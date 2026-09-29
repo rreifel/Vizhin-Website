@@ -1,11 +1,21 @@
-<div align="center">
+# Vizhin GTM Technology Solutions
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+This is the official repository for the Vizhin LLC GTM Technology Solutions website.
 
-  <h1>Built with AI Studio</h2>
+## Features
+- **Modern Responsive Design**: Beautiful display typography using Inter and modern visual elements.
+- **Dynamic Routing & Navigation**: Smooth navigation between sections.
+- **Robust Layout**: Tailored specifically for secured GTM leadership and white-labeled tech solutions.
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+## Automated Deployment (GitHub Actions)
+Whenever changes are pushed to the `main` branch, a GitHub Action will automatically:
+1. Install project dependencies.
+2. Compile/build the production-ready React + Vite assets into the `dist/` directory.
+3. Securely deploy those compiled files via FTP directly to your Hostinger server.
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+### Required Secrets
+To make the automated deployment work, ensure you have configured the following **Repository Secrets** in your GitHub repository settings under **Settings > Secrets and variables > Actions**:
 
-</div>
+1. `FTP_SERVER` - Set to `194.195.84.83` (IP address only, no `ftp://` prefix).
+2. `FTP_USERNAME` - Set to `u824818154`.
+3. `FTP_PASSWORD` - Set to your Hostinger FTP password.

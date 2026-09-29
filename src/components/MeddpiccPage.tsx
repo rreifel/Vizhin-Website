@@ -13,6 +13,7 @@ interface MeddpiccPageProps {
   onBack: () => void;
   onEnterPortal: () => void;
   onRequestAccount: () => void;
+  onNavigateMarketingAnalysis?: () => void;
 }
 
 interface MeddpiccItem {
@@ -181,7 +182,12 @@ const MEDDPICC_DATA: MeddpiccItem[] = [
   }
 ];
 
-export default function MeddpiccPage({ onBack, onEnterPortal, onRequestAccount }: MeddpiccPageProps) {
+export default function MeddpiccPage({ 
+  onBack, 
+  onEnterPortal, 
+  onRequestAccount, 
+  onNavigateMarketingAnalysis 
+}: MeddpiccPageProps) {
   // View mode: 'acronym' (Alphabetical theory) vs 'reality' (Chronological deal flow) - defaults to 'acronym'
   const [viewMode, setViewMode] = useState<'reality' | 'acronym'>('acronym');
   const [activeItem, setActiveItem] = useState<MeddpiccItem | null>(null);
@@ -221,6 +227,7 @@ export default function MeddpiccPage({ onBack, onEnterPortal, onRequestAccount }
         currentPage="meddpicc"
         onNavigateHome={onBack}
         onNavigateMeddpicc={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        onNavigateMarketingAnalysis={onNavigateMarketingAnalysis}
         onEnterPortal={onEnterPortal}
         onRequestAccount={onRequestAccount}
       />

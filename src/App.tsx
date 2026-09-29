@@ -17,12 +17,13 @@ import IntegrationGuide from './components/IntegrationGuide';
 import LandingPage from './components/LandingPage';
 import RequestAccessScreen from './components/RequestAccessScreen';
 import MeddpiccPage from './components/MeddpiccPage';
+import MarketingAnalysisPage from './components/MarketingAnalysisPage';
 import VizhinLogo from './components/VizhinLogo';
 import VizhinCRMLogo from './components/VizhinCRMLogo';
 
 export default function App() {
-  // Navigation state for unauthenticated users (landing, login, sandbox request screen, or meddpicc guide)
-  const [unauthScreen, setUnauthScreen] = useState<'landing' | 'login' | 'request' | 'meddpicc'>('landing');
+  // Navigation state for unauthenticated users (landing, login, sandbox request screen, meddpicc guide, or marketing analysis)
+  const [unauthScreen, setUnauthScreen] = useState<'landing' | 'login' | 'request' | 'meddpicc' | 'marketing-analysis'>('landing');
 
   // Global Database state persisted to local storage
   const [partners, setPartners] = useState<Partner[]>(() => {
@@ -176,7 +177,7 @@ export default function App() {
     alert('System Database reset to initial enterprise seed state!');
   };
 
-  // If session is unauthenticated, show either modern landing page, the CRM portal login, or sandbox request page!
+  // If session is unauthenticated, show either modern landing page, the CRM portal login, sandbox request page, meddpicc guide, or marketing analysis brochure!
   if (!currentUser) {
     if (unauthScreen === 'landing') {
       return (
@@ -184,6 +185,7 @@ export default function App() {
           onEnterPortal={() => setUnauthScreen('login')}
           onRequestAccount={() => setUnauthScreen('request')}
           onNavigateMeddpicc={() => setUnauthScreen('meddpicc')}
+          onNavigateMarketingAnalysis={() => setUnauthScreen('marketing-analysis')}
         />
       );
     }
@@ -194,6 +196,18 @@ export default function App() {
           onBack={() => setUnauthScreen('landing')}
           onEnterPortal={() => setUnauthScreen('login')}
           onRequestAccount={() => setUnauthScreen('request')}
+          onNavigateMarketingAnalysis={() => setUnauthScreen('marketing-analysis')}
+        />
+      );
+    }
+
+    if (unauthScreen === 'marketing-analysis') {
+      return (
+        <MarketingAnalysisPage 
+          onBack={() => setUnauthScreen('landing')}
+          onEnterPortal={() => setUnauthScreen('login')}
+          onRequestAccount={() => setUnauthScreen('request')}
+          onNavigateMeddpicc={() => setUnauthScreen('meddpicc')}
         />
       );
     }

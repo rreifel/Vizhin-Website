@@ -4,9 +4,10 @@ import { ChevronDown, Menu, X, Mail } from 'lucide-react';
 import VizhinLogo from './VizhinLogo';
 
 interface SiteHeaderProps {
-  currentPage?: 'landing' | 'meddpicc';
+  currentPage?: 'landing' | 'meddpicc' | 'marketing-analysis';
   onNavigateHome: () => void;
   onNavigateMeddpicc: () => void;
+  onNavigateMarketingAnalysis?: () => void;
   onEnterPortal: () => void;
   onRequestAccount: () => void;
 }
@@ -15,6 +16,7 @@ export default function SiteHeader({
   currentPage = 'landing',
   onNavigateHome,
   onNavigateMeddpicc,
+  onNavigateMarketingAnalysis,
   onEnterPortal,
   onRequestAccount
 }: SiteHeaderProps) {
@@ -53,13 +55,20 @@ export default function SiteHeader({
               <p className="text-xs font-semibold text-neutral-200 group-hover:text-white">GTM Consulting</p>
               <p className="text-[10px] text-neutral-500 leading-normal mt-0.5">Hands-on strategy and execution framework to scale reseller partners, define clear margins, and boost metrics.</p>
             </div>
-            <div className="block p-2 rounded hover:bg-neutral-900 transition-colors cursor-pointer group">
-              <div className="flex items-center justify-between">
-                <p className="text-xs font-semibold text-neutral-200 group-hover:text-white">Marketing Analysis</p>
-                <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-950/80 text-emerald-400 border border-emerald-800/60 uppercase font-semibold">Coming Soon</span>
-              </div>
-              <p className="text-[10px] text-neutral-500 leading-normal mt-0.5">Campaign diagnostics, conversion funnel tracking, attribution analytics, and demand generation ROI modeling.</p>
-            </div>
+            <button
+              onClick={() => {
+                setActiveDropdown(null);
+                setMobileMenuOpen(false);
+                onNavigateMarketingAnalysis?.();
+              }}
+              className="w-full text-left block p-2 rounded hover:bg-neutral-900 transition-colors cursor-pointer group"
+            >
+              <p className="text-xs font-semibold text-neutral-200 group-hover:text-emerald-400 transition-colors flex items-center justify-between">
+                <span>Marketing Analysis</span>
+                <span className="text-[10px] text-emerald-400 font-mono">View Brochure →</span>
+              </p>
+              <p className="text-[10px] text-neutral-500 leading-normal mt-0.5">Sublime x Vizhin sales & marketing GTM assessment: find pipeline leaks and align your revenue engine.</p>
+            </button>
           </div>
         </div>
       )

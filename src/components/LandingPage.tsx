@@ -9,9 +9,15 @@ interface LandingPageProps {
   onEnterPortal: () => void;
   onRequestAccount: () => void;
   onNavigateMeddpicc: () => void;
+  onNavigateMarketingAnalysis: () => void;
 }
 
-export default function LandingPage({ onEnterPortal, onRequestAccount, onNavigateMeddpicc }: LandingPageProps) {
+export default function LandingPage({ 
+  onEnterPortal, 
+  onRequestAccount, 
+  onNavigateMeddpicc,
+  onNavigateMarketingAnalysis
+}: LandingPageProps) {
   return (
     <div id="landing_container" className="min-h-screen bg-[#070708] text-neutral-100 flex flex-col relative overflow-hidden font-sans">
       
@@ -28,6 +34,7 @@ export default function LandingPage({ onEnterPortal, onRequestAccount, onNavigat
         currentPage="landing"
         onNavigateHome={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         onNavigateMeddpicc={onNavigateMeddpicc}
+        onNavigateMarketingAnalysis={onNavigateMarketingAnalysis}
         onEnterPortal={onEnterPortal}
         onRequestAccount={onRequestAccount}
       />
@@ -130,12 +137,20 @@ export default function LandingPage({ onEnterPortal, onRequestAccount, onNavigat
           </div>
 
           {/* Feature 5: Marketing Analysis */}
-          <div className="bg-neutral-900/35 border border-neutral-850/60 p-6 rounded-2xl space-y-4 hover:border-neutral-800 transition-all">
-            <div className="w-10 h-10 rounded-xl bg-teal-950/80 flex items-center justify-center border border-teal-800/60 text-teal-300 shrink-0">
-              <BarChart3 className="w-5 h-5" />
+          <div 
+            onClick={onNavigateMarketingAnalysis}
+            className="bg-neutral-900/35 border border-neutral-850/60 p-6 rounded-2xl space-y-4 hover:border-emerald-500/60 hover:bg-neutral-900/60 transition-all cursor-pointer group"
+          >
+            <div className="flex items-center justify-between">
+              <div className="w-10 h-10 rounded-xl bg-teal-950/80 flex items-center justify-center border border-teal-800/60 text-teal-300 group-hover:scale-105 transition-transform shrink-0">
+                <BarChart3 className="w-5 h-5" />
+              </div>
+              <span className="text-[10px] font-mono font-semibold text-emerald-400 group-hover:translate-x-0.5 transition-transform flex items-center gap-1">
+                View Brochure →
+              </span>
             </div>
             <div className="space-y-2">
-              <h3 className="text-base font-bold text-neutral-150">Marketing Analysis</h3>
+              <h3 className="text-base font-bold text-neutral-150 group-hover:text-emerald-300 transition-colors">Marketing Analysis</h3>
               <p className="text-xs text-neutral-400 leading-relaxed">
                 In-depth campaign diagnostics, conversion funnel tracking, attribution analytics, and ROI modeling to optimize demand generation efficiency.
               </p>

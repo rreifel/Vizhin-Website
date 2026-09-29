@@ -34,3 +34,4 @@ jobs:
           port: 21
           local-dir: ./dist/
           server-dir: /domains/vizhin.co/public_html/
+          dangerous-clean-slate: true

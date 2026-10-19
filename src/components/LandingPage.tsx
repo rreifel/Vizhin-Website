@@ -7,6 +7,7 @@ import SiteHeader from './SiteHeader';
 
 interface LandingPageProps {
   onEnterPortal: () => void;
+  onEnterOrg?: () => void;
   onRequestAccount: () => void;
   onNavigateMeddpicc: () => void;
   onNavigateMarketingAnalysis: () => void;
@@ -14,6 +15,7 @@ interface LandingPageProps {
 
 export default function LandingPage({ 
   onEnterPortal, 
+  onEnterOrg,
   onRequestAccount, 
   onNavigateMeddpicc,
   onNavigateMarketingAnalysis
@@ -36,6 +38,7 @@ export default function LandingPage({
         onNavigateMeddpicc={onNavigateMeddpicc}
         onNavigateMarketingAnalysis={onNavigateMarketingAnalysis}
         onEnterPortal={onEnterPortal}
+        onEnterOrg={onEnterOrg}
         onRequestAccount={onRequestAccount}
       />
 

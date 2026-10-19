@@ -12,6 +12,7 @@ import SiteHeader from './SiteHeader';
 interface MeddpiccPageProps {
   onBack: () => void;
   onEnterPortal: () => void;
+  onEnterOrg?: () => void;
   onRequestAccount: () => void;
   onNavigateMarketingAnalysis?: () => void;
 }
@@ -185,6 +186,7 @@ const MEDDPICC_DATA: MeddpiccItem[] = [
 export default function MeddpiccPage({ 
   onBack, 
   onEnterPortal, 
+  onEnterOrg,
   onRequestAccount, 
   onNavigateMarketingAnalysis 
 }: MeddpiccPageProps) {
@@ -229,6 +231,7 @@ export default function MeddpiccPage({
         onNavigateMeddpicc={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         onNavigateMarketingAnalysis={onNavigateMarketingAnalysis}
         onEnterPortal={onEnterPortal}
+        onEnterOrg={onEnterOrg}
         onRequestAccount={onRequestAccount}
       />
 

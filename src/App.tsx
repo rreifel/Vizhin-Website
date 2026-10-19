@@ -18,12 +18,13 @@ import LandingPage from './components/LandingPage';
 import RequestAccessScreen from './components/RequestAccessScreen';
 import MeddpiccPage from './components/MeddpiccPage';
 import MarketingAnalysisPage from './components/MarketingAnalysisPage';
+import VizhinOrgLoginScreen from './components/VizhinOrgLoginScreen';
 import VizhinLogo from './components/VizhinLogo';
 import VizhinCRMLogo from './components/VizhinCRMLogo';
 
 export default function App() {
-  // Navigation state for unauthenticated users (landing, login, sandbox request screen, meddpicc guide, or marketing analysis)
-  const [unauthScreen, setUnauthScreen] = useState<'landing' | 'login' | 'request' | 'meddpicc' | 'marketing-analysis'>('landing');
+  // Navigation state for unauthenticated users (landing, login, org-login, sandbox request screen, meddpicc guide, or marketing analysis)
+  const [unauthScreen, setUnauthScreen] = useState<'landing' | 'login' | 'org-login' | 'request' | 'meddpicc' | 'marketing-analysis'>('landing');
 
   // Global Database state persisted to local storage
   const [partners, setPartners] = useState<Partner[]>(() => {
@@ -177,12 +178,13 @@ export default function App() {
     alert('System Database reset to initial enterprise seed state!');
   };
 
-  // If session is unauthenticated, show either modern landing page, the CRM portal login, sandbox request page, meddpicc guide, or marketing analysis brochure!
+  // If session is unauthenticated, show either modern landing page, the CRM portal login, the ORG portal login, sandbox request page, meddpicc guide, or marketing analysis brochure!
   if (!currentUser) {
     if (unauthScreen === 'landing') {
       return (
         <LandingPage 
           onEnterPortal={() => setUnauthScreen('login')}
+          onEnterOrg={() => setUnauthScreen('org-login')}
           onRequestAccount={() => setUnauthScreen('request')}
           onNavigateMeddpicc={() => setUnauthScreen('meddpicc')}
           onNavigateMarketingAnalysis={() => setUnauthScreen('marketing-analysis')}
@@ -195,6 +197,7 @@ export default function App() {
         <MeddpiccPage 
           onBack={() => setUnauthScreen('landing')}
           onEnterPortal={() => setUnauthScreen('login')}
+          onEnterOrg={() => setUnauthScreen('org-login')}
           onRequestAccount={() => setUnauthScreen('request')}
           onNavigateMarketingAnalysis={() => setUnauthScreen('marketing-analysis')}
         />
@@ -206,8 +209,18 @@ export default function App() {
         <MarketingAnalysisPage 
           onBack={() => setUnauthScreen('landing')}
           onEnterPortal={() => setUnauthScreen('login')}
+          onEnterOrg={() => setUnauthScreen('org-login')}
           onRequestAccount={() => setUnauthScreen('request')}
           onNavigateMeddpicc={() => setUnauthScreen('meddpicc')}
+        />
+      );
+    }
+
+    if (unauthScreen === 'org-login') {
+      return (
+        <VizhinOrgLoginScreen 
+          onBack={() => setUnauthScreen('landing')}
+          onSwitchToCrm={() => setUnauthScreen('login')}
         />
       );
     }
@@ -226,6 +239,7 @@ export default function App() {
           onLoginSuccess={handleLoginSuccess}
           users={users}
           onBack={() => setUnauthScreen('landing')}
+          onSwitchToOrg={() => setUnauthScreen('org-login')}
         />
       </div>
     );

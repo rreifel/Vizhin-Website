@@ -1,6 +1,6 @@
 {
-  "name": "Vizhin CRM Portal",
-  "description": "Enterprise-grade white-labeled multi-tenant CRM portal featuring multi-level administrative structures, logo customization, secure login protection, password managers compatibility, and comprehensive Supabase integration schemas.",
+  "name": "Vizhin.co",
+  "description": "Vizhin.co - Driving Go-To-Market Results. Enterprise revenue architecture, channel enablement, and high-performance GTM teams.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

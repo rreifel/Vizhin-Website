@@ -8,9 +8,10 @@ interface LoginScreenProps {
   onLoginSuccess: (user: PortalUser) => void;
   users: PortalUser[];
   onBack?: () => void;
+  onSwitchToOrg?: () => void;
 }
 
-export default function LoginScreen({ onLoginSuccess, users, onBack }: LoginScreenProps) {
+export default function LoginScreen({ onLoginSuccess, users, onBack, onSwitchToOrg }: LoginScreenProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -142,6 +143,16 @@ export default function LoginScreen({ onLoginSuccess, users, onBack }: LoginScre
               <VizhinLogo className="h-14 md:h-16 w-auto" />
             )}
           </div>
+
+          {onSwitchToOrg && (
+            <button
+              onClick={onSwitchToOrg}
+              className="text-xs font-semibold px-3.5 py-1.5 rounded-lg bg-neutral-900 border border-neutral-800 hover:border-cyan-700/60 text-cyan-400 hover:text-cyan-300 transition-all cursor-pointer flex items-center gap-1.5"
+            >
+              <span>Need VizhinORG?</span>
+              <span className="font-mono">Switch →</span>
+            </button>
+          )}
         </div>
       </header>
 

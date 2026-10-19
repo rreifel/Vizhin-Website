@@ -9,6 +9,7 @@ import SiteHeader from './SiteHeader';
 interface MarketingAnalysisPageProps {
   onBack: () => void;
   onEnterPortal: () => void;
+  onEnterOrg?: () => void;
   onRequestAccount: () => void;
   onNavigateMeddpicc: () => void;
 }
@@ -16,6 +17,7 @@ interface MarketingAnalysisPageProps {
 export default function MarketingAnalysisPage({
   onBack,
   onEnterPortal,
+  onEnterOrg,
   onRequestAccount,
   onNavigateMeddpicc
 }: MarketingAnalysisPageProps) {
@@ -70,6 +72,7 @@ export default function MarketingAnalysisPage({
           onNavigateMeddpicc={onNavigateMeddpicc}
           onNavigateMarketingAnalysis={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           onEnterPortal={onEnterPortal}
+          onEnterOrg={onEnterOrg}
           onRequestAccount={onRequestAccount}
         />
       </div>

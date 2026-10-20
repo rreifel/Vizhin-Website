@@ -4,7 +4,7 @@ import { ChevronDown, Menu, X, Mail, Building2, Network } from 'lucide-react';
 import VizhinLogo from './VizhinLogo';
 
 interface SiteHeaderProps {
-  currentPage?: 'landing' | 'meddpicc' | 'marketing-analysis';
+  currentPage?: 'landing' | 'meddpicc' | 'marketing-analysis' | 'org';
   onNavigateHome: () => void;
   onNavigateMeddpicc: () => void;
   onNavigateMarketingAnalysis?: () => void;

@@ -18,13 +18,47 @@ import LandingPage from './components/LandingPage';
 import RequestAccessScreen from './components/RequestAccessScreen';
 import MeddpiccPage from './components/MeddpiccPage';
 import MarketingAnalysisPage from './components/MarketingAnalysisPage';
+import VizhinOrgPage from "./components/VizhinOrgPage";
 import VizhinOrgLoginScreen from './components/VizhinOrgLoginScreen';
 import VizhinLogo from './components/VizhinLogo';
 import VizhinCRMLogo from './components/VizhinCRMLogo';
 
 export default function App() {
   // Navigation state for unauthenticated users (landing, login, org-login, sandbox request screen, meddpicc guide, or marketing analysis)
-  const [unauthScreen, setUnauthScreen] = useState<'landing' | 'login' | 'org-login' | 'request' | 'meddpicc' | 'marketing-analysis'>('landing');
+  const getInitialScreen = (): "landing" | "login" | "org" | "request" | "meddpicc" | "marketing-analysis" => {
+    if (typeof window !== "undefined") {
+      const p = window.location.pathname.toLowerCase();
+      if (p === "/org" || p.startsWith("/org/")) return "org";
+      if (p === "/meddpicc") return "meddpicc";
+      if (p === "/marketing-analysis") return "marketing-analysis";
+      if (p === "/login") return "login";
+      if (p === "/request") return "request";
+    }
+    return "landing";
+  };
+
+  const [unauthScreen, setUnauthScreen] = useState<"landing" | "login" | "org" | "request" | "meddpicc" | "marketing-analysis">(getInitialScreen);
+
+  const navigateTo = (screen: "landing" | "login" | "org" | "request" | "meddpicc" | "marketing-analysis") => {
+    setUnauthScreen(screen);
+    if (typeof window !== "undefined") {
+      let p = "/";
+      if (screen === "org") p = "/ORG";
+      else if (screen === "meddpicc") p = "/meddpicc";
+      else if (screen === "marketing-analysis") p = "/marketing-analysis";
+      else if (screen === "login") p = "/login";
+      else if (screen === "request") p = "/request";
+      window.history.pushState({ screen }, "", p);
+    }
+  };
+
+  useEffect(() => {
+    const handlePopState = () => {
+      setUnauthScreen(getInitialScreen());
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
 
   // Global Database state persisted to local storage
   const [partners, setPartners] = useState<Partner[]>(() => {
@@ -183,11 +217,11 @@ export default function App() {
     if (unauthScreen === 'landing') {
       return (
         <LandingPage 
-          onEnterPortal={() => setUnauthScreen('login')}
-          onEnterOrg={() => setUnauthScreen('org-login')}
-          onRequestAccount={() => setUnauthScreen('request')}
-          onNavigateMeddpicc={() => setUnauthScreen('meddpicc')}
-          onNavigateMarketingAnalysis={() => setUnauthScreen('marketing-analysis')}
+          onEnterPortal={() => navigateTo('login')}
+          onEnterOrg={() => navigateTo('org')}
+          onRequestAccount={() => navigateTo('request')}
+          onNavigateMeddpicc={() => navigateTo('meddpicc')}
+          onNavigateMarketingAnalysis={() => navigateTo('marketing-analysis')}
         />
       );
     }
@@ -196,10 +230,10 @@ export default function App() {
       return (
         <MeddpiccPage 
           onBack={() => setUnauthScreen('landing')}
-          onEnterPortal={() => setUnauthScreen('login')}
-          onEnterOrg={() => setUnauthScreen('org-login')}
-          onRequestAccount={() => setUnauthScreen('request')}
-          onNavigateMarketingAnalysis={() => setUnauthScreen('marketing-analysis')}
+          onEnterPortal={() => navigateTo('login')}
+          onEnterOrg={() => navigateTo('org')}
+          onRequestAccount={() => navigateTo('request')}
+          onNavigateMarketingAnalysis={() => navigateTo('marketing-analysis')}
         />
       );
     }
@@ -208,15 +242,27 @@ export default function App() {
       return (
         <MarketingAnalysisPage 
           onBack={() => setUnauthScreen('landing')}
-          onEnterPortal={() => setUnauthScreen('login')}
-          onEnterOrg={() => setUnauthScreen('org-login')}
-          onRequestAccount={() => setUnauthScreen('request')}
-          onNavigateMeddpicc={() => setUnauthScreen('meddpicc')}
+          onEnterPortal={() => navigateTo('login')}
+          onEnterOrg={() => navigateTo('org')}
+          onRequestAccount={() => navigateTo('request')}
+          onNavigateMeddpicc={() => navigateTo('meddpicc')}
         />
       );
     }
 
-    if (unauthScreen === 'org-login') {
+        if (unauthScreen === "org") {
+      return (
+        <VizhinOrgPage 
+          onBack={() => navigateTo("landing")}
+          onEnterPortal={() => navigateTo("login")}
+          onRequestAccount={() => navigateTo("request")}
+          onNavigateMeddpicc={() => navigateTo("meddpicc")}
+          onNavigateMarketingAnalysis={() => navigateTo("marketing-analysis")}
+        />
+      );
+    }
+
+    if (unauthScreen === "org-login") {
       return (
         <VizhinOrgLoginScreen 
           onBack={() => setUnauthScreen('landing')}

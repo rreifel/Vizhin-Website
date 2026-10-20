@@ -184,7 +184,7 @@ export default function App() {
       return (
         <LandingPage 
           onEnterPortal={() => setUnauthScreen('login')}
-          onEnterOrg={() => window.open('https://ais-dev-k3dq5q47ugexrlhpj2wpqo-615362750641.us-west2.run.app?signup=true', '_blank')}
+          onEnterOrg={() => setUnauthScreen('org-login')}
           onRequestAccount={() => setUnauthScreen('request')}
           onNavigateMeddpicc={() => setUnauthScreen('meddpicc')}
           onNavigateMarketingAnalysis={() => setUnauthScreen('marketing-analysis')}
@@ -197,7 +197,7 @@ export default function App() {
         <MeddpiccPage 
           onBack={() => setUnauthScreen('landing')}
           onEnterPortal={() => setUnauthScreen('login')}
-          onEnterOrg={() => window.open('https://ais-dev-k3dq5q47ugexrlhpj2wpqo-615362750641.us-west2.run.app?signup=true', '_blank')}
+          onEnterOrg={() => setUnauthScreen('org-login')}
           onRequestAccount={() => setUnauthScreen('request')}
           onNavigateMarketingAnalysis={() => setUnauthScreen('marketing-analysis')}
         />
@@ -209,7 +209,7 @@ export default function App() {
         <MarketingAnalysisPage 
           onBack={() => setUnauthScreen('landing')}
           onEnterPortal={() => setUnauthScreen('login')}
-          onEnterOrg={() => window.open('https://ais-dev-k3dq5q47ugexrlhpj2wpqo-615362750641.us-west2.run.app?signup=true', '_blank')}
+          onEnterOrg={() => setUnauthScreen('org-login')}
           onRequestAccount={() => setUnauthScreen('request')}
           onNavigateMeddpicc={() => setUnauthScreen('meddpicc')}
         />

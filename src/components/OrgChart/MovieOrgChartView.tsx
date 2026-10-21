@@ -26,17 +26,29 @@ import {
   Grid,
   Columns,
   Eye,
-  Scan
+  Scan,
+  LogOut,
+  User
 } from 'lucide-react';
 
 interface MovieOrgChartViewProps {
   onBackToLogin: () => void;
+  currentUser?: {
+    email: string;
+    name?: string;
+    role?: string;
+  } | null;
+  onSignOut?: () => void;
 }
 
 export type DensityMode = 'detailed' | 'compact' | 'micro' | 'satellite';
 export type SpacingMode = 'comfortable' | 'condensed';
 
-export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({ onBackToLogin }) => {
+export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({ 
+  onBackToLogin,
+  currentUser,
+  onSignOut
+}) => {
   const [rootId, setRootId] = useState<string | null>(null);
   const [selectedUser, setSelectedUser] = useState<MovieEmployee | null>(null);
   
@@ -679,7 +691,7 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({ onBackToLo
           )}
         </div>
 
-        {/* Right Controls: Department Filter */}
+        {/* Right Controls: Department Filter & Sign Out */}
         <div className="flex items-center gap-2">
           <select
             value={departmentFilter}
@@ -693,6 +705,26 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({ onBackToLo
               </option>
             ))}
           </select>
+
+          {/* Active Session & Sign Out Button */}
+          {currentUser && (
+            <div className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 border border-slate-300 text-xs">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span className="font-bold text-black text-[11px] truncate max-w-[120px]">
+                {currentUser.name || currentUser.email}
+              </span>
+            </div>
+          )}
+
+          <button
+            type="button"
+            onClick={onSignOut || onBackToLogin}
+            className="px-3 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer"
+            title="Sign out of current account to switch user"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            <span>Sign Out</span>
+          </button>
         </div>
       </div>
 

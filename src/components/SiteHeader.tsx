@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ChevronDown, Menu, X, Mail, Building2, Network } from 'lucide-react';
+import { ChevronDown, Menu, X, Mail, Building2, Network, LogOut, User } from 'lucide-react';
 import VizhinLogo from './VizhinLogo';
 
 interface SiteHeaderProps {
-  currentPage?: 'landing' | 'meddpicc' | 'marketing-analysis' | 'org';
+  currentPage?: 'landing' | 'meddpicc' | 'marketing-analysis' | 'org' | 'portal';
+  currentUser?: {
+    email: string;
+    name?: string;
+    role?: string;
+  } | null;
+  onSignOut?: () => void;
   onNavigateHome: () => void;
   onNavigateMeddpicc: () => void;
   onNavigateMarketingAnalysis?: () => void;
@@ -15,6 +21,8 @@ interface SiteHeaderProps {
 
 export default function SiteHeader({
   currentPage = 'landing',
+  currentUser,
+  onSignOut,
   onNavigateHome,
   onNavigateMeddpicc,
   onNavigateMarketingAnalysis,
@@ -233,88 +241,120 @@ export default function SiteHeader({
           </div>
 
           <div className="flex items-center gap-3">
-            {/* Sign In Dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => {
-                  setSignInDropdownOpen(prev => !prev);
-                  setActiveDropdown(null);
-                }}
-                className={`px-3.5 py-2 text-xs font-bold transition-all cursor-pointer bg-neutral-900 border rounded-lg flex items-center gap-1.5 ${
-                  signInDropdownOpen 
-                    ? 'text-white border-emerald-500/60 bg-neutral-850 shadow-md shadow-emerald-950/40' 
-                    : 'text-neutral-350 hover:text-white border-neutral-800 hover:border-neutral-700'
-                }`}
-                aria-expanded={signInDropdownOpen}
-              >
-                <span>Sign In</span>
-                <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${signInDropdownOpen ? 'rotate-180 text-emerald-400' : 'text-neutral-500'}`} />
-              </button>
-
-              {signInDropdownOpen && (
-                <div className="absolute top-full right-0 mt-2.5 w-64 bg-neutral-950/95 border border-neutral-800 rounded-xl shadow-2xl z-50 p-2 space-y-1 animate-in fade-in slide-in-from-top-2 duration-150 backdrop-blur-md">
-                  <p className="px-2.5 py-1 text-[10px] font-mono uppercase tracking-wider text-neutral-500">
-                    Select Platform
-                  </p>
-
-                  {/* Option 1: VizhinCRM */}
-                  <button
-                    onClick={() => {
-                      setSignInDropdownOpen(false);
-                      onEnterPortal();
-                    }}
-                    className="w-full text-left p-2.5 rounded-lg hover:bg-neutral-900 transition-colors flex items-center gap-3 cursor-pointer group"
-                  >
-                    <div className="w-8 h-8 rounded-lg bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0 group-hover:scale-105 transition-transform">
-                      <Building2 className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-xs font-bold text-neutral-200 group-hover:text-emerald-400 transition-colors">
-                          VizhinCRM
-                        </span>
-                      </div>
-                      <p className="text-[10px] text-neutral-400 leading-tight mt-0.5">
-                        Partner & Customer Portal
-                      </p>
-                    </div>
-                  </button>
-
-                  {/* Option 2: Sign In to VizhinORG */}
-                  <button
-                    onClick={() => {
-                      setSignInDropdownOpen(false);
-                      onEnterOrg?.();
-                    }}
-                    className="w-full text-left p-2.5 rounded-lg hover:bg-neutral-900 transition-colors flex items-center gap-3 cursor-pointer group"
-                  >
-                    <div className="w-8 h-8 rounded-lg bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400 shrink-0 group-hover:scale-105 transition-transform">
-                      <Network className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-xs font-bold text-neutral-200 group-hover:text-cyan-400 transition-colors">
-                          Sign In to VizhinORG
-                        </span>
-                        <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-950/80 text-amber-300 border border-amber-700/60 font-bold">
-                          COMING SOON
-                        </span>
-                      </div>
-                      <p className="text-[10px] text-neutral-400 leading-tight mt-0.5">
-                        Workforce & Org Architecture
-                      </p>
-                    </div>
-                  </button>
+            {currentUser ? (
+              <div className="flex items-center gap-2.5">
+                {/* Active User Identity Chip */}
+                <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-neutral-900 border border-neutral-800 text-xs shadow-xs">
+                  <div className="w-6 h-6 rounded-full bg-emerald-600 text-neutral-950 font-black text-[11px] flex items-center justify-center">
+                    {currentUser.name ? currentUser.name[0].toUpperCase() : currentUser.email[0].toUpperCase()}
+                  </div>
+                  <div className="text-left">
+                    <p className="font-bold text-white text-[11px] leading-tight truncate max-w-[140px]">
+                      {currentUser.name || currentUser.email}
+                    </p>
+                    <p className="text-[9px] font-mono text-emerald-400 uppercase leading-none mt-0.5">
+                      {currentUser.role || 'Active Session'}
+                    </p>
+                  </div>
                 </div>
-              )}
-            </div>
 
-            <button
-              onClick={onRequestAccount}
-              className="px-4 py-2 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white text-xs font-semibold rounded-lg shadow-md shadow-emerald-950/40 border border-emerald-500/30 transition-all transform hover:-translate-y-0.5 cursor-pointer"
-            >
-              Request Access
-            </button>
+                {/* Direct Sign Out Button */}
+                <button
+                  type="button"
+                  onClick={onSignOut}
+                  className="px-3.5 py-1.5 rounded-lg bg-red-950/70 hover:bg-red-900/90 text-red-300 hover:text-white border border-red-800/70 text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm cursor-pointer hover:scale-105"
+                  title="Sign out of current account to switch user"
+                >
+                  <LogOut className="w-3.5 h-3.5 text-red-400" />
+                  <span>Sign Out</span>
+                </button>
+              </div>
+            ) : (
+              <>
+                {/* Sign In Dropdown */}
+                <div className="relative">
+                  <button
+                    onClick={() => {
+                      setSignInDropdownOpen(prev => !prev);
+                      setActiveDropdown(null);
+                    }}
+                    className={`px-3.5 py-2 text-xs font-bold transition-all cursor-pointer bg-neutral-900 border rounded-lg flex items-center gap-1.5 ${
+                      signInDropdownOpen 
+                        ? 'text-white border-emerald-500/60 bg-neutral-850 shadow-md shadow-emerald-950/40' 
+                        : 'text-neutral-350 hover:text-white border-neutral-800 hover:border-neutral-700'
+                    }`}
+                    aria-expanded={signInDropdownOpen}
+                  >
+                    <span>Sign In</span>
+                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${signInDropdownOpen ? 'rotate-180 text-emerald-400' : 'text-neutral-500'}`} />
+                  </button>
+
+                  {signInDropdownOpen && (
+                    <div className="absolute top-full right-0 mt-2.5 w-64 bg-neutral-950/95 border border-neutral-800 rounded-xl shadow-2xl z-50 p-2 space-y-1 animate-in fade-in slide-in-from-top-2 duration-150 backdrop-blur-md">
+                      <p className="px-2.5 py-1 text-[10px] font-mono uppercase tracking-wider text-neutral-500">
+                        Select Platform
+                      </p>
+
+                      {/* Option 1: VizhinCRM */}
+                      <button
+                        onClick={() => {
+                          setSignInDropdownOpen(false);
+                          onEnterPortal();
+                        }}
+                        className="w-full text-left p-2.5 rounded-lg hover:bg-neutral-900 transition-colors flex items-center gap-3 cursor-pointer group"
+                      >
+                        <div className="w-8 h-8 rounded-lg bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0 group-hover:scale-105 transition-transform">
+                          <Building2 className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-xs font-bold text-neutral-200 group-hover:text-emerald-400 transition-colors">
+                              VizhinCRM
+                            </span>
+                          </div>
+                          <p className="text-[10px] text-neutral-400 leading-tight mt-0.5">
+                            Partner & Customer Portal
+                          </p>
+                        </div>
+                      </button>
+
+                      {/* Option 2: Sign In to VizhinORG */}
+                      <button
+                        onClick={() => {
+                          setSignInDropdownOpen(false);
+                          onEnterOrg?.();
+                        }}
+                        className="w-full text-left p-2.5 rounded-lg hover:bg-neutral-900 transition-colors flex items-center gap-3 cursor-pointer group"
+                      >
+                        <div className="w-8 h-8 rounded-lg bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400 shrink-0 group-hover:scale-105 transition-transform">
+                          <Network className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-xs font-bold text-neutral-200 group-hover:text-cyan-400 transition-colors">
+                              Sign In to VizhinORG
+                            </span>
+                            <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-950/80 text-amber-300 border border-amber-700/60 font-bold">
+                              COMING SOON
+                            </span>
+                          </div>
+                          <p className="text-[10px] text-neutral-400 leading-tight mt-0.5">
+                            Workforce & Org Architecture
+                          </p>
+                        </div>
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                <button
+                  onClick={onRequestAccount}
+                  className="px-4 py-2 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white text-xs font-semibold rounded-lg shadow-md shadow-emerald-950/40 border border-emerald-500/30 transition-all transform hover:-translate-y-0.5 cursor-pointer"
+                >
+                  Request Access
+                </button>
+              </>
+            )}
 
             {/* Mobile Menu Toggle Button */}
             <button
@@ -382,39 +422,61 @@ export default function SiteHeader({
                 }
               })}
 
-              {/* Mobile Sign In Platforms */}
-              <div className="pt-3 border-t border-neutral-900 space-y-2">
-                <p className="px-2 text-[10px] font-mono uppercase tracking-wider text-neutral-500">
-                  Sign In Platform
-                </p>
-                <div className="grid grid-cols-2 gap-2 px-1">
-                  <button
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      onEnterPortal();
-                    }}
-                    className="p-2.5 rounded-lg bg-neutral-900 border border-neutral-800 text-left cursor-pointer hover:border-emerald-700/60"
-                  >
-                    <p className="text-xs font-bold text-emerald-400">VizhinCRM</p>
-                    <p className="text-[10px] text-neutral-400">Partner & Customer</p>
-                  </button>
-                  <button
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      onEnterOrg?.();
-                    }}
-                    className="p-2.5 rounded-lg bg-neutral-900 border border-neutral-800 text-left cursor-pointer hover:border-cyan-700/60"
-                  >
-                    <div className="flex items-center justify-between">
-                      <p className="text-xs font-bold text-cyan-400">Sign In to VizhinORG</p>
-                      <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-950/80 text-amber-300 border border-amber-700/60 font-bold">
-                        COMING SOON
-                      </span>
+              {/* Mobile Actions: User & Sign Out OR Sign In Platforms */}
+              {currentUser ? (
+                <div className="pt-3 border-t border-neutral-900 space-y-2">
+                  <div className="p-2.5 rounded-lg bg-neutral-900 border border-neutral-800 flex items-center justify-between text-xs">
+                    <div>
+                      <p className="font-bold text-white">{currentUser.name || currentUser.email}</p>
+                      <p className="text-[10px] font-mono text-emerald-400 uppercase">{currentUser.role || 'Active Session'}</p>
                     </div>
-                    <p className="text-[10px] text-neutral-400 mt-0.5">Workforce & Teams</p>
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      onSignOut?.();
+                    }}
+                    className="w-full py-2.5 px-3 rounded-lg bg-red-950/80 hover:bg-red-900 text-red-300 border border-red-800/70 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-colors"
+                  >
+                    <LogOut className="w-4 h-4 text-red-400" />
+                    <span>Sign Out</span>
                   </button>
                 </div>
-              </div>
+              ) : (
+                <div className="pt-3 border-t border-neutral-900 space-y-2">
+                  <p className="px-2 text-[10px] font-mono uppercase tracking-wider text-neutral-500">
+                    Sign In Platform
+                  </p>
+                  <div className="grid grid-cols-2 gap-2 px-1">
+                    <button
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        onEnterPortal();
+                      }}
+                      className="p-2.5 rounded-lg bg-neutral-900 border border-neutral-800 text-left cursor-pointer hover:border-emerald-700/60"
+                    >
+                      <p className="text-xs font-bold text-emerald-400">VizhinCRM</p>
+                      <p className="text-[10px] text-neutral-400">Partner & Customer</p>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        onEnterOrg?.();
+                      }}
+                      className="p-2.5 rounded-lg bg-neutral-900 border border-neutral-800 text-left cursor-pointer hover:border-cyan-700/60"
+                    >
+                      <div className="flex items-center justify-between">
+                        <p className="text-xs font-bold text-cyan-400">Sign In to VizhinORG</p>
+                        <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-950/80 text-amber-300 border border-amber-700/60 font-bold">
+                          COMING SOON
+                        </span>
+                      </div>
+                      <p className="text-[10px] text-neutral-400 mt-0.5">Workforce & Teams</p>
+                    </button>
+                  </div>
+                </div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>

@@ -7,6 +7,12 @@ import {
 import SiteHeader from './SiteHeader';
 
 interface MarketingAnalysisPageProps {
+  currentUser?: {
+    email: string;
+    name?: string;
+    role?: string;
+  } | null;
+  onSignOut?: () => void;
   onBack: () => void;
   onEnterPortal: () => void;
   onEnterOrg?: () => void;
@@ -15,6 +21,8 @@ interface MarketingAnalysisPageProps {
 }
 
 export default function MarketingAnalysisPage({
+  currentUser,
+  onSignOut,
   onBack,
   onEnterPortal,
   onEnterOrg,
@@ -68,6 +76,8 @@ export default function MarketingAnalysisPage({
       <div className="no-print">
         <SiteHeader 
           currentPage="marketing-analysis"
+          currentUser={currentUser}
+          onSignOut={onSignOut}
           onNavigateHome={onBack}
           onNavigateMeddpicc={onNavigateMeddpicc}
           onNavigateMarketingAnalysis={() => window.scrollTo({ top: 0, behavior: 'smooth' })}

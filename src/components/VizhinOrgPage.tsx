@@ -26,10 +26,12 @@ import {
   Shield, 
   ArrowLeft, 
   Maximize2,
-  Clock
+  Clock,
+  LogOut
 } from 'lucide-react';
 import SiteHeader from './SiteHeader';
 import { MovieOrgChartView } from './OrgChart/MovieOrgChartView';
+import { PortalUser } from '../types';
 
 interface VizhinOrgPageProps {
   onBack: () => void;
@@ -37,6 +39,9 @@ interface VizhinOrgPageProps {
   onRequestAccount: () => void;
   onNavigateMeddpicc: () => void;
   onNavigateMarketingAnalysis?: () => void;
+  currentUser?: PortalUser | null;
+  onSignOut?: () => void;
+  onLoginSuccess?: (user: PortalUser) => void;
 }
 
 const REGISTERED_CORPORATE_EMAILS = [
@@ -54,6 +59,9 @@ export default function VizhinOrgPage({
   onRequestAccount,
   onNavigateMeddpicc,
   onNavigateMarketingAnalysis,
+  currentUser,
+  onSignOut,
+  onLoginSuccess,
 }: VizhinOrgPageProps) {
   // Mode: 'signin' (default per requirement) | 'signup' | 'forgot-password' | 'forgot-username'
   const [authMode, setAuthMode] = useState<'signin' | 'signup' | 'forgot-password' | 'forgot-username'>('signin');
@@ -108,7 +116,49 @@ export default function VizhinOrgPage({
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!loginEmail.trim()) return;
-    // Direct user to COMING SOON page with original layout per user request
+    const cleanEmail = loginEmail.trim().toLowerCase();
+
+    // Authenticate user session
+    let resolvedUser: PortalUser;
+    if (cleanEmail === 'rreifel@vizhin.co' || cleanEmail === 'ricreifel@gmail.com') {
+      resolvedUser = {
+        id: 'user_super',
+        email: cleanEmail,
+        name: 'Richard Reifel (Super)',
+        role: 'SUPER_ADMIN',
+        partnerId: null,
+        customerId: null,
+        isActive: true,
+        createdAt: new Date().toISOString(),
+        mfaEnabled: false
+      };
+    } else if (cleanEmail.includes('sarah.connor')) {
+      resolvedUser = {
+        id: 'usr_ceo_sarah',
+        email: cleanEmail,
+        name: 'Sarah Connor (CEO)',
+        role: 'SUPER_ADMIN',
+        partnerId: null,
+        customerId: null,
+        isActive: true,
+        createdAt: new Date().toISOString(),
+        mfaEnabled: false
+      };
+    } else {
+      resolvedUser = {
+        id: `usr_${Date.now()}`,
+        email: cleanEmail,
+        name: cleanEmail.split('@')[0].replace('.', ' ').replace(/\b\w/g, c => c.toUpperCase()),
+        role: 'PARTNER_ADMIN',
+        partnerId: null,
+        customerId: null,
+        isActive: true,
+        createdAt: new Date().toISOString(),
+        mfaEnabled: false
+      };
+    }
+
+    onLoginSuccess?.(resolvedUser);
     setViewMode('coming-soon');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -156,6 +206,8 @@ export default function VizhinOrgPage({
       {/* 1. COMPLETE VIZHIN.CO SITE HEADER */}
       <SiteHeader
         currentPage="org"
+        currentUser={currentUser}
+        onSignOut={onSignOut}
         onNavigateHome={onBack}
         onNavigateMeddpicc={onNavigateMeddpicc}
         onNavigateMarketingAnalysis={onNavigateMarketingAnalysis}
@@ -181,7 +233,33 @@ export default function VizhinOrgPage({
             COMING SOON
           </span>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Active User Session Pill & Sign Out Button */}
+          {currentUser && (
+            <div className="flex items-center gap-2 mr-2">
+              <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-neutral-900 border border-neutral-800 text-xs">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span className="font-bold text-white text-[11px] truncate max-w-[130px]">
+                  {currentUser.name || currentUser.email}
+                </span>
+                <span className="font-mono text-[9px] text-emerald-400 bg-emerald-950/80 px-1 py-0.2 rounded border border-emerald-800/60 uppercase">
+                  {currentUser.role || 'Active'}
+                </span>
+              </div>
+              {onSignOut && (
+                <button
+                  type="button"
+                  onClick={onSignOut}
+                  className="px-3.5 py-1.5 rounded-lg bg-red-950/70 hover:bg-red-900/90 text-red-300 hover:text-white border border-red-800/70 text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm cursor-pointer hover:scale-105"
+                  title="Sign out to switch to another user for testing"
+                >
+                  <LogOut className="w-3.5 h-3.5 text-red-400" />
+                  <span>Sign Out</span>
+                </button>
+              )}
+            </div>
+          )}
+
           <button
             type="button"
             onClick={() => setViewMode('coming-soon')}
@@ -226,7 +304,11 @@ export default function VizhinOrgPage({
           ========================================================================= */}
       {viewMode === 'chart' ? (
         <div className="flex-1 flex flex-col w-full animate-in fade-in duration-200">
-          <MovieOrgChartView onBackToLogin={() => setViewMode('coming-soon')} />
+          <MovieOrgChartView 
+            onBackToLogin={() => setViewMode('coming-soon')} 
+            currentUser={currentUser}
+            onSignOut={onSignOut}
+          />
         </div>
       ) : viewMode === 'coming-soon' ? (
         /* =========================================================================

@@ -10,6 +10,12 @@ import VizhinLogo from './VizhinLogo';
 import SiteHeader from './SiteHeader';
 
 interface MeddpiccPageProps {
+  currentUser?: {
+    email: string;
+    name?: string;
+    role?: string;
+  } | null;
+  onSignOut?: () => void;
   onBack: () => void;
   onEnterPortal: () => void;
   onEnterOrg?: () => void;
@@ -184,6 +190,8 @@ const MEDDPICC_DATA: MeddpiccItem[] = [
 ];
 
 export default function MeddpiccPage({ 
+  currentUser,
+  onSignOut,
   onBack, 
   onEnterPortal, 
   onEnterOrg,
@@ -227,6 +235,8 @@ export default function MeddpiccPage({
       {/* PERSISTENT GLOBAL SITE HEADER */}
       <SiteHeader 
         currentPage="meddpicc"
+        currentUser={currentUser}
+        onSignOut={onSignOut}
         onNavigateHome={onBack}
         onNavigateMeddpicc={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         onNavigateMarketingAnalysis={onNavigateMarketingAnalysis}

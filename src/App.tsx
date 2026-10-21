@@ -24,8 +24,10 @@ import VizhinLogo from './components/VizhinLogo';
 import VizhinCRMLogo from './components/VizhinCRMLogo';
 
 export default function App() {
+  type AppScreen = "landing" | "login" | "org" | "request" | "meddpicc" | "marketing-analysis" | "portal";
+
   // Navigation state for unauthenticated users (landing, login, org-login, sandbox request screen, meddpicc guide, or marketing analysis)
-  const getInitialScreen = (): "landing" | "login" | "org" | "request" | "meddpicc" | "marketing-analysis" => {
+  const getInitialScreen = (): AppScreen => {
     if (typeof window !== "undefined") {
       const p = window.location.pathname.toLowerCase();
       if (p === "/org" || p.startsWith("/org/")) return "org";
@@ -33,13 +35,14 @@ export default function App() {
       if (p === "/marketing-analysis") return "marketing-analysis";
       if (p === "/login") return "login";
       if (p === "/request") return "request";
+      if (p === "/portal") return "portal";
     }
     return "landing";
   };
 
-  const [unauthScreen, setUnauthScreen] = useState<"landing" | "login" | "org" | "request" | "meddpicc" | "marketing-analysis">(getInitialScreen);
+  const [unauthScreen, setUnauthScreen] = useState<AppScreen>(getInitialScreen);
 
-  const navigateTo = (screen: "landing" | "login" | "org" | "request" | "meddpicc" | "marketing-analysis") => {
+  const navigateTo = (screen: AppScreen) => {
     setUnauthScreen(screen);
     if (typeof window !== "undefined") {
       let p = "/";
@@ -48,6 +51,7 @@ export default function App() {
       else if (screen === "marketing-analysis") p = "/marketing-analysis";
       else if (screen === "login") p = "/login";
       else if (screen === "request") p = "/request";
+      else if (screen === "portal") p = "/portal";
       window.history.pushState({ screen }, "", p);
     }
   };
@@ -197,7 +201,9 @@ export default function App() {
       setAuditLogs(prev => [log, ...prev]);
     }
     setCurrentUser(null);
+    localStorage.removeItem('vzn_current_user');
     setActiveWorkspace('dashboard');
+    navigateTo('login');
   };
 
   const resetToFactoryDefault = () => {
@@ -212,70 +218,80 @@ export default function App() {
     alert('System Database reset to initial enterprise seed state!');
   };
 
-  // If session is unauthenticated, show either modern landing page, the CRM portal login, the ORG portal login, sandbox request page, meddpicc guide, or marketing analysis brochure!
+  // Screen routing for both authenticated and unauthenticated sessions
+  if (unauthScreen === 'landing') {
+    return (
+      <LandingPage 
+        currentUser={currentUser}
+        onSignOut={handleLogout}
+        onEnterPortal={() => navigateTo(currentUser ? 'portal' : 'login')}
+        onEnterOrg={() => navigateTo('org')}
+        onRequestAccount={() => navigateTo('request')}
+        onNavigateMeddpicc={() => navigateTo('meddpicc')}
+        onNavigateMarketingAnalysis={() => navigateTo('marketing-analysis')}
+      />
+    );
+  }
+
+  if (unauthScreen === 'meddpicc') {
+    return (
+      <MeddpiccPage 
+        currentUser={currentUser}
+        onSignOut={handleLogout}
+        onBack={() => navigateTo('landing')}
+        onEnterPortal={() => navigateTo(currentUser ? 'portal' : 'login')}
+        onEnterOrg={() => navigateTo('org')}
+        onRequestAccount={() => navigateTo('request')}
+        onNavigateMarketingAnalysis={() => navigateTo('marketing-analysis')}
+      />
+    );
+  }
+
+  if (unauthScreen === 'marketing-analysis') {
+    return (
+      <MarketingAnalysisPage 
+        currentUser={currentUser}
+        onSignOut={handleLogout}
+        onBack={() => navigateTo('landing')}
+        onEnterPortal={() => navigateTo(currentUser ? 'portal' : 'login')}
+        onEnterOrg={() => navigateTo('org')}
+        onRequestAccount={() => navigateTo('request')}
+        onNavigateMeddpicc={() => navigateTo('meddpicc')}
+      />
+    );
+  }
+
+  if (unauthScreen === 'org') {
+    return (
+      <VizhinOrgPage 
+        currentUser={currentUser}
+        onSignOut={handleLogout}
+        onLoginSuccess={handleLoginSuccess}
+        onBack={() => navigateTo('landing')}
+        onEnterPortal={() => navigateTo(currentUser ? 'portal' : 'login')}
+        onRequestAccount={() => navigateTo('request')}
+        onNavigateMeddpicc={() => navigateTo('meddpicc')}
+        onNavigateMarketingAnalysis={() => navigateTo('marketing-analysis')}
+      />
+    );
+  }
+
+  if (unauthScreen === 'request') {
+    return (
+      <RequestAccessScreen 
+        onBack={() => navigateTo('landing')}
+      />
+    );
+  }
+
+  // If on login route and not yet authenticated, render LoginScreen
   if (!currentUser) {
-    if (unauthScreen === 'landing') {
-      return (
-        <LandingPage 
-          onEnterPortal={() => navigateTo('login')}
-          onEnterOrg={() => navigateTo('org')}
-          onRequestAccount={() => navigateTo('request')}
-          onNavigateMeddpicc={() => navigateTo('meddpicc')}
-          onNavigateMarketingAnalysis={() => navigateTo('marketing-analysis')}
-        />
-      );
-    }
-
-    if (unauthScreen === 'meddpicc') {
-      return (
-        <MeddpiccPage 
-          onBack={() => setUnauthScreen('landing')}
-          onEnterPortal={() => navigateTo('login')}
-          onEnterOrg={() => navigateTo('org')}
-          onRequestAccount={() => navigateTo('request')}
-          onNavigateMarketingAnalysis={() => navigateTo('marketing-analysis')}
-        />
-      );
-    }
-
-    if (unauthScreen === 'marketing-analysis') {
-      return (
-        <MarketingAnalysisPage 
-          onBack={() => setUnauthScreen('landing')}
-          onEnterPortal={() => navigateTo('login')}
-          onEnterOrg={() => navigateTo('org')}
-          onRequestAccount={() => navigateTo('request')}
-          onNavigateMeddpicc={() => navigateTo('meddpicc')}
-        />
-      );
-    }
-
-        if (unauthScreen === "org") {
-      return (
-        <VizhinOrgPage 
-          onBack={() => navigateTo("landing")}
-          onEnterPortal={() => navigateTo("login")}
-          onRequestAccount={() => navigateTo("request")}
-          onNavigateMeddpicc={() => navigateTo("meddpicc")}
-          onNavigateMarketingAnalysis={() => navigateTo("marketing-analysis")}
-        />
-      );
-    }
-
-    if (unauthScreen === 'request') {
-      return (
-        <RequestAccessScreen 
-          onBack={() => setUnauthScreen('landing')}
-        />
-      );
-    }
-
     return (
       <div className="relative min-h-screen">
         <LoginScreen 
           onLoginSuccess={handleLoginSuccess}
           users={users}
-          onBack={() => setUnauthScreen('landing')}
+          onBack={() => navigateTo('landing')}
           onSwitchToOrg={() => navigateTo('org')}
         />
       </div>
@@ -337,7 +353,7 @@ export default function App() {
             )}
           </div>
 
-          {/* Quick Switch for Developer Guidance Tabs */}
+          {/* Global Multi-Platform Navigation Links */}
           <nav className="hidden md:flex items-center gap-1 bg-neutral-950/80 p-1 rounded-lg border border-neutral-800" id="header_nav">
             <button
               onClick={() => setActiveWorkspace('dashboard')}
@@ -345,7 +361,25 @@ export default function App() {
                 activeWorkspace === 'dashboard' ? 'bg-neutral-850 text-white' : 'text-neutral-400 hover:text-white'
               }`}
             >
-              Portal Workspace
+              CRM Portal
+            </button>
+            <button
+              onClick={() => navigateTo('org')}
+              className="px-3 py-1.5 text-xs font-semibold rounded-md transition-colors text-neutral-400 hover:text-white cursor-pointer"
+            >
+              VizhinORG
+            </button>
+            <button
+              onClick={() => navigateTo('meddpicc')}
+              className="px-3 py-1.5 text-xs font-semibold rounded-md transition-colors text-neutral-400 hover:text-white cursor-pointer"
+            >
+              MEDDPICC
+            </button>
+            <button
+              onClick={() => navigateTo('landing')}
+              className="px-3 py-1.5 text-xs font-semibold rounded-md transition-colors text-neutral-400 hover:text-white cursor-pointer"
+            >
+              Home
             </button>
             <button
               onClick={() => setActiveWorkspace('guide')}
@@ -354,13 +388,13 @@ export default function App() {
               }`}
             >
               <Code2 className="w-3.5 h-3.5 text-emerald-400" />
-              Developer Integration Guide
+              Dev Guide
             </button>
           </nav>
         </div>
 
         {/* Current user session & controls */}
-        <div className="flex items-center gap-4" id="header_user_module">
+        <div className="flex items-center gap-3 sm:gap-4" id="header_user_module">
           <div className="hidden sm:flex items-center gap-2.5 text-right">
             <div>
               <div className="text-xs font-bold text-neutral-200">{currentUser.name}</div>
@@ -371,12 +405,12 @@ export default function App() {
           {/* Logout Trigger button */}
           <button
             onClick={handleLogout}
-            className="p-2 rounded bg-neutral-950 hover:bg-neutral-850 border border-neutral-800 hover:border-neutral-700 text-neutral-400 hover:text-white transition-all cursor-pointer inline-flex items-center gap-1.5 text-xs font-semibold"
-            title="Disconnect portal terminal safely"
+            className="p-2 sm:px-3 sm:py-1.5 rounded-lg bg-red-950/70 hover:bg-red-900/90 border border-red-800/70 text-red-300 hover:text-white transition-all cursor-pointer inline-flex items-center gap-1.5 text-xs font-bold shadow-xs hover:scale-105"
+            title="Sign out of current account to switch user"
             id="btn_logout"
           >
-            <LogOut className="w-4 h-4" />
-            <span className="hidden sm:inline">Sign Out</span>
+            <LogOut className="w-4 h-4 text-red-400" />
+            <span>Sign Out</span>
           </button>
         </div>
       </header>

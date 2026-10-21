@@ -6,6 +6,12 @@ import {
 import SiteHeader from './SiteHeader';
 
 interface LandingPageProps {
+  currentUser?: {
+    email: string;
+    name?: string;
+    role?: string;
+  } | null;
+  onSignOut?: () => void;
   onEnterPortal: () => void;
   onEnterOrg?: () => void;
   onRequestAccount: () => void;
@@ -14,6 +20,8 @@ interface LandingPageProps {
 }
 
 export default function LandingPage({ 
+  currentUser,
+  onSignOut,
   onEnterPortal, 
   onEnterOrg,
   onRequestAccount, 
@@ -34,6 +42,8 @@ export default function LandingPage({
       {/* PERSISTENT GLOBAL SITE HEADER */}
       <SiteHeader 
         currentPage="landing"
+        currentUser={currentUser}
+        onSignOut={onSignOut}
         onNavigateHome={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         onNavigateMeddpicc={onNavigateMeddpicc}
         onNavigateMarketingAnalysis={onNavigateMarketingAnalysis}

@@ -176,106 +176,341 @@ export default function VizhinOrgPage({
             </p>
           </div>
 
-          {/* Interactive Org Chart Simulation Preview */}
-          <div className="bg-[#0c0d10] border border-neutral-800/90 rounded-2xl p-5 shadow-2xl relative overflow-hidden backdrop-blur-sm">
+                    {/* Interactive Org Chart Simulation Preview */}
+          <div className="bg-[#0c0d10] border border-neutral-800/90 rounded-2xl p-4 sm:p-5 shadow-2xl relative overflow-hidden backdrop-blur-sm">
             
-            {/* Top Toolbar */}
-            <div className="flex items-center justify-between pb-4 border-b border-neutral-800/80 text-xs">
+            {/* Top Toolbar & Quick Metrics */}
+            <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-neutral-800/80 text-xs">
               <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                <span className="font-mono font-bold text-neutral-200 text-[11px]">
-                  LIVE HIERARCHY TREE DEMO
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span className="font-mono font-bold text-neutral-200 text-[11px] tracking-wide">
+                  ENTERPRISE HIERARCHY SIMULATION
                 </span>
               </div>
-              <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-800/60 px-2 py-0.5 rounded">
-                Recursive RBAC Active
-              </span>
+              <div className="flex items-center gap-2 text-[10px] font-mono text-neutral-400">
+                <span className="bg-neutral-900 border border-neutral-800 px-2 py-0.5 rounded text-neutral-300">
+                  Headcount: <strong className="text-white">15</strong>
+                </span>
+                <span className="bg-neutral-900 border border-neutral-800 px-2 py-0.5 rounded text-neutral-300">
+                  Levels: <strong className="text-white">4</strong>
+                </span>
+                <span className="bg-emerald-950/80 text-emerald-400 border border-emerald-800/60 px-2 py-0.5 rounded font-bold">
+                  Recursive RBAC: Active
+                </span>
+              </div>
             </div>
 
-            {/* Tree Node Visualizer */}
-            <div className="py-6 flex flex-col items-center space-y-4">
+            {/* Department Filter Chips */}
+            <div className="flex items-center gap-1.5 py-2.5 overflow-x-auto text-[10px] font-mono border-b border-neutral-900/60">
+              <span className="text-neutral-500 mr-1 uppercase">Filter Branch:</span>
+              {[
+                { id: 'all', label: 'All Branches (15)' },
+                { id: 'Executive', label: 'Executive (2)' },
+                { id: 'Engineering', label: 'Engineering (5)' },
+                { id: 'Operations', label: 'Operations (2)' },
+                { id: 'Revenue', label: 'Revenue (3)' },
+                { id: 'People', label: 'People (2)' },
+              ].map(dept => (
+                <button
+                  key={dept.id}
+                  type="button"
+                  onClick={() => setSelectedBranch(dept.id)}
+                  className={`px-2 py-0.5 rounded transition-colors whitespace-nowrap cursor-pointer ${
+                    selectedBranch === dept.id
+                      ? 'bg-emerald-500 text-neutral-950 font-bold'
+                      : 'bg-neutral-900/90 text-neutral-400 hover:text-white border border-neutral-800'
+                  }`}
+                >
+                  {dept.label}
+                </button>
+              ))}
+            </div>
+
+            {/* COMPACT MULTI-TIER TREE VISUALIZER */}
+            <div className="py-4 space-y-3 overflow-x-auto">
               
-              {/* Root CEO Node */}
-              <button
-                type="button"
-                onClick={() => setSelectedPreviewNode('sarah')}
-                className={`p-3 rounded-xl border text-left transition-all w-64 shadow-md cursor-pointer ${
-                  selectedPreviewNode === 'sarah'
-                    ? 'bg-emerald-950/40 border-emerald-500 text-white ring-1 ring-emerald-500'
-                    : 'bg-neutral-900/80 border-neutral-800 text-neutral-300 hover:border-neutral-700'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold">Sarah Connor</span>
-                  <span className="text-[9px] font-mono bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded">CEO</span>
-                </div>
-                <p className="text-[10px] text-neutral-400">Chief Executive Officer</p>
-                <div className="mt-2 text-[9px] font-mono text-emerald-400 flex items-center gap-1">
-                  <ShieldCheck className="w-3 h-3" />
-                  <span>God Mode · Complete Tree Access</span>
-                </div>
-              </button>
+              {/* TIER 1: ROOT EXECUTIVE */}
+              <div className="flex flex-col items-center">
+                <button
+                  type="button"
+                  onClick={() => setSelectedPreviewNode('sarah')}
+                  className={`px-3 py-2 rounded-xl border text-left transition-all w-60 shadow-md cursor-pointer flex items-center gap-2.5 ${
+                    selectedPreviewNode === 'sarah'
+                      ? 'bg-emerald-950/50 border-emerald-500 text-white ring-1 ring-emerald-500 shadow-emerald-950/30'
+                      : 'bg-[#08090b] border-neutral-800 text-neutral-300 hover:border-neutral-700'
+                  }`}
+                >
+                  <div className="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-300 flex items-center justify-center font-bold text-xs shrink-0 border border-amber-500/30">
+                    SC
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold truncate">Sarah Connor</span>
+                      <span className="text-[8px] font-mono bg-amber-500/20 text-amber-300 px-1 py-0.2 rounded uppercase">CEO</span>
+                    </div>
+                    <p className="text-[10px] text-neutral-400 truncate">Chief Executive Officer</p>
+                  </div>
+                  <div className="text-[9px] font-mono text-emerald-400 bg-emerald-950 px-1.5 py-0.5 rounded border border-emerald-900 shrink-0">
+                    God Mode
+                  </div>
+                </button>
 
-              {/* Connecting line */}
-              <div className="w-0.5 h-6 bg-emerald-500/40"></div>
+                {/* Vertical Stem */}
+                <div className="w-0.5 h-3.5 bg-emerald-500/40"></div>
+                {/* Horizontal Spine */}
+                <div className="w-full max-w-xl h-0.5 bg-neutral-800 relative">
+                  <div className="absolute left-1/2 -top-1 w-2 h-2 -ml-1 rounded-full bg-emerald-500/60"></div>
+                </div>
+              </div>
 
-              {/* Direct Reports Row */}
-              <div className="grid grid-cols-2 gap-4 w-full max-w-lg">
+              {/* TIER 2: VPs & DIRECT C-SUITE REPORTS (Including User's Injection) */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 max-w-2xl mx-auto pt-1">
                 
-                {/* VP Eng Node */}
+                {/* 1. David Chen (VP Eng) */}
                 <button
                   type="button"
                   onClick={() => setSelectedPreviewNode('david')}
-                  className={`p-3 rounded-xl border text-left transition-all shadow-sm cursor-pointer ${
+                  className={`p-2 rounded-xl border text-left transition-all cursor-pointer ${
                     selectedPreviewNode === 'david'
-                      ? 'bg-emerald-950/40 border-emerald-500 text-white ring-1 ring-emerald-500'
-                      : 'bg-neutral-900/80 border-neutral-800 text-neutral-300 hover:border-neutral-700'
+                      ? 'bg-emerald-950/50 border-emerald-500 text-white ring-1 ring-emerald-500'
+                      : 'bg-[#08090b] border-neutral-800 text-neutral-300 hover:border-neutral-700'
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold">David Chen</span>
-                    <span className="text-[9px] font-mono bg-blue-500/20 text-blue-300 px-1.5 py-0.5 rounded">VP Eng</span>
+                    <span className="text-[11px] font-bold truncate">David Chen</span>
+                    <span className="text-[8px] font-mono bg-blue-500/20 text-blue-300 px-1 rounded">VP</span>
                   </div>
-                  <p className="text-[10px] text-neutral-400">Engineering Branch</p>
-                  <p className="text-[9px] text-neutral-500 mt-1">Directs: Elena, Marcus</p>
+                  <p className="text-[9px] text-neutral-400 truncate">VP Engineering</p>
+                  <p className="text-[8px] font-mono text-neutral-500 mt-1">4 Directs · R&D</p>
                 </button>
 
-                {/* Newly Registered User Injected as Executive Direct Report */}
+                {/* 2. Newly Registered User Injected Under CEO! */}
                 <button
                   type="button"
                   onClick={() => setSelectedPreviewNode('you')}
-                  className={`p-3 rounded-xl border text-left transition-all shadow-sm relative overflow-hidden cursor-pointer ${
+                  className={`p-2 rounded-xl border text-left transition-all relative overflow-hidden cursor-pointer ${
                     selectedPreviewNode === 'you'
-                      ? 'bg-emerald-950/40 border-emerald-500 text-white ring-1 ring-emerald-500'
-                      : 'bg-neutral-900/80 border-neutral-800 text-neutral-300 hover:border-neutral-700'
+                      ? 'bg-emerald-950/60 border-emerald-500 text-white ring-2 ring-emerald-500'
+                      : 'bg-emerald-950/20 border-emerald-700/80 text-neutral-200 hover:border-emerald-500'
                   }`}
                 >
-                  <div className="absolute top-0 right-0 bg-emerald-500 text-neutral-950 text-[8px] font-bold px-1.5 py-0.2 uppercase font-mono">
+                  <div className="absolute top-0 right-0 bg-emerald-500 text-neutral-950 text-[7px] font-black px-1 uppercase tracking-tight font-mono">
                     You Report Here
                   </div>
                   <div className="flex items-center justify-between mt-1">
-                    <span className="text-xs font-bold text-emerald-400">Your Account</span>
-                    <span className="text-[9px] font-mono bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded">Super Admin</span>
+                    <span className="text-[11px] font-bold text-emerald-400 truncate">Your Account</span>
+                    <span className="text-[8px] font-mono bg-emerald-500/20 text-emerald-300 px-1 rounded">Admin</span>
                   </div>
-                  <p className="text-[10px] text-neutral-400">VP of Operations</p>
-                  <p className="text-[9px] text-neutral-500 mt-1">Direct CEO Report · God Mode</p>
+                  <p className="text-[9px] text-neutral-300 truncate">VP Operations</p>
+                  <p className="text-[8px] font-mono text-emerald-300/80 mt-1">CEO Direct · God Mode</p>
+                </button>
+
+                {/* 3. Sarah Lin (Chief People Officer) */}
+                <button
+                  type="button"
+                  onClick={() => setSelectedPreviewNode('slin')}
+                  className={`p-2 rounded-xl border text-left transition-all cursor-pointer ${
+                    selectedPreviewNode === 'slin'
+                      ? 'bg-emerald-950/50 border-emerald-500 text-white ring-1 ring-emerald-500'
+                      : 'bg-[#08090b] border-neutral-800 text-neutral-300 hover:border-neutral-700'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold truncate">Sarah Lin</span>
+                    <span className="text-[8px] font-mono bg-purple-500/20 text-purple-300 px-1 rounded">CPO</span>
+                  </div>
+                  <p className="text-[9px] text-neutral-400 truncate">Chief People Officer</p>
+                  <p className="text-[8px] font-mono text-neutral-500 mt-1">2 Directs · People</p>
+                </button>
+
+                {/* 4. Marcus Vance (VP RevOps) */}
+                <button
+                  type="button"
+                  onClick={() => setSelectedPreviewNode('mvance')}
+                  className={`p-2 rounded-xl border text-left transition-all cursor-pointer ${
+                    selectedPreviewNode === 'mvance'
+                      ? 'bg-emerald-950/50 border-emerald-500 text-white ring-1 ring-emerald-500'
+                      : 'bg-[#08090b] border-neutral-800 text-neutral-300 hover:border-neutral-700'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold truncate">Marcus Vance</span>
+                    <span className="text-[8px] font-mono bg-amber-500/20 text-amber-300 px-1 rounded">VP</span>
+                  </div>
+                  <p className="text-[9px] text-neutral-400 truncate">VP Revenue Ops</p>
+                  <p className="text-[8px] font-mono text-neutral-500 mt-1">3 Directs · GTM</p>
                 </button>
 
               </div>
 
+              {/* TIER 3: MANAGERS & DIRECTORS */}
+              <div className="pt-2">
+                <div className="text-[9px] font-mono uppercase text-neutral-500 mb-1.5 flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-neutral-600"></span>
+                  <span>Tier 3: Operational People Managers & Subtree Leads</span>
+                </div>
+                
+                <div className="grid grid-cols-3 gap-2.5">
+                  
+                  {/* Elena Rostova (under David) */}
+                  <button
+                    type="button"
+                    onClick={() => setSelectedPreviewNode('elena')}
+                    className={`p-2 rounded-lg border text-left transition-all cursor-pointer ${
+                      selectedPreviewNode === 'elena'
+                        ? 'bg-emerald-950/50 border-emerald-500 text-white ring-1 ring-emerald-500'
+                        : 'bg-[#08090b] border-neutral-800/80 text-neutral-300 hover:border-neutral-700'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold truncate">Elena Rostova</span>
+                      <span className="text-[7px] font-mono bg-blue-500/20 text-blue-300 px-1 rounded">MGR</span>
+                    </div>
+                    <p className="text-[9px] text-neutral-400 truncate">Engineering Manager</p>
+                    <p className="text-[8px] text-emerald-400 font-mono mt-0.5">Directs: Marcus, Chloe</p>
+                  </button>
+
+                  {/* Rachel Kim (under Sarah Lin) */}
+                  <button
+                    type="button"
+                    onClick={() => setSelectedPreviewNode('rachel')}
+                    className={`p-2 rounded-lg border text-left transition-all cursor-pointer ${
+                      selectedPreviewNode === 'rachel'
+                        ? 'bg-emerald-950/50 border-emerald-500 text-white ring-1 ring-emerald-500'
+                        : 'bg-[#08090b] border-neutral-800/80 text-neutral-300 hover:border-neutral-700'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold truncate">Rachel Kim</span>
+                      <span className="text-[7px] font-mono bg-purple-500/20 text-purple-300 px-1 rounded">LEAD</span>
+                    </div>
+                    <p className="text-[9px] text-neutral-400 truncate">Lead Talent Architect</p>
+                    <p className="text-[8px] text-purple-400 font-mono mt-0.5">Org Design & Compensation</p>
+                  </button>
+
+                  {/* Liam Patel (under Marcus Vance) */}
+                  <button
+                    type="button"
+                    onClick={() => setSelectedPreviewNode('liam')}
+                    className={`p-2 rounded-lg border text-left transition-all cursor-pointer ${
+                      selectedPreviewNode === 'liam'
+                        ? 'bg-emerald-950/50 border-emerald-500 text-white ring-1 ring-emerald-500'
+                        : 'bg-[#08090b] border-neutral-800/80 text-neutral-300 hover:border-neutral-700'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold truncate">Liam Patel</span>
+                      <span className="text-[7px] font-mono bg-amber-500/20 text-amber-300 px-1 rounded">DIR</span>
+                    </div>
+                    <p className="text-[9px] text-neutral-400 truncate">Enterprise Sales Director</p>
+                    <p className="text-[8px] text-amber-400 font-mono mt-0.5">Directs: Maya, Jordan</p>
+                  </button>
+
+                </div>
+              </div>
+
+              {/* TIER 4: INDIVIDUAL CONTRIBUTORS & STAFF ENGINEERS */}
+              <div className="pt-2">
+                <div className="text-[9px] font-mono uppercase text-neutral-500 mb-1.5 flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-neutral-600"></span>
+                  <span>Tier 4: Individual Contributors (Self-Review Scoped)</span>
+                </div>
+
+                <div className="grid grid-cols-4 gap-2">
+                  {[
+                    { id: 'mbrody', name: 'Marcus Brody', role: 'Staff Engineer', dept: 'Eng' },
+                    { id: 'chloe', name: 'Chloe Bennett', role: 'Sr Frontend', dept: 'Eng' },
+                    { id: 'alex', name: 'Alex Vance', role: 'DevOps Lead', dept: 'Eng' },
+                    { id: 'maya', name: 'Maya Lin', role: 'Enterprise AE', dept: 'Sales' },
+                  ].map(ic => (
+                    <button
+                      key={ic.id}
+                      type="button"
+                      onClick={() => setSelectedPreviewNode(ic.id)}
+                      className={`p-1.5 rounded-lg border text-left transition-all cursor-pointer ${
+                        selectedPreviewNode === ic.id
+                          ? 'bg-emerald-950/50 border-emerald-500 text-white ring-1 ring-emerald-500'
+                          : 'bg-[#08090b] border-neutral-800/60 text-neutral-300 hover:border-neutral-700'
+                      }`}
+                    >
+                      <p className="text-[9px] font-bold truncate">{ic.name}</p>
+                      <p className="text-[8px] text-neutral-400 truncate">{ic.role}</p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
             </div>
 
-            {/* Context Explainer Box */}
-            <div className="bg-[#08090b] border border-neutral-800/80 p-3 rounded-xl text-xs text-neutral-400 flex items-start gap-2.5">
+            {/* Context Explainer Box: Dynamic based on selected node */}
+            <div className="bg-[#08090b] border border-neutral-800/80 p-3 rounded-xl text-xs text-neutral-300 flex items-start gap-2.5 mt-2">
               <Sparkles className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-              <span>
-                {selectedPreviewNode === 'you' && "When you launch the sandbox, you are injected directly under CEO Sarah Connor with full administrative calibration rights across all department reviews."}
-                {selectedPreviewNode === 'sarah' && "Sarah Connor sits at root hierarchy. By recursive RBAC rule, root executives inherit read/write calibration authority over all descendant reviews."}
-                {selectedPreviewNode === 'david' && "David Chen manages the Engineering subtree. He can edit reviews for his direct reports, but cannot access peer Sales branch evaluations."}
-              </span>
+              <div className="text-[11px] leading-relaxed">
+                {selectedPreviewNode === 'you' && (
+                  <span>
+                    <strong className="text-emerald-400">Your Account (Executive Direct Report):</strong> Injected directly reporting to CEO Sarah Connor with Super Admin ("God Mode") authority. You can view, calibrate, and delegate performance reviews across all 15 headcount.
+                  </span>
+                )}
+                {selectedPreviewNode === 'sarah' && (
+                  <span>
+                    <strong className="text-amber-300">Sarah Connor (CEO):</strong> Sits at root level. Under PostgreSQL recursive CTE rule, root executives inherit universal visibility across all descendant nodes and departments.
+                  </span>
+                )}
+                {selectedPreviewNode === 'david' && (
+                  <span>
+                    <strong className="text-blue-300">David Chen (VP Eng):</strong> Subtree manager. Inherits visibility over Elena Rostova, Marcus Brody, Chloe Bennett, and Alex Vance. Deterministic RBAC prevents him from viewing Revenue or People reviews.
+                  </span>
+                )}
+                {selectedPreviewNode === 'slin' && (
+                  <span>
+                    <strong className="text-purple-300">Sarah Lin (CPO):</strong> Manages the People & Culture division. Governs compensation bands, talent architecture, and executive review cycles for Rachel Kim and HR business partners.
+                  </span>
+                )}
+                {selectedPreviewNode === 'mvance' && (
+                  <span>
+                    <strong className="text-amber-300">Marcus Vance (VP RevOps):</strong> GTM Operations leader. Oversees quota structures, pipeline calibration, and evaluation scorecards for Liam Patel and the sales team.
+                  </span>
+                )}
+                {selectedPreviewNode === 'elena' && (
+                  <span>
+                    <strong className="text-emerald-300">Elena Rostova (Engineering Manager):</strong> Direct people manager for Marcus Brody and Chloe Bennett. Can write reviews for her direct reports, and delegate review authority to peers.
+                  </span>
+                )}
+                {selectedPreviewNode === 'rachel' && (
+                  <span>
+                    <strong className="text-purple-300">Rachel Kim (Lead Talent Architect):</strong> Reports to CPO Sarah Lin. Configures organizational job families and competency rubrics.
+                  </span>
+                )}
+                {selectedPreviewNode === 'liam' && (
+                  <span>
+                    <strong className="text-amber-300">Liam Patel (Sales Director):</strong> Reports to Marcus Vance. Reviews deal desk quotas and enterprise account executives.
+                  </span>
+                )}
+                {selectedPreviewNode === 'mbrody' && (
+                  <span>
+                    <strong className="text-neutral-200">Marcus Brody (Staff Engineer):</strong> Individual Contributor. Scoped to self-evaluations only; strict RLS blocks peer review inspection.
+                  </span>
+                )}
+                {selectedPreviewNode === 'chloe' && (
+                  <span>
+                    <strong className="text-neutral-200">Chloe Bennett (Sr Frontend):</strong> Individual Contributor. Participates in 360 upward feedback and self-calibration.
+                  </span>
+                )}
+                {selectedPreviewNode === 'alex' && (
+                  <span>
+                    <strong className="text-neutral-200">Alex Vance (DevOps Lead):</strong> Individual Contributor. Cloud infrastructure and deployment pipelines.
+                  </span>
+                )}
+                {selectedPreviewNode === 'maya' && (
+                  <span>
+                    <strong className="text-neutral-200">Maya Lin (Enterprise AE):</strong> Individual Contributor. Quota attainment and quarterly sales performance evaluations.
+                  </span>
+                )}
+              </div>
             </div>
 
           </div>
+
 
           {/* Trust Badges */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">

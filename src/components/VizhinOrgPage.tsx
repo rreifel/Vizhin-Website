@@ -255,7 +255,7 @@ export default function VizhinOrgPage({
               </span>
             </h1>
             <p className="text-sm sm:text-base text-neutral-300 leading-relaxed font-normal max-w-2xl mx-auto">
-              You are signed up! We are finalizing the production deployment of our multi-tenant enterprise terminal, live HRIS roster connectors (Workday, BambooHR, ADP), and deterministic PostgreSQL CTE ancestry permissions.
+              You are signed up! We are finalizing the production deployment of our multi-tenant enterprise terminal, live HRIS roster connectors (ADP, BambooHR, Deel, Oracle, Paycom, Rippling, SAP, UKG and more), and deterministic PostgreSQL CTE ancestry permissions.
             </p>
           </div>
 
@@ -299,7 +299,7 @@ export default function VizhinOrgPage({
               <div className="flex items-center justify-between p-2.5 rounded-lg bg-neutral-900/60 border border-neutral-800/60">
                 <span className="text-neutral-200 flex items-center gap-2">
                   <Clock className="w-4 h-4 text-amber-400 shrink-0 animate-spin" />
-                  <span>Live HRIS Ingestion Gateways (Workday, BambooHR, ADP)</span>
+                  <span>Live HRIS Ingestion Gateways (ADP, BambooHR, Deel, Oracle, Paycom, Rippling, SAP, UKG and more)</span>
                 </span>
                 <span className="text-amber-400 font-bold text-[11px]">Final QA</span>
               </div>
@@ -357,7 +357,7 @@ export default function VizhinOrgPage({
               </div>
               <h4 className="text-sm font-bold text-white">Two-Pass HRIS Ingestion</h4>
               <p className="text-xs text-neutral-400 leading-relaxed">
-                Zero-failure parent-child graph resolving for Workday, BambooHR, and ADP employee rosters.
+                Zero-failure parent-child graph resolving across ADP, BambooHR, Deel, Oracle, Paycom, Rippling, SAP, UKG and more.
               </p>
             </div>
 
@@ -808,7 +808,7 @@ export default function VizhinOrgPage({
                   <span>HRIS Sync</span>
                 </div>
                 <p className="text-[11px] text-neutral-400 mt-1 leading-snug">
-                  Native connectors for ADP Workforce Now, BambooHR, and Workday.
+                  Native connectors for ADP, BambooHR, Deel, Oracle, Paycom, Rippling, SAP, UKG and more.
                 </p>
               </div>
             </div>
@@ -1365,7 +1365,7 @@ export default function VizhinOrgPage({
                         <div className="border border-neutral-800 bg-[#08090b] rounded-xl p-3 flex items-center justify-between">
                           <div>
                             <p className="text-xs font-semibold text-white">Option B: Connect HRIS</p>
-                            <p className="text-[10px] text-neutral-400">ADP, BambooHR, or Workday via Nango</p>
+                            <p className="text-[10px] text-neutral-400">ADP, BambooHR, Deel, Oracle, Paycom, Rippling, SAP, UKG and more via Nango</p>
                           </div>
                           <button
                             type="button"

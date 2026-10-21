@@ -17,20 +17,36 @@ import {
   Briefcase,
   Layers,
   Crown,
-  Network
+  Network,
+  Maximize2,
+  Minimize2,
+  Shrink,
+  SlidersHorizontal,
+  LayoutGrid,
+  Grid,
+  Columns,
+  Eye,
+  Scan
 } from 'lucide-react';
 
 interface MovieOrgChartViewProps {
   onBackToLogin: () => void;
 }
 
+export type DensityMode = 'detailed' | 'compact' | 'micro' | 'satellite';
+export type SpacingMode = 'comfortable' | 'condensed';
+
 export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({ onBackToLogin }) => {
   const [rootId, setRootId] = useState<string | null>(null);
   const [selectedUser, setSelectedUser] = useState<MovieEmployee | null>(null);
-  const [zoomScale, setZoomScale] = useState(0.8);
+  
+  // Sift-style scaling and density modes
+  const [density, setDensity] = useState<DensityMode>('compact');
+  const [spacing, setSpacing] = useState<SpacingMode>('condensed');
+  const [zoomScale, setZoomScale] = useState(0.7);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [departmentFilter, setDepartmentFilter] = useState('ALL');
-  const [selectedLevelFilter, setSelectedLevelFilter] = useState<number | 'ALL'>('ALL');
 
   // Fast map lookup
   const employeeMap = useMemo(() => {
@@ -89,7 +105,6 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({ onBackToLo
   const [expandedNodes, setExpandedNodes] = useState<Record<string, boolean>>(() => {
     const initial: Record<string, boolean> = {};
     MOVIE_100_EMPLOYEES.forEach(e => {
-      // Expand Level 1 (CEO), Level 2 (C-Suite), and Level 3 (VPs) by default
       let lvl = 1;
       let curr: MovieEmployee | undefined = e;
       while (curr && curr.manager_id) {
@@ -157,8 +172,14 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({ onBackToLo
   };
 
   const handleCollapseAll = () => {
-    // Keep root expanded
     setExpandedNodes({ [defaultRoot.id]: true });
+  };
+
+  // Sift-style "Fit to Screen"
+  const handleFitToScreen = () => {
+    setDensity('micro');
+    setSpacing('condensed');
+    setZoomScale(0.45);
   };
 
   // Search matches
@@ -173,46 +194,120 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({ onBackToLo
     ).slice(0, 8);
   }, [searchQuery]);
 
+  // Card dimensions and styling based on density mode
+  const getCardStyle = (isUserNode: boolean, isSelected: boolean, isRoot: boolean) => {
+    let base = 'bg-white rounded-xl border-2 transition-all cursor-pointer select-none text-left relative hover:shadow-xl hover:border-slate-900 ';
+    
+    if (isUserNode) {
+      base += 'ring-2 ring-emerald-500 border-emerald-600 bg-emerald-50/80 shadow-lg ';
+    } else if (isSelected) {
+      base += 'ring-2 ring-blue-500 border-blue-600 shadow-lg ';
+    } else if (isRoot) {
+      base += 'border-slate-900 shadow-md ring-1 ring-slate-900/60 ';
+    } else {
+      base += 'border-slate-300 hover:border-slate-800 shadow-xs ';
+    }
+
+    switch (density) {
+      case 'detailed':
+        return `${base} w-64 p-3.5`;
+      case 'compact':
+        return `${base} w-48 p-2.5`;
+      case 'micro':
+        return `${base} w-36 p-1.5`;
+      case 'satellite':
+        return `${base} w-24 p-1`;
+    }
+  };
+
+  // Stem heights based on density mode
+  const getStemHeight = () => {
+    switch (density) {
+      case 'detailed': return 'h-6';
+      case 'compact': return 'h-4';
+      case 'micro': return 'h-2.5';
+      case 'satellite': return 'h-1.5';
+    }
+  };
+
+  // Sibling padding based on spacing and density
+  const getSiblingPadding = () => {
+    if (spacing === 'condensed') {
+      switch (density) {
+        case 'detailed': return 'px-2';
+        case 'compact': return 'px-1';
+        case 'micro': return 'px-0.5';
+        case 'satellite': return 'px-0.5';
+      }
+    } else {
+      switch (density) {
+        case 'detailed': return 'px-3.5';
+        case 'compact': return 'px-2';
+        case 'micro': return 'px-1';
+        case 'satellite': return 'px-0.5';
+      }
+    }
+  };
+
   // Level badge styling helper
   const renderLevelBadge = (level: number, isUser?: boolean) => {
+    if (density === 'satellite') {
+      return (
+        <span className="font-mono text-[8px] font-bold text-slate-700">
+          L{level}
+        </span>
+      );
+    }
+
+    if (density === 'micro') {
+      return (
+        <span className={`inline-flex items-center px-1 py-0.2 rounded font-mono text-[8px] font-black uppercase ${
+          isUser ? 'bg-emerald-600 text-white' : level === 1 ? 'bg-amber-100 text-amber-900' : 'bg-slate-100 text-slate-800'
+        }`}>
+          {isUser ? 'YOU' : `L${level}`}
+        </span>
+      );
+    }
+
     if (isUser) {
       return (
         <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-emerald-600 text-white font-mono text-[9px] font-black uppercase tracking-wider shadow-xs">
           <ShieldCheck className="w-2.5 h-2.5 text-emerald-200" />
-          <span>Level 2 · Super Admin</span>
+          <span>{density === 'compact' ? 'L2 · Super Admin' : 'Level 2 · Super Admin'}</span>
         </span>
       );
     }
+
     switch (level) {
       case 1:
         return (
           <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-300 font-mono text-[9px] font-black uppercase">
             <Crown className="w-2.5 h-2.5 text-amber-600" />
-            <span>Level 1 · CEO</span>
+            <span>{density === 'compact' ? 'L1 · CEO' : 'Level 1 · CEO'}</span>
           </span>
         );
       case 2:
         return (
           <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-purple-100 text-purple-900 border border-purple-300 font-mono text-[9px] font-extrabold uppercase">
-            <span>Level 2 · C-Suite</span>
+            <span>{density === 'compact' ? 'L2 · C-Suite' : 'Level 2 · C-Suite'}</span>
           </span>
         );
       case 3:
         return (
           <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-blue-100 text-blue-900 border border-blue-300 font-mono text-[9px] font-bold uppercase">
-            <span>Level 3 · VP</span>
+            <span>{density === 'compact' ? 'L3 · VP' : 'Level 3 · VP'}</span>
           </span>
         );
       case 4:
         return (
           <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-900 border border-indigo-200 font-mono text-[9px] font-bold uppercase">
-            <span>Level 4 · Director</span>
+            <span>{density === 'compact' ? 'L4 · Dir' : 'Level 4 · Director'}</span>
           </span>
         );
       default:
         return (
           <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-300 font-mono text-[9px] font-semibold uppercase">
-            <span>Level 5 · Staff IC</span>
+            <span>{density === 'compact' ? 'L5 · IC' : 'Level 5 · Staff IC'}</span>
           </span>
         );
     }
@@ -229,7 +324,6 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({ onBackToLo
     // Filter children based on department if applied
     const filteredChildren = children.filter(child => {
       if (departmentFilter !== 'ALL' && child.department !== departmentFilter) {
-        // Keep child if its subtree matches
         const hasMatchingDescendant = (mId: string): boolean => {
           const direct = reportsByManager.get(mId) || [];
           return direct.some(d => d.department === departmentFilter || hasMatchingDescendant(d.id));
@@ -246,121 +340,213 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({ onBackToLo
     return (
       <div key={node.id} className="flex flex-col items-center">
         
-        {/* Node Card - Pure White with Crisp Black Text and Distinct Borders */}
+        {/* Node Card */}
         <div
           onClick={() => setSelectedUser(node)}
-          className={`w-64 bg-white rounded-xl border-2 transition-all cursor-pointer select-none text-left p-3.5 relative hover:shadow-xl hover:border-slate-900 ${
-            isUserNode
-              ? 'ring-2 ring-emerald-500 border-emerald-600 bg-emerald-50/80 shadow-lg'
-              : isSelected
-              ? 'ring-2 ring-blue-500 border-blue-600 shadow-lg'
-              : isRoot
-              ? 'border-slate-900 shadow-md ring-1 ring-slate-900/60'
-              : 'border-slate-300 hover:border-slate-800 shadow-xs'
-          }`}
+          className={getCardStyle(isUserNode, isSelected, isRoot)}
         >
-          {/* Special Banner for User's Direct Placement Under CEO */}
-          {isUserNode && (
-            <div className="mb-2 -mx-1 px-2 py-0.5 rounded bg-emerald-600 text-white flex items-center justify-between text-[9px] font-black uppercase tracking-wider shadow-xs">
-              <span className="flex items-center gap-1">
-                <ShieldCheck className="w-3 h-3 text-emerald-200" />
-                <span>Your Account · God Mode</span>
+          {/* Detailed Mode Card Layout */}
+          {density === 'detailed' && (
+            <>
+              {isUserNode && (
+                <div className="mb-2 -mx-1 px-2 py-0.5 rounded bg-emerald-600 text-white flex items-center justify-between text-[9px] font-black uppercase tracking-wider shadow-xs">
+                  <span className="flex items-center gap-1">
+                    <ShieldCheck className="w-3 h-3 text-emerald-200" />
+                    <span>Your Account · God Mode</span>
+                  </span>
+                  <span className="bg-emerald-800 px-1 py-0.2 rounded font-mono text-[8px]">
+                    Reports to CEO
+                  </span>
+                </div>
+              )}
+
+              <div className="flex items-center justify-between text-[10px] mb-2 gap-1">
+                {renderLevelBadge(nodeLevel, isUserNode)}
+                <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-800 border border-slate-300 font-mono text-[9px] font-bold shrink-0">
+                  <Clapperboard className="w-2.5 h-2.5 text-emerald-600" />
+                  <span className="truncate max-w-[85px]">{node.movie}</span>
+                </span>
+              </div>
+
+              <div className="flex items-start gap-2.5">
+                <div className={`w-9 h-9 rounded-full flex items-center justify-center font-black text-xs shrink-0 shadow-xs ${
+                  isUserNode 
+                    ? 'bg-emerald-600 text-white ring-2 ring-emerald-300' 
+                    : nodeLevel === 1 
+                    ? 'bg-amber-500 text-neutral-950 ring-2 ring-amber-300' 
+                    : 'bg-black text-white'
+                }`}>
+                  {isUserNode ? '★' : `${node.first_name[0]}${node.last_name[0]}`}
+                </div>
+
+                <div className="min-w-0 flex-1">
+                  <h4 className="text-xs font-black text-black truncate leading-tight">
+                    {node.first_name} {node.last_name}
+                  </h4>
+                  <p className="text-[10px] font-bold text-slate-800 truncate leading-tight mt-0.5">
+                    {node.title}
+                  </p>
+                  <div className="flex items-center gap-1 text-[9px] font-mono text-slate-500 mt-1">
+                    <span className="font-extrabold text-slate-700 uppercase tracking-wider">{node.department}</span>
+                    {node.manager_id && employeeMap.has(node.manager_id) && (
+                      <span className="truncate">· Re: {employeeMap.get(node.manager_id)!.last_name}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-2.5 pt-2 border-t border-slate-200 flex items-center justify-between text-[10px]">
+                <span className="font-extrabold text-slate-800">
+                  {hasChildren ? (
+                    <span>
+                      {children.length} direct{children.length === 1 ? '' : 's'}
+                      {subtreeCount > children.length && (
+                        <span className="text-slate-500 font-normal ml-1">({subtreeCount} in div)</span>
+                      )}
+                    </span>
+                  ) : (
+                    <span className="text-slate-500 font-medium">Individual Contributor</span>
+                  )}
+                </span>
+
+                <div className="flex items-center gap-1.5">
+                  {node.id !== activeRoot.id && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setRootId(node.id);
+                      }}
+                      className="text-[9px] text-emerald-700 hover:text-emerald-900 font-bold hover:underline"
+                    >
+                      Focus
+                    </button>
+                  )}
+
+                  {hasChildren && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleExpand(node.id);
+                      }}
+                      className="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-800 font-mono text-[9px] font-extrabold border border-slate-300 transition-colors"
+                    >
+                      {isExpanded ? `Collapse (${children.length})` : `Expand (${children.length})`}
+                    </button>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* Compact Mode Card Layout (Sift Standard) */}
+          {density === 'compact' && (
+            <>
+              {isUserNode && (
+                <div className="mb-1 -mx-0.5 px-1.5 py-0.2 rounded bg-emerald-600 text-white flex items-center justify-between text-[8px] font-black uppercase">
+                  <span>★ Your Account</span>
+                  <span className="font-mono text-[7px]">CEO Direct</span>
+                </div>
+              )}
+
+              <div className="flex items-center justify-between text-[9px] mb-1 gap-1">
+                {renderLevelBadge(nodeLevel, isUserNode)}
+                <span className="font-mono text-[8px] text-slate-500 truncate max-w-[65px]">
+                  {node.movie}
+                </span>
+              </div>
+
+              <div className="flex items-center gap-1.5">
+                <div className={`w-7 h-7 rounded-full flex items-center justify-center font-black text-[10px] shrink-0 ${
+                  isUserNode ? 'bg-emerald-600 text-white' : nodeLevel === 1 ? 'bg-amber-500 text-black' : 'bg-black text-white'
+                }`}>
+                  {isUserNode ? '★' : `${node.first_name[0]}${node.last_name[0]}`}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h4 className="text-[11px] font-black text-black truncate leading-tight">
+                    {node.first_name} {node.last_name}
+                  </h4>
+                  <p className="text-[9px] font-semibold text-slate-700 truncate leading-tight">
+                    {node.title}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-1.5 pt-1 border-t border-slate-200 flex items-center justify-between text-[8px] font-mono">
+                <span className="font-bold text-slate-700">
+                  {hasChildren ? `${children.length}d · ${subtreeCount}div` : node.department}
+                </span>
+                {hasChildren && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleExpand(node.id);
+                    }}
+                    className="px-1.5 py-0.2 rounded bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold border border-slate-300"
+                  >
+                    {isExpanded ? '−' : `+${children.length}`}
+                  </button>
+                )}
+              </div>
+            </>
+          )}
+
+          {/* Micro Mode Card Layout (Sift Bird's Eye View - Extreme Screen Efficiency) */}
+          {density === 'micro' && (
+            <>
+              <div className="flex items-center justify-between gap-1">
+                <div className="flex items-center gap-1 min-w-0">
+                  <div className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[8px] shrink-0 ${
+                    isUserNode ? 'bg-emerald-600 text-white' : nodeLevel === 1 ? 'bg-amber-500 text-black' : 'bg-black text-white'
+                  }`}>
+                    {isUserNode ? '★' : `${node.first_name[0]}${node.last_name[0]}`}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-[9px] font-black text-black truncate leading-tight">
+                      {node.first_name} {node.last_name}
+                    </p>
+                    <p className="text-[7.5px] font-medium text-slate-600 truncate leading-tight">
+                      {node.title}
+                    </p>
+                  </div>
+                </div>
+
+                {hasChildren && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleExpand(node.id);
+                    }}
+                    className="w-4 h-4 rounded bg-slate-100 hover:bg-slate-200 text-slate-800 font-mono text-[8px] font-black border border-slate-300 flex items-center justify-center shrink-0"
+                  >
+                    {isExpanded ? '−' : children.length}
+                  </button>
+                )}
+              </div>
+            </>
+          )}
+
+          {/* Satellite Mode (Micro Pill for Panoramic Multi-Tier Topology) */}
+          {density === 'satellite' && (
+            <div className="flex items-center justify-between gap-1">
+              <span className="text-[8px] font-black text-black truncate">
+                {isUserNode ? '★ You' : `${node.last_name}`}
               </span>
-              <span className="bg-emerald-800 px-1 py-0.2 rounded font-mono text-[8px]">
-                Reports to CEO
+              <span className="text-[7px] font-mono font-bold text-slate-500">
+                {hasChildren ? `(${children.length})` : `L${nodeLevel}`}
               </span>
             </div>
           )}
-
-          {/* Header row: Management Level Badge & Movie Tag */}
-          <div className="flex items-center justify-between text-[10px] mb-2 gap-1">
-            {renderLevelBadge(nodeLevel, isUserNode)}
-
-            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-800 border border-slate-300 font-mono text-[9px] font-bold shrink-0">
-              <Clapperboard className="w-2.5 h-2.5 text-emerald-600" />
-              <span className="truncate max-w-[85px]">{node.movie}</span>
-            </span>
-          </div>
-
-          {/* User Identity */}
-          <div className="flex items-start gap-2.5">
-            <div className={`w-9 h-9 rounded-full flex items-center justify-center font-black text-xs shrink-0 shadow-xs ${
-              isUserNode 
-                ? 'bg-emerald-600 text-white ring-2 ring-emerald-300' 
-                : nodeLevel === 1 
-                ? 'bg-amber-500 text-neutral-950 ring-2 ring-amber-300' 
-                : 'bg-black text-white'
-            }`}>
-              {isUserNode ? '★' : `${node.first_name[0]}${node.last_name[0]}`}
-            </div>
-
-            <div className="min-w-0 flex-1">
-              <h4 className="text-xs font-black text-black truncate leading-tight">
-                {node.first_name} {node.last_name}
-              </h4>
-              <p className="text-[10px] font-bold text-slate-800 truncate leading-tight mt-0.5">
-                {node.title}
-              </p>
-              <div className="flex items-center gap-1 text-[9px] font-mono text-slate-500 mt-1">
-                <span className="font-extrabold text-slate-700 uppercase tracking-wider">{node.department}</span>
-                {node.manager_id && employeeMap.has(node.manager_id) && (
-                  <span className="truncate">· Re: {employeeMap.get(node.manager_id)!.last_name}</span>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Subtree Division Scope & Directs Footer */}
-          <div className="mt-2.5 pt-2 border-t border-slate-200 flex items-center justify-between text-[10px]">
-            <span className="font-extrabold text-slate-800">
-              {hasChildren ? (
-                <span>
-                  {children.length} direct{children.length === 1 ? '' : 's'}
-                  {subtreeCount > children.length && (
-                    <span className="text-slate-500 font-normal ml-1">({subtreeCount} in div)</span>
-                  )}
-                </span>
-              ) : (
-                <span className="text-slate-500 font-medium">Individual Contributor</span>
-              )}
-            </span>
-
-            <div className="flex items-center gap-1.5">
-              {node.id !== activeRoot.id && (
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setRootId(node.id);
-                  }}
-                  className="text-[9px] text-emerald-700 hover:text-emerald-900 font-bold hover:underline"
-                  title="Focus view on this subtree"
-                >
-                  Focus
-                </button>
-              )}
-
-              {hasChildren && (
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleExpand(node.id);
-                  }}
-                  className="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-800 font-mono text-[9px] font-extrabold border border-slate-300 transition-colors"
-                >
-                  {isExpanded ? `Collapse (${children.length})` : `Expand (${children.length})`}
-                </button>
-              )}
-            </div>
-          </div>
         </div>
 
         {/* Child branches */}
         {hasChildren && isExpanded && (
           <div className="flex flex-col items-center w-full">
             {/* Vertical stem down */}
-            <div className="w-[2px] h-6 bg-slate-700"></div>
+            <div className={`w-[2px] ${getStemHeight()} bg-slate-700`}></div>
 
             {/* Horizontal branch line */}
             <div className="flex justify-center relative">
@@ -370,7 +556,7 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({ onBackToLo
                 const isLast = index === filteredChildren.length - 1;
 
                 return (
-                  <div key={child.id} className="flex flex-col items-center px-2 sm:px-3 relative">
+                  <div key={child.id} className={`flex flex-col items-center ${getSiblingPadding()} relative`}>
                     {!isOnly && (
                       <>
                         <div
@@ -387,7 +573,7 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({ onBackToLo
                     )}
 
                     {/* Stem to child node */}
-                    <div className="w-[2px] h-6 bg-slate-700"></div>
+                    <div className={`w-[2px] ${getStemHeight()} bg-slate-700`}></div>
 
                     {renderBranch(child, level + 1)}
                   </div>
@@ -404,12 +590,12 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({ onBackToLo
     <div className="flex flex-col h-full bg-slate-100 text-slate-900 overflow-hidden relative">
       
       {/* =========================================================================
-          TOOLBAR HEADER: Navigation, Search, Department Filter, Zoom, and Levels
+          TOOLBAR HEADER: Navigation, Search, Department Filter, and Controls
           ========================================================================= */}
-      <div className="bg-white border-b-2 border-slate-300 px-4 py-3 flex flex-wrap items-center justify-between gap-3 shrink-0 shadow-xs z-30">
+      <div className="bg-white border-b-2 border-slate-300 px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 shrink-0 shadow-xs z-30">
         
         {/* Left: Back button & Breadcrumbs */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           <button
             type="button"
             onClick={onBackToLogin}
@@ -449,14 +635,14 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({ onBackToLo
         </div>
 
         {/* Middle: Search bar */}
-        <div className="relative w-64 sm:w-80">
+        <div className="relative w-56 sm:w-72">
           <div className="flex items-center bg-slate-50 rounded-lg px-2.5 py-1.5 border border-slate-300 focus-within:border-slate-800 focus-within:bg-white transition-colors">
             <Search className="w-3.5 h-3.5 text-slate-500 mr-2 shrink-0" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search 115 cinema tech employees & roles..."
+              placeholder="Search 115 cinema tech employees..."
               className="text-xs bg-transparent border-0 focus:outline-none w-full text-black placeholder:text-slate-400"
             />
             {searchQuery && (
@@ -493,14 +679,12 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({ onBackToLo
           )}
         </div>
 
-        {/* Right Controls: Department Filter & Zoom */}
+        {/* Right Controls: Department Filter */}
         <div className="flex items-center gap-2">
-          
-          {/* Department Filter */}
           <select
             value={departmentFilter}
             onChange={(e) => setDepartmentFilter(e.target.value)}
-            className="bg-white border border-slate-300 text-slate-800 font-bold py-1 px-2.5 rounded-lg text-xs focus:outline-none"
+            className="bg-white border border-slate-300 text-slate-800 font-bold py-1 px-2 rounded-lg text-xs focus:outline-none"
           >
             <option value="ALL">All Departments (115)</option>
             {departments.map((d) => (
@@ -509,94 +693,197 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({ onBackToLo
               </option>
             ))}
           </select>
-
-          {/* Zoom controls */}
-          <div className="flex items-center bg-white border border-slate-300 rounded-lg p-0.5 shadow-xs">
-            <button
-              type="button"
-              onClick={() => setZoomScale((prev) => Math.min(1.4, prev + 0.1))}
-              className="p-1 hover:bg-slate-100 rounded text-slate-700"
-              title="Zoom In"
-            >
-              <ZoomIn className="w-3.5 h-3.5" />
-            </button>
-            <button
-              type="button"
-              onClick={() => setZoomScale(0.8)}
-              className="p-1 hover:bg-slate-100 rounded text-slate-700 text-[10px] font-mono font-bold px-1"
-              title="Reset Zoom"
-            >
-              {Math.round(zoomScale * 100)}%
-            </button>
-            <button
-              type="button"
-              onClick={() => setZoomScale((prev) => Math.max(0.4, prev - 0.1))}
-              className="p-1 hover:bg-slate-100 rounded text-slate-700"
-              title="Zoom Out"
-            >
-              <ZoomOut className="w-3.5 h-3.5" />
-            </button>
-          </div>
         </div>
       </div>
 
       {/* =========================================================================
-          LEVEL SELECTOR & HIERARCHY SUMMARY BAR
+          SIFT-STYLE DISPLAY CONTROLS BAR: Density, Spacing, Fit Screen, & Zoom Presets
           ========================================================================= */}
-      <div className="bg-slate-200 border-b border-slate-300 px-4 py-2 flex flex-wrap items-center justify-between gap-3 text-xs shrink-0 z-20">
+      <div className="bg-slate-200 border-b-2 border-slate-300 px-4 py-2 flex flex-wrap items-center justify-between gap-3 text-xs shrink-0 z-20 shadow-xs">
+        
+        {/* Left Side: Sift Density & Spacing Selectors */}
+        <div className="flex flex-wrap items-center gap-3">
+          
+          {/* Card Density Segmented Control */}
+          <div className="flex items-center gap-1 bg-white p-1 rounded-lg border border-slate-300 shadow-xs">
+            <span className="text-[9px] font-mono font-bold uppercase text-slate-500 px-1.5 hidden sm:inline">
+              Density:
+            </span>
+            {[
+              { id: 'detailed', label: 'Detailed', icon: LayoutGrid, hint: 'Full Cards (260px)' },
+              { id: 'compact', label: 'Compact', icon: Grid, hint: 'Medium Cards (190px)' },
+              { id: 'micro', label: 'Micro (Bird\'s Eye)', icon: Shrink, hint: 'High Screen Capacity (130px)' },
+              { id: 'satellite', label: 'Satellite', icon: Scan, hint: 'Mini Pills (95px)' },
+            ].map(mode => {
+              const Icon = mode.icon;
+              return (
+                <button
+                  key={mode.id}
+                  type="button"
+                  onClick={() => setDensity(mode.id as DensityMode)}
+                  title={mode.hint}
+                  className={`px-2 py-1 rounded text-[10px] font-bold flex items-center gap-1 transition-all cursor-pointer ${
+                    density === mode.id
+                      ? 'bg-slate-900 text-white shadow-xs'
+                      : 'text-slate-700 hover:text-black hover:bg-slate-100'
+                  }`}
+                >
+                  <Icon className="w-3 h-3" />
+                  <span className="hidden md:inline">{mode.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Branch Spacing Toggle */}
+          <div className="flex items-center gap-1 bg-white p-1 rounded-lg border border-slate-300 shadow-xs">
+            <span className="text-[9px] font-mono font-bold uppercase text-slate-500 px-1.5 hidden sm:inline">
+              Spacing:
+            </span>
+            <button
+              type="button"
+              onClick={() => setSpacing('condensed')}
+              className={`px-2 py-1 rounded text-[10px] font-bold transition-all cursor-pointer ${
+                spacing === 'condensed'
+                  ? 'bg-emerald-600 text-white shadow-xs'
+                  : 'text-slate-700 hover:text-black hover:bg-slate-100'
+              }`}
+              title="Condensed Horizontal Gap (Fitted)"
+            >
+              Tight Spacing
+            </button>
+            <button
+              type="button"
+              onClick={() => setSpacing('comfortable')}
+              className={`px-2 py-1 rounded text-[10px] font-bold transition-all cursor-pointer ${
+                spacing === 'comfortable'
+                  ? 'bg-slate-900 text-white shadow-xs'
+                  : 'text-slate-700 hover:text-black hover:bg-slate-100'
+              }`}
+              title="Comfortable Horizontal Gap"
+            >
+              Relaxed
+            </button>
+          </div>
+
+        </div>
+
+        {/* Right Side: Sift Fit-to-Screen & Semantic Zoom Presets */}
+        <div className="flex items-center gap-2">
+          
+          {/* Fit To Screen (Sift's Signature Overview Button) */}
+          <button
+            type="button"
+            onClick={handleFitToScreen}
+            className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] flex items-center gap-1.5 shadow-xs transition-transform hover:scale-105 cursor-pointer"
+            title="Auto-shrink view to fit all departments on screen simultaneously"
+          >
+            <Maximize2 className="w-3 h-3 text-emerald-200" />
+            <span>Fit To Screen</span>
+          </button>
+
+          {/* Quick Zoom Presets */}
+          <div className="flex items-center bg-white rounded-lg p-0.5 border border-slate-300 shadow-xs">
+            {[
+              { label: '35%', scale: 0.35 },
+              { label: '50%', scale: 0.5 },
+              { label: '70%', scale: 0.7 },
+              { label: '100%', scale: 1.0 },
+            ].map(p => (
+              <button
+                key={p.label}
+                type="button"
+                onClick={() => setZoomScale(p.scale)}
+                className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-bold transition-all cursor-pointer ${
+                  Math.abs(zoomScale - p.scale) < 0.05
+                    ? 'bg-slate-900 text-white'
+                    : 'text-slate-700 hover:text-black hover:bg-slate-100'
+                }`}
+              >
+                {p.label}
+              </button>
+            ))}
+
+            {/* Stepper buttons */}
+            <button
+              type="button"
+              onClick={() => setZoomScale(prev => Math.max(0.25, prev - 0.1))}
+              className="p-1 hover:bg-slate-100 rounded text-slate-700"
+              title="Zoom Out"
+            >
+              <ZoomOut className="w-3 h-3" />
+            </button>
+            <button
+              type="button"
+              onClick={() => setZoomScale(prev => Math.min(1.4, prev + 0.1))}
+              className="p-1 hover:bg-slate-100 rounded text-slate-700"
+              title="Zoom In"
+            >
+              <ZoomIn className="w-3 h-3" />
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+      {/* =========================================================================
+          LEVEL DEPTH & EXPANSION BAR
+          ========================================================================= */}
+      <div className="bg-slate-100 border-b border-slate-300 px-4 py-1.5 flex flex-wrap items-center justify-between gap-2 text-[10px] shrink-0 z-10">
         <div className="flex items-center gap-1.5 overflow-x-auto">
-          <span className="text-slate-600 font-mono font-bold uppercase text-[10px] mr-1">
-            Expand Depth:
+          <span className="text-slate-600 font-mono font-bold uppercase mr-1">
+            Hierarchy Depth:
           </span>
           <button
             type="button"
             onClick={handleExpandAll}
-            className="px-2.5 py-1 rounded bg-slate-900 text-white font-bold text-[10px] hover:bg-black transition-colors"
+            className="px-2 py-0.5 rounded bg-slate-900 text-white font-bold hover:bg-black transition-colors"
           >
             All 5 Levels (115)
           </button>
           <button
             type="button"
             onClick={() => handleExpandToLevel(3)}
-            className="px-2.5 py-1 rounded bg-white text-slate-800 font-bold text-[10px] border border-slate-300 hover:bg-slate-50 transition-colors"
+            className="px-2 py-0.5 rounded bg-white text-slate-800 font-bold border border-slate-300 hover:bg-slate-50 transition-colors"
           >
             Levels 1-3 (C-Suite & VPs)
           </button>
           <button
             type="button"
             onClick={() => handleExpandToLevel(2)}
-            className="px-2.5 py-1 rounded bg-white text-slate-800 font-bold text-[10px] border border-slate-300 hover:bg-slate-50 transition-colors"
+            className="px-2 py-0.5 rounded bg-white text-slate-800 font-bold border border-slate-300 hover:bg-slate-50 transition-colors"
           >
             Levels 1-2 (C-Suite Only)
           </button>
           <button
             type="button"
             onClick={handleCollapseAll}
-            className="px-2.5 py-1 rounded bg-white text-slate-600 font-bold text-[10px] border border-slate-300 hover:bg-slate-50 transition-colors"
+            className="px-2 py-0.5 rounded bg-white text-slate-600 font-bold border border-slate-300 hover:bg-slate-50 transition-colors"
           >
             Collapse All
           </button>
         </div>
 
         {/* 5-Level Architecture Breakdown Legend */}
-        <div className="hidden md:flex items-center gap-2 text-[10px] font-mono font-bold">
-          <span className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-300">
+        <div className="hidden lg:flex items-center gap-1.5 font-mono font-bold text-[9px]">
+          <span className="px-1.5 py-0.2 rounded bg-amber-100 text-amber-900 border border-amber-300">
             L1: CEO (1)
           </span>
           <span>→</span>
-          <span className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-purple-100 text-purple-900 border border-purple-300">
+          <span className="px-1.5 py-0.2 rounded bg-purple-100 text-purple-900 border border-purple-300">
             L2: C-Suite (7)
           </span>
           <span>→</span>
-          <span className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-blue-100 text-blue-900 border border-blue-300">
+          <span className="px-1.5 py-0.2 rounded bg-blue-100 text-blue-900 border border-blue-300">
             L3: VPs (17)
           </span>
           <span>→</span>
-          <span className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-900 border border-indigo-200">
-            L4: Directors (21)
+          <span className="px-1.5 py-0.2 rounded bg-indigo-50 text-indigo-900 border border-indigo-200">
+            L4: Dirs (21)
           </span>
           <span>→</span>
-          <span className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-300">
+          <span className="px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 border border-slate-300">
             L5: ICs (69)
           </span>
         </div>

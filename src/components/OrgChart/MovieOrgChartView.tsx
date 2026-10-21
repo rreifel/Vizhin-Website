@@ -14,7 +14,10 @@ import {
   Building2,
   X,
   Mail,
-  Briefcase
+  Briefcase,
+  Layers,
+  Crown,
+  Network
 } from 'lucide-react';
 
 interface MovieOrgChartViewProps {
@@ -24,39 +27,17 @@ interface MovieOrgChartViewProps {
 export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({ onBackToLogin }) => {
   const [rootId, setRootId] = useState<string | null>(null);
   const [selectedUser, setSelectedUser] = useState<MovieEmployee | null>(null);
-  const [zoomScale, setZoomScale] = useState(0.85);
+  const [zoomScale, setZoomScale] = useState(0.8);
   const [searchQuery, setSearchQuery] = useState('');
   const [departmentFilter, setDepartmentFilter] = useState('ALL');
-  const [movieFilter, setMovieFilter] = useState('ALL');
-  
-  // Track expanded nodes; default top 3 levels expanded
-  const [expandedNodes, setExpandedNodes] = useState<Record<string, boolean>>(() => {
-    const initial: Record<string, boolean> = {};
-    MOVIE_100_EMPLOYEES.forEach(e => {
-      // Expand top level executives and directors by default
-      if (['e1', 'e2', 'e3', 'e4', 'e5', 'e6', 'e7', 'e8', 'e9'].includes(e.id)) {
-        initial[e.id] = true;
-      }
-    });
-    return initial;
-  });
+  const [selectedLevelFilter, setSelectedLevelFilter] = useState<number | 'ALL'>('ALL');
 
+  // Fast map lookup
   const employeeMap = useMemo(() => {
     const map = new Map<string, MovieEmployee>();
     MOVIE_100_EMPLOYEES.forEach(e => map.set(e.id, e));
     return map;
   }, []);
-
-  const defaultRoot = useMemo(() => {
-    return MOVIE_100_EMPLOYEES.find(e => e.manager_id === null) || MOVIE_100_EMPLOYEES[0];
-  }, []);
-
-  const activeRoot = useMemo(() => {
-    if (rootId && employeeMap.has(rootId)) {
-      return employeeMap.get(rootId)!;
-    }
-    return defaultRoot;
-  }, [rootId, employeeMap, defaultRoot]);
 
   // Reports grouped by manager
   const reportsByManager = useMemo(() => {
@@ -71,13 +52,70 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({ onBackToLo
     return map;
   }, []);
 
-  const departments = useMemo(() => {
-    const set = new Set(MOVIE_100_EMPLOYEES.map(e => e.department));
-    return Array.from(set).sort();
+  // Helper to compute node level (1 to 5)
+  const getNodeLevel = useMemo(() => {
+    const cache = new Map<string, number>();
+    return (id: string): number => {
+      if (cache.has(id)) return cache.get(id)!;
+      let lvl = 1;
+      let curr = employeeMap.get(id);
+      while (curr && curr.manager_id && employeeMap.has(curr.manager_id)) {
+        lvl++;
+        curr = employeeMap.get(curr.manager_id);
+      }
+      cache.set(id, lvl);
+      return lvl;
+    };
+  }, [employeeMap]);
+
+  // Helper to compute total subtree headcount (division size)
+  const getSubtreeCount = useMemo(() => {
+    const cache = new Map<string, number>();
+    const countFn = (id: string): number => {
+      if (cache.has(id)) return cache.get(id)!;
+      let total = 0;
+      const directs = reportsByManager.get(id) || [];
+      total += directs.length;
+      directs.forEach(d => {
+        total += countFn(d.id);
+      });
+      cache.set(id, total);
+      return total;
+    };
+    return countFn;
+  }, [reportsByManager]);
+
+  // Track expanded nodes; default top 3 levels expanded so 5-level structure is immediately visible
+  const [expandedNodes, setExpandedNodes] = useState<Record<string, boolean>>(() => {
+    const initial: Record<string, boolean> = {};
+    MOVIE_100_EMPLOYEES.forEach(e => {
+      // Expand Level 1 (CEO), Level 2 (C-Suite), and Level 3 (VPs) by default
+      let lvl = 1;
+      let curr: MovieEmployee | undefined = e;
+      while (curr && curr.manager_id) {
+        lvl++;
+        curr = employeeMap.get(curr.manager_id);
+      }
+      if (lvl <= 3) {
+        initial[e.id] = true;
+      }
+    });
+    return initial;
+  });
+
+  const defaultRoot = useMemo(() => {
+    return MOVIE_100_EMPLOYEES.find(e => e.manager_id === null) || MOVIE_100_EMPLOYEES[0];
   }, []);
 
-  const movies = useMemo(() => {
-    const set = new Set(MOVIE_100_EMPLOYEES.map(e => e.movie));
+  const activeRoot = useMemo(() => {
+    if (rootId && employeeMap.has(rootId)) {
+      return employeeMap.get(rootId)!;
+    }
+    return defaultRoot;
+  }, [rootId, employeeMap, defaultRoot]);
+
+  const departments = useMemo(() => {
+    const set = new Set(MOVIE_100_EMPLOYEES.map(e => e.department));
     return Array.from(set).sort();
   }, []);
 
@@ -100,6 +138,16 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({ onBackToLo
     }));
   };
 
+  const handleExpandToLevel = (targetLevel: number) => {
+    const updated: Record<string, boolean> = {};
+    MOVIE_100_EMPLOYEES.forEach(e => {
+      if (getNodeLevel(e.id) <= targetLevel) {
+        updated[e.id] = true;
+      }
+    });
+    setExpandedNodes(updated);
+  };
+
   const handleExpandAll = () => {
     const all: Record<string, boolean> = {};
     MOVIE_100_EMPLOYEES.forEach(e => {
@@ -109,7 +157,8 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({ onBackToLo
   };
 
   const handleCollapseAll = () => {
-    setExpandedNodes({});
+    // Keep root expanded
+    setExpandedNodes({ [defaultRoot.id]: true });
   };
 
   // Search matches
@@ -124,13 +173,60 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({ onBackToLo
     ).slice(0, 8);
   }, [searchQuery]);
 
+  // Level badge styling helper
+  const renderLevelBadge = (level: number, isUser?: boolean) => {
+    if (isUser) {
+      return (
+        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-emerald-600 text-white font-mono text-[9px] font-black uppercase tracking-wider shadow-xs">
+          <ShieldCheck className="w-2.5 h-2.5 text-emerald-200" />
+          <span>Level 2 · Super Admin</span>
+        </span>
+      );
+    }
+    switch (level) {
+      case 1:
+        return (
+          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-300 font-mono text-[9px] font-black uppercase">
+            <Crown className="w-2.5 h-2.5 text-amber-600" />
+            <span>Level 1 · CEO</span>
+          </span>
+        );
+      case 2:
+        return (
+          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-purple-100 text-purple-900 border border-purple-300 font-mono text-[9px] font-extrabold uppercase">
+            <span>Level 2 · C-Suite</span>
+          </span>
+        );
+      case 3:
+        return (
+          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-blue-100 text-blue-900 border border-blue-300 font-mono text-[9px] font-bold uppercase">
+            <span>Level 3 · VP</span>
+          </span>
+        );
+      case 4:
+        return (
+          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-900 border border-indigo-200 font-mono text-[9px] font-bold uppercase">
+            <span>Level 4 · Director</span>
+          </span>
+        );
+      default:
+        return (
+          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-300 font-mono text-[9px] font-semibold uppercase">
+            <span>Level 5 · Staff IC</span>
+          </span>
+        );
+    }
+  };
+
   // Render a branch of the tree recursively
   const renderBranch = (node: MovieEmployee, level: number = 0): React.ReactNode => {
     const children = reportsByManager.get(node.id) || [];
     const hasChildren = children.length > 0;
     const isExpanded = expandedNodes[node.id] ?? false;
+    const nodeLevel = getNodeLevel(node.id);
+    const subtreeCount = getSubtreeCount(node.id);
 
-    // Filter children based on department or movie if applied
+    // Filter children based on department if applied
     const filteredChildren = children.filter(child => {
       if (departmentFilter !== 'ALL' && child.department !== departmentFilter) {
         // Keep child if its subtree matches
@@ -145,26 +241,40 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({ onBackToLo
 
     const isSelected = selectedUser?.id === node.id;
     const isRoot = node.id === activeRoot.id;
+    const isUserNode = Boolean(node.isUser);
 
     return (
       <div key={node.id} className="flex flex-col items-center">
         
-        {/* Node Card */}
+        {/* Node Card - Pure White with Crisp Black Text and Distinct Borders */}
         <div
           onClick={() => setSelectedUser(node)}
-          className={`w-60 bg-white rounded-xl border-2 transition-all cursor-pointer select-none text-left p-3 relative hover:shadow-xl hover:border-slate-900 ${
-            isSelected
-              ? 'ring-2 ring-emerald-500 border-emerald-600 shadow-lg'
+          className={`w-64 bg-white rounded-xl border-2 transition-all cursor-pointer select-none text-left p-3.5 relative hover:shadow-xl hover:border-slate-900 ${
+            isUserNode
+              ? 'ring-2 ring-emerald-500 border-emerald-600 bg-emerald-50/80 shadow-lg'
+              : isSelected
+              ? 'ring-2 ring-blue-500 border-blue-600 shadow-lg'
               : isRoot
               ? 'border-slate-900 shadow-md ring-1 ring-slate-900/60'
-              : 'border-slate-300 hover:border-slate-700 shadow-sm'
+              : 'border-slate-300 hover:border-slate-800 shadow-xs'
           }`}
         >
-          {/* Header row: Department & Movie Tag */}
-          <div className="flex items-center justify-between text-[10px] mb-1.5 gap-1">
-            <span className="font-extrabold text-slate-700 tracking-wider uppercase truncate">
-              {node.department}
-            </span>
+          {/* Special Banner for User's Direct Placement Under CEO */}
+          {isUserNode && (
+            <div className="mb-2 -mx-1 px-2 py-0.5 rounded bg-emerald-600 text-white flex items-center justify-between text-[9px] font-black uppercase tracking-wider shadow-xs">
+              <span className="flex items-center gap-1">
+                <ShieldCheck className="w-3 h-3 text-emerald-200" />
+                <span>Your Account · God Mode</span>
+              </span>
+              <span className="bg-emerald-800 px-1 py-0.2 rounded font-mono text-[8px]">
+                Reports to CEO
+              </span>
+            </div>
+          )}
+
+          {/* Header row: Management Level Badge & Movie Tag */}
+          <div className="flex items-center justify-between text-[10px] mb-2 gap-1">
+            {renderLevelBadge(nodeLevel, isUserNode)}
 
             <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-800 border border-slate-300 font-mono text-[9px] font-bold shrink-0">
               <Clapperboard className="w-2.5 h-2.5 text-emerald-600" />
@@ -173,25 +283,46 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({ onBackToLo
           </div>
 
           {/* User Identity */}
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center font-black text-xs shrink-0 shadow-xs">
-              {node.first_name[0]}{node.last_name[0]}
+          <div className="flex items-start gap-2.5">
+            <div className={`w-9 h-9 rounded-full flex items-center justify-center font-black text-xs shrink-0 shadow-xs ${
+              isUserNode 
+                ? 'bg-emerald-600 text-white ring-2 ring-emerald-300' 
+                : nodeLevel === 1 
+                ? 'bg-amber-500 text-neutral-950 ring-2 ring-amber-300' 
+                : 'bg-black text-white'
+            }`}>
+              {isUserNode ? '★' : `${node.first_name[0]}${node.last_name[0]}`}
             </div>
 
             <div className="min-w-0 flex-1">
               <h4 className="text-xs font-black text-black truncate leading-tight">
                 {node.first_name} {node.last_name}
               </h4>
-              <p className="text-[10px] font-semibold text-slate-800 truncate leading-tight mt-0.5">
+              <p className="text-[10px] font-bold text-slate-800 truncate leading-tight mt-0.5">
                 {node.title}
               </p>
+              <div className="flex items-center gap-1 text-[9px] font-mono text-slate-500 mt-1">
+                <span className="font-extrabold text-slate-700 uppercase tracking-wider">{node.department}</span>
+                {node.manager_id && employeeMap.has(node.manager_id) && (
+                  <span className="truncate">· Re: {employeeMap.get(node.manager_id)!.last_name}</span>
+                )}
+              </div>
             </div>
           </div>
 
-          {/* Footer bar: Directs count & Expand Toggle */}
-          <div className="mt-2 pt-1.5 border-t border-slate-200 flex items-center justify-between text-[10px]">
-            <span className="font-bold text-slate-800">
-              {hasChildren ? `${children.length} direct${children.length === 1 ? '' : 's'}` : 'Individual Contributor'}
+          {/* Subtree Division Scope & Directs Footer */}
+          <div className="mt-2.5 pt-2 border-t border-slate-200 flex items-center justify-between text-[10px]">
+            <span className="font-extrabold text-slate-800">
+              {hasChildren ? (
+                <span>
+                  {children.length} direct{children.length === 1 ? '' : 's'}
+                  {subtreeCount > children.length && (
+                    <span className="text-slate-500 font-normal ml-1">({subtreeCount} in div)</span>
+                  )}
+                </span>
+              ) : (
+                <span className="text-slate-500 font-medium">Individual Contributor</span>
+              )}
             </span>
 
             <div className="flex items-center gap-1.5">
@@ -216,9 +347,9 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({ onBackToLo
                     e.stopPropagation();
                     toggleExpand(node.id);
                   }}
-                  className="px-1.5 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 font-mono text-[9px] font-bold border border-slate-300"
+                  className="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-800 font-mono text-[9px] font-extrabold border border-slate-300 transition-colors"
                 >
-                  {isExpanded ? `Hide (${children.length})` : `Show (${children.length})`}
+                  {isExpanded ? `Collapse (${children.length})` : `Expand (${children.length})`}
                 </button>
               )}
             </div>
@@ -255,10 +386,9 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({ onBackToLo
                       </>
                     )}
 
-                    {/* Stem down into child card */}
+                    {/* Stem to child node */}
                     <div className="w-[2px] h-6 bg-slate-700"></div>
 
-                    {/* Recursive branch */}
                     {renderBranch(child, level + 1)}
                   </div>
                 );
@@ -266,53 +396,52 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({ onBackToLo
             </div>
           </div>
         )}
-
       </div>
     );
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-80px)] min-h-[700px] bg-slate-200 select-none overflow-hidden relative">
+    <div className="flex flex-col h-full bg-slate-100 text-slate-900 overflow-hidden relative">
       
-      {/* Top Filter and Navigation Bar */}
-      <div className="bg-white border-b border-slate-300 px-6 py-2.5 flex flex-wrap items-center justify-between gap-3 shrink-0 shadow-xs z-20">
+      {/* =========================================================================
+          TOOLBAR HEADER: Navigation, Search, Department Filter, Zoom, and Levels
+          ========================================================================= */}
+      <div className="bg-white border-b-2 border-slate-300 px-4 py-3 flex flex-wrap items-center justify-between gap-3 shrink-0 shadow-xs z-30">
         
-        {/* Left: Back to Login & Breadcrumbs */}
+        {/* Left: Back button & Breadcrumbs */}
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={onBackToLogin}
-            className="px-3 py-1.5 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-black text-white text-xs font-bold transition-all shadow-xs"
           >
             <ArrowLeft className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Back to Login & Account Setup</span>
+            <span>Return to Login</span>
           </button>
-
-          <div className="h-4 w-px bg-slate-300 hidden sm:block" />
 
           {rootId && (
             <button
               type="button"
               onClick={() => setRootId(null)}
-              className="text-xs text-slate-700 hover:text-black font-semibold flex items-center gap-1 hover:underline"
+              className="text-xs text-emerald-700 hover:text-emerald-900 font-bold flex items-center gap-1 border border-emerald-300 bg-emerald-50 px-2 py-1 rounded-md"
             >
-              <span>Full Org View</span>
+              <span>Reset to CEO (Root)</span>
             </button>
           )}
 
-          <div className="hidden md:flex items-center gap-1.5 text-xs text-slate-600">
+          <div className="hidden lg:flex items-center gap-1.5 text-xs text-slate-600">
             {ancestryChain.map((p) => (
               <React.Fragment key={p.id}>
                 <button
                   onClick={() => setRootId(p.id)}
-                  className="hover:text-black font-medium"
+                  className="hover:text-black font-semibold"
                 >
                   {p.first_name} {p.last_name}
                 </button>
                 <ChevronRight className="w-3 h-3 text-slate-400" />
               </React.Fragment>
             ))}
-            <span className="font-bold text-black">
+            <span className="font-extrabold text-black">
               {activeRoot.first_name} {activeRoot.last_name}
             </span>
             <span className="text-slate-500 font-mono text-[11px]">({activeRoot.title})</span>
@@ -320,14 +449,14 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({ onBackToLo
         </div>
 
         {/* Middle: Search bar */}
-        <div className="relative w-64 sm:w-72">
-          <div className="flex items-center bg-slate-100 rounded-lg px-2.5 py-1.5 border border-slate-300 focus-within:border-slate-800 focus-within:bg-white transition-colors">
+        <div className="relative w-64 sm:w-80">
+          <div className="flex items-center bg-slate-50 rounded-lg px-2.5 py-1.5 border border-slate-300 focus-within:border-slate-800 focus-within:bg-white transition-colors">
             <Search className="w-3.5 h-3.5 text-slate-500 mr-2 shrink-0" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search 100 movie figures..."
+              placeholder="Search 115 cinema tech employees & roles..."
               className="text-xs bg-transparent border-0 focus:outline-none w-full text-black placeholder:text-slate-400"
             />
             {searchQuery && (
@@ -371,9 +500,9 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({ onBackToLo
           <select
             value={departmentFilter}
             onChange={(e) => setDepartmentFilter(e.target.value)}
-            className="bg-white border border-slate-300 text-slate-800 font-semibold py-1 px-2.5 rounded-lg text-xs focus:outline-none"
+            className="bg-white border border-slate-300 text-slate-800 font-bold py-1 px-2.5 rounded-lg text-xs focus:outline-none"
           >
-            <option value="ALL">All Departments (100)</option>
+            <option value="ALL">All Departments (115)</option>
             {departments.map((d) => (
               <option key={d} value={d}>
                 {d}
@@ -381,117 +510,200 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({ onBackToLo
             ))}
           </select>
 
-          {/* Expand/Collapse All */}
-          <button
-            type="button"
-            onClick={handleExpandAll}
-            className="px-2 py-1 text-xs text-slate-700 hover:text-black bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded font-semibold transition-colors hidden sm:block"
-          >
-            Expand All
-          </button>
-          <button
-            type="button"
-            onClick={handleCollapseAll}
-            className="px-2 py-1 text-xs text-slate-700 hover:text-black bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded font-semibold transition-colors hidden sm:block"
-          >
-            Collapse All
-          </button>
-
-          <div className="h-4 w-px bg-slate-300 mx-1 hidden sm:block" />
-
           {/* Zoom controls */}
-          <div className="flex items-center bg-slate-100 rounded-lg p-0.5 border border-slate-300">
+          <div className="flex items-center bg-white border border-slate-300 rounded-lg p-0.5 shadow-xs">
             <button
-              onClick={() => setZoomScale((prev) => Math.max(0.4, prev - 0.1))}
-              className="p-1 text-slate-700 hover:text-black rounded"
-              title="Zoom Out"
-            >
-              <ZoomOut className="w-3.5 h-3.5" />
-            </button>
-            <span className="text-[11px] font-mono px-1 text-slate-800 font-bold">
-              {Math.round(zoomScale * 100)}%
-            </span>
-            <button
+              type="button"
               onClick={() => setZoomScale((prev) => Math.min(1.4, prev + 0.1))}
-              className="p-1 text-slate-700 hover:text-black rounded"
+              className="p-1 hover:bg-slate-100 rounded text-slate-700"
               title="Zoom In"
             >
               <ZoomIn className="w-3.5 h-3.5" />
             </button>
             <button
-              onClick={() => setZoomScale(0.85)}
-              className="p-1 text-slate-500 hover:text-black ml-1"
+              type="button"
+              onClick={() => setZoomScale(0.8)}
+              className="p-1 hover:bg-slate-100 rounded text-slate-700 text-[10px] font-mono font-bold px-1"
               title="Reset Zoom"
             >
-              <RotateCcw className="w-3 h-3" />
+              {Math.round(zoomScale * 100)}%
+            </button>
+            <button
+              type="button"
+              onClick={() => setZoomScale((prev) => Math.max(0.4, prev - 0.1))}
+              className="p-1 hover:bg-slate-100 rounded text-slate-700"
+              title="Zoom Out"
+            >
+              <ZoomOut className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* =========================================================================
+          LEVEL SELECTOR & HIERARCHY SUMMARY BAR
+          ========================================================================= */}
+      <div className="bg-slate-200 border-b border-slate-300 px-4 py-2 flex flex-wrap items-center justify-between gap-3 text-xs shrink-0 z-20">
+        <div className="flex items-center gap-1.5 overflow-x-auto">
+          <span className="text-slate-600 font-mono font-bold uppercase text-[10px] mr-1">
+            Expand Depth:
+          </span>
+          <button
+            type="button"
+            onClick={handleExpandAll}
+            className="px-2.5 py-1 rounded bg-slate-900 text-white font-bold text-[10px] hover:bg-black transition-colors"
+          >
+            All 5 Levels (115)
+          </button>
+          <button
+            type="button"
+            onClick={() => handleExpandToLevel(3)}
+            className="px-2.5 py-1 rounded bg-white text-slate-800 font-bold text-[10px] border border-slate-300 hover:bg-slate-50 transition-colors"
+          >
+            Levels 1-3 (C-Suite & VPs)
+          </button>
+          <button
+            type="button"
+            onClick={() => handleExpandToLevel(2)}
+            className="px-2.5 py-1 rounded bg-white text-slate-800 font-bold text-[10px] border border-slate-300 hover:bg-slate-50 transition-colors"
+          >
+            Levels 1-2 (C-Suite Only)
+          </button>
+          <button
+            type="button"
+            onClick={handleCollapseAll}
+            className="px-2.5 py-1 rounded bg-white text-slate-600 font-bold text-[10px] border border-slate-300 hover:bg-slate-50 transition-colors"
+          >
+            Collapse All
+          </button>
+        </div>
+
+        {/* 5-Level Architecture Breakdown Legend */}
+        <div className="hidden md:flex items-center gap-2 text-[10px] font-mono font-bold">
+          <span className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-300">
+            L1: CEO (1)
+          </span>
+          <span>→</span>
+          <span className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-purple-100 text-purple-900 border border-purple-300">
+            L2: C-Suite (7)
+          </span>
+          <span>→</span>
+          <span className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-blue-100 text-blue-900 border border-blue-300">
+            L3: VPs (17)
+          </span>
+          <span>→</span>
+          <span className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-900 border border-indigo-200">
+            L4: Directors (21)
+          </span>
+          <span>→</span>
+          <span className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-300">
+            L5: ICs (69)
+          </span>
+        </div>
+      </div>
+
+      {/* =========================================================================
+          CANVAS AREA: Interactive Tree Structure (Light Grey Canvas + White Cards)
+          ========================================================================= */}
+      <div 
+        className="flex-1 overflow-auto p-8 relative flex justify-center items-start cursor-grab active:cursor-grabbing"
+        style={{
+          backgroundColor: '#e2e8f0', // Crisp slate light grey
+          backgroundImage: 'radial-gradient(circle, #94a3b8 1.5px, transparent 1.5px)',
+          backgroundSize: '24px 24px',
+        }}
+      >
+        <div 
+          style={{ 
+            transform: `scale(${zoomScale})`,
+            transformOrigin: 'top center',
+            transition: 'transform 0.15s ease-out'
+          }}
+          className="pb-24 pt-4"
+        >
+          {renderBranch(activeRoot, 0)}
+        </div>
+      </div>
+
+      {/* =========================================================================
+          SIDE PROFILE DRAWER: Rich Persona Dossier and Ancestry Permissions
+          ========================================================================= */}
+      {selectedUser && (
+        <div className="absolute top-0 right-0 bottom-0 w-80 sm:w-96 bg-white border-l-2 border-slate-300 shadow-2xl p-5 flex flex-col z-40 overflow-y-auto animate-in slide-in-from-right duration-200">
+          
+          <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+            <span className="text-[10px] font-mono font-bold uppercase text-slate-500 tracking-wider">
+              Workforce Intelligence Profile
+            </span>
+            <button
+              type="button"
+              onClick={() => setSelectedUser(null)}
+              className="p-1 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-black transition-colors"
+            >
+              <X className="w-4 h-4" />
             </button>
           </div>
 
-        </div>
-
-      </div>
-
-      {/* Main Interactive Canvas with distinct light grey background */}
-      <div className="flex-1 overflow-auto p-12 flex justify-center items-start relative cursor-grab active:cursor-grabbing bg-slate-200">
-        
-        {/* Crisp grid pattern background */}
-        <div 
-          className="absolute inset-0 pointer-events-none opacity-50"
-          style={{
-            backgroundImage: 'radial-gradient(circle, #94a3b8 1.5px, transparent 1.5px)',
-            backgroundSize: '24px 24px',
-          }}
-        />
-
-        {/* Tree Container with Zoom transform */}
-        <div 
-          className="relative transition-transform duration-100 origin-top"
-          style={{ transform: `scale(${zoomScale})` }}
-        >
-          {renderBranch(activeRoot)}
-        </div>
-
-      </div>
-
-      {/* Slide-over Profile Drawer for Selected Movie Employee */}
-      {selectedUser && (
-        <div className="fixed inset-y-0 right-0 w-80 sm:w-96 bg-white border-l border-slate-300 shadow-2xl z-50 p-6 flex flex-col justify-between overflow-y-auto">
-          <div className="space-y-4">
+          <div className="pt-4 space-y-4">
             
-            <div className="flex items-center justify-between pb-3 border-b border-slate-200">
-              <span className="font-mono text-xs text-emerald-700 font-bold uppercase tracking-wider">
-                Executive Profile
-              </span>
-              <button
-                onClick={() => setSelectedUser(null)}
-                className="p-1 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-black"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-black text-white flex items-center justify-center font-black text-base shadow-sm">
-                {selectedUser.first_name[0]}{selectedUser.last_name[0]}
+            <div className="flex items-start gap-3">
+              <div className={`w-14 h-14 rounded-full flex items-center justify-center font-black text-lg shadow-sm shrink-0 ${
+                selectedUser.isUser 
+                  ? 'bg-emerald-600 text-white ring-2 ring-emerald-300' 
+                  : getNodeLevel(selectedUser.id) === 1
+                  ? 'bg-amber-500 text-neutral-950 ring-2 ring-amber-300'
+                  : 'bg-black text-white'
+              }`}>
+                {selectedUser.isUser ? '★' : `${selectedUser.first_name[0]}${selectedUser.last_name[0]}`}
               </div>
+
               <div>
-                <h3 className="text-base font-black text-black">
+                <h3 className="text-base font-black text-black leading-tight">
                   {selectedUser.first_name} {selectedUser.last_name}
                 </h3>
-                <p className="text-xs font-semibold text-slate-700">
+                <p className="text-xs font-bold text-slate-800 mt-0.5">
                   {selectedUser.title}
                 </p>
-                <span className="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full bg-slate-100 border border-slate-300 font-mono text-[10px] font-bold text-slate-800">
-                  <Clapperboard className="w-3 h-3 text-emerald-600" />
-                  <span>{selectedUser.movie}</span>
-                </span>
+                <div className="flex items-center gap-1.5 mt-1.5">
+                  {renderLevelBadge(getNodeLevel(selectedUser.id), selectedUser.isUser)}
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-100 border border-slate-300 font-mono text-[10px] font-bold text-slate-800">
+                    <Clapperboard className="w-3 h-3 text-emerald-600" />
+                    <span>{selectedUser.movie}</span>
+                  </span>
+                </div>
               </div>
             </div>
 
+            {/* Special User Account Privilege Callout */}
+            {selectedUser.isUser && (
+              <div className="p-3 bg-emerald-50 border border-emerald-300 rounded-xl text-xs text-emerald-950 font-medium shadow-xs">
+                <div className="flex items-center gap-1.5 font-bold text-emerald-900 mb-1">
+                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                  <span>Level 2 Executive · Super Admin (God Mode)</span>
+                </div>
+                <p className="text-[11px] text-emerald-800 leading-relaxed">
+                  Your account is positioned at Level 2, reporting directly to CEO Sarah Connor. You hold unrestricted cross-departmental administrative rights across all 115 workforce nodes.
+                </p>
+              </div>
+            )}
+
+            {/* Details Table */}
             <div className="space-y-2 pt-2 border-t border-slate-100 text-xs text-slate-700">
               <div className="flex items-center justify-between py-1 border-b border-slate-100">
                 <span className="text-slate-500 font-medium">Department</span>
                 <span className="font-bold text-black">{selectedUser.department}</span>
+              </div>
+
+              <div className="flex items-center justify-between py-1 border-b border-slate-100">
+                <span className="text-slate-500 font-medium">Management Level</span>
+                <span className="font-bold text-black">Level {getNodeLevel(selectedUser.id)} of 5</span>
+              </div>
+
+              <div className="flex items-center justify-between py-1 border-b border-slate-100">
+                <span className="text-slate-500 font-medium">Division Headcount Scope</span>
+                <span className="font-bold text-black font-mono">
+                  {getSubtreeCount(selectedUser.id)} total employees
+                </span>
               </div>
 
               <div className="flex items-center justify-between py-1 border-b border-slate-100">
@@ -532,35 +744,44 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({ onBackToLo
                 {(reportsByManager.get(selectedUser.id) || []).map((rep) => (
                   <button
                     key={rep.id}
+                    type="button"
                     onClick={() => setSelectedUser(rep)}
                     className="w-full text-left p-2 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors flex items-center justify-between text-xs"
                   >
                     <div>
-                      <p className="font-bold text-black">{rep.first_name} {rep.last_name}</p>
-                      <p className="text-[10px] text-slate-600 truncate max-w-[170px]">{rep.title}</p>
+                      <p className="font-bold text-black truncate">{rep.first_name} {rep.last_name}</p>
+                      <p className="text-[10px] text-slate-600 truncate">{rep.title}</p>
                     </div>
                     <span className="text-[9px] font-mono text-slate-500 shrink-0">
-                      {rep.movie}
+                      Level {getNodeLevel(rep.id)}
                     </span>
                   </button>
                 ))}
+
+                {(reportsByManager.get(selectedUser.id) || []).length === 0 && (
+                  <p className="text-[11px] text-slate-400 italic">
+                    No direct reports (Individual Contributor).
+                  </p>
+                )}
               </div>
             </div>
 
-          </div>
+            {/* Focus Subtree Action */}
+            <div className="pt-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setRootId(selectedUser.id);
+                  setSelectedUser(null);
+                }}
+                className="w-full py-2 bg-slate-900 hover:bg-black text-white text-xs font-bold rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-sm"
+              >
+                <Users className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Focus Subtree on {selectedUser.first_name}</span>
+              </button>
+            </div>
 
-          <div className="pt-4 border-t border-slate-200">
-            <button
-              onClick={() => {
-                setRootId(selectedUser.id);
-                setSelectedUser(null);
-              }}
-              className="w-full py-2 bg-neutral-900 hover:bg-neutral-800 text-white rounded-lg text-xs font-bold transition-all shadow-xs"
-            >
-              Focus Hierarchy on {selectedUser.first_name}
-            </button>
           </div>
-
         </div>
       )}
 

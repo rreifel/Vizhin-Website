@@ -25,7 +25,8 @@ import {
   Check, 
   Shield, 
   ArrowLeft, 
-  Maximize2 
+  Maximize2,
+  Clock
 } from 'lucide-react';
 import SiteHeader from './SiteHeader';
 import { MovieOrgChartView } from './OrgChart/MovieOrgChartView';
@@ -57,15 +58,18 @@ export default function VizhinOrgPage({
   // Mode: 'signin' (default per requirement) | 'signup' | 'forgot-password' | 'forgot-username'
   const [authMode, setAuthMode] = useState<'signin' | 'signup' | 'forgot-password' | 'forgot-username'>('signin');
   
-  // Full 115-employee Cinema Tech Org Chart View (supports ?view=chart or button toggle)
-  const [isFullOrgChartOpen, setIsFullOrgChartOpen] = useState(() => {
+  // View mode: 'coming-soon' (default per requirement when clicking Sign In to VizhinORG) | 'terminal' | 'chart'
+  const [viewMode, setViewMode] = useState<'coming-soon' | 'terminal' | 'chart'>(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       if (params.get('view') === 'chart' || params.get('chart') === 'true') {
-        return true;
+        return 'chart';
+      }
+      if (params.get('view') === 'terminal' || params.get('terminal') === 'true') {
+        return 'terminal';
       }
     }
-    return false;
+    return 'coming-soon';
   });
   
   // Step for Signup: 1 = Initial account creation; 2 = Inverted Sandbox choice
@@ -104,7 +108,9 @@ export default function VizhinOrgPage({
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!loginEmail.trim()) return;
-    setIsFullOrgChartOpen(true);
+    // Direct user to COMING SOON page with original layout per user request
+    setViewMode('coming-soon');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleSignUpSubmit = (e: React.FormEvent) => {
@@ -155,7 +161,7 @@ export default function VizhinOrgPage({
         onNavigateMarketingAnalysis={onNavigateMarketingAnalysis}
         onEnterPortal={onEnterPortal}
         onEnterOrg={() => {
-          setIsFullOrgChartOpen(false);
+          setViewMode('coming-soon');
           setAuthMode('signin');
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
@@ -169,44 +175,204 @@ export default function VizhinOrgPage({
         <div className="flex items-center gap-2.5">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
           <span className="text-xs font-mono font-bold text-neutral-200 uppercase tracking-wide">
-            115-EMPLOYEE WORKFORCE HIERARCHY · 5 MANAGEMENT LEVELS
+            VIZHINORG • WORKFORCE ARCHITECTURE
+          </span>
+          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-amber-950/90 text-amber-300 border border-amber-700/60 uppercase">
+            COMING SOON
           </span>
         </div>
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={() => setIsFullOrgChartOpen(true)}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 cursor-pointer shadow-xs ${
-              isFullOrgChartOpen
+            onClick={() => setViewMode('coming-soon')}
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs ${
+              viewMode === 'coming-soon'
+                ? 'bg-emerald-500 text-neutral-950 font-black ring-2 ring-emerald-400 shadow-emerald-950/40'
+                : 'bg-neutral-900 hover:bg-neutral-800 text-neutral-300 border border-neutral-700'
+            }`}
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Coming Soon</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setViewMode('chart')}
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs ${
+              viewMode === 'chart'
                 ? 'bg-emerald-500 text-neutral-950 font-black ring-2 ring-emerald-400 shadow-emerald-950/40'
                 : 'bg-neutral-900 hover:bg-neutral-800 text-white border border-neutral-700 hover:border-emerald-500'
             }`}
           >
             <Network className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Full 115-Employee Interactive Org Chart</span>
+            <span>115-Employee Sandbox</span>
           </button>
           <button
             type="button"
-            onClick={() => setIsFullOrgChartOpen(false)}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 cursor-pointer shadow-xs ${
-              !isFullOrgChartOpen
+            onClick={() => setViewMode('terminal')}
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs ${
+              viewMode === 'terminal'
                 ? 'bg-emerald-500 text-neutral-950 font-black ring-2 ring-emerald-400 shadow-emerald-950/40'
                 : 'bg-neutral-900 hover:bg-neutral-800 text-neutral-300 border border-neutral-700'
             }`}
           >
             <LockKeyhole className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Split-Pane Login & Setup</span>
+            <span>Account Setup</span>
           </button>
         </div>
       </div>
 
       {/* =========================================================================
-          FULL 115-EMPLOYEE CINEMA TECH ORG CHART
+          VIEW ROUTING: COMING SOON (Default) | CHART SANDBOX | SPLIT-PANE TERMINAL
           ========================================================================= */}
-      {isFullOrgChartOpen ? (
+      {viewMode === 'chart' ? (
         <div className="flex-1 flex flex-col w-full animate-in fade-in duration-200">
-          <MovieOrgChartView onBackToLogin={() => setIsFullOrgChartOpen(false)} />
+          <MovieOrgChartView onBackToLogin={() => setViewMode('coming-soon')} />
         </div>
+      ) : viewMode === 'coming-soon' ? (
+        /* =========================================================================
+            COMING SOON PAGE (Original Layout Matching All Other Pages)
+            ========================================================================= */
+        <main className="flex-1 flex flex-col items-center justify-center px-6 py-14 lg:py-20 max-w-5xl mx-auto w-full text-center relative z-10 space-y-12 animate-in fade-in duration-200">
+          
+          {/* Ambient Glow & Grid Accent */}
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none -z-10" />
+
+          {/* Top Pill */}
+          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-emerald-950/80 border border-emerald-800/60 text-emerald-400 text-xs font-mono uppercase tracking-widest shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>VizhinORG • Enterprise Workforce Intelligence</span>
+            <span className="text-[10px] bg-amber-950/90 text-amber-300 border border-amber-700/60 px-2 py-0.5 rounded font-bold">
+              COMING SOON
+            </span>
+          </div>
+
+          {/* Hero Headline */}
+          <div className="space-y-4 max-w-3xl">
+            <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white leading-tight">
+              VizhinORG is{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">
+                Coming Soon
+              </span>
+            </h1>
+            <p className="text-sm sm:text-base text-neutral-300 leading-relaxed font-normal max-w-2xl mx-auto">
+              You are signed up! We are finalizing the production deployment of our multi-tenant enterprise terminal, live HRIS roster connectors (Workday, BambooHR, ADP), and deterministic PostgreSQL CTE ancestry permissions.
+            </p>
+          </div>
+
+          {/* Launch Status / Ready Card */}
+          <div className="w-full max-w-2xl bg-[#0c0d10]/90 border border-neutral-800 rounded-2xl p-6 sm:p-8 text-left space-y-6 shadow-2xl backdrop-blur-sm relative overflow-hidden">
+            
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-500"></div>
+
+            <div className="flex items-center justify-between pb-4 border-b border-neutral-800/80">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400">
+                  <ShieldCheck className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-white">Production Release Status</h3>
+                  <p className="text-xs text-neutral-400">Deployment Phase 2 of 2</p>
+                </div>
+              </div>
+              <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800 flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                <span>Rolling Out Soon</span>
+              </span>
+            </div>
+
+            {/* Checklist */}
+            <div className="space-y-3 font-mono text-xs">
+              <div className="flex items-center justify-between p-2.5 rounded-lg bg-neutral-900/60 border border-neutral-800/60">
+                <span className="text-neutral-200 flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Account Provisioning & Super Admin Roles</span>
+                </span>
+                <span className="text-emerald-400 font-bold text-[11px]">Ready</span>
+              </div>
+              <div className="flex items-center justify-between p-2.5 rounded-lg bg-neutral-900/60 border border-neutral-800/60">
+                <span className="text-neutral-200 flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Recursive CTE Hierarchy Ancestry Engine</span>
+                </span>
+                <span className="text-emerald-400 font-bold text-[11px]">Ready</span>
+              </div>
+              <div className="flex items-center justify-between p-2.5 rounded-lg bg-neutral-900/60 border border-neutral-800/60">
+                <span className="text-neutral-200 flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-amber-400 shrink-0 animate-spin" />
+                  <span>Live HRIS Ingestion Gateways (Workday, BambooHR, ADP)</span>
+                </span>
+                <span className="text-amber-400 font-bold text-[11px]">Final QA</span>
+              </div>
+            </div>
+
+            {/* Primary Actions */}
+            <div className="pt-2 space-y-3">
+              <button
+                type="button"
+                onClick={() => setViewMode('chart')}
+                className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-neutral-950 font-black text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-lg shadow-emerald-950/50 hover:scale-[1.02] cursor-pointer"
+              >
+                <Network className="w-4 h-4" />
+                <span>Launch 115-Employee Interactive Org Chart Sandbox →</span>
+              </button>
+
+              <div className="flex flex-col sm:flex-row items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setViewMode('terminal')}
+                  className="w-full py-2.5 px-4 rounded-xl bg-neutral-900 hover:bg-neutral-850 text-neutral-300 hover:text-white border border-neutral-800 hover:border-neutral-700 text-xs font-bold transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <Lock className="w-3.5 h-3.5 text-neutral-400" />
+                  <span>Open Split-Pane Account Setup</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={onBack}
+                  className="w-full py-2.5 px-4 rounded-xl bg-[#08090b] hover:bg-neutral-900 text-neutral-400 hover:text-white border border-neutral-800 text-xs font-semibold transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <ArrowLeft className="w-3.5 h-3.5" />
+                  <span>Return to Home</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          {/* 3 Value Pillars */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full text-left pt-6 border-t border-neutral-900/80">
+            <div className="p-5 rounded-xl bg-neutral-950/60 border border-neutral-900 space-y-2">
+              <div className="w-8 h-8 rounded-lg bg-emerald-950 border border-emerald-900 flex items-center justify-center text-emerald-400">
+                <Network className="w-4 h-4" />
+              </div>
+              <h4 className="text-sm font-bold text-white">Recursive RBAC Ancestry</h4>
+              <p className="text-xs text-neutral-400 leading-relaxed">
+                Deterministic PostgreSQL CTE trees ensuring strict upward visibility and downward evaluation boundaries.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-xl bg-neutral-950/60 border border-neutral-900 space-y-2">
+              <div className="w-8 h-8 rounded-lg bg-teal-950 border border-teal-900 flex items-center justify-center text-teal-400">
+                <Layers className="w-4 h-4" />
+              </div>
+              <h4 className="text-sm font-bold text-white">Two-Pass HRIS Ingestion</h4>
+              <p className="text-xs text-neutral-400 leading-relaxed">
+                Zero-failure parent-child graph resolving for Workday, BambooHR, and ADP employee rosters.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-xl bg-neutral-950/60 border border-neutral-900 space-y-2">
+              <div className="w-8 h-8 rounded-lg bg-cyan-950 border border-cyan-900 flex items-center justify-center text-cyan-400">
+                <ShieldCheck className="w-4 h-4" />
+              </div>
+              <h4 className="text-sm font-bold text-white">Executive Calibration</h4>
+              <p className="text-xs text-neutral-400 leading-relaxed">
+                Multi-layer talent evaluation with time-bounded temporary review delegations and audit tracking.
+              </p>
+            </div>
+          </div>
+
+        </main>
       ) : (
         /* =========================================================================
             MODEL 1: SPLIT-PANE EXECUTIVE TERMINAL LAYOUT
@@ -236,9 +402,9 @@ export default function VizhinOrgPage({
 
             {/* Interactive Org Chart Simulation Preview - Light Grey Background with Pure White Boxes & Black Text */}
             <div 
-              onClick={() => setIsFullOrgChartOpen(true)}
+              onClick={() => setViewMode('chart')}
               className="bg-slate-200 border-2 border-slate-300 hover:border-emerald-500 rounded-2xl p-4 sm:p-5 shadow-2xl relative overflow-hidden transition-all cursor-pointer group select-none"
-              title="Click to open the full 100-employee interactive org chart"
+              title="Click to open the full 115-employee interactive org chart"
             >
               
               {/* Subtle dot grid on preview canvas */}
@@ -263,7 +429,7 @@ export default function VizhinOrgPage({
                     type="button"
                     onClick={(e) => {
                       e.stopPropagation();
-                      setIsFullOrgChartOpen(true);
+                      setViewMode('chart');
                     }}
                     className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-black flex items-center gap-2 shadow-md hover:scale-105 transition-all cursor-pointer"
                   >
@@ -747,7 +913,7 @@ export default function VizhinOrgPage({
                       </div>
                       <button
                         type="button"
-                        onClick={() => setIsFullOrgChartOpen(true)}
+                        onClick={() => setViewMode('chart')}
                         className="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-neutral-950 rounded-lg text-xs font-black transition-all shrink-0 cursor-pointer shadow-sm hover:scale-105"
                       >
                         View Chart →
@@ -854,7 +1020,7 @@ export default function VizhinOrgPage({
                     {/* SSO Button */}
                     <button
                       type="button"
-                      onClick={() => setIsFullOrgChartOpen(true)}
+                      onClick={() => setViewMode('coming-soon')}
                       className="w-full py-2.5 px-4 bg-[#08090b] hover:bg-neutral-900 text-neutral-300 border border-neutral-800 hover:border-neutral-700 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-2 cursor-pointer"
                     >
                       <ShieldCheck className="w-4 h-4 text-emerald-400" />
@@ -1188,7 +1354,7 @@ export default function VizhinOrgPage({
                           </div>
                           <button
                             type="button"
-                            onClick={() => setIsFullOrgChartOpen(true)}
+                            onClick={() => setViewMode('chart')}
                             className="w-full py-2 bg-emerald-500 hover:bg-emerald-400 text-neutral-950 rounded-lg text-xs font-bold transition-all shadow-sm cursor-pointer"
                           >
                             Launch Sandbox Workspace →
@@ -1203,7 +1369,7 @@ export default function VizhinOrgPage({
                           </div>
                           <button
                             type="button"
-                            onClick={() => setIsFullOrgChartOpen(true)}
+                            onClick={() => setViewMode('coming-soon')}
                             className="px-3 py-1.5 bg-neutral-900 hover:bg-neutral-850 text-xs font-medium rounded-lg text-neutral-200 border border-neutral-700 cursor-pointer"
                           >
                             Connect HRIS
@@ -1218,7 +1384,7 @@ export default function VizhinOrgPage({
                           </div>
                           <button
                             type="button"
-                            onClick={() => setIsFullOrgChartOpen(true)}
+                            onClick={() => setViewMode('coming-soon')}
                             className="px-3 py-1.5 bg-neutral-900 hover:bg-neutral-850 text-xs font-medium rounded-lg text-neutral-200 border border-neutral-700 cursor-pointer"
                           >
                             Upload CSV

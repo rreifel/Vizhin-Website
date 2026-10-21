@@ -280,7 +280,7 @@ export default function SiteHeader({
                     </div>
                   </button>
 
-                  {/* Option 2: VizhinORG */}
+                  {/* Option 2: Sign In to VizhinORG */}
                   <button
                     onClick={() => {
                       setSignInDropdownOpen(false);
@@ -294,12 +294,14 @@ export default function SiteHeader({
                     <div>
                       <div className="flex items-center gap-1.5">
                         <span className="text-xs font-bold text-neutral-200 group-hover:text-cyan-400 transition-colors">
-                          VizhinORG
+                          Sign In to VizhinORG
                         </span>
-                        <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-cyan-950/90 text-cyan-400 border border-cyan-800/50">NEW</span>
+                        <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-950/80 text-amber-300 border border-amber-700/60 font-bold">
+                          COMING SOON
+                        </span>
                       </div>
                       <p className="text-[10px] text-neutral-400 leading-tight mt-0.5">
-                        Organization Intelligence
+                        Workforce & Org Architecture
                       </p>
                     </div>
                   </button>
@@ -403,8 +405,13 @@ export default function SiteHeader({
                     }}
                     className="p-2.5 rounded-lg bg-neutral-900 border border-neutral-800 text-left cursor-pointer hover:border-cyan-700/60"
                   >
-                    <p className="text-xs font-bold text-cyan-400">VizhinORG</p>
-                    <p className="text-[10px] text-neutral-400">Workforce & Teams</p>
+                    <div className="flex items-center justify-between">
+                      <p className="text-xs font-bold text-cyan-400">Sign In to VizhinORG</p>
+                      <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-950/80 text-amber-300 border border-amber-700/60 font-bold">
+                        COMING SOON
+                      </span>
+                    </div>
+                    <p className="text-[10px] text-neutral-400 mt-0.5">Workforce & Teams</p>
                   </button>
                 </div>
               </div>

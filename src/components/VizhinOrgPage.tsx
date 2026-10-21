@@ -57,8 +57,16 @@ export default function VizhinOrgPage({
   // Mode: 'signin' (default per requirement) | 'signup' | 'forgot-password' | 'forgot-username'
   const [authMode, setAuthMode] = useState<'signin' | 'signup' | 'forgot-password' | 'forgot-username'>('signin');
   
-  // Full 100-employee Cinema Tech Org Chart View
-  const [isFullOrgChartOpen, setIsFullOrgChartOpen] = useState(false);
+  // Full 115-employee Cinema Tech Org Chart View (supports ?view=chart or button toggle)
+  const [isFullOrgChartOpen, setIsFullOrgChartOpen] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('view') === 'chart' || params.get('chart') === 'true') {
+        return true;
+      }
+    }
+    return false;
+  });
   
   // Step for Signup: 1 = Initial account creation; 2 = Inverted Sandbox choice
   const [step, setStep] = useState<1 | 2>(1);
@@ -155,7 +163,45 @@ export default function VizhinOrgPage({
       />
 
       {/* =========================================================================
-          FULL 100-EMPLOYEE CINEMA TECH ORG CHART (Triggered by Clicking Preview Sample)
+          TOP VIEW MODE SWITCHER BANNER: Direct Toggle for 115-Employee Hierarchy
+          ========================================================================= */}
+      <div className="bg-[#0c0d10] border-b border-neutral-800 px-6 py-2.5 flex flex-wrap items-center justify-between gap-3 shrink-0 z-20">
+        <div className="flex items-center gap-2.5">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span className="text-xs font-mono font-bold text-neutral-200 uppercase tracking-wide">
+            115-EMPLOYEE WORKFORCE HIERARCHY · 5 MANAGEMENT LEVELS
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setIsFullOrgChartOpen(true)}
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 cursor-pointer shadow-xs ${
+              isFullOrgChartOpen
+                ? 'bg-emerald-500 text-neutral-950 font-black ring-2 ring-emerald-400 shadow-emerald-950/40'
+                : 'bg-neutral-900 hover:bg-neutral-800 text-white border border-neutral-700 hover:border-emerald-500'
+            }`}
+          >
+            <Network className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Full 115-Employee Interactive Org Chart</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsFullOrgChartOpen(false)}
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 cursor-pointer shadow-xs ${
+              !isFullOrgChartOpen
+                ? 'bg-emerald-500 text-neutral-950 font-black ring-2 ring-emerald-400 shadow-emerald-950/40'
+                : 'bg-neutral-900 hover:bg-neutral-800 text-neutral-300 border border-neutral-700'
+            }`}
+          >
+            <LockKeyhole className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Split-Pane Login & Setup</span>
+          </button>
+        </div>
+      </div>
+
+      {/* =========================================================================
+          FULL 115-EMPLOYEE CINEMA TECH ORG CHART
           ========================================================================= */}
       {isFullOrgChartOpen ? (
         <div className="flex-1 flex flex-col w-full animate-in fade-in duration-200">
@@ -204,19 +250,26 @@ export default function VizhinOrgPage({
                 }}
               />
 
-              {/* Top Banner with 100-Headcount Exploration CTA */}
-              <div className="relative z-10 flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-300 text-xs bg-white/90 p-2.5 rounded-xl border shadow-xs">
+              {/* Top Banner with 115-Headcount Exploration CTA */}
+              <div className="relative z-10 flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-300 text-xs bg-white/95 p-2.5 rounded-xl border shadow-xs">
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
                   <span className="font-mono font-bold text-black text-[11px] tracking-wide">
-                    100-HEADCOUNT CINEMA TECH ORG CHART (SAMPLE)
+                    115-HEADCOUNT CINEMA TECH ORG CHART (5 LEVELS)
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-1 rounded-full bg-emerald-600 text-white font-mono text-[10px] font-bold flex items-center gap-1 group-hover:scale-105 transition-transform shadow-xs">
-                    <span>Explore 100 Employees</span>
-                    <Maximize2 className="w-3 h-3" />
-                  </span>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsFullOrgChartOpen(true);
+                    }}
+                    className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-black flex items-center gap-2 shadow-md hover:scale-105 transition-all cursor-pointer"
+                  >
+                    <span>Launch 115-Employee Org Chart</span>
+                    <Maximize2 className="w-3.5 h-3.5" />
+                  </button>
                 </div>
               </div>
 
@@ -224,12 +277,14 @@ export default function VizhinOrgPage({
               <div className="flex items-center gap-1.5 py-2.5 overflow-x-auto text-[10px] font-mono border-b border-slate-300 relative z-10">
                 <span className="text-slate-600 mr-1 uppercase font-bold">Filter Branch:</span>
                 {[
-                  { id: 'all', label: 'All Branches (15)' },
-                  { id: 'Executive', label: 'Executive (2)' },
-                  { id: 'Engineering', label: 'Engineering (5)' },
-                  { id: 'Operations', label: 'Operations (2)' },
-                  { id: 'Revenue', label: 'Revenue (3)' },
-                  { id: 'People', label: 'People (2)' },
+                  { id: "all", label: "All Branches (115)" },
+                  { id: "Executive", label: "Executive (3)" },
+                  { id: "Engineering", label: "Engineering (38)" },
+                  { id: "Revenue", label: "Revenue (22)" },
+                  { id: "Operations", label: "Operations (19)" },
+                  { id: "Security", label: "Security (14)" },
+                  { id: "Finance", label: "Finance (9)" },
+                  { id: "People", label: "People (10)" },
                 ].map(dept => (
                   <button
                     key={dept.id}
@@ -238,10 +293,10 @@ export default function VizhinOrgPage({
                       e.stopPropagation();
                       setSelectedBranch(dept.id);
                     }}
-                    className={`px-2 py-0.5 rounded transition-colors whitespace-nowrap cursor-pointer ${
+                    className={`px-2 py-0.5 rounded transition-colors whitespace-nowrap cursor-pointer font-bold ${
                       selectedBranch === dept.id
-                        ? 'bg-emerald-600 text-white font-bold'
-                        : 'bg-white text-slate-700 hover:text-black border border-slate-300'
+                        ? "bg-slate-900 text-white"
+                        : "bg-white text-slate-700 hover:text-black border border-slate-300 hover:bg-slate-50"
                     }`}
                   >
                     {dept.label}
@@ -252,21 +307,21 @@ export default function VizhinOrgPage({
               {/* COMPACT MULTI-TIER TREE VISUALIZER (White boxes with Black text) */}
               <div className="py-4 space-y-3 overflow-x-auto relative z-10">
                 
-                {/* TIER 1: ROOT EXECUTIVE */}
+                {/* LEVEL 1: ROOT EXECUTIVE (CEO) */}
                 <div className="flex flex-col items-center">
                   <button
                     type="button"
                     onClick={(e) => {
                       e.stopPropagation();
-                      setSelectedPreviewNode('sarah');
+                      setSelectedPreviewNode("sarah");
                     }}
-                    className={`px-3 py-2 rounded-xl border-2 text-left transition-all w-60 shadow-sm cursor-pointer flex items-center gap-2.5 ${
-                      selectedPreviewNode === 'sarah'
-                        ? 'bg-white border-emerald-600 ring-2 ring-emerald-500'
-                        : 'bg-white border-slate-300 hover:border-slate-800'
+                    className={`px-3 py-2 rounded-xl border-2 text-left transition-all w-64 shadow-sm cursor-pointer flex items-center gap-2.5 bg-white ${
+                      selectedPreviewNode === "sarah"
+                        ? "border-slate-900 ring-2 ring-slate-900/60 shadow-md"
+                        : "border-slate-300 hover:border-slate-700"
                     }`}
                   >
-                    <div className="w-7 h-7 rounded-lg bg-black text-white flex items-center justify-center font-bold text-xs shrink-0">
+                    <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center font-black text-xs shrink-0 shadow-xs">
                       SC
                     </div>
                     <div className="flex-1 min-w-0">
@@ -274,54 +329,39 @@ export default function VizhinOrgPage({
                         <span className="text-xs font-black text-black truncate">Sarah Connor</span>
                         <span className="text-[8px] font-mono bg-amber-100 text-amber-900 border border-amber-300 px-1 py-0.2 rounded uppercase font-bold">CEO</span>
                       </div>
-                      <p className="text-[10px] text-slate-700 truncate font-medium">Chief Executive Officer</p>
-                    </div>
-                    <div className="text-[9px] font-mono text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-300 font-bold shrink-0">
-                      God Mode
+                      <p className="text-[10px] text-slate-700 font-semibold truncate">Chief Executive Officer & Founder</p>
+                      <p className="text-[9px] text-emerald-700 font-mono font-bold mt-0.5">Terminator · Level 1 Root</p>
                     </div>
                   </button>
 
-                  <div className="w-[2px] h-3.5 bg-slate-700"></div>
-                  <div className="w-full max-w-xl h-[2px] bg-slate-700 relative">
-                    <div className="absolute left-1/2 -top-1 w-2 h-2 -ml-1 rounded-full bg-emerald-600"></div>
+                  <div className="w-0.5 h-3.5 bg-slate-600"></div>
+                  <div className="w-full max-w-2xl h-0.5 bg-slate-400 relative">
+                    <div className="absolute left-1/2 -top-1 w-2 h-2 -ml-1 rounded-full bg-slate-700"></div>
                   </div>
                 </div>
 
-                {/* TIER 2: VPs & DIRECT C-SUITE REPORTS */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 max-w-2xl mx-auto pt-1">
-                  
-                  {/* David Chen */}
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedPreviewNode('david');
-                    }}
-                    className={`p-2 rounded-xl border-2 text-left transition-all cursor-pointer bg-white ${
-                      selectedPreviewNode === 'david'
-                        ? 'border-emerald-600 ring-2 ring-emerald-500'
-                        : 'border-slate-300 hover:border-slate-800'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-black text-black truncate">David Chen</span>
-                      <span className="text-[8px] font-mono bg-blue-100 text-blue-900 font-bold px-1 rounded border border-blue-200">VP</span>
-                    </div>
-                    <p className="text-[9px] text-slate-700 truncate font-medium">VP Engineering</p>
-                    <p className="text-[8px] font-mono text-slate-500 mt-1 font-semibold">4 Directs · R&D</p>
-                  </button>
+                {/* LEVEL 2: C-SUITE & USER ACCOUNT (Direct Reports to CEO) */}
+                <div className="text-[9px] font-mono uppercase text-slate-700 font-extrabold mb-1 flex items-center justify-between px-1">
+                  <span className="flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-slate-700"></span>
+                    <span>Level 2: C-Suite Officers & Your Executive Account</span>
+                  </span>
+                  <span className="text-emerald-700 font-bold">All Direct Reports to CEO Sarah Connor</span>
+                </div>
 
-                  {/* Your Account */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 max-w-3xl mx-auto pt-1">
+                  
+                  {/* 1. YOUR ACCOUNT (INJECTED UNDER CEO AT LEVEL 2) */}
                   <button
                     type="button"
                     onClick={(e) => {
                       e.stopPropagation();
-                      setSelectedPreviewNode('you');
+                      setSelectedPreviewNode("you");
                     }}
                     className={`p-2 rounded-xl border-2 text-left transition-all relative overflow-hidden cursor-pointer bg-emerald-50 ${
-                      selectedPreviewNode === 'you'
-                        ? 'border-emerald-600 ring-2 ring-emerald-500'
-                        : 'border-emerald-500 hover:border-emerald-700'
+                      selectedPreviewNode === "you"
+                        ? "border-emerald-600 ring-2 ring-emerald-500 shadow-md"
+                        : "border-emerald-500 hover:border-emerald-700 shadow-xs"
                     }`}
                   >
                     <div className="absolute top-0 right-0 bg-emerald-600 text-white text-[7px] font-black px-1 uppercase tracking-tight font-mono">
@@ -329,134 +369,247 @@ export default function VizhinOrgPage({
                     </div>
                     <div className="flex items-center justify-between mt-1">
                       <span className="text-[11px] font-black text-emerald-950 truncate">Your Account</span>
-                      <span className="text-[8px] font-mono bg-emerald-200 text-emerald-950 px-1 rounded font-bold">Admin</span>
+                      <span className="text-[8px] font-mono bg-emerald-200 text-emerald-950 px-1 rounded font-bold">VIP</span>
                     </div>
-                    <p className="text-[9px] text-emerald-900 truncate font-semibold">VP Operations</p>
-                    <p className="text-[8px] font-mono text-emerald-800 mt-1 font-bold">CEO Direct · God Mode</p>
+                    <p className="text-[9px] text-emerald-900 truncate font-semibold">Chief Strategy Officer</p>
+                    <p className="text-[8px] font-mono text-emerald-800 mt-1 font-bold">Level 2 · Super Admin</p>
                   </button>
 
-                  {/* Sarah Lin */}
+                  {/* 2. Gordon Gekko (CFO) */}
                   <button
                     type="button"
                     onClick={(e) => {
                       e.stopPropagation();
-                      setSelectedPreviewNode('slin');
+                      setSelectedPreviewNode("cfo");
                     }}
                     className={`p-2 rounded-xl border-2 text-left transition-all cursor-pointer bg-white ${
-                      selectedPreviewNode === 'slin'
-                        ? 'border-emerald-600 ring-2 ring-emerald-500'
-                        : 'border-slate-300 hover:border-slate-800'
+                      selectedPreviewNode === "cfo"
+                        ? "border-slate-900 ring-2 ring-slate-900/60 shadow-md"
+                        : "border-slate-300 hover:border-slate-800 shadow-xs"
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-black text-black truncate">Sarah Lin</span>
-                      <span className="text-[8px] font-mono bg-purple-100 text-purple-900 font-bold px-1 rounded border border-purple-200">CPO</span>
+                      <span className="text-[11px] font-black text-black truncate">Gordon Gekko</span>
+                      <span className="text-[8px] font-mono bg-emerald-100 text-emerald-900 font-bold px-1 rounded border border-emerald-200">CFO</span>
                     </div>
-                    <p className="text-[9px] text-slate-700 truncate font-medium">Chief People Officer</p>
-                    <p className="text-[8px] font-mono text-slate-500 mt-1 font-semibold">2 Directs · People</p>
+                    <p className="text-[9px] text-slate-700 truncate font-semibold">Chief Financial Officer</p>
+                    <p className="text-[8px] font-mono text-slate-500 mt-1">Wall Street · 9 Directs</p>
                   </button>
 
-                  {/* Marcus Vance */}
+                  {/* 3. Lando Calrissian (CRO) */}
                   <button
                     type="button"
                     onClick={(e) => {
                       e.stopPropagation();
-                      setSelectedPreviewNode('mvance');
+                      setSelectedPreviewNode("cro");
                     }}
                     className={`p-2 rounded-xl border-2 text-left transition-all cursor-pointer bg-white ${
-                      selectedPreviewNode === 'mvance'
-                        ? 'border-emerald-600 ring-2 ring-emerald-500'
-                        : 'border-slate-300 hover:border-slate-800'
+                      selectedPreviewNode === "cro"
+                        ? "border-slate-900 ring-2 ring-slate-900/60 shadow-md"
+                        : "border-slate-300 hover:border-slate-800 shadow-xs"
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-black text-black truncate">Marcus Vance</span>
-                      <span className="text-[8px] font-mono bg-amber-100 text-amber-900 font-bold px-1 rounded border border-amber-200">VP</span>
+                      <span className="text-[11px] font-black text-black truncate">Lando Calrissian</span>
+                      <span className="text-[8px] font-mono bg-amber-100 text-amber-900 font-bold px-1 rounded border border-amber-200">CRO</span>
                     </div>
-                    <p className="text-[9px] text-slate-700 truncate font-medium">VP Revenue Ops</p>
-                    <p className="text-[8px] font-mono text-slate-500 mt-1 font-semibold">3 Directs · GTM</p>
+                    <p className="text-[9px] text-slate-700 truncate font-semibold">Chief Revenue Officer</p>
+                    <p className="text-[8px] font-mono text-slate-500 mt-1">Star Wars · 22 Directs</p>
+                  </button>
+
+                  {/* 4. Ellen Ripley (COO) */}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedPreviewNode("coo");
+                    }}
+                    className={`p-2 rounded-xl border-2 text-left transition-all cursor-pointer bg-white ${
+                      selectedPreviewNode === "coo"
+                        ? "border-slate-900 ring-2 ring-slate-900/60 shadow-md"
+                        : "border-slate-300 hover:border-slate-800 shadow-xs"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-black text-black truncate">Ellen Ripley</span>
+                      <span className="text-[8px] font-mono bg-blue-100 text-blue-900 font-bold px-1 rounded border border-blue-200">COO</span>
+                    </div>
+                    <p className="text-[9px] text-slate-700 truncate font-semibold">Chief Operating Officer</p>
+                    <p className="text-[8px] font-mono text-slate-500 mt-1">Alien · 19 Directs</p>
+                  </button>
+
+                  {/* 5. Morpheus Zion (CIO) */}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedPreviewNode("cio");
+                    }}
+                    className={`p-2 rounded-xl border-2 text-left transition-all cursor-pointer bg-white ${
+                      selectedPreviewNode === "cio"
+                        ? "border-slate-900 ring-2 ring-slate-900/60 shadow-md"
+                        : "border-slate-300 hover:border-slate-800 shadow-xs"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-black text-black truncate">Morpheus</span>
+                      <span className="text-[8px] font-mono bg-purple-100 text-purple-900 font-bold px-1 rounded border border-purple-200">CIO</span>
+                    </div>
+                    <p className="text-[9px] text-slate-700 truncate font-semibold">Chief Info Officer</p>
+                    <p className="text-[8px] font-mono text-slate-500 mt-1">Matrix · 14 Directs</p>
+                  </button>
+
+                  {/* 6. Tony Stark (CTO) */}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedPreviewNode("cto");
+                    }}
+                    className={`p-2 rounded-xl border-2 text-left transition-all cursor-pointer bg-white ${
+                      selectedPreviewNode === "cto"
+                        ? "border-slate-900 ring-2 ring-slate-900/60 shadow-md"
+                        : "border-slate-300 hover:border-slate-800 shadow-xs"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-black text-black truncate">Tony Stark</span>
+                      <span className="text-[8px] font-mono bg-red-100 text-red-900 font-bold px-1 rounded border border-red-200">CTO</span>
+                    </div>
+                    <p className="text-[9px] text-slate-700 truncate font-semibold">Chief Technology Officer</p>
+                    <p className="text-[8px] font-mono text-slate-500 mt-1">Iron Man · 38 Directs</p>
                   </button>
 
                 </div>
 
-                {/* TIER 3: MANAGERS */}
+                {/* LEVEL 3: VICE PRESIDENTS */}
                 <div className="pt-2">
-                  <div className="grid grid-cols-3 gap-2.5">
-                    
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedPreviewNode('elena');
-                      }}
-                      className={`p-2 rounded-lg border-2 text-left transition-all cursor-pointer bg-white ${
-                        selectedPreviewNode === 'elena'
-                          ? 'border-emerald-600 ring-2 ring-emerald-500'
-                          : 'border-slate-300 hover:border-slate-700'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-black text-black truncate">Elena Rostova</span>
-                        <span className="text-[7px] font-mono bg-blue-100 text-blue-900 font-bold px-1 rounded border border-blue-200">MGR</span>
-                      </div>
-                      <p className="text-[9px] text-slate-700 truncate font-medium">Engineering Manager</p>
-                      <p className="text-[8px] text-emerald-800 font-mono mt-0.5 font-bold">Directs: Marcus, Chloe</p>
-                    </button>
+                  <div className="text-[9px] font-mono uppercase text-slate-700 font-extrabold mb-1.5 flex items-center justify-between">
+                    <span className="flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-slate-700"></span>
+                      <span>Level 3: Vice Presidents & Divisional Architects</span>
+                    </span>
+                    <span className="text-slate-500 font-mono text-[9px]">14 VPs</span>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    {[
+                      { id: "vp_eng_neo", name: "Thomas Anderson (Neo)", title: "VP Core Systems", movie: "Matrix", dept: "Engineering" },
+                      { id: "vp_sec_trinity", name: "Trinity", title: "VP Zero-Trust Security", movie: "Matrix", dept: "Security" },
+                      { id: "vp_sales_solo", name: "Han Solo", title: "VP Enterprise Sales", movie: "Star Wars", dept: "Revenue" },
+                      { id: "vp_ops_cooper", name: "Joseph Cooper", title: "VP Infra & Scale", movie: "Interstellar", dept: "Operations" },
+                    ].map(vp => (
+                      <button
+                        key={vp.id}
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedPreviewNode(vp.id);
+                        }}
+                        className={`p-2 rounded-lg border-2 text-left transition-all cursor-pointer bg-white ${
+                          selectedPreviewNode === vp.id
+                            ? "border-slate-900 ring-2 ring-slate-900/60 shadow-md"
+                            : "border-slate-300 hover:border-slate-700 shadow-xs"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-black text-black truncate">{vp.name}</span>
+                          <span className="text-[7px] font-mono bg-slate-100 text-slate-800 font-bold px-1 rounded border border-slate-300">VP</span>
+                        </div>
+                        <p className="text-[9px] text-slate-700 truncate font-medium">{vp.title}</p>
+                        <p className="text-[8px] text-slate-500 font-mono mt-0.5">{vp.movie} · {vp.dept}</p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
 
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedPreviewNode('rachel');
-                      }}
-                      className={`p-2 rounded-lg border-2 text-left transition-all cursor-pointer bg-white ${
-                        selectedPreviewNode === 'rachel'
-                          ? 'border-emerald-600 ring-2 ring-emerald-500'
-                          : 'border-slate-300 hover:border-slate-700'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-black text-black truncate">Rachel Kim</span>
-                        <span className="text-[7px] font-mono bg-purple-100 text-purple-900 font-bold px-1 rounded border border-purple-200">LEAD</span>
-                      </div>
-                      <p className="text-[9px] text-slate-700 truncate font-medium">Lead Talent Architect</p>
-                      <p className="text-[8px] text-purple-800 font-mono mt-0.5 font-bold">Comp & Design</p>
-                    </button>
+                {/* LEVEL 4 & 5: DIRECTORS, MANAGERS & STAFF SPECIALISTS */}
+                <div className="pt-2">
+                  <div className="text-[9px] font-mono uppercase text-slate-700 font-extrabold mb-1.5 flex items-center justify-between">
+                    <span className="flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-slate-700"></span>
+                      <span>Levels 4 & 5: Directors, Managers & IC Staff</span>
+                    </span>
+                    <span className="text-slate-600 font-mono text-[9px] font-bold">115 Total Employees</span>
+                  </div>
 
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedPreviewNode('liam');
-                      }}
-                      className={`p-2 rounded-lg border-2 text-left transition-all cursor-pointer bg-white ${
-                        selectedPreviewNode === 'liam'
-                          ? 'border-emerald-600 ring-2 ring-emerald-500'
-                          : 'border-slate-300 hover:border-slate-700'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-black text-black truncate">Liam Patel</span>
-                        <span className="text-[7px] font-mono bg-amber-100 text-amber-900 font-bold px-1 rounded border border-amber-200">DIR</span>
-                      </div>
-                      <p className="text-[9px] text-slate-700 truncate font-medium">Sales Director</p>
-                      <p className="text-[8px] text-amber-800 font-mono mt-0.5 font-bold">Directs: Maya, Jordan</p>
-                    </button>
-
+                  <div className="grid grid-cols-3 sm:grid-cols-6 gap-1.5">
+                    {[
+                      { id: "dir_ai_docbrown", name: "Doc Brown", role: "AI Lab Dir", movie: "Back to the Future" },
+                      { id: "dir_sec_smith", name: "Agent Smith", role: "Threat Dir", movie: "Matrix" },
+                      { id: "dir_talent_lorraine", name: "Lorraine McFly", role: "Talent Dir", movie: "Back to Future" },
+                      { id: "mgr_web_parker", name: "Peter Parker", role: "Web Lead", movie: "Spider-Man" },
+                      { id: "ic_bishop", name: "Bishop", role: "Robotics IC", movie: "Alien" },
+                      { id: "ic_yoda", name: "Yoda", role: "Principal Fellow", movie: "Star Wars" },
+                    ].map(ic => (
+                      <button
+                        key={ic.id}
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedPreviewNode(ic.id);
+                        }}
+                        className={`p-1.5 rounded-lg border-2 text-left transition-all cursor-pointer bg-white ${
+                          selectedPreviewNode === ic.id
+                            ? "border-slate-900 ring-2 ring-slate-900/60 shadow-md"
+                            : "border-slate-300 hover:border-slate-700 shadow-xs"
+                        }`}
+                      >
+                        <p className="text-[9px] font-black text-black truncate">{ic.name}</p>
+                        <p className="text-[8px] text-slate-700 truncate font-medium">{ic.role}</p>
+                        <p className="text-[7px] text-slate-500 font-mono truncate">{ic.movie}</p>
+                      </button>
+                    ))}
                   </div>
                 </div>
 
               </div>
 
-              {/* Bottom Click Hint */}
-              <div className="relative z-10 bg-white border border-slate-300 p-2.5 rounded-xl text-xs text-slate-900 flex items-center justify-between mt-3 font-semibold shadow-xs">
-                <span className="flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>Click anywhere to explore the full 100-person cinema-themed tech org chart</span>
-                </span>
-                <span className="text-[10px] font-mono text-emerald-700 font-bold uppercase underline">
-                  Launch View →
-                </span>
+              {/* Context Explainer Box: Pure White Box with Black Text */}
+              <div className="bg-white border-2 border-slate-300 p-3 rounded-xl text-xs text-slate-800 flex items-start gap-2.5 mt-2 shadow-xs relative z-10">
+                <Sparkles className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                <div className="text-[11px] leading-relaxed">
+                  {selectedPreviewNode === "you" && (
+                    <span>
+                      <strong className="text-emerald-700">Your Account (Level 2 Direct Report to CEO):</strong> Placed directly reporting to CEO Sarah Connor with Super Admin ("God Mode") authority. You inherit universal cross-branch calibration, access delegation, and performance evaluation rights across all 115 workforce positions.
+                    </span>
+                  )}
+                  {selectedPreviewNode === "sarah" && (
+                    <span>
+                      <strong className="text-slate-900">Sarah Connor (CEO & Founder · Terminator):</strong> Level 1 Root executive. Evaluates all C-level officers directly. Under recursive PostgreSQL CTE queries, inherits visibility across all 115 workforce nodes.
+                    </span>
+                  )}
+                  {selectedPreviewNode === "cfo" && (
+                    <span>
+                      <strong className="text-slate-900">Gordon Gekko (CFO · Wall Street):</strong> Reports directly to Sarah Connor at Level 2. Manages Jordan Belfort (VP Finance), controllers, and financial audits across 9 employees.
+                    </span>
+                  )}
+                  {selectedPreviewNode === "cro" && (
+                    <span>
+                      <strong className="text-slate-900">Lando Calrissian (CRO · Star Wars):</strong> Reports directly to Sarah Connor at Level 2. Governs Han Solo (VP Sales), Jules Winnfield (VP CS), and Winston Wolfe (VP Solutions) across 22 revenue employees.
+                    </span>
+                  )}
+                  {selectedPreviewNode === "coo" && (
+                    <span>
+                      <strong className="text-slate-900">Ellen Ripley (COO · Alien):</strong> Reports directly to Sarah Connor at Level 2. Leads Joseph Cooper (VP Ops) and Dr. Alan Grant (VP Professional Services) across 19 operations and facilities specialists.
+                    </span>
+                  )}
+                  {selectedPreviewNode === "cio" && (
+                    <span>
+                      <strong className="text-slate-900">Morpheus Zion (CIO · Matrix):</strong> Reports directly to Sarah Connor at Level 2. Oversees Trinity (VP Cybersecurity), Eldon Tyrell (VP Enterprise Systems), and Rick Deckard across 14 security employees.
+                    </span>
+                  )}
+                  {selectedPreviewNode === "cto" && (
+                    <span>
+                      <strong className="text-slate-900">Tony Stark (CTO · Iron Man):</strong> Reports directly to Sarah Connor at Level 2. Leads Thomas Anderson / Neo (VP Core Eng), Bruce Banner (VP AI), Dom Cobb (VP Product), and Shuri (VP Hardware) across 38 engineers.
+                    </span>
+                  )}
+                  {!["you", "sarah", "cfo", "cro", "coo", "cio", "cto"].includes(selectedPreviewNode) && (
+                    <span>
+                      <strong className="text-slate-900">Interactive 5-Level Architecture:</strong> Demonstrates deterministic hierarchical RBAC across 115 employees. Click anywhere on this preview to open the full interactive org chart with pan, zoom, search, and cinema profile dossiers.
+                    </span>
+                  )}
+                </div>
               </div>
 
             </div>
@@ -581,6 +734,24 @@ export default function VizhinOrgPage({
                       <p className="text-xs text-neutral-400 mt-0.5">
                         Enter your corporate credentials to access your organization workspace.
                       </p>
+                    </div>
+
+                    {/* Direct button to 115-Employee Multi-Tiered Example */}
+                    <div className="p-3 bg-emerald-950/40 border border-emerald-800/80 rounded-xl flex items-center justify-between gap-2 shadow-xs">
+                      <div className="flex items-center gap-2">
+                        <Network className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <div>
+                          <p className="text-xs font-bold text-white leading-tight">Explore 115-Employee Org Chart</p>
+                          <p className="text-[10px] text-emerald-300/80 leading-tight mt-0.5">5 Management Levels · Sarah Connor CEO & C-Suite</p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setIsFullOrgChartOpen(true)}
+                        className="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-neutral-950 rounded-lg text-xs font-black transition-all shrink-0 cursor-pointer shadow-sm hover:scale-105"
+                      >
+                        View Chart →
+                      </button>
                     </div>
 
                     <form onSubmit={handleLoginSubmit} className="space-y-4">

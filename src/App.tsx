@@ -262,15 +262,6 @@ export default function App() {
       );
     }
 
-    if (unauthScreen === "org-login") {
-      return (
-        <VizhinOrgLoginScreen 
-          onBack={() => setUnauthScreen('landing')}
-          onSwitchToCrm={() => setUnauthScreen('login')}
-        />
-      );
-    }
-
     if (unauthScreen === 'request') {
       return (
         <RequestAccessScreen 
@@ -285,7 +276,7 @@ export default function App() {
           onLoginSuccess={handleLoginSuccess}
           users={users}
           onBack={() => setUnauthScreen('landing')}
-          onSwitchToOrg={() => setUnauthScreen('org-login')}
+          onSwitchToOrg={() => navigateTo('org')}
         />
       </div>
     );

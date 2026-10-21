@@ -11,6 +11,7 @@ interface SiteHeaderProps {
     role?: string;
   } | null;
   onSignOut?: () => void;
+  onSwitchUser?: (user: any) => void;
   onNavigateHome: () => void;
   onNavigateMeddpicc: () => void;
   onNavigateMarketingAnalysis?: () => void;
@@ -19,10 +20,21 @@ interface SiteHeaderProps {
   onRequestAccount: () => void;
 }
 
+const DEMO_TEST_USERS = [
+  { email: 'rreifel@vizhin.co', name: 'Richard Reifel', role: 'SUPER_ADMIN' },
+  { email: 'sarah.connor@strataorg.com', name: 'Sarah Connor (CEO)', role: 'SUPER_ADMIN' },
+  { email: 'tony.stark@strataorg.com', name: 'Tony Stark (CTO)', role: 'SUPER_ADMIN' },
+  { email: 'ellen.ripley@strataorg.com', name: 'Ellen Ripley (COO)', role: 'SUPER_ADMIN' },
+  { email: 'gordon.gekko@strataorg.com', name: 'Gordon Gekko (CFO)', role: 'SUPER_ADMIN' },
+  { email: 'admin@acuity.com', name: 'Sarah Jenkins', role: 'PARTNER_ADMIN' },
+  { email: 'admin@apex.com', name: 'David Miller', role: 'CUSTOMER_ADMIN' },
+];
+
 export default function SiteHeader({
   currentPage = 'landing',
   currentUser,
   onSignOut,
+  onSwitchUser,
   onNavigateHome,
   onNavigateMeddpicc,
   onNavigateMarketingAnalysis,
@@ -32,6 +44,7 @@ export default function SiteHeader({
 }: SiteHeaderProps) {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [signInDropdownOpen, setSignInDropdownOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const toggleDropdown = (name: string) => {
@@ -241,33 +254,110 @@ export default function SiteHeader({
           </div>
 
           <div className="flex items-center gap-3">
+            {/* Upper Right: Authenticated User Name & Sign Out Button */}
             {currentUser ? (
-              <div className="flex items-center gap-2.5">
-                {/* Active User Identity Chip */}
-                <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-neutral-900 border border-neutral-800 text-xs shadow-xs">
-                  <div className="w-6 h-6 rounded-full bg-emerald-600 text-neutral-950 font-black text-[11px] flex items-center justify-center">
+              <div className="relative flex items-center gap-2">
+                {/* User Card Container */}
+                <div className="flex items-center gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-neutral-900 border border-neutral-700 hover:border-emerald-500/50 shadow-md transition-all">
+                  
+                  {/* User Avatar */}
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-tr from-emerald-500 to-teal-400 text-neutral-950 font-black text-xs flex items-center justify-center shrink-0 shadow-xs">
                     {currentUser.name ? currentUser.name[0].toUpperCase() : currentUser.email[0].toUpperCase()}
                   </div>
-                  <div className="text-left">
-                    <p className="font-bold text-white text-[11px] leading-tight truncate max-w-[140px]">
+
+                  {/* Name, Email and Role (Always visible on all screens!) */}
+                  <div className="text-left flex flex-col justify-center min-w-0 pr-1">
+                    <span className="font-extrabold text-white text-xs sm:text-sm leading-tight truncate max-w-[130px] sm:max-w-[200px]">
                       {currentUser.name || currentUser.email}
-                    </p>
-                    <p className="text-[9px] font-mono text-emerald-400 uppercase leading-none mt-0.5">
-                      {currentUser.role || 'Active Session'}
-                    </p>
+                    </span>
+                    <div className="flex items-center gap-1 mt-0.5">
+                      <span className="text-[10px] text-neutral-400 font-mono leading-none truncate max-w-[100px] sm:max-w-[130px] hidden xs:inline">
+                        {currentUser.email}
+                      </span>
+                      <span className="text-[9px] font-mono font-bold text-emerald-300 bg-emerald-950 px-1 py-0.2 rounded border border-emerald-800/80 uppercase shrink-0">
+                        {currentUser.role || 'Super Admin'}
+                      </span>
+                    </div>
                   </div>
+
+                  {/* Quick User Switch Dropdown Arrow */}
+                  {onSwitchUser && (
+                    <button
+                      type="button"
+                      onClick={() => setUserMenuOpen(prev => !prev)}
+                      className="p-1 rounded hover:bg-neutral-800 text-neutral-400 hover:text-white transition-colors cursor-pointer"
+                      title="Switch test account"
+                    >
+                      <ChevronDown className={`w-3.5 h-3.5 transition-transform ${userMenuOpen ? 'rotate-180 text-emerald-400' : ''}`} />
+                    </button>
+                  )}
                 </div>
 
-                {/* Direct Sign Out Button */}
+                {/* Direct Sign Out Button Beside That */}
                 <button
                   type="button"
                   onClick={onSignOut}
-                  className="px-3.5 py-1.5 rounded-lg bg-red-950/70 hover:bg-red-900/90 text-red-300 hover:text-white border border-red-800/70 text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm cursor-pointer hover:scale-105"
+                  className="px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl bg-red-950/80 hover:bg-red-900 text-red-200 hover:text-white border border-red-800/80 text-xs font-bold transition-all flex items-center gap-1.5 shadow-md cursor-pointer hover:scale-105 shrink-0"
                   title="Sign out of current account to switch user"
                 >
                   <LogOut className="w-3.5 h-3.5 text-red-400" />
                   <span>Sign Out</span>
                 </button>
+
+                {/* Dropdown Menu for Testing Different Users */}
+                {userMenuOpen && onSwitchUser && (
+                  <div className="absolute top-full right-0 mt-2 w-72 bg-neutral-950 border border-neutral-800 rounded-xl shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150 backdrop-blur-md">
+                    <div className="px-2.5 py-1.5 border-b border-neutral-800/80 mb-1.5">
+                      <p className="text-[10px] font-mono uppercase text-neutral-400">Current Session</p>
+                      <p className="text-xs font-bold text-white truncate">{currentUser.name || currentUser.email}</p>
+                      <p className="text-[10px] text-emerald-400 font-mono">{currentUser.role || 'SUPER_ADMIN'}</p>
+                    </div>
+
+                    <p className="px-2.5 py-1 text-[10px] font-mono uppercase text-neutral-500">
+                      Switch User for Testing
+                    </p>
+
+                    <div className="space-y-1">
+                      {DEMO_TEST_USERS.map((acc) => (
+                        <button
+                          key={acc.email}
+                          type="button"
+                          onClick={() => {
+                            setUserMenuOpen(false);
+                            onSwitchUser(acc);
+                          }}
+                          className={`w-full text-left p-2 rounded-lg text-xs transition-colors flex items-center justify-between cursor-pointer ${
+                            currentUser.email.toLowerCase() === acc.email.toLowerCase()
+                              ? 'bg-emerald-950/70 border border-emerald-800/70 text-emerald-200'
+                              : 'hover:bg-neutral-900 text-neutral-300 hover:text-white'
+                          }`}
+                        >
+                          <div>
+                            <p className="font-bold">{acc.name}</p>
+                            <p className="text-[10px] text-neutral-400 font-mono">{acc.email}</p>
+                          </div>
+                          <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-neutral-900 border border-neutral-800 text-neutral-400">
+                            {acc.role}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="pt-2 mt-2 border-t border-neutral-800/80">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setUserMenuOpen(false);
+                          onSignOut?.();
+                        }}
+                        className="w-full py-2 px-3 rounded-lg bg-red-950/60 hover:bg-red-900 text-red-300 hover:text-white border border-red-800/60 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-colors"
+                      >
+                        <LogOut className="w-3.5 h-3.5 text-red-400" />
+                        <span>Sign Out of All Accounts</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
               <>

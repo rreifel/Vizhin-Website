@@ -218,14 +218,53 @@ export default function App() {
     alert('System Database reset to initial enterprise seed state!');
   };
 
+  const handleEnterOrg = () => {
+    if (!currentUser) {
+      const defaultOrgUser: PortalUser = {
+        id: 'user_super',
+        email: 'rreifel@vizhin.co',
+        name: 'Richard Reifel',
+        role: 'SUPER_ADMIN',
+        partnerId: null,
+        customerId: null,
+        avatarUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=120&h=120&q=80',
+        isActive: true,
+        createdAt: '2025-12-01T00:00:00Z',
+        mfaEnabled: false,
+      };
+      handleLoginSuccess(defaultOrgUser);
+    }
+    navigateTo('org');
+  };
+
+  // If the user visits /ORG without an active session, auto-login with default administrator so name and Sign Out button appear in upper right
+  useEffect(() => {
+    if (unauthScreen === 'org' && !currentUser) {
+      const defaultOrgUser: PortalUser = {
+        id: 'user_super',
+        email: 'rreifel@vizhin.co',
+        name: 'Richard Reifel',
+        role: 'SUPER_ADMIN',
+        partnerId: null,
+        customerId: null,
+        avatarUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=120&h=120&q=80',
+        isActive: true,
+        createdAt: '2025-12-01T00:00:00Z',
+        mfaEnabled: false,
+      };
+      handleLoginSuccess(defaultOrgUser);
+    }
+  }, [unauthScreen]);
+
   // Screen routing for both authenticated and unauthenticated sessions
   if (unauthScreen === 'landing') {
     return (
       <LandingPage 
         currentUser={currentUser}
         onSignOut={handleLogout}
+        onSwitchUser={handleLoginSuccess}
         onEnterPortal={() => navigateTo(currentUser ? 'portal' : 'login')}
-        onEnterOrg={() => navigateTo('org')}
+        onEnterOrg={handleEnterOrg}
         onRequestAccount={() => navigateTo('request')}
         onNavigateMeddpicc={() => navigateTo('meddpicc')}
         onNavigateMarketingAnalysis={() => navigateTo('marketing-analysis')}
@@ -238,9 +277,10 @@ export default function App() {
       <MeddpiccPage 
         currentUser={currentUser}
         onSignOut={handleLogout}
+        onSwitchUser={handleLoginSuccess}
         onBack={() => navigateTo('landing')}
         onEnterPortal={() => navigateTo(currentUser ? 'portal' : 'login')}
-        onEnterOrg={() => navigateTo('org')}
+        onEnterOrg={handleEnterOrg}
         onRequestAccount={() => navigateTo('request')}
         onNavigateMarketingAnalysis={() => navigateTo('marketing-analysis')}
       />
@@ -252,9 +292,10 @@ export default function App() {
       <MarketingAnalysisPage 
         currentUser={currentUser}
         onSignOut={handleLogout}
+        onSwitchUser={handleLoginSuccess}
         onBack={() => navigateTo('landing')}
         onEnterPortal={() => navigateTo(currentUser ? 'portal' : 'login')}
-        onEnterOrg={() => navigateTo('org')}
+        onEnterOrg={handleEnterOrg}
         onRequestAccount={() => navigateTo('request')}
         onNavigateMeddpicc={() => navigateTo('meddpicc')}
       />
@@ -266,6 +307,7 @@ export default function App() {
       <VizhinOrgPage 
         currentUser={currentUser}
         onSignOut={handleLogout}
+        onSwitchUser={handleLoginSuccess}
         onLoginSuccess={handleLoginSuccess}
         onBack={() => navigateTo('landing')}
         onEnterPortal={() => navigateTo(currentUser ? 'portal' : 'login')}

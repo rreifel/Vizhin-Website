@@ -41,6 +41,7 @@ interface VizhinOrgPageProps {
   onNavigateMarketingAnalysis?: () => void;
   currentUser?: PortalUser | null;
   onSignOut?: () => void;
+  onSwitchUser?: (user: PortalUser) => void;
   onLoginSuccess?: (user: PortalUser) => void;
 }
 
@@ -61,6 +62,7 @@ export default function VizhinOrgPage({
   onNavigateMarketingAnalysis,
   currentUser,
   onSignOut,
+  onSwitchUser,
   onLoginSuccess,
 }: VizhinOrgPageProps) {
   // Mode: 'signin' (default per requirement) | 'signup' | 'forgot-password' | 'forgot-username'
@@ -208,6 +210,7 @@ export default function VizhinOrgPage({
         currentPage="org"
         currentUser={currentUser}
         onSignOut={onSignOut}
+        onSwitchUser={onSwitchUser}
         onNavigateHome={onBack}
         onNavigateMeddpicc={onNavigateMeddpicc}
         onNavigateMarketingAnalysis={onNavigateMarketingAnalysis}

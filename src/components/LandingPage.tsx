@@ -12,6 +12,7 @@ interface LandingPageProps {
     role?: string;
   } | null;
   onSignOut?: () => void;
+  onSwitchUser?: (user: any) => void;
   onEnterPortal: () => void;
   onEnterOrg?: () => void;
   onRequestAccount: () => void;
@@ -22,6 +23,7 @@ interface LandingPageProps {
 export default function LandingPage({ 
   currentUser,
   onSignOut,
+  onSwitchUser,
   onEnterPortal, 
   onEnterOrg,
   onRequestAccount, 
@@ -44,6 +46,7 @@ export default function LandingPage({
         currentPage="landing"
         currentUser={currentUser}
         onSignOut={onSignOut}
+        onSwitchUser={onSwitchUser}
         onNavigateHome={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         onNavigateMeddpicc={onNavigateMeddpicc}
         onNavigateMarketingAnalysis={onNavigateMarketingAnalysis}

@@ -41,8 +41,11 @@ interface VizhinOrgPageProps {
   onNavigateMarketingAnalysis?: () => void;
   currentUser?: PortalUser | null;
   onSignOut?: () => void;
+  onSignOutOrg?: () => void;
+  onSignOutCRM?: () => void;
   onSwitchUser?: (user: PortalUser) => void;
   onLoginSuccess?: (user: PortalUser) => void;
+  initialViewMode?: 'coming-soon' | 'terminal' | 'chart';
 }
 
 const REGISTERED_CORPORATE_EMAILS = [
@@ -62,14 +65,18 @@ export default function VizhinOrgPage({
   onNavigateMarketingAnalysis,
   currentUser,
   onSignOut,
+  onSignOutOrg,
+  onSignOutCRM,
   onSwitchUser,
   onLoginSuccess,
+  initialViewMode,
 }: VizhinOrgPageProps) {
   // Mode: 'signin' (default per requirement) | 'signup' | 'forgot-password' | 'forgot-username'
   const [authMode, setAuthMode] = useState<'signin' | 'signup' | 'forgot-password' | 'forgot-username'>('signin');
   
   // View mode: 'coming-soon' (default per requirement when clicking Sign In to VizhinORG) | 'terminal' | 'chart'
   const [viewMode, setViewMode] = useState<'coming-soon' | 'terminal' | 'chart'>(() => {
+    if (initialViewMode) return initialViewMode;
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       if (params.get('view') === 'chart' || params.get('chart') === 'true') {
@@ -81,6 +88,29 @@ export default function VizhinOrgPage({
     }
     return 'coming-soon';
   });
+
+  const [orgSignOutDropdownOpen, setOrgSignOutDropdownOpen] = useState(false);
+
+  // Sync initialViewMode if changed externally (e.g. from Sign Out of VizhinORG)
+  React.useEffect(() => {
+    if (initialViewMode) {
+      setViewMode(initialViewMode);
+      if (initialViewMode === 'terminal') {
+        setAuthMode('signin');
+        setLoginEmail('');
+        setLoginPassword('');
+      }
+    }
+  }, [initialViewMode]);
+
+  const handleLocalSignOutOrg = () => {
+    setViewMode('terminal');
+    setAuthMode('signin');
+    setLoginEmail('');
+    setLoginPassword('');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    onSignOutOrg?.();
+  };
   
   // Step for Signup: 1 = Initial account creation; 2 = Inverted Sandbox choice
   const [step, setStep] = useState<1 | 2>(1);
@@ -210,6 +240,8 @@ export default function VizhinOrgPage({
         currentPage="org"
         currentUser={currentUser}
         onSignOut={onSignOut}
+        onSignOutOrg={handleLocalSignOutOrg}
+        onSignOutCRM={onSignOutCRM}
         onSwitchUser={onSwitchUser}
         onNavigateHome={onBack}
         onNavigateMeddpicc={onNavigateMeddpicc}
@@ -249,17 +281,66 @@ export default function VizhinOrgPage({
                   {currentUser.role || 'Active'}
                 </span>
               </div>
-              {onSignOut && (
+              {/* App-Specific Sign Out Dropdown */}
+              <div className="relative">
                 <button
                   type="button"
-                  onClick={onSignOut}
+                  onClick={() => setOrgSignOutDropdownOpen(prev => !prev)}
                   className="px-3.5 py-1.5 rounded-lg bg-red-950/70 hover:bg-red-900/90 text-red-300 hover:text-white border border-red-800/70 text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm cursor-pointer hover:scale-105"
-                  title="Sign out to switch to another user for testing"
+                  title="Sign out of specific application"
                 >
                   <LogOut className="w-3.5 h-3.5 text-red-400" />
                   <span>Sign Out</span>
+                  <ChevronDown className="w-3 h-3 text-red-300" />
                 </button>
-              )}
+
+                {orgSignOutDropdownOpen && (
+                  <div className="absolute top-full right-0 mt-2 w-64 bg-neutral-950/95 border border-neutral-800 rounded-xl shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150 backdrop-blur-md">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setOrgSignOutDropdownOpen(false);
+                        handleLocalSignOutOrg();
+                      }}
+                      className="w-full text-left p-2 rounded-lg hover:bg-neutral-900 text-xs font-bold text-cyan-300 hover:text-cyan-200 flex items-center gap-2 cursor-pointer"
+                    >
+                      <Network className="w-4 h-4 text-cyan-400 shrink-0" />
+                      <div>
+                        <p>Sign Out of VizhinORG</p>
+                        <p className="text-[10px] text-neutral-400 font-normal">Split Setup & Sign-In Screen</p>
+                      </div>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setOrgSignOutDropdownOpen(false);
+                        if (onSignOutCRM) onSignOutCRM();
+                        else onSignOut?.();
+                      }}
+                      className="w-full text-left p-2 rounded-lg hover:bg-neutral-900 text-xs font-bold text-emerald-300 hover:text-emerald-200 flex items-center gap-2 cursor-pointer mt-1"
+                    >
+                      <Building2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                      <div>
+                        <p>Sign Out of VizhinCRM</p>
+                        <p className="text-[10px] text-neutral-400 font-normal">CRM Setup Screen</p>
+                      </div>
+                    </button>
+                    <div className="pt-1.5 mt-1.5 border-t border-neutral-800">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setOrgSignOutDropdownOpen(false);
+                          onSignOut?.();
+                        }}
+                        className="w-full p-1.5 rounded-lg bg-red-950/60 hover:bg-red-900 text-red-300 text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer"
+                      >
+                        <LogOut className="w-3.5 h-3.5 text-red-400" />
+                        <span>Sign Out of All</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           )}
 

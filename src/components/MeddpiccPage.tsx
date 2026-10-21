@@ -16,6 +16,8 @@ interface MeddpiccPageProps {
     role?: string;
   } | null;
   onSignOut?: () => void;
+  onSignOutOrg?: () => void;
+  onSignOutCRM?: () => void;
   onSwitchUser?: (user: any) => void;
   onBack: () => void;
   onEnterPortal: () => void;
@@ -193,6 +195,8 @@ const MEDDPICC_DATA: MeddpiccItem[] = [
 export default function MeddpiccPage({ 
   currentUser,
   onSignOut,
+  onSignOutOrg,
+  onSignOutCRM,
   onSwitchUser,
   onBack, 
   onEnterPortal, 
@@ -239,6 +243,8 @@ export default function MeddpiccPage({
         currentPage="meddpicc"
         currentUser={currentUser}
         onSignOut={onSignOut}
+        onSignOutOrg={onSignOutOrg}
+        onSignOutCRM={onSignOutCRM}
         onSwitchUser={onSwitchUser}
         onNavigateHome={onBack}
         onNavigateMeddpicc={() => window.scrollTo({ top: 0, behavior: 'smooth' })}

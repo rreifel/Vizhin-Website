@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   LogOut, ShieldAlert, Code2, Users, Building, Activity, 
-  HelpCircle, Settings, Key, UserCheck, ShieldClose
+  HelpCircle, Settings, Key, UserCheck, ShieldClose, ChevronDown, Network, Building2
 } from 'lucide-react';
 import { Partner, Customer, PortalUser, AuditLog, Lead, Task } from './types';
 import { 
@@ -187,15 +187,55 @@ export default function App() {
     setAuditLogs(prev => [log, ...prev]);
   };
 
+  const [orgInitialView, setOrgInitialView] = useState<'coming-soon' | 'terminal' | 'chart'>('coming-soon');
+  const [crmSignOutDropdownOpen, setCrmSignOutDropdownOpen] = useState(false);
+
   const handleLogout = () => {
     if (currentUser) {
       const log: AuditLog = {
         id: `aud_${Date.now()}`,
         timestamp: new Date().toISOString(),
         actorEmail: currentUser.email,
-        action: 'USER_LOGOUT',
+        action: 'USER_LOGOUT_ALL',
         ipAddress: '192.168.1.56',
-        details: 'User session closed successfully. Tokens expired.',
+        details: 'User session closed successfully across all platforms. Tokens expired.',
+        severity: 'info'
+      };
+      setAuditLogs(prev => [log, ...prev]);
+    }
+    setCurrentUser(null);
+    localStorage.removeItem('vzn_current_user');
+    setActiveWorkspace('dashboard');
+    navigateTo('login');
+  };
+
+  const handleSignOutOrg = () => {
+    if (currentUser) {
+      const log: AuditLog = {
+        id: `aud_${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        actorEmail: currentUser.email,
+        action: 'USER_LOGOUT_VIZHINORG',
+        ipAddress: '192.168.1.56',
+        details: 'User logged out of VizhinORG. Returned to split setup/sign-in screen.',
+        severity: 'info'
+      };
+      setAuditLogs(prev => [log, ...prev]);
+    }
+    // Return to split setup / sign-in screen on VizhinORG
+    setOrgInitialView('terminal');
+    navigateTo('org');
+  };
+
+  const handleSignOutCRM = () => {
+    if (currentUser) {
+      const log: AuditLog = {
+        id: `aud_${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        actorEmail: currentUser.email,
+        action: 'USER_LOGOUT_VIZHINCRM',
+        ipAddress: '192.168.1.56',
+        details: 'User logged out of VizhinCRM. Returned to CRM setup / login screen.',
         severity: 'info'
       };
       setAuditLogs(prev => [log, ...prev]);
@@ -262,6 +302,8 @@ export default function App() {
       <LandingPage 
         currentUser={currentUser}
         onSignOut={handleLogout}
+        onSignOutOrg={handleSignOutOrg}
+        onSignOutCRM={handleSignOutCRM}
         onSwitchUser={handleLoginSuccess}
         onEnterPortal={() => navigateTo(currentUser ? 'portal' : 'login')}
         onEnterOrg={handleEnterOrg}
@@ -277,6 +319,8 @@ export default function App() {
       <MeddpiccPage 
         currentUser={currentUser}
         onSignOut={handleLogout}
+        onSignOutOrg={handleSignOutOrg}
+        onSignOutCRM={handleSignOutCRM}
         onSwitchUser={handleLoginSuccess}
         onBack={() => navigateTo('landing')}
         onEnterPortal={() => navigateTo(currentUser ? 'portal' : 'login')}
@@ -292,6 +336,8 @@ export default function App() {
       <MarketingAnalysisPage 
         currentUser={currentUser}
         onSignOut={handleLogout}
+        onSignOutOrg={handleSignOutOrg}
+        onSignOutCRM={handleSignOutCRM}
         onSwitchUser={handleLoginSuccess}
         onBack={() => navigateTo('landing')}
         onEnterPortal={() => navigateTo(currentUser ? 'portal' : 'login')}
@@ -307,8 +353,11 @@ export default function App() {
       <VizhinOrgPage 
         currentUser={currentUser}
         onSignOut={handleLogout}
+        onSignOutOrg={handleSignOutOrg}
+        onSignOutCRM={handleSignOutCRM}
         onSwitchUser={handleLoginSuccess}
         onLoginSuccess={handleLoginSuccess}
+        initialViewMode={orgInitialView}
         onBack={() => navigateTo('landing')}
         onEnterPortal={() => navigateTo(currentUser ? 'portal' : 'login')}
         onRequestAccount={() => navigateTo('request')}
@@ -444,16 +493,94 @@ export default function App() {
             </div>
           </div>
 
-          {/* Logout Trigger button */}
-          <button
-            onClick={handleLogout}
-            className="p-2 sm:px-3 sm:py-1.5 rounded-lg bg-red-950/70 hover:bg-red-900/90 border border-red-800/70 text-red-300 hover:text-white transition-all cursor-pointer inline-flex items-center gap-1.5 text-xs font-bold shadow-xs hover:scale-105"
-            title="Sign out of current account to switch user"
-            id="btn_logout"
-          >
-            <LogOut className="w-4 h-4 text-red-400" />
-            <span>Sign Out</span>
-          </button>
+          {/* Logout Trigger button with dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => setCrmSignOutDropdownOpen(prev => !prev)}
+              className="p-2 sm:px-3 sm:py-1.5 rounded-lg bg-red-950/70 hover:bg-red-900/90 border border-red-800/70 text-red-300 hover:text-white transition-all cursor-pointer inline-flex items-center gap-1.5 text-xs font-bold shadow-xs hover:scale-105"
+              title="Select application to sign out of"
+              id="btn_logout"
+            >
+              <LogOut className="w-4 h-4 text-red-400" />
+              <span>Sign Out</span>
+              <ChevronDown className={`w-3 h-3 text-red-300 transition-transform ${crmSignOutDropdownOpen ? 'rotate-180' : ''}`} />
+            </button>
+
+            {crmSignOutDropdownOpen && (
+              <div className="absolute top-full right-0 mt-2 w-72 bg-neutral-950/95 border border-neutral-800 rounded-xl shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150 backdrop-blur-md">
+                <div className="px-2.5 py-1.5 border-b border-neutral-800/80 mb-1.5">
+                  <p className="text-[10px] font-mono uppercase tracking-wider text-neutral-400">
+                    Select App to Sign Out
+                  </p>
+                  <p className="text-[11px] text-neutral-300 font-medium">
+                    Choose which platform to disconnect:
+                  </p>
+                </div>
+
+                <div className="space-y-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCrmSignOutDropdownOpen(false);
+                      handleSignOutOrg();
+                    }}
+                    className="w-full text-left p-2.5 rounded-lg hover:bg-neutral-900 transition-colors flex items-start gap-3 cursor-pointer group border border-transparent hover:border-cyan-800/60"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400 shrink-0 group-hover:scale-105 transition-transform mt-0.5">
+                      <Network className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs font-bold text-neutral-200 group-hover:text-cyan-400 transition-colors">
+                          Sign Out of VizhinORG
+                        </span>
+                      </div>
+                      <p className="text-[10px] text-neutral-400 leading-tight mt-0.5">
+                        Returns to the split setup & sign-in screen
+                      </p>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCrmSignOutDropdownOpen(false);
+                      handleSignOutCRM();
+                    }}
+                    className="w-full text-left p-2.5 rounded-lg hover:bg-neutral-900 transition-colors flex items-start gap-3 cursor-pointer group border border-transparent hover:border-emerald-800/60"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0 group-hover:scale-105 transition-transform mt-0.5">
+                      <Building2 className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs font-bold text-neutral-200 group-hover:text-emerald-400 transition-colors">
+                          Sign Out of VizhinCRM
+                        </span>
+                      </div>
+                      <p className="text-[10px] text-neutral-400 leading-tight mt-0.5">
+                        Returns to the CRM setup / login screen
+                      </p>
+                    </div>
+                  </button>
+                </div>
+
+                <div className="pt-2 mt-2 border-t border-neutral-800/80">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCrmSignOutDropdownOpen(false);
+                      handleLogout();
+                    }}
+                    className="w-full py-2 px-3 rounded-lg bg-red-950/60 hover:bg-red-900 text-red-300 hover:text-white border border-red-800/60 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-colors"
+                  >
+                    <LogOut className="w-3.5 h-3.5 text-red-400" />
+                    <span>Sign Out of All Platforms</span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </header>
 

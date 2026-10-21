@@ -11,6 +11,8 @@ interface SiteHeaderProps {
     role?: string;
   } | null;
   onSignOut?: () => void;
+  onSignOutOrg?: () => void;
+  onSignOutCRM?: () => void;
   onSwitchUser?: (user: any) => void;
   onNavigateHome: () => void;
   onNavigateMeddpicc: () => void;
@@ -34,6 +36,8 @@ export default function SiteHeader({
   currentPage = 'landing',
   currentUser,
   onSignOut,
+  onSignOutOrg,
+  onSignOutCRM,
   onSwitchUser,
   onNavigateHome,
   onNavigateMeddpicc,
@@ -45,6 +49,7 @@ export default function SiteHeader({
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [signInDropdownOpen, setSignInDropdownOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [signOutMenuOpen, setSignOutMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const toggleDropdown = (name: string) => {
@@ -293,16 +298,113 @@ export default function SiteHeader({
                   )}
                 </div>
 
-                {/* Direct Sign Out Button Beside That */}
-                <button
-                  type="button"
-                  onClick={onSignOut}
-                  className="px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl bg-red-950/80 hover:bg-red-900 text-red-200 hover:text-white border border-red-800/80 text-xs font-bold transition-all flex items-center gap-1.5 shadow-md cursor-pointer hover:scale-105 shrink-0"
-                  title="Sign out of current account to switch user"
-                >
-                  <LogOut className="w-3.5 h-3.5 text-red-400" />
-                  <span>Sign Out</span>
-                </button>
+                {/* Sign Out Button with Multi-App Selection Dropdown */}
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSignOutMenuOpen(prev => !prev);
+                      setUserMenuOpen(false);
+                    }}
+                    className={`px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-md cursor-pointer hover:scale-105 shrink-0 border ${
+                      signOutMenuOpen 
+                        ? 'bg-red-900 text-white border-red-700 ring-2 ring-red-500/50' 
+                        : 'bg-red-950/80 hover:bg-red-900 text-red-200 hover:text-white border-red-800/80'
+                    }`}
+                    title="Select platform to sign out of"
+                  >
+                    <LogOut className="w-3.5 h-3.5 text-red-400" />
+                    <span>Sign Out</span>
+                    <ChevronDown className={`w-3 h-3 text-red-300 transition-transform ${signOutMenuOpen ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  {/* App Selection Dropdown */}
+                  {signOutMenuOpen && (
+                    <div className="absolute top-full right-0 mt-2 w-72 bg-neutral-950/95 border border-neutral-800 rounded-xl shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150 backdrop-blur-md">
+                      <div className="px-2.5 py-1.5 border-b border-neutral-800/80 mb-1.5">
+                        <p className="text-[10px] font-mono uppercase tracking-wider text-neutral-400">
+                          Select App to Sign Out
+                        </p>
+                        <p className="text-[11px] text-neutral-300 font-medium">
+                          Choose which platform to disconnect:
+                        </p>
+                      </div>
+
+                      <div className="space-y-1">
+                        {/* Option 1: Sign Out of VizhinORG */}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSignOutMenuOpen(false);
+                            if (onSignOutOrg) {
+                              onSignOutOrg();
+                            } else {
+                              onSignOut?.();
+                            }
+                          }}
+                          className="w-full text-left p-2.5 rounded-lg hover:bg-neutral-900 transition-colors flex items-start gap-3 cursor-pointer group border border-transparent hover:border-cyan-800/60"
+                        >
+                          <div className="w-8 h-8 rounded-lg bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400 shrink-0 group-hover:scale-105 transition-transform mt-0.5">
+                            <Network className="w-4 h-4" />
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-1.5">
+                              <span className="text-xs font-bold text-neutral-200 group-hover:text-cyan-400 transition-colors">
+                                Sign Out of VizhinORG
+                              </span>
+                            </div>
+                            <p className="text-[10px] text-neutral-400 leading-tight mt-0.5">
+                              Returns to the split setup & sign-in screen
+                            </p>
+                          </div>
+                        </button>
+
+                        {/* Option 2: Sign Out of VizhinCRM */}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSignOutMenuOpen(false);
+                            if (onSignOutCRM) {
+                              onSignOutCRM();
+                            } else {
+                              onSignOut?.();
+                            }
+                          }}
+                          className="w-full text-left p-2.5 rounded-lg hover:bg-neutral-900 transition-colors flex items-start gap-3 cursor-pointer group border border-transparent hover:border-emerald-800/60"
+                        >
+                          <div className="w-8 h-8 rounded-lg bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0 group-hover:scale-105 transition-transform mt-0.5">
+                            <Building2 className="w-4 h-4" />
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-1.5">
+                              <span className="text-xs font-bold text-neutral-200 group-hover:text-emerald-400 transition-colors">
+                                Sign Out of VizhinCRM
+                              </span>
+                            </div>
+                            <p className="text-[10px] text-neutral-400 leading-tight mt-0.5">
+                              Returns to the CRM setup / login screen
+                            </p>
+                          </div>
+                        </button>
+                      </div>
+
+                      {/* Option 3: Sign Out of All Platforms */}
+                      <div className="pt-2 mt-2 border-t border-neutral-800/80">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSignOutMenuOpen(false);
+                            onSignOut?.();
+                          }}
+                          className="w-full py-2 px-3 rounded-lg bg-red-950/60 hover:bg-red-900 text-red-300 hover:text-white border border-red-800/60 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-colors"
+                        >
+                          <LogOut className="w-3.5 h-3.5 text-red-400" />
+                          <span>Sign Out of All Platforms</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
 
                 {/* Dropdown Menu for Testing Different Users */}
                 {userMenuOpen && onSwitchUser && (
@@ -522,16 +624,52 @@ export default function SiteHeader({
                     </div>
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                   </div>
-                  <button
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      onSignOut?.();
-                    }}
-                    className="w-full py-2.5 px-3 rounded-lg bg-red-950/80 hover:bg-red-900 text-red-300 border border-red-800/70 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-colors"
-                  >
-                    <LogOut className="w-4 h-4 text-red-400" />
-                    <span>Sign Out</span>
-                  </button>
+
+                  <p className="px-2 text-[10px] font-mono uppercase tracking-wider text-neutral-500">
+                    Sign Out Options
+                  </p>
+                  <div className="grid grid-cols-1 gap-2">
+                    <button
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        if (onSignOutOrg) onSignOutOrg();
+                        else onSignOut?.();
+                      }}
+                      className="w-full py-2.5 px-3 rounded-lg bg-neutral-900 hover:bg-neutral-850 text-cyan-300 border border-neutral-700 text-xs font-bold flex items-center justify-between cursor-pointer"
+                    >
+                      <span className="flex items-center gap-2">
+                        <Network className="w-4 h-4 text-cyan-400" />
+                        <span>Sign Out of VizhinORG</span>
+                      </span>
+                      <span className="text-[10px] text-neutral-400 font-normal">Split Setup Screen →</span>
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        if (onSignOutCRM) onSignOutCRM();
+                        else onSignOut?.();
+                      }}
+                      className="w-full py-2.5 px-3 rounded-lg bg-neutral-900 hover:bg-neutral-850 text-emerald-300 border border-neutral-700 text-xs font-bold flex items-center justify-between cursor-pointer"
+                    >
+                      <span className="flex items-center gap-2">
+                        <Building2 className="w-4 h-4 text-emerald-400" />
+                        <span>Sign Out of VizhinCRM</span>
+                      </span>
+                      <span className="text-[10px] text-neutral-400 font-normal">Setup Screen →</span>
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        onSignOut?.();
+                      }}
+                      className="w-full py-2 px-3 rounded-lg bg-red-950/80 hover:bg-red-900 text-red-300 border border-red-800/70 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-colors"
+                    >
+                      <LogOut className="w-4 h-4 text-red-400" />
+                      <span>Sign Out of All Platforms</span>
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <div className="pt-3 border-t border-neutral-900 space-y-2">

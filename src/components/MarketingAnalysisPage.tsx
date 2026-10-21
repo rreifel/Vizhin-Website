@@ -13,6 +13,8 @@ interface MarketingAnalysisPageProps {
     role?: string;
   } | null;
   onSignOut?: () => void;
+  onSignOutOrg?: () => void;
+  onSignOutCRM?: () => void;
   onSwitchUser?: (user: any) => void;
   onBack: () => void;
   onEnterPortal: () => void;
@@ -24,6 +26,8 @@ interface MarketingAnalysisPageProps {
 export default function MarketingAnalysisPage({
   currentUser,
   onSignOut,
+  onSignOutOrg,
+  onSignOutCRM,
   onSwitchUser,
   onBack,
   onEnterPortal,
@@ -80,6 +84,8 @@ export default function MarketingAnalysisPage({
           currentPage="marketing-analysis"
           currentUser={currentUser}
           onSignOut={onSignOut}
+          onSignOutOrg={onSignOutOrg}
+          onSignOutCRM={onSignOutCRM}
           onSwitchUser={onSwitchUser}
           onNavigateHome={onBack}
           onNavigateMeddpicc={onNavigateMeddpicc}

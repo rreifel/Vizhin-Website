@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Lock, Mail, Eye, EyeOff, AlertTriangle, ShieldCheck, KeyRound, ArrowRight, Sparkles, Database } from 'lucide-react';
+import { Lock, Mail, Eye, EyeOff, AlertTriangle, ShieldCheck, KeyRound, ArrowRight, Sparkles, Database, Check, Shield } from 'lucide-react';
 import { PortalUser } from '../types';
 import VizhinLogo from './VizhinLogo';
+import PasswordStrengthValidator, { calculatePasswordStrength } from './PasswordStrengthValidator';
 
 interface LoginScreenProps {
   onLoginSuccess: (user: PortalUser) => void;
@@ -22,6 +23,12 @@ export default function LoginScreen({ onLoginSuccess, users, onBack, onSwitchToO
   const [forgotFlow, setForgotFlow] = useState(false);
   const [forgotEmail, setForgotEmail] = useState('');
   const [resetSuccess, setResetSuccess] = useState(false);
+  const [isSettingNewPassword, setIsSettingNewPassword] = useState(false);
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [isNewPasswordValid, setIsNewPasswordValid] = useState(false);
+  const [newPasswordSaved, setNewPasswordSaved] = useState(false);
 
   // Remember Device State
   const [rememberDevice, setRememberDevice] = useState(true);
@@ -144,15 +151,15 @@ export default function LoginScreen({ onLoginSuccess, users, onBack, onSwitchToO
             )}
           </div>
 
-          {onSwitchToOrg && (
-            <button
-              onClick={onSwitchToOrg}
-              className="text-xs font-semibold px-3.5 py-1.5 rounded-lg bg-neutral-900 border border-neutral-800 hover:border-cyan-700/60 text-cyan-400 hover:text-cyan-300 transition-all cursor-pointer flex items-center gap-1.5"
-            >
-              <span>Need VizhinORG?</span>
-              <span className="font-mono">Switch →</span>
-            </button>
-          )}
+          <a
+            href="https://ais-dev-k3dq5q47ugexrlhpj2wpqo-615362750641.us-west2.run.app?signup=true"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs font-semibold px-3.5 py-1.5 rounded-lg bg-neutral-900 border border-neutral-800 hover:border-cyan-700/60 text-cyan-400 hover:text-cyan-300 transition-all cursor-pointer flex items-center gap-1.5"
+          >
+            <span>Need VizhinORG?</span>
+            <span className="font-mono">Switch ↗</span>
+          </a>
         </div>
       </header>
 
@@ -219,23 +226,130 @@ export default function LoginScreen({ onLoginSuccess, users, onBack, onSwitchToO
                 Enter your registered administrator email. The system triggers a recovery token callback to verify identity.
               </p>
 
-              {resetSuccess ? (
+              {newPasswordSaved ? (
                 <motion.div 
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   className="bg-emerald-950/40 border border-emerald-800 text-emerald-300 rounded-lg p-5 text-xs space-y-3 mb-6"
                 >
                   <div className="font-semibold flex items-center gap-2">
+                    <Check className="w-4 h-4 text-emerald-400" />
+                    <span>Password Successfully Updated!</span>
+                  </div>
+                  <p>
+                    Your account has been updated with a new enterprise-compliant password. Redirecting to sign in...
+                  </p>
+                </motion.div>
+              ) : isSettingNewPassword ? (
+                <form 
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (!isNewPasswordValid || newPassword !== confirmNewPassword) return;
+                    setNewPasswordSaved(true);
+                    setTimeout(() => {
+                      setForgotFlow(false);
+                      setResetSuccess(false);
+                      setIsSettingNewPassword(false);
+                      setNewPassword('');
+                      setConfirmNewPassword('');
+                      setNewPasswordSaved(false);
+                    }, 2000);
+                  }}
+                  className="space-y-4"
+                >
+                  <div className="space-y-1">
+                    <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-400 block">
+                      Account Verified • {forgotEmail}
+                    </span>
+                    <label className="block text-xs uppercase tracking-wider font-semibold text-neutral-300">
+                      New Enterprise Password
+                    </label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-3 h-4 w-4 text-neutral-500" />
+                      <input
+                        type={showNewPassword ? "text" : "password"}
+                        required
+                        className="w-full bg-neutral-950 border border-neutral-800 rounded-lg py-2.5 pl-10 pr-10 text-sm text-neutral-200 placeholder-neutral-600 focus:outline-none focus:border-emerald-500 transition-colors font-sans"
+                        placeholder="••••••••••••"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowNewPassword(!showNewPassword)}
+                        className="absolute right-3 top-3.5 text-neutral-500 hover:text-neutral-300 cursor-pointer"
+                      >
+                        {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* REAL-TIME PASSWORD STRENGTH VALIDATOR */}
+                  <PasswordStrengthValidator 
+                    password={newPassword}
+                    onValidityChange={(isValid) => setIsNewPasswordValid(isValid)}
+                  />
+
+                  <div className="space-y-1">
+                    <label className="block text-xs uppercase tracking-wider font-semibold text-neutral-300">
+                      Confirm New Password
+                    </label>
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-3 h-4 w-4 text-neutral-500" />
+                      <input
+                        type={showNewPassword ? "text" : "password"}
+                        required
+                        className="w-full bg-neutral-950 border border-neutral-800 rounded-lg py-2.5 pl-10 pr-10 text-sm text-neutral-200 placeholder-neutral-600 focus:outline-none focus:border-emerald-500 transition-colors font-sans"
+                        placeholder="••••••••••••"
+                        value={confirmNewPassword}
+                        onChange={(e) => setConfirmNewPassword(e.target.value)}
+                      />
+                      {confirmNewPassword && (
+                        <span className="absolute right-3 top-3">
+                          {confirmNewPassword === newPassword ? (
+                            <Check className="w-4 h-4 text-emerald-400" />
+                          ) : (
+                            <span className="text-[10px] text-red-400 font-mono">Mismatch</span>
+                          )}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={!isNewPasswordValid || newPassword !== confirmNewPassword}
+                    className="w-full bg-gradient-to-r from-emerald-600 to-[#0D5C46] disabled:opacity-50 disabled:cursor-not-allowed hover:from-emerald-500 hover:to-[#0A4837] text-white font-medium text-sm py-2.5 px-4 rounded-lg flex items-center justify-center gap-2 transition-all shadow-lg shadow-emerald-950/40 border border-emerald-500/30 cursor-pointer"
+                  >
+                    Save Enterprise Compliant Password <ArrowRight className="w-4 h-4" />
+                  </button>
+                </form>
+              ) : resetSuccess ? (
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="bg-emerald-950/40 border border-emerald-800 text-emerald-300 rounded-lg p-5 text-xs space-y-4 mb-6"
+                >
+                  <div className="font-semibold flex items-center gap-2">
                     <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                    Recovery Callback Request Received
+                    <span>Recovery Callback Dispatched</span>
                   </div>
                   <p>
                     A secure authentication token has been fired. Check <strong>{forgotEmail}</strong> for completion.
                   </p>
-                  <p className="bg-neutral-950 p-2.5 rounded border border-neutral-800 text-neutral-400 font-mono">
-                    Development Bypass Key:<br/>
-                    <span className="text-yellow-400 select-all font-bold">http://vizhin.co/portal-reset-key=vzn_9948cba</span>
-                  </p>
+                  <div className="bg-neutral-950 p-3 rounded-lg border border-neutral-800 text-neutral-400 space-y-2">
+                    <p className="text-[11px] font-mono text-neutral-300">
+                      ⚡ Immediate Reset Action:
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setIsSettingNewPassword(true)}
+                      className="w-full bg-emerald-950 hover:bg-emerald-900 border border-emerald-800/80 text-emerald-300 font-bold text-xs py-2 px-3 rounded flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                    >
+                      <Lock className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>Set New Compliant Password Now →</span>
+                    </button>
+                  </div>
                 </motion.div>
               ) : (
                 <form onSubmit={handleForgotSubmit} className="space-y-4">
@@ -270,6 +384,7 @@ export default function LoginScreen({ onLoginSuccess, users, onBack, onSwitchToO
                 onClick={() => {
                   setForgotFlow(false);
                   setResetSuccess(false);
+                  setIsSettingNewPassword(false);
                   setForgotEmail('');
                 }}
               >

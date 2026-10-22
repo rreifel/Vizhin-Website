@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ChevronDown, Menu, X, Mail, Building2, Network, LogOut, User } from 'lucide-react';
+import { ChevronDown, Menu, X, Mail, Building2, Network, LogOut, User, Download, Check } from 'lucide-react';
 import VizhinLogo from './VizhinLogo';
 
 interface SiteHeaderProps {
@@ -51,6 +51,30 @@ export default function SiteHeader({
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [signOutMenuOpen, setSignOutMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [downloadStatus, setDownloadStatus] = useState<'idle' | 'downloading' | 'done'>('idle');
+
+  const handleDownloadBuildZip = async () => {
+    try {
+      setDownloadStatus('downloading');
+      const response = await fetch('/build.zip');
+      if (!response.ok) throw new Error('File not found');
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      const tempLink = document.createElement('a');
+      tempLink.href = blobUrl;
+      tempLink.download = 'build.zip';
+      document.body.appendChild(tempLink);
+      tempLink.click();
+      window.URL.revokeObjectURL(blobUrl);
+      document.body.removeChild(tempLink);
+      setDownloadStatus('done');
+      setTimeout(() => setDownloadStatus('idle'), 4000);
+    } catch (err) {
+      console.error(err);
+      window.location.href = '/build.zip';
+      setDownloadStatus('idle');
+    }
+  };
 
   const toggleDropdown = (name: string) => {
     setSignInDropdownOpen(false);
@@ -192,6 +216,33 @@ export default function SiteHeader({
           onClick={() => setActiveDropdown(null)} 
         />
       )}
+
+      {/* Deployment Helper Banner */}
+      <div className="bg-emerald-950/95 border-b border-emerald-600/70 px-4 py-2.5 text-center text-xs text-neutral-200 flex flex-wrap items-center justify-center gap-2 sm:gap-4 shadow-lg z-50 relative">
+        <span className="font-semibold text-emerald-300 flex items-center gap-1.5">
+          <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          Step 1 for Hostinger:
+        </span>
+        <button
+          onClick={handleDownloadBuildZip}
+          disabled={downloadStatus === 'downloading'}
+          className="bg-emerald-400 hover:bg-emerald-300 text-neutral-950 font-black px-4 py-1.5 rounded-lg shadow-md cursor-pointer transition-all flex items-center gap-2 hover:scale-105 active:scale-95 text-xs tracking-wide"
+        >
+          {downloadStatus === 'downloading' ? (
+            <span>Downloading package...</span>
+          ) : downloadStatus === 'done' ? (
+            <>
+              <Check className="w-4 h-4 text-neutral-950 stroke-[3]" />
+              <span>Downloaded build.zip! Check your Downloads folder</span>
+            </>
+          ) : (
+            <>
+              <Download className="w-4 h-4 text-neutral-950 stroke-[3]" />
+              <span>CLICK HERE TO DOWNLOAD build.zip</span>
+            </>
+          )}
+        </button>
+      </div>
 
       {/* HEADER BAR */}
       <header className="sticky top-0 border-b border-neutral-900/80 bg-[#070708]/90 backdrop-blur-md px-6 py-4 z-50">

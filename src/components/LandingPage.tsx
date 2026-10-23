@@ -1,9 +1,82 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { 
-  ShieldCheck, Layers, Users, Activity, Sparkles, Mail, BarChart3
+  ShieldCheck, Layers, Users, Activity, Sparkles, Mail, BarChart3, Calendar, ArrowUpRight
 } from 'lucide-react';
 import SiteHeader from './SiteHeader';
+
+const DETAILED_SECTIONS = [
+  {
+    id: 'strategic-gtm-analysis',
+    title: 'Strategic GTM Analysis',
+    icon: Layers,
+    summary: 'We design and audit strategic Go-To-Market frameworks, mapping key friction layers and helping partners operate at optimal velocity.',
+    latinParagraphs: [
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+    ]
+  },
+  {
+    id: 'gtm-tech',
+    title: 'GTM Tech',
+    icon: Users,
+    summary: 'Modern systems supporting CRM, organizational charting, and comprehensive performance evaluations to scale your team.',
+    latinParagraphs: [
+      'Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris.',
+      'Integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula. Donec lobortis risus a elit. Etiam tempor. Ut ullamcorper, ligula eu tempor congue, eros est euismod turpis.'
+    ]
+  },
+  {
+    id: 'audit-compliance',
+    title: 'Audit Compliance',
+    icon: ShieldCheck,
+    summary: 'All modifications, user assignments, and profile creations are logged continuously to ensure strict partner accountability and audit trails.',
+    latinParagraphs: [
+      'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nullam at felis mi. Sed mollis, sapien sit amet facilisis mollis, dolor libero pellentesque massa, in porta felis dui eu erat.',
+      'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin pharetra nonummy pede. Mauris et orci. Aenean nec lorem.'
+    ]
+  },
+  {
+    id: 'marketing-services',
+    title: 'Marketing Services',
+    icon: Sparkles,
+    summary: 'Aligning marketing with your overall go to market efforts, including the development of brand assets such as video, testimonials, collateral, and website review.',
+    latinParagraphs: [
+      'Fusce feugiat malesuada odio. Morbi nunc odio, gravida at, cursus nec, luctus a, lorem. Maecenas tristique orci ac sem. Duis ultricies pharetra magna.',
+      'Donec accumsan malesuada orci. Donec sit amet eros. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris fermentum dictum magna. Sed laoreet aliquam leo.'
+    ]
+  },
+  {
+    id: 'marketing-analysis',
+    title: 'Marketing Analysis',
+    icon: BarChart3,
+    summary: 'In-depth campaign diagnostics, conversion funnel tracking, attribution analytics, and ROI modeling to optimize demand generation efficiency.',
+    latinParagraphs: [
+      'Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus. Nam nulla quam, gravida non, commodo a, sodales sit amet, nisi.',
+      'Pellentesque fermentum dolor. Aliquam quam lectus, facilisis auctor, ultrices ut, elementum vulputate, nunc. Sed adipiscing ornare risus. Morbi est est, blandit sit amet, hendrerit sit amet.'
+    ]
+  },
+  {
+    id: 'project-management',
+    title: 'Project Management',
+    icon: Activity,
+    summary: 'Expert planning, coordination, and execution of complex IT projects, delivering alignment across cross-functional engineering teams.',
+    latinParagraphs: [
+      'Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus.',
+      'Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui.'
+    ]
+  },
+  {
+    id: 'call-to-action',
+    title: 'Call To Action',
+    icon: Calendar,
+    summary: 'Connect directly with our leadership team to evaluate your current Go-To-Market architecture, partner distribution pipelines, and execution roadmap.',
+    latinParagraphs: [
+      'Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc, quis gravida magna mi a libero.',
+      'Fusce vulputate eleifend sapien. Vestibulum purus quam, scelerisque ut, mollis sed, nonummy id, metus. Nullam accumsan lorem in dui. Cras ultricies mi eu turpis hendrerit fringilla.'
+    ]
+  }
+];
 
 interface LandingPageProps {
   currentUser?: {
@@ -192,6 +265,62 @@ export default function LandingPage({
             </div>
           </div>
         </div>
+      </section>
+
+      {/* 7 DETAILED CONTENT SECTIONS */}
+      <section className="px-6 py-10 max-w-7xl mx-auto z-10 w-full space-y-8" id="landing_detailed_sections">
+        {DETAILED_SECTIONS.map((sec, idx) => {
+          const Icon = sec.icon;
+          return (
+            <div
+              key={sec.id}
+              id={sec.id}
+              className="bg-neutral-900/40 border border-neutral-800/80 hover:border-neutral-700/80 transition-all rounded-2xl p-6 md:p-8 backdrop-blur-xs flex flex-col justify-between"
+            >
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0">
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-400">
+                      Overview • 0{idx + 1}
+                    </span>
+                    <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">
+                      {sec.title}
+                    </h2>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-xl bg-neutral-950/70 border border-neutral-850 text-sm md:text-base text-neutral-200 leading-relaxed font-medium">
+                  {sec.summary}
+                </div>
+
+                <div className="space-y-3 pt-1 text-xs md:text-sm text-neutral-400 leading-relaxed">
+                  {sec.latinParagraphs.map((para, pIdx) => (
+                    <p key={pIdx}>
+                      {para}
+                    </p>
+                  ))}
+                </div>
+              </div>
+
+              {/* Lower right corner button */}
+              <div className="pt-6 mt-4 border-t border-neutral-850/60 flex justify-end items-center">
+                <a
+                  href="https://zcal.co/rreifel/30min"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white text-xs font-bold rounded-xl shadow-md shadow-emerald-950/40 border border-emerald-500/30 transition-all transform hover:-translate-y-0.5 cursor-pointer flex items-center gap-2 group"
+                >
+                  <Calendar className="w-4 h-4 text-emerald-300 group-hover:scale-110 transition-transform" />
+                  <span>Schedule a Call</span>
+                  <span className="font-mono text-[10px] text-emerald-300">↗</span>
+                </a>
+              </div>
+            </div>
+          );
+        })}
       </section>
 
       {/* CORPORATE FOOTER ADDRESS & DIRECT EMAIL SYSTEM */}

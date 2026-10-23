@@ -28,7 +28,11 @@ import {
   Eye,
   Scan,
   LogOut,
-  User
+  User,
+  Crosshair,
+  AlignJustify,
+  GitFork,
+  Rows
 } from 'lucide-react';
 
 interface MovieOrgChartViewProps {
@@ -43,6 +47,7 @@ interface MovieOrgChartViewProps {
 
 export type DensityMode = 'detailed' | 'compact' | 'micro' | 'satellite';
 export type SpacingMode = 'comfortable' | 'condensed';
+export type LayoutMode = 'staggered' | 'dual-column' | 'traditional';
 
 export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({ 
   onBackToLogin,
@@ -52,13 +57,21 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
   const [rootId, setRootId] = useState<string | null>(null);
   const [selectedUser, setSelectedUser] = useState<MovieEmployee | null>(null);
   
+  // Staggered vs Traditional layout mode
+  const [layoutMode, setLayoutMode] = useState<LayoutMode>('staggered');
+
   // Sift-style scaling and density modes
   const [density, setDensity] = useState<DensityMode>('compact');
   const [spacing, setSpacing] = useState<SpacingMode>('condensed');
-  const [zoomScale, setZoomScale] = useState(0.7);
+  const [zoomScale, setZoomScale] = useState(0.65);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [departmentFilter, setDepartmentFilter] = useState('ALL');
+
+  // Scroll canvas ref and drag-to-pan state
+  const scrollContainerRef = React.useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0, scrollLeft: 0, scrollTop: 0 });
 
   // Fast map lookup
   const employeeMap = useMemo(() => {
@@ -187,11 +200,62 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
     setExpandedNodes({ [defaultRoot.id]: true });
   };
 
-  // Sift-style "Fit to Screen"
+  // Center View helper - centers the scroll container smoothly
+  const handleCenterView = () => {
+    if (scrollContainerRef.current) {
+      const el = scrollContainerRef.current;
+      const targetLeft = Math.max(0, (el.scrollWidth - el.clientWidth) / 2);
+      el.scrollTo({ left: targetLeft, top: 0, behavior: 'smooth' });
+    }
+  };
+
+  // Auto-center on load or filter/layout change
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      if (scrollContainerRef.current) {
+        const el = scrollContainerRef.current;
+        el.scrollLeft = Math.max(0, (el.scrollWidth - el.clientWidth) / 2);
+        el.scrollTop = 0;
+      }
+    }, 80);
+    return () => clearTimeout(timer);
+  }, [activeRoot, departmentFilter, layoutMode]);
+
+  // Mouse pan drag-to-scroll handlers
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).closest('button, input, select, a, [role="button"]')) return;
+    setIsDragging(true);
+    if (scrollContainerRef.current) {
+      setDragStart({
+        x: e.clientX,
+        y: e.clientY,
+        scrollLeft: scrollContainerRef.current.scrollLeft,
+        scrollTop: scrollContainerRef.current.scrollTop,
+      });
+    }
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !scrollContainerRef.current) return;
+    e.preventDefault();
+    const dx = e.clientX - dragStart.x;
+    const dy = e.clientY - dragStart.y;
+    scrollContainerRef.current.scrollLeft = dragStart.scrollLeft - dx;
+    scrollContainerRef.current.scrollTop = dragStart.scrollTop - dy;
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  // "Fit to Screen" - fits the whole 100-person organization on screen
   const handleFitToScreen = () => {
-    setDensity('micro');
+    setLayoutMode('staggered');
+    setDensity('compact');
     setSpacing('condensed');
-    setZoomScale(0.45);
+    setZoomScale(0.48);
+    handleExpandAll();
+    setTimeout(handleCenterView, 100);
   };
 
   // Search matches
@@ -557,41 +621,107 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
         {/* Child branches */}
         {hasChildren && isExpanded && (
           <div className="flex flex-col items-center w-full">
-            {/* Vertical stem down */}
-            <div className={`w-[2px] ${getStemHeight()} bg-slate-700`}></div>
+            {/* Helper to check if all filtered direct children are leaf nodes (ICs) */}
+            {(() => {
+              const allLeaves = filteredChildren.length > 0 && filteredChildren.every(c => (reportsByManager.get(c.id) || []).length === 0);
 
-            {/* Horizontal branch line */}
-            <div className="flex justify-center relative">
-              {filteredChildren.map((child, index) => {
-                const isOnly = filteredChildren.length === 1;
-                const isFirst = index === 0;
-                const isLast = index === filteredChildren.length - 1;
-
+              // 1. VERTICAL STAGGERED COLUMN LAYOUT (Matches attached reference image)
+              // If layoutMode is 'staggered' and all direct children are leaf nodes, stack them vertically in a clean single column!
+              if (layoutMode === 'staggered' && allLeaves) {
                 return (
-                  <div key={child.id} className={`flex flex-col items-center ${getSiblingPadding()} relative`}>
-                    {!isOnly && (
-                      <>
-                        <div
-                          className={`absolute top-0 left-0 right-1/2 h-[2px] ${
-                            isFirst ? 'bg-transparent' : 'bg-slate-700'
-                          }`}
-                        />
-                        <div
-                          className={`absolute top-0 left-1/2 right-0 h-[2px] ${
-                            isLast ? 'bg-transparent' : 'bg-slate-700'
-                          }`}
-                        />
-                      </>
-                    )}
-
-                    {/* Stem to child node */}
-                    <div className={`w-[2px] ${getStemHeight()} bg-slate-700`}></div>
-
-                    {renderBranch(child, level + 1)}
+                  <div className="flex flex-col items-center">
+                    {filteredChildren.map((child) => (
+                      <React.Fragment key={child.id}>
+                        {/* Vertical connector stem from previous card */}
+                        <div className={`w-[2px] ${getStemHeight()} bg-slate-700`}></div>
+                        {renderBranch(child, level + 1)}
+                      </React.Fragment>
+                    ))}
                   </div>
                 );
-              })}
-            </div>
+              }
+
+              // 2. DUAL-COLUMN STAGGERED LAYOUT (For compact width and height)
+              if (layoutMode === 'dual-column' && allLeaves && filteredChildren.length >= 2) {
+                const col1 = filteredChildren.filter((_, i) => i % 2 === 0);
+                const col2 = filteredChildren.filter((_, i) => i % 2 === 1);
+
+                return (
+                  <div className="flex flex-col items-center">
+                    {/* Stem down from manager */}
+                    <div className={`w-[2px] ${getStemHeight()} bg-slate-700`}></div>
+
+                    {/* Dual staggered columns side by side */}
+                    <div className="flex justify-center relative">
+                      <div className="absolute top-0 left-1/4 right-1/4 h-[2px] bg-slate-700" />
+                      
+                      {/* Column 1 */}
+                      <div className="flex flex-col items-center px-1.5">
+                        <div className={`w-[2px] ${getStemHeight()} bg-slate-700`}></div>
+                        {col1.map((child, idx) => (
+                          <React.Fragment key={child.id}>
+                            {idx > 0 && <div className={`w-[2px] ${getStemHeight()} bg-slate-700`}></div>}
+                            {renderBranch(child, level + 1)}
+                          </React.Fragment>
+                        ))}
+                      </div>
+
+                      {/* Column 2 */}
+                      <div className="flex flex-col items-center px-1.5">
+                        <div className={`w-[2px] ${getStemHeight()} bg-slate-700`}></div>
+                        {col2.map((child, idx) => (
+                          <React.Fragment key={child.id}>
+                            {idx > 0 && <div className={`w-[2px] ${getStemHeight()} bg-slate-700`}></div>}
+                            {renderBranch(child, level + 1)}
+                          </React.Fragment>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+
+              // 3. HORIZONTAL TREE BRANCHING (Default for subtrees, C-Suite, or traditional mode)
+              return (
+                <div className="flex flex-col items-center w-full">
+                  {/* Vertical stem down */}
+                  <div className={`w-[2px] ${getStemHeight()} bg-slate-700`}></div>
+
+                  {/* Horizontal branch line */}
+                  <div className="flex justify-center relative">
+                    {filteredChildren.map((child, index) => {
+                      const isOnly = filteredChildren.length === 1;
+                      const isFirst = index === 0;
+                      const isLast = index === filteredChildren.length - 1;
+
+                      return (
+                        <div key={child.id} className={`flex flex-col items-center ${getSiblingPadding()} relative`}>
+                          {!isOnly && (
+                            <>
+                              <div
+                                className={`absolute top-0 left-0 right-1/2 h-[2px] ${
+                                  isFirst ? 'bg-transparent' : 'bg-slate-700'
+                                }`}
+                              />
+                              <div
+                                className={`absolute top-0 left-1/2 right-0 h-[2px] ${
+                                  isLast ? 'bg-transparent' : 'bg-slate-700'
+                                }`}
+                              />
+                            </>
+                          )}
+
+                          {/* Stem to child node */}
+                          <div className={`w-[2px] ${getStemHeight()} bg-slate-700`}></div>
+
+                          {renderBranch(child, level + 1)}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })()}
           </div>
         )}
       </div>
@@ -611,10 +741,10 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
           <button
             type="button"
             onClick={onBackToLogin}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-black text-white text-xs font-bold transition-all shadow-xs"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-black text-white text-xs font-bold transition-all shadow-xs cursor-pointer"
           >
             <ArrowLeft className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Return to Login</span>
+            <span>Return to VizhinORG</span>
           </button>
 
           {rootId && (
@@ -654,7 +784,7 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search 115 cinema tech employees..."
+              placeholder="Search 100 cinema tech employees..."
               className="text-xs bg-transparent border-0 focus:outline-none w-full text-black placeholder:text-slate-400"
             />
             {searchQuery && (
@@ -698,7 +828,7 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
             onChange={(e) => setDepartmentFilter(e.target.value)}
             className="bg-white border border-slate-300 text-slate-800 font-bold py-1 px-2 rounded-lg text-xs focus:outline-none"
           >
-            <option value="ALL">All Departments (115)</option>
+            <option value="ALL">All Departments (100)</option>
             {departments.map((d) => (
               <option key={d} value={d}>
                 {d}
@@ -733,9 +863,55 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
           ========================================================================= */}
       <div className="bg-slate-200 border-b-2 border-slate-300 px-4 py-2 flex flex-wrap items-center justify-between gap-3 text-xs shrink-0 z-20 shadow-xs">
         
-        {/* Left Side: Sift Density & Spacing Selectors */}
-        <div className="flex flex-wrap items-center gap-3">
+        {/* Left Side: Layout Mode, Density & Spacing Selectors */}
+        <div className="flex flex-wrap items-center gap-2.5">
           
+          {/* Staggered vs Dual-Column vs Wide Tree Layout Segmented Control */}
+          <div className="flex items-center gap-1 bg-white p-1 rounded-lg border border-slate-300 shadow-xs">
+            <span className="text-[9px] font-mono font-bold uppercase text-slate-500 px-1.5 hidden sm:inline">
+              Layout:
+            </span>
+            <button
+              type="button"
+              onClick={() => setLayoutMode('staggered')}
+              className={`px-2 py-1 rounded text-[10px] font-bold flex items-center gap-1 transition-all cursor-pointer ${
+                layoutMode === 'staggered'
+                  ? 'bg-emerald-600 text-white shadow-xs'
+                  : 'text-slate-700 hover:text-black hover:bg-slate-100'
+              }`}
+              title="Staggered Vertical Columns (Matches Reference Image, Fits Large Org on Screen)"
+            >
+              <Rows className="w-3 h-3" />
+              <span>Vertical Stagger</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setLayoutMode('dual-column')}
+              className={`px-2 py-1 rounded text-[10px] font-bold flex items-center gap-1 transition-all cursor-pointer ${
+                layoutMode === 'dual-column'
+                  ? 'bg-slate-900 text-white shadow-xs'
+                  : 'text-slate-700 hover:text-black hover:bg-slate-100'
+              }`}
+              title="2-Column Staggered Cards (Compact Height & Width)"
+            >
+              <Columns className="w-3 h-3" />
+              <span>Dual-Column</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setLayoutMode('traditional')}
+              className={`px-2 py-1 rounded text-[10px] font-bold flex items-center gap-1 transition-all cursor-pointer ${
+                layoutMode === 'traditional'
+                  ? 'bg-slate-900 text-white shadow-xs'
+                  : 'text-slate-700 hover:text-black hover:bg-slate-100'
+              }`}
+              title="Traditional Wide Horizontal Tree"
+            >
+              <GitFork className="w-3 h-3" />
+              <span className="hidden sm:inline">Wide Tree</span>
+            </button>
+          </div>
+
           {/* Card Density Segmented Control */}
           <div className="flex items-center gap-1 bg-white p-1 rounded-lg border border-slate-300 shadow-xs">
             <span className="text-[9px] font-mono font-bold uppercase text-slate-500 px-1.5 hidden sm:inline">
@@ -782,7 +958,7 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
               }`}
               title="Condensed Horizontal Gap (Fitted)"
             >
-              Tight Spacing
+              Tight
             </button>
             <button
               type="button"
@@ -800,15 +976,26 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
 
         </div>
 
-        {/* Right Side: Sift Fit-to-Screen & Semantic Zoom Presets */}
+        {/* Right Side: Sift Fit-to-Screen, Center View & Zoom Steppers */}
         <div className="flex items-center gap-2">
           
+          {/* Center View */}
+          <button
+            type="button"
+            onClick={handleCenterView}
+            className="px-2.5 py-1 rounded-lg bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 font-bold text-[10px] flex items-center gap-1.5 shadow-xs cursor-pointer transition-colors"
+            title="Smoothly scroll to center the root executive"
+          >
+            <Crosshair className="w-3 h-3 text-slate-600" />
+            <span>Center View</span>
+          </button>
+
           {/* Fit To Screen (Sift's Signature Overview Button) */}
           <button
             type="button"
             onClick={handleFitToScreen}
             className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[10px] flex items-center gap-1.5 shadow-xs transition-transform hover:scale-105 cursor-pointer"
-            title="Auto-shrink view to fit all departments on screen simultaneously"
+            title="Auto-shrink view and stagger direct reports to fit all 100 on screen simultaneously"
           >
             <Maximize2 className="w-3 h-3 text-emerald-200" />
             <span>Fit To Screen</span>
@@ -872,7 +1059,7 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
             onClick={handleExpandAll}
             className="px-2 py-0.5 rounded bg-slate-900 text-white font-bold hover:bg-black transition-colors"
           >
-            All 5 Levels (115)
+            All 5 Levels (100)
           </button>
           <button
             type="button"
@@ -925,22 +1112,34 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
           CANVAS AREA: Interactive Tree Structure (Light Grey Canvas + White Cards)
           ========================================================================= */}
       <div 
-        className="flex-1 overflow-auto p-8 relative flex justify-center items-start cursor-grab active:cursor-grabbing"
+        ref={scrollContainerRef}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
+        className={`flex-1 overflow-auto relative select-none ${
+          isDragging ? 'cursor-grabbing' : 'cursor-grab'
+        }`}
         style={{
           backgroundColor: '#e2e8f0', // Crisp slate light grey
           backgroundImage: 'radial-gradient(circle, #94a3b8 1.5px, transparent 1.5px)',
           backgroundSize: '24px 24px',
         }}
       >
-        <div 
-          style={{ 
-            transform: `scale(${zoomScale})`,
-            transformOrigin: 'top center',
-            transition: 'transform 0.15s ease-out'
-          }}
-          className="pb-24 pt-4"
-        >
-          {renderBranch(activeRoot, 0)}
+        {/* Outer canvas container: min-w-full w-max prevents negative scroll coordinates */}
+        <div className="min-w-full w-max p-8 sm:p-12 block">
+          {/* Inner tree block with margin: 0 auto centers when smaller, starts at x=0 when wider! ZERO LEFT CUTOFF! */}
+          <div 
+            style={{ 
+              transform: `scale(${zoomScale})`,
+              transformOrigin: 'top center',
+              margin: '0 auto',
+              transition: isDragging ? 'none' : 'transform 0.15s ease-out'
+            }}
+            className="w-max flex flex-col items-center pb-28 pt-4"
+          >
+            {renderBranch(activeRoot, 0)}
+          </div>
         </div>
       </div>
 
@@ -1001,7 +1200,7 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
                   <span>Level 2 Executive · Super Admin (God Mode)</span>
                 </div>
                 <p className="text-[11px] text-emerald-800 leading-relaxed">
-                  Your account is positioned at Level 2, reporting directly to CEO Sarah Connor. You hold unrestricted cross-departmental administrative rights across all 115 workforce nodes.
+                  Your account is positioned at Level 2, reporting directly to CEO Sarah Connor. You hold unrestricted cross-departmental administrative rights across all 100 workforce nodes.
                 </p>
               </div>
             )}

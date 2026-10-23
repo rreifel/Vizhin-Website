@@ -1,0 +1,6 @@
+{
+  "summary":  "Implementation plan to fix the VizhinORG link destination, eliminate the double /ORG/ORG path bug, connect to the active development deployment, and provide clean cross-project routing.",
+  "updatedAt":  "2026-10-23T18:11:37.178577217Z",
+  "requestFeedback":  true,
+  "userFacing":  true
+}

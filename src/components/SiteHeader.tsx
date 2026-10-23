@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ChevronDown, Menu, X, Mail, Building2, Network, LogOut, User, Download, Check } from 'lucide-react';
 import VizhinLogo from './VizhinLogo';
+import { redirectToVizhinOrg, getVizhinOrgUrl, USE_STANDALONE_VIZHIN_ORG } from '../config/orgRouting';
 
 interface SiteHeaderProps {
   currentPage?: 'landing' | 'meddpicc' | 'marketing-analysis' | 'org' | 'portal';
@@ -81,6 +82,69 @@ export default function SiteHeader({
     setActiveDropdown(prev => prev === name ? null : name);
   };
 
+  const getPortalOrigin = () => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('portalOrigin');
+    }
+    return null;
+  };
+
+  const VIZHIN_HOMEPAGE_URL = 'https://vizhin.co';
+
+  const handleLogoClick = (e?: React.MouseEvent) => {
+    if (typeof window !== 'undefined') {
+      // If already on vizhin.co root homepage, smoothly scroll to top
+      if (
+        (window.location.hostname === 'vizhin.co' || window.location.hostname === 'www.vizhin.co') &&
+        window.location.pathname === '/'
+      ) {
+        if (e) e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+
+      // If in local preview mode and already on landing view, smoothly scroll to top
+      if (currentPage === 'landing' && window.location.pathname === '/' && onNavigateHome) {
+        if (e) e.preventDefault();
+        onNavigateHome();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+
+      // Always navigate directly to https://vizhin.co homepage!
+      if (e) e.preventDefault();
+      window.location.href = VIZHIN_HOMEPAGE_URL;
+    }
+  };
+
+  const handleMeddpiccNav = () => {
+    const origin = getPortalOrigin();
+    if (origin) {
+      window.location.assign(`${origin.replace(/\/+$/, '')}/meddpicc`);
+      return;
+    }
+    onNavigateMeddpicc();
+  };
+
+  const handleMarketingAnalysisNav = () => {
+    const origin = getPortalOrigin();
+    if (origin) {
+      window.location.assign(`${origin.replace(/\/+$/, '')}/marketing-analysis`);
+      return;
+    }
+    onNavigateMarketingAnalysis?.();
+  };
+
+  const handleCrmNav = () => {
+    const origin = getPortalOrigin();
+    if (origin) {
+      window.location.assign(`${origin.replace(/\/+$/, '')}/login`);
+      return;
+    }
+    onEnterPortal();
+  };
+
   const navItems = [
     { type: 'disabled', label: 'Why Vizhin' },
     { 
@@ -113,7 +177,7 @@ export default function SiteHeader({
               onClick={() => {
                 setActiveDropdown(null);
                 setMobileMenuOpen(false);
-                onNavigateMarketingAnalysis?.();
+                handleMarketingAnalysisNav();
               }}
               className="w-full text-left block p-2 rounded hover:bg-neutral-900 transition-colors cursor-pointer group"
             >
@@ -130,7 +194,7 @@ export default function SiteHeader({
     { 
       type: 'action', 
       label: 'MEDDPICC', 
-      onClick: onNavigateMeddpicc,
+      onClick: handleMeddpiccNav,
       isActive: currentPage === 'meddpicc'
     },
     { type: 'disabled', label: 'Resources' },
@@ -217,44 +281,19 @@ export default function SiteHeader({
         />
       )}
 
-      {/* Deployment Helper Banner */}
-      <div className="bg-emerald-950/95 border-b border-emerald-600/70 px-4 py-2.5 text-center text-xs text-neutral-200 flex flex-wrap items-center justify-center gap-2 sm:gap-4 shadow-lg z-50 relative">
-        <span className="font-semibold text-emerald-300 flex items-center gap-1.5">
-          <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          Step 1 for Hostinger:
-        </span>
-        <button
-          onClick={handleDownloadBuildZip}
-          disabled={downloadStatus === 'downloading'}
-          className="bg-emerald-400 hover:bg-emerald-300 text-neutral-950 font-black px-4 py-1.5 rounded-lg shadow-md cursor-pointer transition-all flex items-center gap-2 hover:scale-105 active:scale-95 text-xs tracking-wide"
-        >
-          {downloadStatus === 'downloading' ? (
-            <span>Downloading package...</span>
-          ) : downloadStatus === 'done' ? (
-            <>
-              <Check className="w-4 h-4 text-neutral-950 stroke-[3]" />
-              <span>Downloaded build.zip! Check your Downloads folder</span>
-            </>
-          ) : (
-            <>
-              <Download className="w-4 h-4 text-neutral-950 stroke-[3]" />
-              <span>CLICK HERE TO DOWNLOAD build.zip</span>
-            </>
-          )}
-        </button>
-      </div>
 
       {/* HEADER BAR */}
       <header className="sticky top-0 border-b border-neutral-900/80 bg-[#070708]/90 backdrop-blur-md px-6 py-4 z-50">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-8">
-            <button
-              onClick={onNavigateHome}
+            <a
+              href="https://vizhin.co"
+              onClick={handleLogoClick}
               className="flex items-center hover:opacity-85 transition-opacity focus:outline-none cursor-pointer text-left"
-              title="Return to Vizhin Homepage"
+              title="Return to Vizhin Homepage (vizhin.co)"
             >
               <VizhinLogo className="h-14 md:h-16 w-auto" />
-            </button>
+            </a>
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center gap-6">
@@ -542,7 +581,7 @@ export default function SiteHeader({
                       <button
                         onClick={() => {
                           setSignInDropdownOpen(false);
-                          onEnterPortal();
+                          handleCrmNav();
                         }}
                         className="w-full text-left p-2.5 rounded-lg hover:bg-neutral-900 transition-colors flex items-center gap-3 cursor-pointer group"
                       >
@@ -562,10 +601,16 @@ export default function SiteHeader({
                       </button>
 
                       {/* Option 2: Sign In to VizhinORG */}
-                      <button
-                        onClick={() => {
+                      <a
+                        href={USE_STANDALONE_VIZHIN_ORG ? getVizhinOrgUrl('/ORG') : '#'}
+                        target={USE_STANDALONE_VIZHIN_ORG ? "_blank" : undefined}
+                        rel={USE_STANDALONE_VIZHIN_ORG ? "noopener noreferrer" : undefined}
+                        onClick={(e) => {
                           setSignInDropdownOpen(false);
-                          onEnterOrg?.();
+                          if (!USE_STANDALONE_VIZHIN_ORG) {
+                            e.preventDefault();
+                            if (onEnterOrg) onEnterOrg();
+                          }
                         }}
                         className="w-full text-left p-2.5 rounded-lg hover:bg-neutral-900 transition-colors flex items-center gap-3 cursor-pointer group"
                       >
@@ -585,7 +630,7 @@ export default function SiteHeader({
                             Workforce & Org Architecture
                           </p>
                         </div>
-                      </button>
+                      </a>
                     </div>
                   )}
                 </div>
@@ -731,19 +776,25 @@ export default function SiteHeader({
                     <button
                       onClick={() => {
                         setMobileMenuOpen(false);
-                        onEnterPortal();
+                        handleCrmNav();
                       }}
                       className="p-2.5 rounded-lg bg-neutral-900 border border-neutral-800 text-left cursor-pointer hover:border-emerald-700/60"
                     >
                       <p className="text-xs font-bold text-emerald-400">VizhinCRM</p>
                       <p className="text-[10px] text-neutral-400">Partner & Customer</p>
                     </button>
-                    <button
-                      onClick={() => {
+                    <a
+                      href={USE_STANDALONE_VIZHIN_ORG ? getVizhinOrgUrl('/ORG') : '#'}
+                      target={USE_STANDALONE_VIZHIN_ORG ? "_blank" : undefined}
+                      rel={USE_STANDALONE_VIZHIN_ORG ? "noopener noreferrer" : undefined}
+                      onClick={(e) => {
                         setMobileMenuOpen(false);
-                        onEnterOrg?.();
+                        if (!USE_STANDALONE_VIZHIN_ORG) {
+                          e.preventDefault();
+                          if (onEnterOrg) onEnterOrg();
+                        }
                       }}
-                      className="p-2.5 rounded-lg bg-neutral-900 border border-neutral-800 text-left cursor-pointer hover:border-cyan-700/60"
+                      className="p-2.5 rounded-lg bg-neutral-900 border border-neutral-800 text-left cursor-pointer hover:border-cyan-700/60 block"
                     >
                       <div className="flex items-center justify-between">
                         <p className="text-xs font-bold text-cyan-400">Sign In to VizhinORG</p>
@@ -752,7 +803,7 @@ export default function SiteHeader({
                         </span>
                       </div>
                       <p className="text-[10px] text-neutral-400 mt-0.5">Workforce & Teams</p>
-                    </button>
+                    </a>
                   </div>
                 </div>
               )}

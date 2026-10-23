@@ -39,6 +39,8 @@ interface VizhinOrgPageProps {
   onRequestAccount: () => void;
   onNavigateMeddpicc: () => void;
   onNavigateMarketingAnalysis?: () => void;
+  onNavigateOrgDemo?: () => void;
+  onEnterOrg?: () => void;
   currentUser?: PortalUser | null;
   onSignOut?: () => void;
   onSignOutOrg?: () => void;
@@ -63,6 +65,8 @@ export default function VizhinOrgPage({
   onRequestAccount,
   onNavigateMeddpicc,
   onNavigateMarketingAnalysis,
+  onNavigateOrgDemo,
+  onEnterOrg,
   currentUser,
   onSignOut,
   onSignOutOrg,
@@ -74,9 +78,14 @@ export default function VizhinOrgPage({
   // Mode: 'signin' (default per requirement) | 'signup' | 'forgot-password' | 'forgot-username'
   const [authMode, setAuthMode] = useState<'signin' | 'signup' | 'forgot-password' | 'forgot-username'>('signin');
   
-  // View mode: 'coming-soon' (default per requirement when clicking Sign In to VizhinORG) | 'terminal' | 'chart'
+  // View mode: 'coming-soon' (only for authenticated users) | 'terminal' (split screen default for unauthenticated visitors) | 'chart'
   const [viewMode, setViewMode] = useState<'coming-soon' | 'terminal' | 'chart'>(() => {
-    if (initialViewMode) return initialViewMode;
+    if (initialViewMode) {
+      if (initialViewMode === 'coming-soon' && !currentUser) {
+        return 'terminal';
+      }
+      return initialViewMode;
+    }
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       if (params.get('view') === 'chart' || params.get('chart') === 'true') {
@@ -85,23 +94,31 @@ export default function VizhinOrgPage({
       if (params.get('view') === 'terminal' || params.get('terminal') === 'true') {
         return 'terminal';
       }
+      if (params.get('view') === 'coming-soon') {
+        return currentUser ? 'coming-soon' : 'terminal';
+      }
     }
-    return 'coming-soon';
+    return currentUser ? 'coming-soon' : 'terminal';
   });
 
   const [orgSignOutDropdownOpen, setOrgSignOutDropdownOpen] = useState(false);
 
-  // Sync initialViewMode if changed externally (e.g. from Sign Out of VizhinORG)
+  // Sync initialViewMode if changed externally (e.g. from Sign In / Sign Out of VizhinORG)
   React.useEffect(() => {
     if (initialViewMode) {
-      setViewMode(initialViewMode);
-      if (initialViewMode === 'terminal') {
+      if (initialViewMode === 'coming-soon' && !currentUser) {
+        setViewMode('terminal');
         setAuthMode('signin');
-        setLoginEmail('');
-        setLoginPassword('');
+      } else {
+        setViewMode(initialViewMode);
+        if (initialViewMode === 'terminal') {
+          setAuthMode('signin');
+          setLoginEmail('');
+          setLoginPassword('');
+        }
       }
     }
-  }, [initialViewMode]);
+  }, [initialViewMode, currentUser]);
 
   const handleLocalSignOutOrg = () => {
     setViewMode('terminal');
@@ -110,6 +127,36 @@ export default function VizhinOrgPage({
     setLoginPassword('');
     window.scrollTo({ top: 0, behavior: 'smooth' });
     onSignOutOrg?.();
+  };
+
+  const handleOpenOrgDemo = () => {
+    if (onNavigateOrgDemo) {
+      onNavigateOrgDemo();
+    } else {
+      setViewMode('chart');
+      if (typeof window !== 'undefined') {
+        window.history.pushState({ screen: 'orgdemo' }, '', '/ORGdemo');
+      }
+    }
+  };
+
+  const handleEnterOrgInternal = () => {
+    if (!currentUser) {
+      setViewMode('terminal');
+      setAuthMode('signin');
+      if (typeof window !== 'undefined') {
+        window.history.pushState({ screen: 'org' }, '', '/ORG');
+      }
+    } else {
+      setViewMode('coming-soon');
+      if (typeof window !== 'undefined') {
+        window.history.pushState({ screen: 'org' }, '', '/ORG');
+      }
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (onEnterOrg) {
+      onEnterOrg();
+    }
   };
   
   // Step for Signup: 1 = Initial account creation; 2 = Inverted Sandbox choice
@@ -247,16 +294,12 @@ export default function VizhinOrgPage({
         onNavigateMeddpicc={onNavigateMeddpicc}
         onNavigateMarketingAnalysis={onNavigateMarketingAnalysis}
         onEnterPortal={onEnterPortal}
-        onEnterOrg={() => {
-          setViewMode('coming-soon');
-          setAuthMode('signin');
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }}
+        onEnterOrg={handleEnterOrgInternal}
         onRequestAccount={onRequestAccount}
       />
 
       {/* =========================================================================
-          TOP VIEW MODE SWITCHER BANNER: Direct Toggle for 115-Employee Hierarchy
+          TOP VIEW MODE SWITCHER BANNER: Direct Toggle for 100-Employee Hierarchy
           ========================================================================= */}
       <div className="bg-[#0c0d10] border-b border-neutral-800 px-6 py-2.5 flex flex-wrap items-center justify-between gap-3 shrink-0 z-20">
         <div className="flex items-center gap-2.5">
@@ -344,21 +387,23 @@ export default function VizhinOrgPage({
             </div>
           )}
 
+          {currentUser && (
+            <button
+              type="button"
+              onClick={() => setViewMode('coming-soon')}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs ${
+                viewMode === 'coming-soon'
+                  ? 'bg-emerald-500 text-neutral-950 font-black ring-2 ring-emerald-400 shadow-emerald-950/40'
+                  : 'bg-neutral-900 hover:bg-neutral-800 text-neutral-300 border border-neutral-700'
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Coming Soon</span>
+            </button>
+          )}
           <button
             type="button"
-            onClick={() => setViewMode('coming-soon')}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs ${
-              viewMode === 'coming-soon'
-                ? 'bg-emerald-500 text-neutral-950 font-black ring-2 ring-emerald-400 shadow-emerald-950/40'
-                : 'bg-neutral-900 hover:bg-neutral-800 text-neutral-300 border border-neutral-700'
-            }`}
-          >
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Coming Soon</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setViewMode('chart')}
+            onClick={handleOpenOrgDemo}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs ${
               viewMode === 'chart'
                 ? 'bg-emerald-500 text-neutral-950 font-black ring-2 ring-emerald-400 shadow-emerald-950/40'
@@ -366,11 +411,17 @@ export default function VizhinOrgPage({
             }`}
           >
             <Network className="w-3.5 h-3.5 text-emerald-400" />
-            <span>115-Employee Sandbox</span>
+            <span>100-Employee Org Demo</span>
           </button>
           <button
             type="button"
-            onClick={() => setViewMode('terminal')}
+            onClick={() => {
+              setViewMode('terminal');
+              setAuthMode('signin');
+              if (typeof window !== 'undefined') {
+                window.history.pushState({ screen: 'org' }, '', '/ORG');
+              }
+            }}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs ${
               viewMode === 'terminal'
                 ? 'bg-emerald-500 text-neutral-950 font-black ring-2 ring-emerald-400 shadow-emerald-950/40'
@@ -384,17 +435,30 @@ export default function VizhinOrgPage({
       </div>
 
       {/* =========================================================================
-          VIEW ROUTING: COMING SOON (Default) | CHART SANDBOX | SPLIT-PANE TERMINAL
+          VIEW ROUTING: COMING SOON (Authenticated Only) | CHART SANDBOX | SPLIT-PANE TERMINAL
           ========================================================================= */}
       {viewMode === 'chart' ? (
         <div className="flex-1 flex flex-col w-full animate-in fade-in duration-200">
           <MovieOrgChartView 
-            onBackToLogin={() => setViewMode('coming-soon')} 
+            onBackToLogin={() => {
+              if (!currentUser) {
+                setViewMode('terminal');
+                setAuthMode('signin');
+                if (typeof window !== 'undefined') {
+                  window.history.pushState({ screen: 'org' }, '', '/ORG');
+                }
+              } else {
+                setViewMode('coming-soon');
+                if (typeof window !== 'undefined') {
+                  window.history.pushState({ screen: 'org' }, '', '/ORG');
+                }
+              }
+            }} 
             currentUser={currentUser}
-            onSignOut={onSignOut}
+            onSignOut={handleLocalSignOutOrg}
           />
         </div>
-      ) : viewMode === 'coming-soon' ? (
+      ) : (viewMode === 'coming-soon' && currentUser) ? (
         /* =========================================================================
             COMING SOON PAGE (Original Layout Matching All Other Pages)
             ========================================================================= */
@@ -475,11 +539,11 @@ export default function VizhinOrgPage({
             <div className="pt-2 space-y-3">
               <button
                 type="button"
-                onClick={() => setViewMode('chart')}
+                onClick={handleOpenOrgDemo}
                 className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-neutral-950 font-black text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-lg shadow-emerald-950/50 hover:scale-[1.02] cursor-pointer"
               >
                 <Network className="w-4 h-4" />
-                <span>Launch 115-Employee Interactive Org Chart Sandbox →</span>
+                <span>Launch 100-Employee Interactive Org Chart Demo →</span>
               </button>
 
               <div className="flex flex-col sm:flex-row items-center gap-3">
@@ -568,9 +632,9 @@ export default function VizhinOrgPage({
 
             {/* Interactive Org Chart Simulation Preview - Light Grey Background with Pure White Boxes & Black Text */}
             <div 
-              onClick={() => setViewMode('chart')}
+              onClick={handleOpenOrgDemo}
               className="bg-slate-200 border-2 border-slate-300 hover:border-emerald-500 rounded-2xl p-4 sm:p-5 shadow-2xl relative overflow-hidden transition-all cursor-pointer group select-none"
-              title="Click to open the full 115-employee interactive org chart"
+              title="Click to open the full 100-employee interactive org chart at /ORGdemo"
             >
               
               {/* Subtle dot grid on preview canvas */}
@@ -582,12 +646,12 @@ export default function VizhinOrgPage({
                 }}
               />
 
-              {/* Top Banner with 115-Headcount Exploration CTA */}
+              {/* Top Banner with 100-Headcount Exploration CTA */}
               <div className="relative z-10 flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-300 text-xs bg-white/95 p-2.5 rounded-xl border shadow-xs">
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
                   <span className="font-mono font-bold text-black text-[11px] tracking-wide">
-                    115-HEADCOUNT CINEMA TECH ORG CHART (5 LEVELS)
+                    100-HEADCOUNT CINEMA TECH ORG CHART (5 LEVELS)
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -595,11 +659,11 @@ export default function VizhinOrgPage({
                     type="button"
                     onClick={(e) => {
                       e.stopPropagation();
-                      setViewMode('chart');
+                      handleOpenOrgDemo();
                     }}
                     className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-black flex items-center gap-2 shadow-md hover:scale-105 transition-all cursor-pointer"
                   >
-                    <span>Launch 115-Employee Org Chart</span>
+                    <span>Launch 100-Employee Org Chart</span>
                     <Maximize2 className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -609,14 +673,13 @@ export default function VizhinOrgPage({
               <div className="flex items-center gap-1.5 py-2.5 overflow-x-auto text-[10px] font-mono border-b border-slate-300 relative z-10">
                 <span className="text-slate-600 mr-1 uppercase font-bold">Filter Branch:</span>
                 {[
-                  { id: "all", label: "All Branches (115)" },
-                  { id: "Executive", label: "Executive (3)" },
-                  { id: "Engineering", label: "Engineering (38)" },
-                  { id: "Revenue", label: "Revenue (22)" },
-                  { id: "Operations", label: "Operations (19)" },
+                  { id: "all", label: "All Branches (100)" },
+                  { id: "Engineering", label: "Engineering (21)" },
+                  { id: "Revenue", label: "Revenue (19)" },
+                  { id: "Operations", label: "Operations (17)" },
+                  { id: "Enterprise IT", label: "Enterprise IT (14)" },
                   { id: "Security", label: "Security (14)" },
-                  { id: "Finance", label: "Finance (9)" },
-                  { id: "People", label: "People (10)" },
+                  { id: "Finance", label: "Finance (14)" },
                 ].map(dept => (
                   <button
                     key={dept.id}
@@ -672,42 +735,18 @@ export default function VizhinOrgPage({
                   </div>
                 </div>
 
-                {/* LEVEL 2: C-SUITE & USER ACCOUNT (Direct Reports to CEO) */}
+                {/* LEVEL 2: THE 6 C-SUITE EXECUTIVES (Direct Reports to CEO) */}
                 <div className="text-[9px] font-mono uppercase text-slate-700 font-extrabold mb-1 flex items-center justify-between px-1">
                   <span className="flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-slate-700"></span>
-                    <span>Level 2: C-Suite Officers & Your Executive Account</span>
+                    <span>Level 2: The 6 C-Suite Executive Officers</span>
                   </span>
-                  <span className="text-emerald-700 font-bold">All Direct Reports to CEO Sarah Connor</span>
+                  <span className="text-emerald-700 font-bold">Direct Reports to CEO Sarah Connor</span>
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 max-w-3xl mx-auto pt-1">
                   
-                  {/* 1. YOUR ACCOUNT (INJECTED UNDER CEO AT LEVEL 2) */}
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedPreviewNode("you");
-                    }}
-                    className={`p-2 rounded-xl border-2 text-left transition-all relative overflow-hidden cursor-pointer bg-emerald-50 ${
-                      selectedPreviewNode === "you"
-                        ? "border-emerald-600 ring-2 ring-emerald-500 shadow-md"
-                        : "border-emerald-500 hover:border-emerald-700 shadow-xs"
-                    }`}
-                  >
-                    <div className="absolute top-0 right-0 bg-emerald-600 text-white text-[7px] font-black px-1 uppercase tracking-tight font-mono">
-                      You Report Here
-                    </div>
-                    <div className="flex items-center justify-between mt-1">
-                      <span className="text-[11px] font-black text-emerald-950 truncate">Your Account</span>
-                      <span className="text-[8px] font-mono bg-emerald-200 text-emerald-950 px-1 rounded font-bold">VIP</span>
-                    </div>
-                    <p className="text-[9px] text-emerald-900 truncate font-semibold">Chief Strategy Officer</p>
-                    <p className="text-[8px] font-mono text-emerald-800 mt-1 font-bold">Level 2 · Super Admin</p>
-                  </button>
-
-                  {/* 2. Gordon Gekko (CFO) */}
+                  {/* 1. Gordon Gekko (CFO) */}
                   <button
                     type="button"
                     onClick={(e) => {
@@ -725,10 +764,10 @@ export default function VizhinOrgPage({
                       <span className="text-[8px] font-mono bg-emerald-100 text-emerald-900 font-bold px-1 rounded border border-emerald-200">CFO</span>
                     </div>
                     <p className="text-[9px] text-slate-700 truncate font-semibold">Chief Financial Officer</p>
-                    <p className="text-[8px] font-mono text-slate-500 mt-1">Wall Street · 9 Directs</p>
+                    <p className="text-[8px] font-mono text-slate-500 mt-1">Wall Street · 14 in Div</p>
                   </button>
 
-                  {/* 3. Lando Calrissian (CRO) */}
+                  {/* 2. Lando Calrissian (CRO) */}
                   <button
                     type="button"
                     onClick={(e) => {
@@ -746,10 +785,10 @@ export default function VizhinOrgPage({
                       <span className="text-[8px] font-mono bg-amber-100 text-amber-900 font-bold px-1 rounded border border-amber-200">CRO</span>
                     </div>
                     <p className="text-[9px] text-slate-700 truncate font-semibold">Chief Revenue Officer</p>
-                    <p className="text-[8px] font-mono text-slate-500 mt-1">Star Wars · 22 Directs</p>
+                    <p className="text-[8px] font-mono text-slate-500 mt-1">Star Wars · 19 in Div</p>
                   </button>
 
-                  {/* 4. Ellen Ripley (COO) */}
+                  {/* 3. Ellen Ripley (COO) */}
                   <button
                     type="button"
                     onClick={(e) => {
@@ -767,10 +806,10 @@ export default function VizhinOrgPage({
                       <span className="text-[8px] font-mono bg-blue-100 text-blue-900 font-bold px-1 rounded border border-blue-200">COO</span>
                     </div>
                     <p className="text-[9px] text-slate-700 truncate font-semibold">Chief Operating Officer</p>
-                    <p className="text-[8px] font-mono text-slate-500 mt-1">Alien · 19 Directs</p>
+                    <p className="text-[8px] font-mono text-slate-500 mt-1">Alien · 17 in Div</p>
                   </button>
 
-                  {/* 5. Morpheus Zion (CIO) */}
+                  {/* 4. Morpheus Zion (CIO) */}
                   <button
                     type="button"
                     onClick={(e) => {
@@ -788,7 +827,28 @@ export default function VizhinOrgPage({
                       <span className="text-[8px] font-mono bg-purple-100 text-purple-900 font-bold px-1 rounded border border-purple-200">CIO</span>
                     </div>
                     <p className="text-[9px] text-slate-700 truncate font-semibold">Chief Info Officer</p>
-                    <p className="text-[8px] font-mono text-slate-500 mt-1">Matrix · 14 Directs</p>
+                    <p className="text-[8px] font-mono text-slate-500 mt-1">The Matrix · 14 in Div</p>
+                  </button>
+
+                  {/* 5. Trinity Matrix (CISO) */}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedPreviewNode("ciso");
+                    }}
+                    className={`p-2 rounded-xl border-2 text-left transition-all cursor-pointer bg-white ${
+                      selectedPreviewNode === "ciso"
+                        ? "border-slate-900 ring-2 ring-slate-900/60 shadow-md"
+                        : "border-slate-300 hover:border-slate-800 shadow-xs"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-black text-black truncate">Trinity</span>
+                      <span className="text-[8px] font-mono bg-indigo-100 text-indigo-900 font-bold px-1 rounded border border-indigo-200">CISO</span>
+                    </div>
+                    <p className="text-[9px] text-slate-700 truncate font-semibold">Chief Info Security</p>
+                    <p className="text-[8px] font-mono text-slate-500 mt-1">The Matrix · 14 in Div</p>
                   </button>
 
                   {/* 6. Tony Stark (CTO) */}
@@ -809,7 +869,7 @@ export default function VizhinOrgPage({
                       <span className="text-[8px] font-mono bg-red-100 text-red-900 font-bold px-1 rounded border border-red-200">CTO</span>
                     </div>
                     <p className="text-[9px] text-slate-700 truncate font-semibold">Chief Technology Officer</p>
-                    <p className="text-[8px] font-mono text-slate-500 mt-1">Iron Man · 38 Directs</p>
+                    <p className="text-[8px] font-mono text-slate-500 mt-1">Iron Man · 21 in Div</p>
                   </button>
 
                 </div>
@@ -862,14 +922,14 @@ export default function VizhinOrgPage({
                       <span className="w-1.5 h-1.5 rounded-full bg-slate-700"></span>
                       <span>Levels 4 & 5: Directors, Managers & IC Staff</span>
                     </span>
-                    <span className="text-slate-600 font-mono text-[9px] font-bold">115 Total Employees</span>
+                    <span className="text-slate-600 font-mono text-[9px] font-bold">100 Total Employees</span>
                   </div>
 
                   <div className="grid grid-cols-3 sm:grid-cols-6 gap-1.5">
                     {[
                       { id: "dir_ai_docbrown", name: "Doc Brown", role: "AI Lab Dir", movie: "Back to the Future" },
                       { id: "dir_sec_smith", name: "Agent Smith", role: "Threat Dir", movie: "Matrix" },
-                      { id: "dir_talent_lorraine", name: "Lorraine McFly", role: "Talent Dir", movie: "Back to Future" },
+                      { id: "dir_talent_vasquez", name: "Jenette Vasquez", role: "Talent Lead", movie: "Aliens" },
                       { id: "mgr_web_parker", name: "Peter Parker", role: "Web Lead", movie: "Spider-Man" },
                       { id: "ic_bishop", name: "Bishop", role: "Robotics IC", movie: "Alien" },
                       { id: "ic_yoda", name: "Yoda", role: "Principal Fellow", movie: "Star Wars" },
@@ -901,44 +961,44 @@ export default function VizhinOrgPage({
               <div className="bg-white border-2 border-slate-300 p-3 rounded-xl text-xs text-slate-800 flex items-start gap-2.5 mt-2 shadow-xs relative z-10">
                 <Sparkles className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                 <div className="text-[11px] leading-relaxed">
-                  {selectedPreviewNode === "you" && (
-                    <span>
-                      <strong className="text-emerald-700">Your Account (Level 2 Direct Report to CEO):</strong> Placed directly reporting to CEO Sarah Connor with Super Admin ("God Mode") authority. You inherit universal cross-branch calibration, access delegation, and performance evaluation rights across all 115 workforce positions.
-                    </span>
-                  )}
                   {selectedPreviewNode === "sarah" && (
                     <span>
-                      <strong className="text-slate-900">Sarah Connor (CEO & Founder · Terminator):</strong> Level 1 Root executive. Evaluates all C-level officers directly. Under recursive PostgreSQL CTE queries, inherits visibility across all 115 workforce nodes.
+                      <strong className="text-slate-900">Sarah Connor (CEO & Founder · Terminator):</strong> Level 1 Root executive. Evaluates all 6 C-level officers directly. Under recursive PostgreSQL CTE queries, inherits visibility across all 100 workforce nodes.
                     </span>
                   )}
                   {selectedPreviewNode === "cfo" && (
                     <span>
-                      <strong className="text-slate-900">Gordon Gekko (CFO · Wall Street):</strong> Reports directly to Sarah Connor at Level 2. Manages Jordan Belfort (VP Finance), controllers, and financial audits across 9 employees.
+                      <strong className="text-slate-900">Gordon Gekko (CFO · Wall Street):</strong> Reports directly to Sarah Connor at Level 2. Leads 5 direct reports (Jordan Belfort, Andy Dufresne, John Hammond, Atticus Finch, Daniel Kaffee) and 14 total employees across Finance.
                     </span>
                   )}
                   {selectedPreviewNode === "cro" && (
                     <span>
-                      <strong className="text-slate-900">Lando Calrissian (CRO · Star Wars):</strong> Reports directly to Sarah Connor at Level 2. Governs Han Solo (VP Sales), Jules Winnfield (VP CS), and Winston Wolfe (VP Solutions) across 22 revenue employees.
+                      <strong className="text-slate-900">Lando Calrissian (CRO · Star Wars):</strong> Reports directly to Sarah Connor at Level 2. Governs Han Solo, Vincent Vega, Jules Winnfield, Pete Mitchell, Vito Corleone, and Luke Skywalker across 19 revenue employees.
                     </span>
                   )}
                   {selectedPreviewNode === "coo" && (
                     <span>
-                      <strong className="text-slate-900">Ellen Ripley (COO · Alien):</strong> Reports directly to Sarah Connor at Level 2. Leads Joseph Cooper (VP Ops) and Dr. Alan Grant (VP Professional Services) across 19 operations and facilities specialists.
+                      <strong className="text-slate-900">Ellen Ripley (COO · Alien):</strong> Reports directly to Sarah Connor at Level 2. Leads Dwayne Hicks, Bishop Weyland, Dom Cobb, Arthur, Eames, and Jonesy across 17 operations and facilities specialists.
                     </span>
                   )}
                   {selectedPreviewNode === "cio" && (
                     <span>
-                      <strong className="text-slate-900">Morpheus Zion (CIO · Matrix):</strong> Reports directly to Sarah Connor at Level 2. Oversees Trinity (VP Cybersecurity), Eldon Tyrell (VP Enterprise Systems), and Rick Deckard across 14 security employees.
+                      <strong className="text-slate-900">Morpheus Zion (CIO · The Matrix):</strong> Reports directly to Sarah Connor at Level 2. Oversees Tank, Link, Roy Batty, Rick Deckard, and Rachael Tyrell across 14 enterprise IT employees.
+                    </span>
+                  )}
+                  {selectedPreviewNode === "ciso" && (
+                    <span>
+                      <strong className="text-slate-900">Trinity Matrix (CISO · The Matrix):</strong> Reports directly to Sarah Connor at Level 2. Directs Agent Smith, Thomas Anderson, Ethan Hunt, Benji Dunn, and Luther Stickell across 14 cyber defense specialists.
                     </span>
                   )}
                   {selectedPreviewNode === "cto" && (
                     <span>
-                      <strong className="text-slate-900">Tony Stark (CTO · Iron Man):</strong> Reports directly to Sarah Connor at Level 2. Leads Thomas Anderson / Neo (VP Core Eng), Bruce Banner (VP AI), Dom Cobb (VP Product), and Shuri (VP Hardware) across 38 engineers.
+                      <strong className="text-slate-900">Tony Stark (CTO · Iron Man):</strong> Reports directly to Sarah Connor at Level 2. Leads Bruce Banner, Peter Parker, Natasha Romanoff, James Rhodes, Shuri, Ian Malcolm, and Dennis Nedry across 21 platform engineers.
                     </span>
                   )}
-                  {!["you", "sarah", "cfo", "cro", "coo", "cio", "cto"].includes(selectedPreviewNode) && (
+                  {!["sarah", "cfo", "cro", "coo", "cio", "ciso", "cto"].includes(selectedPreviewNode) && (
                     <span>
-                      <strong className="text-slate-900">Interactive 5-Level Architecture:</strong> Demonstrates deterministic hierarchical RBAC across 115 employees. Click anywhere on this preview to open the full interactive org chart with pan, zoom, search, and cinema profile dossiers.
+                      <strong className="text-slate-900">Interactive 5-Level Architecture:</strong> Demonstrates deterministic hierarchical RBAC across 100 cinema tech employees. Click anywhere on this preview to open the full interactive org chart with pan, zoom, search, and cinema profile dossiers.
                     </span>
                   )}
                 </div>
@@ -1068,18 +1128,18 @@ export default function VizhinOrgPage({
                       </p>
                     </div>
 
-                    {/* Direct button to 115-Employee Multi-Tiered Example */}
+                    {/* Direct button to 100-Employee Multi-Tiered Example */}
                     <div className="p-3 bg-emerald-950/40 border border-emerald-800/80 rounded-xl flex items-center justify-between gap-2 shadow-xs">
                       <div className="flex items-center gap-2">
                         <Network className="w-4 h-4 text-emerald-400 shrink-0" />
                         <div>
-                          <p className="text-xs font-bold text-white leading-tight">Explore 115-Employee Org Chart</p>
-                          <p className="text-[10px] text-emerald-300/80 leading-tight mt-0.5">5 Management Levels · Sarah Connor CEO & C-Suite</p>
+                          <p className="text-xs font-bold text-white leading-tight">Explore 100-Employee Org Chart</p>
+                          <p className="text-[10px] text-emerald-300/80 leading-tight mt-0.5">5 Management Levels · Sarah Connor CEO & 6 C-Suite Divisions</p>
                         </div>
                       </div>
                       <button
                         type="button"
-                        onClick={() => setViewMode('chart')}
+                        onClick={handleOpenOrgDemo}
                         className="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-neutral-950 rounded-lg text-xs font-black transition-all shrink-0 cursor-pointer shadow-sm hover:scale-105"
                       >
                         View Chart →
@@ -1186,7 +1246,22 @@ export default function VizhinOrgPage({
                     {/* SSO Button */}
                     <button
                       type="button"
-                      onClick={() => setViewMode('coming-soon')}
+                      onClick={() => {
+                        const ssoUser: PortalUser = {
+                          id: 'usr_sso_exec',
+                          email: loginEmail.trim() || 'enterprise.sso@strataorg.com',
+                          name: 'SSO Enterprise User',
+                          role: 'SUPER_ADMIN',
+                          partnerId: null,
+                          customerId: null,
+                          isActive: true,
+                          createdAt: new Date().toISOString(),
+                          mfaEnabled: true
+                        };
+                        onLoginSuccess?.(ssoUser);
+                        setViewMode('coming-soon');
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
                       className="w-full py-2.5 px-4 bg-[#08090b] hover:bg-neutral-900 text-neutral-300 border border-neutral-800 hover:border-neutral-700 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-2 cursor-pointer"
                     >
                       <ShieldCheck className="w-4 h-4 text-emerald-400" />
@@ -1535,7 +1610,22 @@ export default function VizhinOrgPage({
                           </div>
                           <button
                             type="button"
-                            onClick={() => setViewMode('coming-soon')}
+                            onClick={() => {
+                              const newUser: PortalUser = {
+                                id: `usr_${Date.now()}`,
+                                email: workEmail.trim(),
+                                name: `${firstName.trim()} ${lastName.trim()}`,
+                                role: 'SUPER_ADMIN',
+                                partnerId: null,
+                                customerId: null,
+                                isActive: true,
+                                createdAt: new Date().toISOString(),
+                                mfaEnabled: false
+                              };
+                              onLoginSuccess?.(newUser);
+                              setViewMode('coming-soon');
+                              window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }}
                             className="px-3 py-1.5 bg-neutral-900 hover:bg-neutral-850 text-xs font-medium rounded-lg text-neutral-200 border border-neutral-700 cursor-pointer"
                           >
                             Connect HRIS
@@ -1550,7 +1640,22 @@ export default function VizhinOrgPage({
                           </div>
                           <button
                             type="button"
-                            onClick={() => setViewMode('coming-soon')}
+                            onClick={() => {
+                              const newUser: PortalUser = {
+                                id: `usr_${Date.now()}`,
+                                email: workEmail.trim(),
+                                name: `${firstName.trim()} ${lastName.trim()}`,
+                                role: 'SUPER_ADMIN',
+                                partnerId: null,
+                                customerId: null,
+                                isActive: true,
+                                createdAt: new Date().toISOString(),
+                                mfaEnabled: false
+                              };
+                              onLoginSuccess?.(newUser);
+                              setViewMode('coming-soon');
+                              window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }}
                             className="px-3 py-1.5 bg-neutral-900 hover:bg-neutral-850 text-xs font-medium rounded-lg text-neutral-200 border border-neutral-700 cursor-pointer"
                           >
                             Upload CSV

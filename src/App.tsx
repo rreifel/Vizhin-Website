@@ -22,15 +22,27 @@ import VizhinOrgPage from "./components/VizhinOrgPage";
 import VizhinOrgLoginScreen from './components/VizhinOrgLoginScreen';
 import VizhinLogo from './components/VizhinLogo';
 import VizhinCRMLogo from './components/VizhinCRMLogo';
+import { USE_STANDALONE_VIZHIN_ORG, redirectToVizhinOrg, getVizhinOrgUrl } from './config/orgRouting';
 
 export default function App() {
-  type AppScreen = "landing" | "login" | "org" | "request" | "meddpicc" | "marketing-analysis" | "portal";
+  type AppScreen = "landing" | "login" | "org" | "orgdemo" | "request" | "meddpicc" | "marketing-analysis" | "portal";
 
   // Navigation state for unauthenticated users (landing, login, org-login, sandbox request screen, meddpicc guide, or marketing analysis)
   const getInitialScreen = (): AppScreen => {
     if (typeof window !== "undefined") {
       const p = window.location.pathname.toLowerCase();
-      if (p === "/org" || p.startsWith("/org/")) return "org";
+      if (p === "/orgdemo" || p.startsWith("/orgdemo/")) {
+        if (USE_STANDALONE_VIZHIN_ORG) {
+          redirectToVizhinOrg('/ORGdemo');
+        }
+        return "orgdemo";
+      }
+      if (p === "/org" || p.startsWith("/org/")) {
+        if (USE_STANDALONE_VIZHIN_ORG) {
+          redirectToVizhinOrg('/ORG');
+        }
+        return "org";
+      }
       if (p === "/meddpicc") return "meddpicc";
       if (p === "/marketing-analysis") return "marketing-analysis";
       if (p === "/login") return "login";
@@ -47,6 +59,7 @@ export default function App() {
     if (typeof window !== "undefined") {
       let p = "/";
       if (screen === "org") p = "/ORG";
+      else if (screen === "orgdemo") p = "/ORGdemo";
       else if (screen === "meddpicc") p = "/meddpicc";
       else if (screen === "marketing-analysis") p = "/marketing-analysis";
       else if (screen === "login") p = "/login";
@@ -173,6 +186,7 @@ export default function App() {
     // Update logged state
     setUsers(prev => prev.map(u => u.id === user.id ? updatedUser : u));
     setCurrentUser(updatedUser);
+    setOrgInitialView('coming-soon');
 
     // Append to security ledger
     const log: AuditLog = {
@@ -187,7 +201,9 @@ export default function App() {
     setAuditLogs(prev => [log, ...prev]);
   };
 
-  const [orgInitialView, setOrgInitialView] = useState<'coming-soon' | 'terminal' | 'chart'>('coming-soon');
+  const [orgInitialView, setOrgInitialView] = useState<'coming-soon' | 'terminal' | 'chart'>(() => {
+    return currentUser ? 'coming-soon' : 'terminal';
+  });
   const [crmSignOutDropdownOpen, setCrmSignOutDropdownOpen] = useState(false);
 
   const handleLogout = () => {
@@ -205,8 +221,9 @@ export default function App() {
     }
     setCurrentUser(null);
     localStorage.removeItem('vzn_current_user');
+    setOrgInitialView('terminal');
     setActiveWorkspace('dashboard');
-    navigateTo('login');
+    navigateTo('landing');
   };
 
   const handleSignOutOrg = () => {
@@ -222,6 +239,9 @@ export default function App() {
       };
       setAuditLogs(prev => [log, ...prev]);
     }
+    // Fully clear authenticated user session
+    setCurrentUser(null);
+    localStorage.removeItem('vzn_current_user');
     // Return to split setup / sign-in screen on VizhinORG
     setOrgInitialView('terminal');
     navigateTo('org');
@@ -259,42 +279,17 @@ export default function App() {
   };
 
   const handleEnterOrg = () => {
+    if (USE_STANDALONE_VIZHIN_ORG) {
+      redirectToVizhinOrg('/ORG');
+      return;
+    }
     if (!currentUser) {
-      const defaultOrgUser: PortalUser = {
-        id: 'user_super',
-        email: 'rreifel@vizhin.co',
-        name: 'Richard Reifel',
-        role: 'SUPER_ADMIN',
-        partnerId: null,
-        customerId: null,
-        avatarUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=120&h=120&q=80',
-        isActive: true,
-        createdAt: '2025-12-01T00:00:00Z',
-        mfaEnabled: false,
-      };
-      handleLoginSuccess(defaultOrgUser);
+      setOrgInitialView('terminal');
+    } else {
+      setOrgInitialView('coming-soon');
     }
     navigateTo('org');
   };
-
-  // If the user visits /ORG without an active session, auto-login with default administrator so name and Sign Out button appear in upper right
-  useEffect(() => {
-    if (unauthScreen === 'org' && !currentUser) {
-      const defaultOrgUser: PortalUser = {
-        id: 'user_super',
-        email: 'rreifel@vizhin.co',
-        name: 'Richard Reifel',
-        role: 'SUPER_ADMIN',
-        partnerId: null,
-        customerId: null,
-        avatarUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=120&h=120&q=80',
-        isActive: true,
-        createdAt: '2025-12-01T00:00:00Z',
-        mfaEnabled: false,
-      };
-      handleLoginSuccess(defaultOrgUser);
-    }
-  }, [unauthScreen]);
 
   // Screen routing for both authenticated and unauthenticated sessions
   if (unauthScreen === 'landing') {
@@ -348,7 +343,41 @@ export default function App() {
     );
   }
 
-  if (unauthScreen === 'org') {
+  if (unauthScreen === 'orgdemo') {
+    if (USE_STANDALONE_VIZHIN_ORG) {
+      if (typeof window !== 'undefined') {
+        redirectToVizhinOrg('/ORGdemo');
+      }
+      return (
+        <div className="min-h-screen bg-[#070708] text-white flex flex-col items-center justify-center p-6 text-center">
+          <div className="w-14 h-14 rounded-2xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400 mb-5 animate-pulse shadow-lg shadow-cyan-950/50">
+            <Network className="w-7 h-7" />
+          </div>
+          <h2 className="text-xl sm:text-2xl font-bold mb-2">Connecting to VizhinORG...</h2>
+          <p className="text-xs sm:text-sm text-neutral-400 max-w-md mb-6 leading-relaxed">
+            Redirecting to the 100-employee workforce architecture workspace in the standalone Remix VizhinORG project.
+          </p>
+          <div className="flex items-center gap-3">
+            <a
+              href={getVizhinOrgUrl('/ORGdemo')}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-5 py-2.5 bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-500 hover:to-teal-500 text-white rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer flex items-center gap-2"
+            >
+              <span>Launch Workspace Manually</span>
+              <span className="font-mono">→</span>
+            </a>
+            <button
+              onClick={() => navigateTo('landing')}
+              className="px-4 py-2.5 bg-neutral-900 hover:bg-neutral-800 text-neutral-300 border border-neutral-700 rounded-xl text-xs font-semibold cursor-pointer"
+            >
+              Back to Home
+            </button>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <VizhinOrgPage 
         currentUser={currentUser}
@@ -357,12 +386,69 @@ export default function App() {
         onSignOutCRM={handleSignOutCRM}
         onSwitchUser={handleLoginSuccess}
         onLoginSuccess={handleLoginSuccess}
-        initialViewMode={orgInitialView}
+        initialViewMode="chart"
         onBack={() => navigateTo('landing')}
         onEnterPortal={() => navigateTo(currentUser ? 'portal' : 'login')}
+        onEnterOrg={handleEnterOrg}
         onRequestAccount={() => navigateTo('request')}
         onNavigateMeddpicc={() => navigateTo('meddpicc')}
         onNavigateMarketingAnalysis={() => navigateTo('marketing-analysis')}
+        onNavigateOrgDemo={() => navigateTo('orgdemo')}
+      />
+    );
+  }
+
+  if (unauthScreen === 'org') {
+    if (USE_STANDALONE_VIZHIN_ORG) {
+      if (typeof window !== 'undefined') {
+        redirectToVizhinOrg('/ORG');
+      }
+      return (
+        <div className="min-h-screen bg-[#070708] text-white flex flex-col items-center justify-center p-6 text-center">
+          <div className="w-14 h-14 rounded-2xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400 mb-5 animate-pulse shadow-lg shadow-cyan-950/50">
+            <Network className="w-7 h-7" />
+          </div>
+          <h2 className="text-xl sm:text-2xl font-bold mb-2">Connecting to VizhinORG...</h2>
+          <p className="text-xs sm:text-sm text-neutral-400 max-w-md mb-6 leading-relaxed">
+            Opening your dedicated workforce architecture environment in the standalone Remix VizhinORG project.
+          </p>
+          <div className="flex items-center gap-3">
+            <a
+              href={getVizhinOrgUrl('/ORG')}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-5 py-2.5 bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-500 hover:to-teal-500 text-white rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer flex items-center gap-2"
+            >
+              <span>Launch Workspace Manually</span>
+              <span className="font-mono">→</span>
+            </a>
+            <button
+              onClick={() => navigateTo('landing')}
+              className="px-4 py-2.5 bg-neutral-900 hover:bg-neutral-800 text-neutral-300 border border-neutral-700 rounded-xl text-xs font-semibold cursor-pointer"
+            >
+              Back to Home
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <VizhinOrgPage 
+        currentUser={currentUser}
+        onSignOut={handleLogout}
+        onSignOutOrg={handleSignOutOrg}
+        onSignOutCRM={handleSignOutCRM}
+        onSwitchUser={handleLoginSuccess}
+        onLoginSuccess={handleLoginSuccess}
+        initialViewMode={currentUser ? (orgInitialView || 'coming-soon') : 'terminal'}
+        onBack={() => navigateTo('landing')}
+        onEnterPortal={() => navigateTo(currentUser ? 'portal' : 'login')}
+        onEnterOrg={handleEnterOrg}
+        onRequestAccount={() => navigateTo('request')}
+        onNavigateMeddpicc={() => navigateTo('meddpicc')}
+        onNavigateMarketingAnalysis={() => navigateTo('marketing-analysis')}
+        onNavigateOrgDemo={() => navigateTo('orgdemo')}
       />
     );
   }

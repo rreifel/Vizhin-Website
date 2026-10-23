@@ -35,3 +35,10 @@ jobs:
           local-dir: ./dist/
           server-dir: /domains/vizhin.co/public_html/
           dangerous-clean-slate: true
+          exclude: |
+            **/.git*
+            **/.git*/**
+            ORG/**
+            ORG
+            org/**
+            org

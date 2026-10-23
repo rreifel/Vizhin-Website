@@ -4,6 +4,7 @@ import { Lock, Mail, Eye, EyeOff, AlertTriangle, ShieldCheck, KeyRound, ArrowRig
 import { PortalUser } from '../types';
 import VizhinLogo from './VizhinLogo';
 import PasswordStrengthValidator, { calculatePasswordStrength } from './PasswordStrengthValidator';
+import { getVizhinOrgUrl } from '../config/orgRouting';
 
 interface LoginScreenProps {
   onLoginSuccess: (user: PortalUser) => void;
@@ -137,28 +138,36 @@ export default function LoginScreen({ onLoginSuccess, users, onBack, onSwitchToO
       {/* HEADER BAR - Identical positioning and sizing as landing page */}
       <header className="relative border-b border-neutral-900/80 bg-[#070708]/85 backdrop-blur-md px-6 py-4 z-50 w-full" id="login_header">
         <div className="max-w-7xl mx-auto flex items-center justify-between w-full">
-          <div className="flex items-center gap-8">
-            {onBack ? (
-              <button 
-                onClick={onBack}
-                className="flex items-center hover:opacity-85 transition-opacity focus:outline-none cursor-pointer text-left"
-                title="Back to Website"
-              >
-                <VizhinLogo className="h-14 md:h-16 w-auto" />
-              </button>
-            ) : (
+            <a 
+              href="https://vizhin.co"
+              onClick={(e) => {
+                if (typeof window !== 'undefined') {
+                  if (window.location.hostname === 'vizhin.co' || window.location.hostname === 'www.vizhin.co') {
+                    window.location.href = 'https://vizhin.co';
+                    return;
+                  }
+                  if (onBack) {
+                    e.preventDefault();
+                    onBack();
+                    return;
+                  }
+                  window.location.href = 'https://vizhin.co';
+                }
+              }}
+              className="flex items-center hover:opacity-85 transition-opacity focus:outline-none cursor-pointer text-left"
+              title="Return to Vizhin Homepage (vizhin.co)"
+            >
               <VizhinLogo className="h-14 md:h-16 w-auto" />
-            )}
-          </div>
+            </a>
 
           <a
-            href="https://ais-dev-k3dq5q47ugexrlhpj2wpqo-615362750641.us-west2.run.app?signup=true"
+            href={getVizhinOrgUrl('/ORG')}
             target="_blank"
             rel="noopener noreferrer"
             className="text-xs font-semibold px-3.5 py-1.5 rounded-lg bg-neutral-900 border border-neutral-800 hover:border-cyan-700/60 text-cyan-400 hover:text-cyan-300 transition-all cursor-pointer flex items-center gap-1.5"
           >
             <span>Need VizhinORG?</span>
-            <span className="font-mono">Switch ↗</span>
+            <span className="font-mono">Switch →</span>
           </a>
         </div>
       </header>
@@ -611,11 +620,18 @@ export default function LoginScreen({ onLoginSuccess, users, onBack, onSwitchToO
                 </p>
                 <div className="grid grid-cols-1 gap-1.5 max-h-56 overflow-y-auto pr-1">
                   {users.map(u => (
-                    <button
+                    <div
                       key={u.id}
-                      type="button"
-                      className="w-full text-left p-2 rounded bg-neutral-950 hover:bg-neutral-800 border border-neutral-800 flex items-center justify-between text-xs transition-colors group cursor-pointer"
+                      role="button"
+                      tabIndex={0}
+                      className="w-full text-left p-2 rounded bg-neutral-950 hover:bg-neutral-800 border border-neutral-800 flex items-center justify-between text-xs transition-colors group cursor-pointer select-none"
                       onClick={() => applyQuickUser(u)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          applyQuickUser(u);
+                        }
+                      }}
                     >
                       <div className="flex items-center gap-2">
                         {u.avatarUrl ? (
@@ -656,7 +672,7 @@ export default function LoginScreen({ onLoginSuccess, users, onBack, onSwitchToO
                           ⚡ God Mode
                         </button>
                       </div>
-                    </button>
+                    </div>
                   ))}
                 </div>
               </div>

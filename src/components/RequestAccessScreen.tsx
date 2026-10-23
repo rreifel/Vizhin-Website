@@ -44,15 +44,27 @@ export default function RequestAccessScreen({ onBack }: RequestAccessScreenProps
       {/* HEADER BAR - Identical positioning and sizing as landing page */}
       <header className="relative border-b border-neutral-900/80 bg-[#070708]/85 backdrop-blur-md px-6 py-4 z-50 w-full" id="request_header">
         <div className="max-w-7xl mx-auto flex items-center justify-between w-full">
-          <div className="flex items-center gap-8">
-            <button 
-              onClick={onBack}
+            <a 
+              href="https://vizhin.co"
+              onClick={(e) => {
+                if (typeof window !== 'undefined') {
+                  if (window.location.hostname === 'vizhin.co' || window.location.hostname === 'www.vizhin.co') {
+                    window.location.href = 'https://vizhin.co';
+                    return;
+                  }
+                  if (onBack) {
+                    e.preventDefault();
+                    onBack();
+                    return;
+                  }
+                  window.location.href = 'https://vizhin.co';
+                }
+              }}
               className="flex items-center hover:opacity-85 transition-opacity focus:outline-none cursor-pointer text-left"
-              title="Back to Website"
+              title="Return to Vizhin Homepage (vizhin.co)"
             >
               <VizhinLogo className="h-14 md:h-16 w-auto" />
-            </button>
-          </div>
+            </a>
         </div>
       </header>
 

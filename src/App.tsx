@@ -33,13 +33,13 @@ export default function App() {
       const p = window.location.pathname.toLowerCase();
       if (p === "/orgdemo" || p.startsWith("/orgdemo/")) {
         if (USE_STANDALONE_VIZHIN_ORG) {
-          redirectToVizhinOrg('/ORGdemo');
+          redirectToVizhinOrg('/org/ORGdemo');
         }
         return "orgdemo";
       }
       if (p === "/org" || p.startsWith("/org/")) {
         if (USE_STANDALONE_VIZHIN_ORG) {
-          redirectToVizhinOrg('/ORG');
+          redirectToVizhinOrg('/org/');
         }
         return "org";
       }
@@ -280,7 +280,7 @@ export default function App() {
 
   const handleEnterOrg = () => {
     if (USE_STANDALONE_VIZHIN_ORG) {
-      redirectToVizhinOrg('/ORG');
+      redirectToVizhinOrg('/org/');
       return;
     }
     if (!currentUser) {
@@ -346,7 +346,7 @@ export default function App() {
   if (unauthScreen === 'orgdemo') {
     if (USE_STANDALONE_VIZHIN_ORG) {
       if (typeof window !== 'undefined') {
-        redirectToVizhinOrg('/ORGdemo');
+        redirectToVizhinOrg('/org/ORGdemo');
       }
       return (
         <div className="min-h-screen bg-[#070708] text-white flex flex-col items-center justify-center p-6 text-center">
@@ -401,7 +401,7 @@ export default function App() {
   if (unauthScreen === 'org') {
     if (USE_STANDALONE_VIZHIN_ORG) {
       if (typeof window !== 'undefined') {
-        redirectToVizhinOrg('/ORG');
+        redirectToVizhinOrg('/org/');
       }
       return (
         <div className="min-h-screen bg-[#070708] text-white flex flex-col items-center justify-center p-6 text-center">

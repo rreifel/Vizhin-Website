@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ChevronDown, Menu, X, Mail, Building2, Network, LogOut, User, Download, Check } from 'lucide-react';
+import { ChevronDown, Menu, X, Mail, Building2, Network, LogOut, User } from 'lucide-react';
 import VizhinLogo from './VizhinLogo';
 import { redirectToVizhinOrg, getVizhinOrgUrl, USE_STANDALONE_VIZHIN_ORG } from '../config/orgRouting';
 
@@ -52,30 +52,10 @@ export default function SiteHeader({
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [signOutMenuOpen, setSignOutMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [downloadStatus, setDownloadStatus] = useState<'idle' | 'downloading' | 'done'>('idle');
 
-  const handleDownloadBuildZip = async () => {
-    try {
-      setDownloadStatus('downloading');
-      const response = await fetch('/build.zip');
-      if (!response.ok) throw new Error('File not found');
-      const blob = await response.blob();
-      const blobUrl = window.URL.createObjectURL(blob);
-      const tempLink = document.createElement('a');
-      tempLink.href = blobUrl;
-      tempLink.download = 'build.zip';
-      document.body.appendChild(tempLink);
-      tempLink.click();
-      window.URL.revokeObjectURL(blobUrl);
-      document.body.removeChild(tempLink);
-      setDownloadStatus('done');
-      setTimeout(() => setDownloadStatus('idle'), 4000);
-    } catch (err) {
-      console.error(err);
-      window.location.href = '/build.zip';
-      setDownloadStatus('idle');
-    }
-  };
+  // Home page must NEVER show a logged-in state; only unauthenticated Sign In
+  const isHomePage = currentPage === 'landing';
+  const effectiveUser = isHomePage ? null : currentUser;
 
   const toggleDropdown = (name: string) => {
     setSignInDropdownOpen(false);
@@ -349,28 +329,28 @@ export default function SiteHeader({
           </div>
 
           <div className="flex items-center gap-3">
-            {/* Upper Right: Authenticated User Name & Sign Out Button */}
-            {currentUser ? (
+            {/* Upper Right: Authenticated User Name & Sign Out Button (Hidden on Home Page) */}
+            {effectiveUser ? (
               <div className="relative flex items-center gap-2">
                 {/* User Card Container */}
                 <div className="flex items-center gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-neutral-900 border border-neutral-700 hover:border-emerald-500/50 shadow-md transition-all">
                   
                   {/* User Avatar */}
                   <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-tr from-emerald-500 to-teal-400 text-neutral-950 font-black text-xs flex items-center justify-center shrink-0 shadow-xs">
-                    {currentUser.name ? currentUser.name[0].toUpperCase() : currentUser.email[0].toUpperCase()}
+                    {effectiveUser.name ? effectiveUser.name[0].toUpperCase() : effectiveUser.email[0].toUpperCase()}
                   </div>
 
                   {/* Name, Email and Role (Always visible on all screens!) */}
                   <div className="text-left flex flex-col justify-center min-w-0 pr-1">
                     <span className="font-extrabold text-white text-xs sm:text-sm leading-tight truncate max-w-[130px] sm:max-w-[200px]">
-                      {currentUser.name || currentUser.email}
+                      {effectiveUser.name || effectiveUser.email}
                     </span>
                     <div className="flex items-center gap-1 mt-0.5">
                       <span className="text-[10px] text-neutral-400 font-mono leading-none truncate max-w-[100px] sm:max-w-[130px] hidden xs:inline">
-                        {currentUser.email}
+                        {effectiveUser.email}
                       </span>
                       <span className="text-[9px] font-mono font-bold text-emerald-300 bg-emerald-950 px-1 py-0.2 rounded border border-emerald-800/80 uppercase shrink-0">
-                        {currentUser.role || 'Super Admin'}
+                        {effectiveUser.role || 'Super Admin'}
                       </span>
                     </div>
                   </div>
@@ -501,8 +481,8 @@ export default function SiteHeader({
                   <div className="absolute top-full right-0 mt-2 w-72 bg-neutral-950 border border-neutral-800 rounded-xl shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150 backdrop-blur-md">
                     <div className="px-2.5 py-1.5 border-b border-neutral-800/80 mb-1.5">
                       <p className="text-[10px] font-mono uppercase text-neutral-400">Current Session</p>
-                      <p className="text-xs font-bold text-white truncate">{currentUser.name || currentUser.email}</p>
-                      <p className="text-[10px] text-emerald-400 font-mono">{currentUser.role || 'SUPER_ADMIN'}</p>
+                      <p className="text-xs font-bold text-white truncate">{effectiveUser.name || effectiveUser.email}</p>
+                      <p className="text-[10px] text-emerald-400 font-mono">{effectiveUser.role || 'SUPER_ADMIN'}</p>
                     </div>
 
                     <p className="px-2.5 py-1 text-[10px] font-mono uppercase text-neutral-500">
@@ -519,7 +499,7 @@ export default function SiteHeader({
                             onSwitchUser(acc);
                           }}
                           className={`w-full text-left p-2 rounded-lg text-xs transition-colors flex items-center justify-between cursor-pointer ${
-                            currentUser.email.toLowerCase() === acc.email.toLowerCase()
+                            effectiveUser.email.toLowerCase() === acc.email.toLowerCase()
                               ? 'bg-emerald-950/70 border border-emerald-800/70 text-emerald-200'
                               : 'hover:bg-neutral-900 text-neutral-300 hover:text-white'
                           }`}
@@ -553,7 +533,7 @@ export default function SiteHeader({
               </div>
             ) : (
               <>
-                {/* Sign In Dropdown */}
+                {/* Sign In Dropdown - Clean CRM and ORG options */}
                 <div className="relative">
                   <button
                     onClick={() => {
@@ -573,10 +553,6 @@ export default function SiteHeader({
 
                   {signInDropdownOpen && (
                     <div className="absolute top-full right-0 mt-2.5 w-64 bg-neutral-950/95 border border-neutral-800 rounded-xl shadow-2xl z-50 p-2 space-y-1 animate-in fade-in slide-in-from-top-2 duration-150 backdrop-blur-md">
-                      <p className="px-2.5 py-1 text-[10px] font-mono uppercase tracking-wider text-neutral-500">
-                        Select Platform
-                      </p>
-
                       {/* Option 1: VizhinCRM */}
                       <button
                         onClick={() => {
@@ -600,18 +576,12 @@ export default function SiteHeader({
                         </div>
                       </button>
 
-                      {/* Option 2: Sign In to VizhinORG */}
+                      {/* Option 2: VizhinORG (Opens vizhin.co/ORG in new tab) */}
                       <a
-                        href={USE_STANDALONE_VIZHIN_ORG ? getVizhinOrgUrl('/ORG') : '#'}
-                        target={USE_STANDALONE_VIZHIN_ORG ? "_blank" : undefined}
-                        rel={USE_STANDALONE_VIZHIN_ORG ? "noopener noreferrer" : undefined}
-                        onClick={(e) => {
-                          setSignInDropdownOpen(false);
-                          if (!USE_STANDALONE_VIZHIN_ORG) {
-                            e.preventDefault();
-                            if (onEnterOrg) onEnterOrg();
-                          }
-                        }}
+                        href="https://vizhin.co/ORG"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => setSignInDropdownOpen(false)}
                         className="w-full text-left p-2.5 rounded-lg hover:bg-neutral-900 transition-colors flex items-center gap-3 cursor-pointer group"
                       >
                         <div className="w-8 h-8 rounded-lg bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400 shrink-0 group-hover:scale-105 transition-transform">
@@ -620,14 +590,11 @@ export default function SiteHeader({
                         <div>
                           <div className="flex items-center gap-1.5">
                             <span className="text-xs font-bold text-neutral-200 group-hover:text-cyan-400 transition-colors">
-                              Sign In to VizhinORG
-                            </span>
-                            <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-950/80 text-amber-300 border border-amber-700/60 font-bold">
-                              COMING SOON
+                              VizhinORG
                             </span>
                           </div>
                           <p className="text-[10px] text-neutral-400 leading-tight mt-0.5">
-                            Workforce & Org Architecture
+                            Workforce Architecture
                           </p>
                         </div>
                       </a>
@@ -635,12 +602,14 @@ export default function SiteHeader({
                   )}
                 </div>
 
-                <button
-                  onClick={onRequestAccount}
-                  className="px-4 py-2 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white text-xs font-semibold rounded-lg shadow-md shadow-emerald-950/40 border border-emerald-500/30 transition-all transform hover:-translate-y-0.5 cursor-pointer"
-                >
-                  Request Access
-                </button>
+                {!isHomePage && (
+                  <button
+                    onClick={onRequestAccount}
+                    className="px-4 py-2 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white text-xs font-semibold rounded-lg shadow-md shadow-emerald-950/40 border border-emerald-500/30 transition-all transform hover:-translate-y-0.5 cursor-pointer"
+                  >
+                    Request Access
+                  </button>
+                )}
               </>
             )}
 
@@ -711,12 +680,12 @@ export default function SiteHeader({
               })}
 
               {/* Mobile Actions: User & Sign Out OR Sign In Platforms */}
-              {currentUser ? (
+              {effectiveUser ? (
                 <div className="pt-3 border-t border-neutral-900 space-y-2">
                   <div className="p-2.5 rounded-lg bg-neutral-900 border border-neutral-800 flex items-center justify-between text-xs">
                     <div>
-                      <p className="font-bold text-white">{currentUser.name || currentUser.email}</p>
-                      <p className="text-[10px] font-mono text-emerald-400 uppercase">{currentUser.role || 'Active Session'}</p>
+                      <p className="font-bold text-white">{effectiveUser.name || effectiveUser.email}</p>
+                      <p className="text-[10px] font-mono text-emerald-400 uppercase">{effectiveUser.role || 'Active Session'}</p>
                     </div>
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                   </div>
@@ -770,7 +739,7 @@ export default function SiteHeader({
               ) : (
                 <div className="pt-3 border-t border-neutral-900 space-y-2">
                   <p className="px-2 text-[10px] font-mono uppercase tracking-wider text-neutral-500">
-                    Sign In Platform
+                    Sign In
                   </p>
                   <div className="grid grid-cols-2 gap-2 px-1">
                     <button
@@ -784,27 +753,30 @@ export default function SiteHeader({
                       <p className="text-[10px] text-neutral-400">Partner & Customer</p>
                     </button>
                     <a
-                      href={USE_STANDALONE_VIZHIN_ORG ? getVizhinOrgUrl('/ORG') : '#'}
-                      target={USE_STANDALONE_VIZHIN_ORG ? "_blank" : undefined}
-                      rel={USE_STANDALONE_VIZHIN_ORG ? "noopener noreferrer" : undefined}
-                      onClick={(e) => {
-                        setMobileMenuOpen(false);
-                        if (!USE_STANDALONE_VIZHIN_ORG) {
-                          e.preventDefault();
-                          if (onEnterOrg) onEnterOrg();
-                        }
-                      }}
+                      href="https://vizhin.co/ORG"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => setMobileMenuOpen(false)}
                       className="p-2.5 rounded-lg bg-neutral-900 border border-neutral-800 text-left cursor-pointer hover:border-cyan-700/60 block"
                     >
-                      <div className="flex items-center justify-between">
-                        <p className="text-xs font-bold text-cyan-400">Sign In to VizhinORG</p>
-                        <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-amber-950/80 text-amber-300 border border-amber-700/60 font-bold">
-                          COMING SOON
-                        </span>
-                      </div>
-                      <p className="text-[10px] text-neutral-400 mt-0.5">Workforce & Teams</p>
+                      <p className="text-xs font-bold text-cyan-400">VizhinORG</p>
+                      <p className="text-[10px] text-neutral-400 mt-0.5">Opens vizhin.co/ORG ↗</p>
                     </a>
                   </div>
+
+                  {!isHomePage && (
+                    <div className="pt-2">
+                      <button
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          onRequestAccount();
+                        }}
+                        className="w-full py-2 px-4 bg-gradient-to-r from-emerald-600 to-[#0D5C46] text-white text-xs font-semibold rounded-lg text-center"
+                      >
+                        Request Access
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
             </motion.div>

@@ -15,9 +15,9 @@ export const USE_STANDALONE_VIZHIN_ORG: boolean =
     : DEFAULT_USE_STANDALONE;
 
 /**
- * Returns the base URL for the standalone Remix VizhinORG project.
- * - In production (vizhin.co), defaults to https://vizhin.co/ORG
- * - In development / preview, defaults to the active Cloud Run deployment:
+ * Returns the base URL for the standalone VizhinORG project.
+ * - In production (vizhin.co), points to the deployed /org/ directory: https://vizhin.co/org/
+ * - In development / preview, defaults to the active deployment:
  *   https://ais-dev-w5xozbr56c6ysf2jdmwe3f-615362750641.us-west2.run.app
  */
 export function getBaseVizhinOrgUrl(): string {
@@ -27,46 +27,40 @@ export function getBaseVizhinOrgUrl(): string {
   if (typeof window !== 'undefined') {
     const host = window.location.hostname.toLowerCase();
     if (host === 'vizhin.co' || host === 'www.vizhin.co') {
-      return 'https://vizhin.co/ORG';
+      return 'https://vizhin.co/org/';
     }
   }
   return 'https://ais-dev-w5xozbr56c6ysf2jdmwe3f-615362750641.us-west2.run.app';
 }
 
 export const STANDALONE_VIZHIN_ORG_URL: string = getBaseVizhinOrgUrl();
-
 export const VIZHIN_HOMEPAGE_URL = 'https://vizhin.co';
 
 /**
- * Builds the destination URL for the standalone Remix VizhinORG project,
- * preventing duplicate /ORG path segments (e.g. avoiding /ORG/ORG).
+ * Builds the destination URL for the standalone VizhinORG project.
  */
-export function getVizhinOrgUrl(subPath: string = '/ORG'): string {
+export function getVizhinOrgUrl(subPath: string = '/org/'): string {
   let base = getBaseVizhinOrgUrl().trim().replace(/\/+$/, '');
   
-  // Deduplicate: If base URL already ends with /ORG, remove it before appending subpaths
-  base = base.replace(/\/ORG$/i, '');
-
-  let path = subPath ? (subPath.startsWith('/') ? subPath : `/${subPath}`) : '';
+  // Deduplicate if base URL already includes /org
+  base = base.replace(/\/org$/i, '');
   
-  // Normalize path if pointing to /ORG or /ORGdemo
-  if (path.toLowerCase() === '/org') {
-    path = '/ORG';
-  } else if (path.toLowerCase() === '/orgdemo') {
-    path = '/ORGdemo';
+  let path = subPath ? (subPath.startsWith('/') ? subPath : `/${subPath}`) : '';
+  if (!path || path === '/' || path.toLowerCase() === '/org' || path.toLowerCase() === '/org/') {
+    return `${base}/org/`;
   }
-
+  
   return `${base}${path}`;
 }
 
-export const STANDALONE_VIZHIN_ORG_SIGNIN_URL: string = getVizhinOrgUrl('/ORG');
+export const STANDALONE_VIZHIN_ORG_SIGNIN_URL: string = getVizhinOrgUrl('/org/');
 
 /**
- * Executes a seamless same-window redirect to the standalone VizhinORG app.
+ * Executes a seamless redirect to the standalone VizhinORG app.
  */
 export function redirectToVizhinOrg(subPath?: string): void {
   if (typeof window !== 'undefined') {
-    const targetUrl = getVizhinOrgUrl(subPath);
+    const targetUrl = getVizhinOrgUrl(subPath || '/org/');
     window.location.assign(targetUrl);
   }
 }

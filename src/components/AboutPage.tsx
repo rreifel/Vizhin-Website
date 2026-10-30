@@ -76,19 +76,10 @@ export default function AboutPage({
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             <span>Back to Home</span>
           </button>
-
-          <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-emerald-950/80 text-emerald-400 border border-emerald-800/60 font-semibold uppercase tracking-wider">
-            Vizhin LLC • Executive Overview
-          </span>
         </div>
 
         {/* Section Header */}
         <div className="text-center space-y-4 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/60 border border-emerald-800/60 text-emerald-400 text-xs font-mono font-medium">
-            <ShieldCheck className="w-3.5 h-3.5" />
-            <span>Company Philosophy & Leadership</span>
-          </div>
-
           <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight">
             About{' '}
             <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-200 bg-clip-text text-transparent">

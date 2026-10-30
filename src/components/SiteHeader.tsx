@@ -5,7 +5,7 @@ import VizhinLogo from './VizhinLogo';
 import { redirectToVizhinOrg, getVizhinOrgUrl, USE_STANDALONE_VIZHIN_ORG } from '../config/orgRouting';
 
 interface SiteHeaderProps {
-  currentPage?: 'landing' | 'meddpicc' | 'marketing-analysis' | 'org' | 'portal' | 'partners';
+  currentPage?: 'landing' | 'meddpicc' | 'marketing-analysis' | 'org' | 'portal' | 'partners' | 'about';
   currentUser?: {
     email: string;
     name?: string;
@@ -19,6 +19,7 @@ interface SiteHeaderProps {
   onNavigateMeddpicc: () => void;
   onNavigateMarketingAnalysis?: () => void;
   onNavigateJointDeliveryPartners?: () => void;
+  onNavigateAbout?: () => void;
   onEnterPortal: () => void;
   onEnterOrg?: () => void;
   onRequestAccount: () => void;
@@ -45,6 +46,7 @@ export default function SiteHeader({
   onNavigateMeddpicc,
   onNavigateMarketingAnalysis,
   onNavigateJointDeliveryPartners,
+  onNavigateAbout,
   onEnterPortal,
   onEnterOrg,
   onRequestAccount
@@ -253,9 +255,25 @@ export default function SiteHeader({
         <div className="p-4 w-64 space-y-2 text-left">
           <p className="text-xs font-bold text-emerald-400 uppercase tracking-widest font-mono">Vizhin LLC</p>
           <div className="space-y-1 text-xs">
-            <div className="block p-2 rounded hover:bg-neutral-900 text-neutral-500 hover:text-neutral-400 transition-colors cursor-not-allowed opacity-60">
-              About (Inactive)
-            </div>
+            <a
+              href="/Company/About"
+              onClick={(e) => {
+                if (e.button === 0 && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                  e.preventDefault();
+                  setActiveDropdown(null);
+                  setMobileMenuOpen(false);
+                  if (onNavigateAbout) {
+                    onNavigateAbout();
+                  } else {
+                    window.location.assign('/Company/About');
+                  }
+                }
+              }}
+              className="w-full text-left block p-2 rounded hover:bg-neutral-900 text-neutral-200 hover:text-emerald-400 transition-colors cursor-pointer flex items-center justify-between group"
+            >
+              <span className="font-semibold">About</span>
+              <span className="font-mono text-[10px] text-emerald-400">→</span>
+            </a>
             <button 
               onClick={() => {
                 setActiveDropdown(null);

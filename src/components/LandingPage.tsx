@@ -204,6 +204,7 @@ interface LandingPageProps {
   onNavigateMeddpicc: () => void;
   onNavigateMarketingAnalysis: () => void;
   onNavigateJointDeliveryPartners?: () => void;
+  onNavigateAbout?: () => void;
 }
 
 export default function LandingPage({ 
@@ -217,7 +218,8 @@ export default function LandingPage({
   onRequestAccount, 
   onNavigateMeddpicc,
   onNavigateMarketingAnalysis,
-  onNavigateJointDeliveryPartners
+  onNavigateJointDeliveryPartners,
+  onNavigateAbout
 }: LandingPageProps) {
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
 
@@ -251,6 +253,7 @@ export default function LandingPage({
         onNavigateMeddpicc={onNavigateMeddpicc}
         onNavigateMarketingAnalysis={onNavigateMarketingAnalysis}
         onNavigateJointDeliveryPartners={onNavigateJointDeliveryPartners}
+        onNavigateAbout={onNavigateAbout}
         onEnterPortal={onEnterPortal}
         onEnterOrg={onEnterOrg}
         onRequestAccount={onRequestAccount}

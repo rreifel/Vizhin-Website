@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const routes = ['meddpicc', 'marketing-analysis', 'Partners/Joint_Delivery', 'joint-delivery-partners', 'login', 'request', 'portal'];
+const routes = ['meddpicc', 'marketing-analysis', 'Partners/Joint_Delivery', 'joint-delivery-partners', 'Company/About', 'login', 'request', 'portal'];
 const distDir = path.resolve('dist');
 const indexPath = path.join(distDir, 'index.html');
 

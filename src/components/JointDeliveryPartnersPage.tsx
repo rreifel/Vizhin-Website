@@ -17,6 +17,7 @@ interface JointDeliveryPartnersPageProps {
   onNavigateMeddpicc: () => void;
   onNavigateMarketingAnalysis?: () => void;
   onNavigateJointDeliveryPartners?: () => void;
+  onNavigateAbout?: () => void;
   onEnterPortal: () => void;
   onEnterOrg?: () => void;
   onRequestAccount: () => void;
@@ -32,6 +33,7 @@ export default function JointDeliveryPartnersPage({
   onNavigateMeddpicc,
   onNavigateMarketingAnalysis,
   onNavigateJointDeliveryPartners,
+  onNavigateAbout,
   onEnterPortal,
   onEnterOrg,
   onRequestAccount
@@ -57,6 +59,7 @@ export default function JointDeliveryPartnersPage({
         onNavigateMeddpicc={onNavigateMeddpicc}
         onNavigateMarketingAnalysis={onNavigateMarketingAnalysis}
         onNavigateJointDeliveryPartners={onNavigateJointDeliveryPartners}
+        onNavigateAbout={onNavigateAbout}
         onEnterPortal={onEnterPortal}
         onEnterOrg={onEnterOrg}
         onRequestAccount={onRequestAccount}

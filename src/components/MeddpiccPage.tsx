@@ -272,9 +272,9 @@ export default function MeddpiccPage({
             transition={{ delay: 0.05 }}
             className="text-4xl md:text-6xl font-extrabold text-white tracking-tight leading-tight"
           >
-            MEDDPICC Isn't a Linear Checklist. <br className="hidden md:inline" />
+            MEDDPICC is a Deal Diagnostic, <br className="hidden md:inline" />
             <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-200 bg-clip-text text-transparent">
-              It’s a Diagnostic.
+              Not a Compliance Checklist.
             </span>
           </motion.h1>
 
@@ -663,13 +663,6 @@ export default function MeddpiccPage({
             >
               <Mail className="w-4 h-4" />
               <span>Contact GTM Advisor</span>
-            </button>
-
-            <button
-              onClick={onRequestAccount}
-              className="px-6 py-3 bg-neutral-900 hover:bg-neutral-850 border border-neutral-800 hover:border-emerald-500/50 text-white rounded-xl text-xs font-bold transition-all cursor-pointer"
-            >
-              Request Portal Sandbox
             </button>
           </div>
         </div>

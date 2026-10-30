@@ -18,6 +18,7 @@ import LandingPage from './components/LandingPage';
 import RequestAccessScreen from './components/RequestAccessScreen';
 import MeddpiccPage from './components/MeddpiccPage';
 import MarketingAnalysisPage from './components/MarketingAnalysisPage';
+import JointDeliveryPartnersPage from './components/JointDeliveryPartnersPage';
 import VizhinOrgPage from "./components/VizhinOrgPage";
 import VizhinOrgLoginScreen from './components/VizhinOrgLoginScreen';
 import VizhinLogo from './components/VizhinLogo';
@@ -25,7 +26,7 @@ import VizhinCRMLogo from './components/VizhinCRMLogo';
 import { USE_STANDALONE_VIZHIN_ORG, redirectToVizhinOrg, getVizhinOrgUrl } from './config/orgRouting';
 
 export default function App() {
-  type AppScreen = "landing" | "login" | "org" | "orgdemo" | "request" | "meddpicc" | "marketing-analysis" | "portal";
+  type AppScreen = "landing" | "login" | "org" | "orgdemo" | "request" | "meddpicc" | "marketing-analysis" | "partners" | "portal";
 
   // Navigation state for unauthenticated users (landing, login, org-login, sandbox request screen, meddpicc guide, or marketing analysis)
   const getInitialScreen = (): AppScreen => {
@@ -45,6 +46,7 @@ export default function App() {
       }
       if (p === "/meddpicc") return "meddpicc";
       if (p === "/marketing-analysis") return "marketing-analysis";
+      if (p === "/joint-delivery-partners" || p === "/partners" || p.startsWith("/partners/")) return "partners";
       if (p === "/login") return "login";
       if (p === "/request") return "request";
       if (p === "/portal") return "portal";
@@ -62,6 +64,7 @@ export default function App() {
       else if (screen === "orgdemo") p = "/ORGdemo";
       else if (screen === "meddpicc") p = "/meddpicc";
       else if (screen === "marketing-analysis") p = "/marketing-analysis";
+      else if (screen === "partners") p = "/Partners/Joint_Delivery";
       else if (screen === "login") p = "/login";
       else if (screen === "request") p = "/request";
       else if (screen === "portal") p = "/portal";
@@ -305,6 +308,7 @@ export default function App() {
         onRequestAccount={() => navigateTo('request')}
         onNavigateMeddpicc={() => navigateTo('meddpicc')}
         onNavigateMarketingAnalysis={() => navigateTo('marketing-analysis')}
+        onNavigateJointDeliveryPartners={() => navigateTo('partners')}
       />
     );
   }
@@ -339,6 +343,25 @@ export default function App() {
         onEnterOrg={handleEnterOrg}
         onRequestAccount={() => navigateTo('request')}
         onNavigateMeddpicc={() => navigateTo('meddpicc')}
+      />
+    );
+  }
+
+  if (unauthScreen === 'partners') {
+    return (
+      <JointDeliveryPartnersPage 
+        currentUser={currentUser}
+        onSignOut={handleLogout}
+        onSignOutOrg={handleSignOutOrg}
+        onSignOutCRM={handleSignOutCRM}
+        onSwitchUser={handleLoginSuccess}
+        onNavigateHome={() => navigateTo('landing')}
+        onNavigateMeddpicc={() => navigateTo('meddpicc')}
+        onNavigateMarketingAnalysis={() => navigateTo('marketing-analysis')}
+        onNavigateJointDeliveryPartners={() => navigateTo('partners')}
+        onEnterPortal={() => navigateTo(currentUser ? 'portal' : 'login')}
+        onEnterOrg={handleEnterOrg}
+        onRequestAccount={() => navigateTo('request')}
       />
     );
   }

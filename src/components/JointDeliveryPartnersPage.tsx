@@ -190,6 +190,99 @@ export default function JointDeliveryPartnersPage({
           </div>
         </motion.div>
       </div>
+
+      {/* Category: CRM Partners */}
+      <div className="space-y-6">
+        <div className="flex items-center gap-3 border-b border-neutral-800/80 pb-3">
+          <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight flex items-center gap-2.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-teal-400"></span>
+            <span>CRM Partners</span>
+          </h2>
+        </div>
+
+        {/* Featured Partner Card: Hive Strategy */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="bg-neutral-900/40 border border-neutral-800/90 hover:border-emerald-700/60 rounded-3xl p-8 md:p-12 backdrop-blur-md shadow-2xl space-y-8 transition-all group"
+        >
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8 pb-8 border-b border-neutral-800/80">
+            {/* Logo Container - Hotlinked to Hive Strategy */}
+            <div className="w-full md:w-auto flex justify-center">
+              <a
+                href="https://www.hivestrategy.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block p-6 md:p-8 bg-white rounded-2xl shadow-xl hover:shadow-amber-500/10 hover:scale-[1.02] transition-all border border-neutral-200 cursor-pointer group/logo"
+                title="Visit Hive Strategy (Opens in new tab)"
+              >
+                <img
+                  src="/assets/aistudio/HIVE-Strategy-Logo-2025-V1.1_7478f797.webp"
+                  alt="Hive Strategy"
+                  className="h-16 md:h-20 w-auto object-contain transition-transform group-hover/logo:scale-105"
+                />
+              </a>
+            </div>
+
+            {/* Partner Details */}
+            <div className="flex-1 text-center md:text-left space-y-3">
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
+                <span className="text-[10px] font-mono px-2.5 py-0.5 rounded bg-teal-950 text-teal-400 border border-teal-800/60 font-bold uppercase tracking-wider">
+                  Featured Joint Delivery Partner
+                </span>
+                <span className="text-[10px] font-mono text-neutral-400">
+                  HubSpot & CRM Architecture
+                </span>
+              </div>
+
+              <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight">
+                Hive Strategy
+              </h2>
+
+              <p className="text-xs md:text-sm text-neutral-300 leading-relaxed max-w-xl">
+                Hive Strategy is the HubSpot growth consultancy for mid-market and enterprise companies that takes HubSpot further than anyone else. By designing AI-powered ecosystems, crafting sophisticated HubSpot portals, building complex integrations, and curating growth marketing campaigns, we multiply the impact of your marketing, sales, and service teams for true scale.
+              </p>
+
+              <div className="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-3">
+                <a
+                  href="https://zcal.co/rreifel/30min"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white text-xs font-bold rounded-xl shadow-md shadow-emerald-950/40 border border-emerald-500/30 transition-all transform hover:-translate-y-0.5 cursor-pointer"
+                >
+                  <Calendar className="w-3.5 h-3.5 text-emerald-200" />
+                  <span>Inquire About Joint Engagement</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Collaborative Value Framework */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+            <div className="p-4 rounded-xl bg-neutral-950/70 border border-neutral-850/80 space-y-1.5">
+              <p className="text-xs font-bold text-teal-400 font-mono">01 • Sophisticated HubSpot Portals</p>
+              <p className="text-xs text-neutral-400 leading-relaxed">
+                Tailored enterprise architecture and customized workflows configured to remove pipeline friction and scale your revenue operations.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-xl bg-neutral-950/70 border border-neutral-850/80 space-y-1.5">
+              <p className="text-xs font-bold text-teal-400 font-mono">02 • AI-Powered Ecosystems</p>
+              <p className="text-xs text-neutral-400 leading-relaxed">
+                Automated sales workflows, smart enrichment, and complex systems integrations linking your sales stack end-to-end.
+              </p>
+            </div>
+
+            <div className="p-4 rounded-xl bg-neutral-950/70 border border-neutral-850/80 space-y-1.5">
+              <p className="text-xs font-bold text-teal-400 font-mono">03 • Scaled Sales & Service Impact</p>
+              <p className="text-xs text-neutral-400 leading-relaxed">
+                Aligning marketing, sales, and service teams around a single source of truth for predictable revenue and high customer retention.
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      </div>
       </main>
 
       {/* Corporate Footer */}

@@ -333,7 +333,7 @@ export default function LandingPage({
                   </div>
                 </div>
 
-                {isMarketingAnalysis && (
+                {(isMarketingAnalysis || sec.id === 'marketing-services') && (
                   <div className="pt-3 flex justify-end">
                     <button
                       type="button"
@@ -342,7 +342,7 @@ export default function LandingPage({
                         onNavigateMarketingAnalysis();
                       }}
                       className="text-[10px] font-mono font-semibold text-emerald-400 hover:text-emerald-300 bg-neutral-900/90 hover:bg-neutral-850 px-2.5 py-1 rounded-lg border border-emerald-800/60 hover:border-emerald-500 transition-all flex items-center gap-1 group/btn cursor-pointer"
-                      title="View Marketing Analysis Brochure"
+                      title="View Marketing Assessment Brochure"
                     >
                       <span>View Brochure</span>
                       <span className="group-hover/btn:translate-x-0.5 transition-transform">→</span>
@@ -524,6 +524,28 @@ export default function LandingPage({
                       download="Vizhin_GTM_Assessment.pdf"
                       className="p-2.5 bg-neutral-900 hover:bg-neutral-850 text-neutral-400 hover:text-emerald-300 rounded-xl border border-neutral-800 hover:border-emerald-700/60 transition-all cursor-pointer"
                       title="Download PDF Offer"
+                    >
+                      <Download className="w-4 h-4" />
+                    </a>
+                  </div>
+                )}
+
+                {(sec.id === 'marketing-services' || sec.id === 'marketing-analysis') && (
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={onNavigateMarketingAnalysis}
+                      className="px-5 py-2.5 bg-neutral-900 hover:bg-neutral-850 text-emerald-400 hover:text-emerald-300 text-xs font-bold rounded-xl border border-emerald-800/80 hover:border-emerald-600 shadow-md transition-all flex items-center gap-2 cursor-pointer group"
+                    >
+                      <FileText className="w-4 h-4 text-emerald-400 group-hover:scale-105 transition-transform" />
+                      <span>View Brochure</span>
+                      <span className="font-mono text-[10px] text-emerald-400">→</span>
+                    </button>
+                    <a
+                      href="/assets/aistudio/Vizhin_GTM_Assessment_290913e5.pdf"
+                      download="Vizhin_GTM_Assessment.pdf"
+                      className="p-2.5 bg-neutral-900 hover:bg-neutral-850 text-neutral-400 hover:text-emerald-300 rounded-xl border border-neutral-800 hover:border-emerald-700/60 transition-all cursor-pointer"
+                      title="Download PDF Brochure"
                     >
                       <Download className="w-4 h-4" />
                     </a>

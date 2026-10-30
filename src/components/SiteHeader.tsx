@@ -211,18 +211,24 @@ export default function SiteHeader({
 
             <a
               href="/Partners/Joint_Delivery"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => {
-                setActiveDropdown(null);
-                setMobileMenuOpen(false);
+              onClick={(e) => {
+                if (e.button === 0 && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                  e.preventDefault();
+                  setActiveDropdown(null);
+                  setMobileMenuOpen(false);
+                  if (onNavigateJointDeliveryPartners) {
+                    onNavigateJointDeliveryPartners();
+                  } else {
+                    window.location.assign('/Partners/Joint_Delivery');
+                  }
+                }
               }}
               className="block p-2 rounded hover:bg-neutral-900 transition-colors group cursor-pointer"
             >
               <div className="flex items-center justify-between">
                 <p className="text-xs font-semibold text-neutral-200 group-hover:text-emerald-400 transition-colors flex items-center gap-1.5">
                   <span>Joint Delivery Partners</span>
-                  <span className="font-mono text-[10px] text-emerald-400">↗</span>
+                  <span className="font-mono text-[10px] text-emerald-400">→</span>
                 </p>
               </div>
               <p className="text-[10px] text-neutral-500 leading-normal mt-0.5">Collaborative implementation with Sublime Designs Media co-delivering client projects.</p>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { 
-  ShieldCheck, Layers, Users, Activity, Sparkles, Mail, BarChart3, Calendar, ArrowUpRight
+  ShieldCheck, Layers, Users, Activity, Sparkles, Mail, BarChart3, Calendar, ArrowUpRight, FileText, Download
 } from 'lucide-react';
 import SiteHeader from './SiteHeader';
 
@@ -10,18 +10,20 @@ const DETAILED_SECTIONS = [
     id: 'strategic-gtm-analysis',
     title: 'Strategic GTM Analysis',
     icon: Layers,
-    summary: 'We design and audit strategic Go-To-Market frameworks, mapping key friction layers and helping partners operate at optimal velocity.',
-    latinParagraphs: [
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-    ]
+    summary: 'Multiply your GTM Results.',
+    paragraphs: [
+      "When sales and marketing pull in different directions, growth gets expensive. Leads stall, messages conflict, and your CRM becomes a place where pipeline goes to hide. The bottom line: your team isn't performing. The fix isn't more headcount or another tool—it's alignment and getting the right people in the right seats, with the right expectations.",
+      "Sublime and Vizhin have joined forces to offer a GTM assessment that looks across your entire revenue engine—sales and marketing together—to find exactly where momentum is leaking and what to do about it. Together, we bring decades of experience on both sides of the funnel, so nothing gets lost in the gap between teams.",
+      "You'll walk away with a clear-eyed read on what's working, what isn't, and a prioritized plan to fix it. No fluff. No 80-page reports nobody opens. Just answers you can act on."
+    ],
+    offerUrl: '/assets/aistudio/Vizhin_GTM_Assessment_290913e5.pdf'
   },
   {
     id: 'gtm-tech',
     title: 'GTM Tech',
     icon: Users,
     summary: 'Modern systems supporting CRM, organizational charting, and comprehensive performance evaluations to scale your team.',
-    latinParagraphs: [
+    paragraphs: [
       'Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris.',
       'Integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula. Donec lobortis risus a elit. Etiam tempor. Ut ullamcorper, ligula eu tempor congue, eros est euismod turpis.'
     ]
@@ -31,7 +33,7 @@ const DETAILED_SECTIONS = [
     title: 'Audit Compliance',
     icon: ShieldCheck,
     summary: 'All modifications, user assignments, and profile creations are logged continuously to ensure strict partner accountability and audit trails.',
-    latinParagraphs: [
+    paragraphs: [
       'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nullam at felis mi. Sed mollis, sapien sit amet facilisis mollis, dolor libero pellentesque massa, in porta felis dui eu erat.',
       'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin pharetra nonummy pede. Mauris et orci. Aenean nec lorem.'
     ]
@@ -41,7 +43,7 @@ const DETAILED_SECTIONS = [
     title: 'Marketing Services',
     icon: Sparkles,
     summary: 'Aligning marketing with your overall go to market efforts, including the development of brand assets such as video, testimonials, collateral, and website review.',
-    latinParagraphs: [
+    paragraphs: [
       'Fusce feugiat malesuada odio. Morbi nunc odio, gravida at, cursus nec, luctus a, lorem. Maecenas tristique orci ac sem. Duis ultricies pharetra magna.',
       'Donec accumsan malesuada orci. Donec sit amet eros. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mauris fermentum dictum magna. Sed laoreet aliquam leo.'
     ]
@@ -51,7 +53,7 @@ const DETAILED_SECTIONS = [
     title: 'Marketing Analysis',
     icon: BarChart3,
     summary: 'In-depth campaign diagnostics, conversion funnel tracking, attribution analytics, and ROI modeling to optimize demand generation efficiency.',
-    latinParagraphs: [
+    paragraphs: [
       'Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus. Nam nulla quam, gravida non, commodo a, sodales sit amet, nisi.',
       'Pellentesque fermentum dolor. Aliquam quam lectus, facilisis auctor, ultrices ut, elementum vulputate, nunc. Sed adipiscing ornare risus. Morbi est est, blandit sit amet, hendrerit sit amet.'
     ]
@@ -61,7 +63,7 @@ const DETAILED_SECTIONS = [
     title: 'Project Management',
     icon: Activity,
     summary: 'Expert planning, coordination, and execution of complex IT projects, delivering alignment across cross-functional engineering teams.',
-    latinParagraphs: [
+    paragraphs: [
       'Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus.',
       'Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui.'
     ]
@@ -71,7 +73,7 @@ const DETAILED_SECTIONS = [
     title: 'Call To Action',
     icon: Calendar,
     summary: 'Connect directly with our leadership team to evaluate your current Go-To-Market architecture, partner distribution pipelines, and execution roadmap.',
-    latinParagraphs: [
+    paragraphs: [
       'Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc, quis gravida magna mi a libero.',
       'Fusce vulputate eleifend sapien. Vestibulum purus quam, scelerisque ut, mollis sed, nonummy id, metus. Nullam accumsan lorem in dui. Cras ultricies mi eu turpis hendrerit fringilla.'
     ]
@@ -181,13 +183,13 @@ export default function LandingPage({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Feature 1 */}
           <div className="bg-neutral-900/35 border border-neutral-850/60 p-6 rounded-2xl space-y-4 hover:border-neutral-800 transition-all">
-            <div className="w-10 h-10 rounded-xl bg-emerald-950/80 flex items-center justify-center border border-emerald-800/60 text-emerald-400 shrink-0">
+            <div className="w-10 h-10 rounded-full bg-emerald-950/80 flex items-center justify-center border border-emerald-800/60 text-emerald-400 shrink-0">
               <Layers className="w-5 h-5" />
             </div>
             <div className="space-y-2">
               <h3 className="text-base font-bold text-neutral-150">Strategic GTM Analysis</h3>
               <p className="text-xs text-neutral-400 leading-relaxed">
-                We design and audit strategic Go-To-Market frameworks, mapping key friction layers and helping partners operate at optimal velocity.
+                Multiply your GTM Results.
               </p>
             </div>
           </div>
@@ -279,7 +281,7 @@ export default function LandingPage({
             >
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0">
                     <Icon className="w-5 h-5" />
                   </div>
                   <div>
@@ -297,7 +299,7 @@ export default function LandingPage({
                 </div>
 
                 <div className="space-y-3 pt-1 text-xs md:text-sm text-neutral-400 leading-relaxed">
-                  {sec.latinParagraphs.map((para, pIdx) => (
+                  {sec.paragraphs.map((para, pIdx) => (
                     <p key={pIdx}>
                       {para}
                     </p>
@@ -305,8 +307,31 @@ export default function LandingPage({
                 </div>
               </div>
 
-              {/* Lower right corner button */}
-              <div className="pt-6 mt-4 border-t border-neutral-850/60 flex justify-end items-center">
+              {/* Lower right actions */}
+              <div className="pt-6 mt-4 border-t border-neutral-850/60 flex flex-col items-end gap-2.5">
+                {sec.offerUrl && (
+                  <div className="flex items-center gap-2">
+                    <a
+                      href={sec.offerUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-5 py-2.5 bg-neutral-900 hover:bg-neutral-850 text-emerald-400 hover:text-emerald-300 text-xs font-bold rounded-xl border border-emerald-800/80 hover:border-emerald-600 shadow-md transition-all flex items-center gap-2 cursor-pointer group"
+                    >
+                      <FileText className="w-4 h-4 text-emerald-400 group-hover:scale-105 transition-transform" />
+                      <span>View Offer</span>
+                      <span className="font-mono text-[10px] text-emerald-400">↗</span>
+                    </a>
+                    <a
+                      href={sec.offerUrl}
+                      download="Vizhin_GTM_Assessment.pdf"
+                      className="p-2.5 bg-neutral-900 hover:bg-neutral-850 text-neutral-400 hover:text-emerald-300 rounded-xl border border-neutral-800 hover:border-emerald-700/60 transition-all cursor-pointer"
+                      title="Download PDF Offer"
+                    >
+                      <Download className="w-4 h-4" />
+                    </a>
+                  </div>
+                )}
+
                 <a
                   href="https://zcal.co/rreifel/30min"
                   target="_blank"

@@ -279,9 +279,9 @@ export default function LandingPage({
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-4xl md:text-6xl font-extrabold text-white tracking-tight leading-tight"
           >
-            Driving{' '}
+            Go-to-Market Consulting for{' '}
             <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-200 bg-clip-text text-transparent">
-              Go-To-Market Results
+              Growth-Stage Companies
             </span>
           </motion.h1>
 
@@ -289,9 +289,9 @@ export default function LandingPage({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-neutral-300 text-base md:text-xl max-w-2xl mx-auto leading-relaxed font-medium"
+            className="text-neutral-400 text-base md:text-lg max-w-2xl mx-auto leading-relaxed"
           >
-            Go-To-Market Consulting for Growth-Stage Companies
+            Enabling Go To Market teams with modern methodologies and technology. We provide the services you need to enable your organization to grow.
           </motion.p>
 
         </div>

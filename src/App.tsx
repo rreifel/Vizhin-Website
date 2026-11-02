@@ -85,6 +85,7 @@ export default function App() {
 
   useEffect(() => {
     if (typeof document !== 'undefined') {
+      document.title = 'Go-to-Market Consulting & Fractional VP of Sales | Vizhin';
       let meta = document.querySelector('meta[name="description"]');
       if (!meta) {
         meta = document.createElement('meta');

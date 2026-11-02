@@ -270,7 +270,7 @@ export default function LandingPage({
             className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-950/80 text-emerald-300 border border-emerald-800/60 backdrop-blur"
           >
             <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Vizhin LLC • GTM and Consulting Services</span>
+            <span>Go-to-Market Consulting & Fractional VP of Sales | Vizhin, Denver</span>
           </motion.div>
 
           <motion.h1 
@@ -289,9 +289,9 @@ export default function LandingPage({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-neutral-400 text-base md:text-lg max-w-2xl mx-auto leading-relaxed"
+            className="text-neutral-300 text-base md:text-xl max-w-2xl mx-auto leading-relaxed font-medium"
           >
-            Enabling Go To Market teams with modern methodologies and technology. We provide the services you need to enable your organization to grow.
+            Go-To-Market Consulting for Growth-Stage Companies
           </motion.p>
 
         </div>

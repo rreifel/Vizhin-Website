@@ -83,6 +83,21 @@ export default function App() {
     return () => window.removeEventListener("popstate", handlePopState);
   }, []);
 
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      let meta = document.querySelector('meta[name="description"]');
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.setAttribute('name', 'description');
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute(
+        'content',
+        'Vizhin helps growth-stage companies align sales and marketing, fix CRM and pipeline friction, and build accountable teams that predictably grow revenue.'
+      );
+    }
+  }, []);
+
   // Global Database state persisted to local storage
   const [partners, setPartners] = useState<Partner[]>(() => {
     const saved = localStorage.getItem('vzn_partners');

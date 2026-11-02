@@ -2,6 +2,9 @@
   RewriteEngine On
   RewriteBase /
 
+  # Exclude sitemap.xml and robots.txt explicitly from single-page fallback
+  RewriteRule ^(sitemap\.xml|robots\.txt)$ - [L]
+
   # 1. Forward /ORG and /org requests directly to /org/
   RewriteCond %{REQUEST_URI} !^/org/
   RewriteRule ^ORG/?$ /org/ [R=301,NC,L]
@@ -14,10 +17,26 @@
   RewriteCond %{REQUEST_URI} !^/org/
   RewriteRule ^ORGdemo/?$ /org/ORGdemo [R=301,NC,L]
 
-  # 4. Standard SPA rewrite for the root Vizhin marketing website
+  # 4. Standard SPA rewrite for the root Vizhin marketing website (excluding sitemap.xml and robots.txt)
+  RewriteCond %{REQUEST_URI} !^/(sitemap\.xml|robots\.txt)$ [NC]
   RewriteRule ^index\.html$ - [L]
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME} !-l
   RewriteRule . /index.html [L]
 </IfModule>
+
+# Force correct Content-Types
+<Files "sitemap.xml">
+  ForceType application/xml
+  <IfModule mod_headers.c>
+    Header set Content-Type "application/xml; charset=utf-8"
+  </IfModule>
+</Files>
+
+<Files "robots.txt">
+  ForceType text/plain
+  <IfModule mod_headers.c>
+    Header set Content-Type "text/plain; charset=utf-8"
+  </IfModule>
+</Files>

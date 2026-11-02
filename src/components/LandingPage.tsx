@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
-  ShieldCheck, Layers, Users, Activity, Sparkles, Mail, BarChart3, Calendar, ArrowUpRight, FileText, Download, Target, UserPlus
+  ShieldCheck, Layers, Users, Activity, Sparkles, Mail, BarChart3, Calendar, ArrowUpRight, ArrowRight, FileText, Download, Target, UserPlus
 } from 'lucide-react';
 import SiteHeader from './SiteHeader';
 
@@ -47,7 +47,7 @@ const DETAILED_SECTIONS: DetailedSectionItem[] = [
   },
   {
     id: 'gtm-tech',
-    title: 'GTM Tech',
+    title: 'GTM Tech: Sales Technology Stack Optimization',
     icon: Users,
     summary: 'Sales Infrastructure Efficiency: Transforming your CRM from an expensive digital filing cabinet into an automated revenue driver. I audit, restructure, and optimize your sales technology stack to eliminate administrative friction and give you flawless pipeline visibility.',
     paragraphs: [
@@ -120,36 +120,6 @@ const DETAILED_SECTIONS: DetailedSectionItem[] = [
     }
   },
   {
-    id: 'audit-compliance',
-    title: 'Audit Compliance',
-    icon: ShieldCheck,
-    summary: 'Sales Governance: Partner Accountability and Audit Readiness',
-    paragraphs: [
-      "When scaling a sales organization with external leadership, operational discipline is non-negotiable. As your Fractional VP of Sales, I establish rigorous governance frameworks where every system modification, user assignment, and profile creation is continuously logged and monitored. This ensures absolute transparency and strict partner accountability across your entire sales infrastructure. You will always have full visibility into who has access to your customer data, who modified your pipeline stages, and how administrative permissions are managed, completely eliminating operational blind spots.",
-      "This level of structural oversight ensures your company is always prepared for enterprise-level scrutiny, due diligence, or board reviews without the typical scramble. By embedding clean, continuous audit trails into your daily sales operations, we protect your company's valuation and build a mature, compliant sales function. This gives you, your investors, and your future enterprise clients total confidence that your sales engine is built on a secure, accountable, and legally sound foundation."
-    ]
-  },
-  {
-    id: 'marketing-services',
-    title: 'Marketing Services',
-    icon: Sparkles,
-    summary: 'Sales-Marketing Integration: Bridging the gap between marketing initiatives and revenue generation. I ensure your brand assets, client testimonials, and digital presence are systematically engineered to feed the sales pipeline, accelerate deals, and maintain absolute messaging consistency.',
-    paragraphs: [
-      "For a growing company, the costliest bottleneck is a disconnect between the team generating leads and the team closing deals. When marketing operates in a vacuum, they often optimize for metrics like views or clicks, resulting in collateral, websites, and video assets that look beautiful but fail to move the needle for sales. By integrating marketing directly into your sales strategy, I eliminate this friction. We transform your marketing footprint from a passive cost center into an active sales enablement engine, ensuring that every asset produced is directly engineered to handle objections, build credibility, and pre-qualify prospects before they ever hop on a discovery call.",
-      "What this means for you as a founder is complete pipeline clarity and a significantly accelerated sales cycle. Your sales team will no longer waste time correcting misaligned expectations set by generic marketing materials. Instead, they will be armed with hyper-targeted testimonials, case studies, and collateral that perfectly mirror the live sales conversation. This seamless handoff not only maximizes the return on your marketing spend but also presents a highly sophisticated, unified front to your market—ultimately driving higher conversion rates and predictable revenue growth."
-    ]
-  },
-  {
-    id: 'marketing-analysis',
-    title: 'Marketing Analysis',
-    icon: BarChart3,
-    summary: 'Revenue Analytics & ROI Optimization: Turning marketing data into executive decision-making power. I implement deep funnel tracking and ROI modeling to map exactly how marketing dollars convert into closed-won revenue, maximizing your demand generation efficiency.',
-    paragraphs: [
-      'To scale a company predictably, you cannot afford to guess which marketing efforts are actually driving revenue. Many growth-stage companies suffer from "vanity metrics"—reporting high website traffic or lead volumes that ultimately result in zero closed deals. I look past the surface-level data to run deep conversion funnel diagnostics and attribution modeling. By tracking a prospect\'s journey from the first click to the signed contract, we uncover exactly which campaigns are yielding high-value sales opportunities and which ones are simply draining your budget.',
-      'For you as a founder, this means complete financial clarity and data-backed confidence. Instead of wondering if your marketing budget is working, you will have clear ROI models that prove exactly how much revenue is generated for every dollar spent. This level of analytics strips the emotion and guesswork out of your growth strategy, giving you and your board the precise insights needed to confidently scale up your winning channels, cut the waste, and optimize your entire customer acquisition cost.'
-    ]
-  },
-  {
     id: 'sales-team-accountability',
     title: 'Sales Team Accountability & KPIs',
     icon: Target,
@@ -167,6 +137,36 @@ const DETAILED_SECTIONS: DetailedSectionItem[] = [
     paragraphs: [
       'For most founders, hiring sales reps is a costly roll of the dice. Charismatic candidates routinely interview exceptionally well, only to fail miserably once they are in the seat—costing you months of lost revenue, burned leads, and thousands in wasted salary. Without a dedicated sales leader who knows exactly how to screen for grit, process discipline, and true selling capability, growth-stage companies easily fall into the trap of hiring the wrong profile for their specific sales cycle. I eliminate this expensive guesswork by building a structured, repeatable talent acquisition engine designed to source and filter for elite performers.',
       "When you partner with me for your sales hiring strategy, we don't just find people; we build a scalable hiring infrastructure. I define the exact candidate profile your business needs, create objective vetting scorecards, conduct deep-dive behavioral interviews, and structure competitive compensation packages that align a rep's incentives directly with your revenue goals. Furthermore, I build out a comprehensive 30-60-90 day onboarding playbook. This ensures your new hires hit the ground running with the exact training, scripts, and playbooks they need to shorten their time-to-productivity and start closing deals quickly."
+    ]
+  },
+  {
+    id: 'audit-compliance',
+    title: 'Sales Governance, Partner Accountability & Audit Readiness',
+    icon: ShieldCheck,
+    summary: 'Sales Governance: Partner Accountability and Audit Readiness',
+    paragraphs: [
+      "When scaling a sales organization with external leadership, operational discipline is non-negotiable. As your Fractional VP of Sales, I establish rigorous governance frameworks where user access, customer boundaries, and stage progressions are continuously verified. This ensures absolute transparency and strict partner accountability across your entire sales infrastructure. You will always have full visibility into who has access to your customer data, who modified your pipeline stages, and how administrative permissions are managed, completely eliminating operational blind spots.",
+      "This level of structural oversight ensures your company is always prepared for senior leadership scrutiny, due diligence, or board reviews without the typical scramble. By verifying clean, continuous audit trails throughout daily sales operations, we protect your company's valuation and prepare a mature, compliant sales function. This gives you, your investors, and your future enterprise clients total confidence that your revenue engine is verified, accountable, and legally sound."
+    ]
+  },
+  {
+    id: 'marketing-services',
+    title: 'Sales-Marketing Integration Services',
+    icon: Sparkles,
+    summary: 'Sales-Marketing Integration: Bridging the gap between marketing initiatives and revenue generation. I ensure your brand assets, client testimonials, and digital presence are systematically engineered to feed the sales pipeline, accelerate deals, and maintain absolute messaging consistency.',
+    paragraphs: [
+      "For a growing company, the costliest bottleneck is a disconnect between the team generating leads and the team closing deals. When marketing operates in a vacuum, they often optimize for metrics like views or clicks, resulting in collateral, websites, and video assets that look beautiful but fail to move the needle for sales. By integrating marketing directly into your sales strategy, I eliminate this friction. We transform your marketing footprint from a passive cost center into an active sales enablement engine, ensuring that every asset produced is directly engineered to handle objections, build credibility, and pre-qualify prospects before they ever hop on a discovery call.",
+      "What this means for you as a founder is complete pipeline clarity and a significantly accelerated sales cycle. Your sales team will no longer waste time correcting misaligned expectations set by generic marketing materials. Instead, they will be armed with hyper-targeted testimonials, case studies, and collateral that perfectly mirror the live sales conversation. This seamless handoff not only maximizes the return on your marketing spend but also presents a highly sophisticated, unified front to your market—ultimately driving higher conversion rates and predictable revenue growth."
+    ]
+  },
+  {
+    id: 'marketing-analysis',
+    title: 'Marketing Analysis',
+    icon: BarChart3,
+    summary: 'Revenue Analytics & ROI Optimization: Turning marketing data into executive decision-making power. I implement deep funnel tracking and ROI modeling to map exactly how marketing dollars convert into closed-won revenue, maximizing your demand generation efficiency.',
+    paragraphs: [
+      'To scale a company predictably, you cannot afford to guess which marketing efforts are actually driving revenue. Many growth-stage companies suffer from "vanity metrics"—reporting high website traffic or lead volumes that ultimately result in zero closed deals. I look past the surface-level data to run deep conversion funnel diagnostics and attribution modeling. By tracking a prospect\'s journey from the first click to the signed contract, we uncover exactly which campaigns are yielding high-value sales opportunities and which ones are simply draining your budget.',
+      'For you as a founder, this means complete financial clarity and data-backed confidence. Instead of wondering if your marketing budget is working, you will have clear ROI models that prove exactly how much revenue is generated for every dollar spent. This level of analytics strips the emotion and guesswork out of your growth strategy, giving you and your board the precise insights needed to confidently scale up your winning channels, cut the waste, and optimize your entire customer acquisition cost.'
     ]
   },
   {
@@ -206,6 +206,9 @@ interface LandingPageProps {
   onNavigateJointDeliveryPartners?: () => void;
   onNavigateAbout?: () => void;
   onNavigateStrategicGtmAnalysis?: () => void;
+  onNavigateGtmTech?: () => void;
+  onNavigateAuditCompliance?: () => void;
+  onNavigateMarketingServices?: () => void;
 }
 
 export default function LandingPage({ 
@@ -221,7 +224,10 @@ export default function LandingPage({
   onNavigateMarketingAnalysis,
   onNavigateJointDeliveryPartners,
   onNavigateAbout,
-  onNavigateStrategicGtmAnalysis
+  onNavigateStrategicGtmAnalysis,
+  onNavigateGtmTech,
+  onNavigateAuditCompliance,
+  onNavigateMarketingServices
 }: LandingPageProps) {
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
 
@@ -257,6 +263,9 @@ export default function LandingPage({
         onNavigateJointDeliveryPartners={onNavigateJointDeliveryPartners}
         onNavigateAbout={onNavigateAbout}
         onNavigateStrategicGtmAnalysis={onNavigateStrategicGtmAnalysis}
+        onNavigateGtmTech={onNavigateGtmTech}
+        onNavigateAuditCompliance={onNavigateAuditCompliance}
+        onNavigateMarketingServices={onNavigateMarketingServices}
         onEnterPortal={onEnterPortal}
         onEnterOrg={onEnterOrg}
         onRequestAccount={onRequestAccount}
@@ -511,63 +520,116 @@ export default function LandingPage({
                 )}
               </div>
 
-              {/* Lower right actions */}
-              <div className="pt-6 mt-4 border-t border-neutral-850/60 flex flex-col items-end gap-2.5">
-                {sec.offerUrl && (
-                  <div className="flex items-center gap-2">
+              {/* Card Footer: Lower left link and lower right actions */}
+              <div className="pt-6 mt-4 border-t border-neutral-850/60 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                {/* Lower Left */}
+                <div className="flex items-center">
+                  {sec.id === 'strategic-gtm-analysis' && (
                     <a
-                      href={sec.offerUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-5 py-2.5 bg-neutral-900 hover:bg-neutral-850 text-emerald-400 hover:text-emerald-300 text-xs font-bold rounded-xl border border-emerald-800/80 hover:border-emerald-600 shadow-md transition-all flex items-center gap-2 cursor-pointer group"
+                      href="/gtm"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (onNavigateStrategicGtmAnalysis) {
+                          onNavigateStrategicGtmAnalysis();
+                        } else {
+                          window.location.href = '/gtm';
+                        }
+                      }}
+                      className="inline-flex items-center gap-1.5 text-xs md:text-sm font-semibold text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer group"
                     >
-                      <FileText className="w-4 h-4 text-emerald-400 group-hover:scale-105 transition-transform" />
-                      <span>View Offer</span>
-                      <span className="font-mono text-[10px] text-emerald-400">↗</span>
+                      <span>Explore Strategic Go-to-Market Analysis</span>
+                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                     </a>
+                  )}
+                  {sec.id === 'gtm-tech' && (
                     <a
-                      href={sec.offerUrl}
-                      download="Vizhin_GTM_Assessment.pdf"
-                      className="p-2.5 bg-neutral-900 hover:bg-neutral-850 text-neutral-400 hover:text-emerald-300 rounded-xl border border-neutral-800 hover:border-emerald-700/60 transition-all cursor-pointer"
-                      title="Download PDF Offer"
+                      href="/gtm-tech"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (onNavigateGtmTech) {
+                          onNavigateGtmTech();
+                        } else {
+                          window.location.href = '/gtm-tech';
+                        }
+                      }}
+                      className="inline-flex items-center gap-1.5 text-xs md:text-sm font-semibold text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer group"
                     >
-                      <Download className="w-4 h-4" />
+                      <span>Explore GTM Tech: Sales Technology Stack Optimization</span>
+                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                     </a>
-                  </div>
-                )}
+                  )}
+                </div>
 
-                {(sec.id === 'marketing-services' || sec.id === 'marketing-analysis') && (
-                  <div className="flex items-center gap-2">
+                {/* Lower Right Actions */}
+                <div className="flex flex-wrap items-center sm:justify-end gap-2.5">
+                  {sec.offerUrl && (
+                    <div className="flex items-center gap-2">
+                      <a
+                        href={sec.offerUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-5 py-2.5 bg-neutral-900 hover:bg-neutral-850 text-emerald-400 hover:text-emerald-300 text-xs font-bold rounded-xl border border-emerald-800/80 hover:border-emerald-600 shadow-md transition-all flex items-center gap-2 cursor-pointer group"
+                      >
+                        <FileText className="w-4 h-4 text-emerald-400 group-hover:scale-105 transition-transform" />
+                        <span>View Offer</span>
+                        <span className="font-mono text-[10px] text-emerald-400">↗</span>
+                      </a>
+                      <a
+                        href={sec.offerUrl}
+                        download="Vizhin_GTM_Assessment.pdf"
+                        className="p-2.5 bg-neutral-900 hover:bg-neutral-850 text-neutral-400 hover:text-emerald-300 rounded-xl border border-neutral-800 hover:border-emerald-700/60 transition-all cursor-pointer"
+                        title="Download PDF Offer"
+                      >
+                        <Download className="w-4 h-4" />
+                      </a>
+                    </div>
+                  )}
+
+                  {sec.id === 'marketing-services' && onNavigateMarketingServices && (
                     <button
                       type="button"
-                      onClick={onNavigateMarketingAnalysis}
+                      onClick={onNavigateMarketingServices}
                       className="px-5 py-2.5 bg-neutral-900 hover:bg-neutral-850 text-emerald-400 hover:text-emerald-300 text-xs font-bold rounded-xl border border-emerald-800/80 hover:border-emerald-600 shadow-md transition-all flex items-center gap-2 cursor-pointer group"
                     >
-                      <FileText className="w-4 h-4 text-emerald-400 group-hover:scale-105 transition-transform" />
-                      <span>View Brochure</span>
+                      <Sparkles className="w-4 h-4 text-emerald-400 group-hover:scale-105 transition-transform" />
+                      <span>Explore Integration Services</span>
                       <span className="font-mono text-[10px] text-emerald-400">→</span>
                     </button>
-                    <a
-                      href="/assets/aistudio/Vizhin_GTM_Assessment_290913e5.pdf"
-                      download="Vizhin_GTM_Assessment.pdf"
-                      className="p-2.5 bg-neutral-900 hover:bg-neutral-850 text-neutral-400 hover:text-emerald-300 rounded-xl border border-neutral-800 hover:border-emerald-700/60 transition-all cursor-pointer"
-                      title="Download PDF Brochure"
-                    >
-                      <Download className="w-4 h-4" />
-                    </a>
-                  </div>
-                )}
+                  )}
 
-                <a
-                  href="https://zcal.co/rreifel/30min"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white text-xs font-bold rounded-xl shadow-md shadow-emerald-950/40 border border-emerald-500/30 transition-all transform hover:-translate-y-0.5 cursor-pointer flex items-center gap-2 group"
-                >
-                  <Calendar className="w-4 h-4 text-emerald-300 group-hover:scale-110 transition-transform" />
-                  <span>Schedule a Call</span>
-                  <span className="font-mono text-[10px] text-emerald-300">↗</span>
-                </a>
+                  {(sec.id === 'marketing-services' || sec.id === 'marketing-analysis') && (
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={onNavigateMarketingAnalysis}
+                        className="px-5 py-2.5 bg-neutral-900 hover:bg-neutral-850 text-emerald-400 hover:text-emerald-300 text-xs font-bold rounded-xl border border-emerald-800/80 hover:border-emerald-600 shadow-md transition-all flex items-center gap-2 cursor-pointer group"
+                      >
+                        <FileText className="w-4 h-4 text-emerald-400 group-hover:scale-105 transition-transform" />
+                        <span>View Brochure</span>
+                        <span className="font-mono text-[10px] text-emerald-400">→</span>
+                      </button>
+                      <a
+                        href="/assets/aistudio/Vizhin_GTM_Assessment_290913e5.pdf"
+                        download="Vizhin_GTM_Assessment.pdf"
+                        className="p-2.5 bg-neutral-900 hover:bg-neutral-850 text-neutral-400 hover:text-emerald-300 rounded-xl border border-neutral-800 hover:border-emerald-700/60 transition-all cursor-pointer"
+                        title="Download PDF Brochure"
+                      >
+                        <Download className="w-4 h-4" />
+                      </a>
+                    </div>
+                  )}
+
+                  <a
+                    href="https://zcal.co/rreifel/30min"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white text-xs font-bold rounded-xl shadow-md shadow-emerald-950/40 border border-emerald-500/30 transition-all transform hover:-translate-y-0.5 cursor-pointer flex items-center gap-2 group"
+                  >
+                    <Calendar className="w-4 h-4 text-emerald-300 group-hover:scale-110 transition-transform" />
+                    <span>Schedule a Call</span>
+                    <span className="font-mono text-[10px] text-emerald-300">↗</span>
+                  </a>
+                </div>
               </div>
             </div>
           );

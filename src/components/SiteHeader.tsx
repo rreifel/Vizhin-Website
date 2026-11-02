@@ -21,6 +21,9 @@ interface SiteHeaderProps {
   onNavigateJointDeliveryPartners?: () => void;
   onNavigateAbout?: () => void;
   onNavigateStrategicGtmAnalysis?: () => void;
+  onNavigateGtmTech?: () => void;
+  onNavigateAuditCompliance?: () => void;
+  onNavigateMarketingServices?: () => void;
   onEnterPortal: () => void;
   onEnterOrg?: () => void;
   onRequestAccount?: () => void;
@@ -39,6 +42,9 @@ export default function SiteHeader({
   onNavigateJointDeliveryPartners,
   onNavigateAbout,
   onNavigateStrategicGtmAnalysis,
+  onNavigateGtmTech,
+  onNavigateAuditCompliance,
+  onNavigateMarketingServices,
   onEnterPortal,
   onEnterOrg,
   onRequestAccount
@@ -201,10 +207,63 @@ export default function SiteHeader({
               </p>
               <p className="text-[10px] text-neutral-500 leading-normal mt-0.5">Deep-dive audit assessing channel readiness, structural enablement gaps, and partner pipeline health.</p>
             </button>
-            <div className="block p-2 rounded hover:bg-neutral-900 transition-colors cursor-pointer group">
-              <p className="text-xs font-semibold text-neutral-200 group-hover:text-white">GTM Consulting</p>
-              <p className="text-[10px] text-neutral-500 leading-normal mt-0.5">Hands-on strategy and execution framework to scale reseller partners, define clear margins, and boost metrics.</p>
-            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setActiveDropdown(null);
+                setMobileMenuOpen(false);
+                if (onNavigateGtmTech) {
+                  onNavigateGtmTech();
+                } else {
+                  window.location.assign('/gtm-tech');
+                }
+              }}
+              className="w-full text-left block p-2 rounded hover:bg-neutral-900 transition-colors cursor-pointer group"
+            >
+              <p className="text-xs font-semibold text-neutral-200 group-hover:text-emerald-400 transition-colors flex items-center justify-between">
+                <span>GTM Technology Stack Optimization</span>
+                <span className="text-[10px] text-emerald-400 font-mono">Explore →</span>
+              </p>
+              <p className="text-[10px] text-neutral-500 leading-normal mt-0.5">Audit and optimize CRM, email, revenue operations, and conversation intelligence tools.</p>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setActiveDropdown(null);
+                setMobileMenuOpen(false);
+                if (onNavigateAuditCompliance) {
+                  onNavigateAuditCompliance();
+                } else {
+                  window.location.assign('/audit-compliance');
+                }
+              }}
+              className="w-full text-left block p-2 rounded hover:bg-neutral-900 transition-colors cursor-pointer group"
+            >
+              <p className="text-xs font-semibold text-neutral-200 group-hover:text-emerald-400 transition-colors flex items-center justify-between">
+                <span>Sales Governance & Audit Readiness</span>
+                <span className="text-[10px] text-emerald-400 font-mono">Explore →</span>
+              </p>
+              <p className="text-[10px] text-neutral-500 leading-normal mt-0.5">Prepare sales teams for review by senior managers and boards; verify partner accountability and access.</p>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setActiveDropdown(null);
+                setMobileMenuOpen(false);
+                if (onNavigateMarketingServices) {
+                  onNavigateMarketingServices();
+                } else {
+                  window.location.assign('/marketing-services');
+                }
+              }}
+              className="w-full text-left block p-2 rounded hover:bg-neutral-900 transition-colors cursor-pointer group"
+            >
+              <p className="text-xs font-semibold text-neutral-200 group-hover:text-emerald-400 transition-colors flex items-center justify-between">
+                <span>Sales-Marketing Integration Services</span>
+                <span className="text-[10px] text-emerald-400 font-mono">Explore →</span>
+              </p>
+              <p className="text-[10px] text-neutral-500 leading-normal mt-0.5">Bridge marketing and sales so every asset feeds your pipeline; align messaging, testimonials, and campaigns.</p>
+            </button>
             <button
               onClick={() => {
                 setActiveDropdown(null);

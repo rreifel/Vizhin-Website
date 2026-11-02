@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { 
   Download, Printer, ArrowLeft, ExternalLink, Mail, Phone, 
-  FileText, CheckCircle2, ChevronRight, Eye, Sparkles, Share2
+  FileText, CheckCircle2, ChevronRight, Eye, Sparkles, Share2, BarChart3, Calendar
 } from 'lucide-react';
 import SiteHeader from './SiteHeader';
 
@@ -36,6 +36,23 @@ export default function MarketingAnalysisPage({
   onNavigateMeddpicc
 }: MarketingAnalysisPageProps) {
   const [activeView, setActiveView] = useState<'both' | 'page1' | 'page2'>('both');
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (typeof document !== 'undefined') {
+      document.title = 'Marketing ROI & Revenue Analytics Consulting | Vizhin';
+      let meta = document.querySelector('meta[name="description"]');
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.setAttribute('name', 'description');
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute(
+        'content',
+        'Stop guessing which marketing drives revenue. Vizhin maps funnel attribution and ROI from first click to closed-won deal, so you can scale what works.'
+      );
+    }
+  }, []);
 
   const handlePrint = () => {
     window.print();
@@ -180,8 +197,52 @@ export default function MarketingAnalysisPage({
       </div>
 
       {/* BROCHURE VIEWER STAGE */}
-      <main className="flex-1 py-8 px-3 sm:px-6 flex justify-center items-start overflow-x-hidden">
+      <main className="flex-1 py-8 px-3 sm:px-6 flex flex-col items-center justify-start overflow-x-hidden">
         
+        {/* Executive Service Overview (Screen only) with EXACTLY ONE H1 HEADING */}
+        <div className="w-full max-w-[850px] space-y-8 no-print mb-8">
+          {/* Hero Section with EXACTLY ONE H1 HEADING */}
+          <div className="space-y-4">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shadow-md">
+              <BarChart3 className="w-6 h-6" />
+            </div>
+
+            <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight">
+              Revenue Analytics & Marketing ROI Optimization
+            </h1>
+          </div>
+
+          {/* Primary Diagnosis Box - EXACT REQUIRED BODY TEXT */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="p-6 md:p-8 rounded-2xl bg-neutral-900/60 border border-emerald-850/80 hover:border-emerald-600/70 shadow-xl backdrop-blur-md transition-all space-y-4"
+          >
+            <div className="text-sm md:text-base text-neutral-200 leading-relaxed font-medium">
+              Revenue Analytics & ROI Optimization: Turning marketing data into executive decision-making power. I implement deep funnel tracking and ROI modeling to map exactly how marketing dollars convert into closed-won revenue, maximizing your demand generation efficiency.
+            </div>
+          </motion.div>
+
+          {/* Detailed Analysis Breakdown */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+            className="bg-neutral-900/40 border border-neutral-850/80 rounded-2xl p-6 md:p-8 backdrop-blur-xs space-y-4 text-xs md:text-sm text-neutral-300 leading-relaxed font-normal"
+          >
+            <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">
+              Mapping Funnel Attribution from First Click to Closed-Won Deal
+            </h2>
+            <p>
+              To scale a company predictably, you cannot afford to guess which marketing efforts are actually driving revenue. Many growth-stage companies suffer from &ldquo;vanity metrics&rdquo;—reporting high website traffic or lead volumes that ultimately result in zero closed deals. I look past the surface-level data to run deep conversion funnel diagnostics and attribution modeling. By tracking a prospect&apos;s journey from the first click to the signed contract, we uncover exactly which campaigns are yielding high-value sales opportunities and which ones are simply draining your budget.
+            </p>
+            <p>
+              For you as a founder, this means complete financial clarity and data-backed confidence. Instead of wondering if your marketing budget is working, you will have clear ROI models that prove exactly how much revenue is generated for every dollar spent. This level of analytics strips the emotion and guesswork out of your growth strategy, giving you and your board the precise insights needed to confidently scale up your winning channels, cut the waste, and optimize your entire customer acquisition cost.
+            </p>
+          </motion.div>
+        </div>
+
         {/* Printable & Interactive Brochure Container */}
         <div id="printable_brochure_container" className="w-full max-w-[850px] space-y-10">
 
@@ -240,10 +301,10 @@ export default function MarketingAnalysisPage({
 
                 {/* Hero Title */}
                 <div>
-                  <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-neutral-950 tracking-tight leading-[1.05]">
+                  <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-neutral-950 tracking-tight leading-[1.05]">
                     Multiply your<br />
                     GTM results.
-                  </h1>
+                  </h2>
                 </div>
 
                 {/* Two-Column Intro & Callout Section */}

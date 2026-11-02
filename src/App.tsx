@@ -21,6 +21,12 @@ import MarketingAnalysisPage from './components/MarketingAnalysisPage';
 import JointDeliveryPartnersPage from './components/JointDeliveryPartnersPage';
 import AboutPage from './components/AboutPage';
 import StrategicGtmAnalysisPage from './components/StrategicGtmAnalysisPage';
+import GtmTechPage from './components/GtmTechPage';
+import AuditCompliancePage from './components/AuditCompliancePage';
+import MarketingServicesPage from './components/MarketingServicesPage';
+import SalesTeamAccountabilityPage from './components/SalesTeamAccountabilityPage';
+import SalesHiringStrategyPage from './components/SalesHiringStrategyPage';
+import TechnologyProjectManagementPage from './components/TechnologyProjectManagementPage';
 import VizhinOrgPage from "./components/VizhinOrgPage";
 import VizhinOrgLoginScreen from './components/VizhinOrgLoginScreen';
 import VizhinLogo from './components/VizhinLogo';
@@ -28,7 +34,7 @@ import VizhinCRMLogo from './components/VizhinCRMLogo';
 import { USE_STANDALONE_VIZHIN_ORG, redirectToVizhinOrg, getVizhinOrgUrl } from './config/orgRouting';
 
 export default function App() {
-  type AppScreen = "landing" | "login" | "org" | "orgdemo" | "request" | "meddpicc" | "marketing-analysis" | "partners" | "about" | "strategic-gtm-analysis" | "portal";
+  type AppScreen = "landing" | "login" | "org" | "orgdemo" | "request" | "meddpicc" | "marketing-analysis" | "partners" | "about" | "strategic-gtm-analysis" | "gtm-tech" | "audit-compliance" | "marketing-services" | "sales-team-accountability" | "sales-hiring-strategy" | "technology-project-management" | "portal";
 
   // Navigation state for unauthenticated users (landing, login, org-login, sandbox request screen, meddpicc guide, or marketing analysis)
   const getInitialScreen = (): AppScreen => {
@@ -47,8 +53,14 @@ export default function App() {
         return "org";
       }
       if (p === "/meddpicc") return "meddpicc";
-      if (p === "/marketing-analysis") return "marketing-analysis";
-      if (p === "/strategic-gtm-analysis" || p === "/strategic-go-to-market-analysis" || p.startsWith("/strategic-gtm-analysis")) return "strategic-gtm-analysis";
+      if (p === "/marketing-analysis" || p === "/revenue-analytics" || p.startsWith("/marketing-analysis")) return "marketing-analysis";
+      if (p === "/gtm" || p === "/gtm/" || p === "/strategic-gtm-analysis" || p === "/strategic-go-to-market-analysis" || p.startsWith("/strategic-gtm-analysis")) return "strategic-gtm-analysis";
+      if (p === "/gtm-tech" || p === "/gtm-technology-stack-optimization" || p.startsWith("/gtm-tech")) return "gtm-tech";
+      if (p === "/audit-compliance" || p === "/sales-governance" || p === "/audit-readiness" || p.startsWith("/audit-compliance")) return "audit-compliance";
+      if (p === "/marketing-services" || p === "/sales-marketing-integration" || p === "/sales-marketing-alignment" || p.startsWith("/marketing-services")) return "marketing-services";
+      if (p === "/sales-team-accountability" || p === "/sales-team-kpis" || p === "/sales-accountability" || p.startsWith("/sales-team-accountability") || p.startsWith("/sales-team-kpis")) return "sales-team-accountability";
+      if (p === "/sales-hiring-strategy" || p === "/sales-hiring" || p.startsWith("/sales-hiring-strategy") || p.startsWith("/sales-hiring")) return "sales-hiring-strategy";
+      if (p === "/technology-project-management" || p === "/project-management" || p === "/software-selection" || p.startsWith("/technology-project-management") || p.startsWith("/project-management")) return "technology-project-management";
       if (p === "/joint-delivery-partners" || p === "/partners/joint_delivery" || p === "/partners" || p.startsWith("/partners/")) return "partners";
       if (p === "/company/about" || p === "/about" || p.startsWith("/company/about")) return "about";
       if (p === "/login") return "login";
@@ -68,7 +80,13 @@ export default function App() {
       else if (screen === "orgdemo") p = "/ORGdemo";
       else if (screen === "meddpicc") p = "/meddpicc";
       else if (screen === "marketing-analysis") p = "/marketing-analysis";
-      else if (screen === "strategic-gtm-analysis") p = "/strategic-gtm-analysis";
+      else if (screen === "strategic-gtm-analysis") p = "/gtm";
+      else if (screen === "gtm-tech") p = "/gtm-tech";
+      else if (screen === "audit-compliance") p = "/audit-compliance";
+      else if (screen === "marketing-services") p = "/marketing-services";
+      else if (screen === "sales-team-accountability") p = "/sales-team-accountability";
+      else if (screen === "sales-hiring-strategy") p = "/sales-hiring-strategy";
+      else if (screen === "technology-project-management") p = "/technology-project-management";
       else if (screen === "partners") p = "/Partners/Joint_Delivery";
       else if (screen === "about") p = "/Company/About";
       else if (screen === "login") p = "/login";
@@ -95,11 +113,53 @@ export default function App() {
         document.head.appendChild(meta);
       }
 
-      if (unauthScreen === 'strategic-gtm-analysis') {
+      if (unauthScreen === 'audit-compliance') {
+        document.title = 'Sales Governance & Audit Readiness Consulting | Vizhin';
+        meta.setAttribute(
+          'content',
+          'Vizhin prepares sales teams for review by senior managers and boards, verifying partner accountability, access, and audit trails for due diligence.'
+        );
+      } else if (unauthScreen === 'gtm-tech') {
+        document.title = 'GTM Technology Stack Optimization | Vizhin Consulting';
+        meta.setAttribute(
+          'content',
+          'Vizhin audits and optimizes CRM, email, revenue operations, and conversation intelligence tools so your GTM stack drives pipeline instead of slowing it down.'
+        );
+      } else if (unauthScreen === 'strategic-gtm-analysis') {
         document.title = 'Go-to-Market Strategy Analysis | Vizhin Consulting';
         meta.setAttribute(
           'content',
           'Uncover hidden friction in your revenue engine. Vizhin analyzes target verticals, pricing, and buyer personas to realign your sales strategy for growth.'
+        );
+      } else if (unauthScreen === 'marketing-services') {
+        document.title = 'Sales & Marketing Alignment Services | Vizhin';
+        meta.setAttribute(
+          'content',
+          'Bridge marketing and sales so every asset feeds your pipeline. Vizhin aligns messaging, testimonials, and campaigns to accelerate deals and revenue.'
+        );
+      } else if (unauthScreen === 'marketing-analysis') {
+        document.title = 'Marketing ROI & Revenue Analytics Consulting | Vizhin';
+        meta.setAttribute(
+          'content',
+          'Stop guessing which marketing drives revenue. Vizhin maps funnel attribution and ROI from first click to closed-won deal, so you can scale what works.'
+        );
+      } else if (unauthScreen === 'sales-team-accountability') {
+        document.title = 'Sales Team KPIs & Accountability Framework | Vizhin';
+        meta.setAttribute(
+          'content',
+          'Shift from activity-driven to outcome-focused sales. Vizhin builds KPIs, pipeline reviews, and accountability structures that help reps consistently hit targets.'
+        );
+      } else if (unauthScreen === 'sales-hiring-strategy') {
+        document.title = 'Sales Hiring Strategy & Recruiting Consulting | Vizhin';
+        meta.setAttribute(
+          'content',
+          'End bad sales hires and missed quotas. Vizhin builds a metrics-driven vetting, scorecard, and 30-60-90 onboarding system to hire reps who consistently produce.'
+        );
+      } else if (unauthScreen === 'technology-project-management') {
+        document.title = 'Technology Project Management & Software Selection | Vizhin';
+        meta.setAttribute(
+          'content',
+          'De-risk software selection, migration, and implementation. Vizhin provides platform-agnostic oversight so your technology investments deliver value on time.'
         );
       } else {
         document.title = 'Go-to-Market Consulting & Fractional VP of Sales | Vizhin';
@@ -342,6 +402,9 @@ export default function App() {
         onNavigateJointDeliveryPartners={() => navigateTo('partners')}
         onNavigateAbout={() => navigateTo('about')}
         onNavigateStrategicGtmAnalysis={() => navigateTo('strategic-gtm-analysis')}
+        onNavigateGtmTech={() => navigateTo('gtm-tech')}
+        onNavigateAuditCompliance={() => navigateTo('audit-compliance')}
+        onNavigateMarketingServices={() => navigateTo('marketing-services')}
       />
     );
   }
@@ -360,6 +423,81 @@ export default function App() {
         onNavigateJointDeliveryPartners={() => navigateTo('partners')}
         onNavigateAbout={() => navigateTo('about')}
         onNavigateStrategicGtmAnalysis={() => navigateTo('strategic-gtm-analysis')}
+        onNavigateGtmTech={() => navigateTo('gtm-tech')}
+        onNavigateAuditCompliance={() => navigateTo('audit-compliance')}
+        onNavigateMarketingServices={() => navigateTo('marketing-services')}
+        onEnterPortal={() => navigateTo(currentUser ? 'portal' : 'login')}
+        onEnterOrg={handleEnterOrg}
+        onRequestAccount={() => navigateTo('request')}
+      />
+    );
+  }
+
+  if (unauthScreen === 'gtm-tech') {
+    return (
+      <GtmTechPage 
+        currentUser={currentUser}
+        onSignOut={handleLogout}
+        onSignOutOrg={handleSignOutOrg}
+        onSignOutCRM={handleSignOutCRM}
+        onSwitchUser={handleLoginSuccess}
+        onNavigateHome={() => navigateTo('landing')}
+        onNavigateMeddpicc={() => navigateTo('meddpicc')}
+        onNavigateMarketingAnalysis={() => navigateTo('marketing-analysis')}
+        onNavigateJointDeliveryPartners={() => navigateTo('partners')}
+        onNavigateAbout={() => navigateTo('about')}
+        onNavigateStrategicGtmAnalysis={() => navigateTo('strategic-gtm-analysis')}
+        onNavigateGtmTech={() => navigateTo('gtm-tech')}
+        onNavigateAuditCompliance={() => navigateTo('audit-compliance')}
+        onNavigateMarketingServices={() => navigateTo('marketing-services')}
+        onEnterPortal={() => navigateTo(currentUser ? 'portal' : 'login')}
+        onEnterOrg={handleEnterOrg}
+        onRequestAccount={() => navigateTo('request')}
+      />
+    );
+  }
+
+  if (unauthScreen === 'audit-compliance') {
+    return (
+      <AuditCompliancePage 
+        currentUser={currentUser}
+        onSignOut={handleLogout}
+        onSignOutOrg={handleSignOutOrg}
+        onSignOutCRM={handleSignOutCRM}
+        onSwitchUser={handleLoginSuccess}
+        onNavigateHome={() => navigateTo('landing')}
+        onNavigateMeddpicc={() => navigateTo('meddpicc')}
+        onNavigateMarketingAnalysis={() => navigateTo('marketing-analysis')}
+        onNavigateJointDeliveryPartners={() => navigateTo('partners')}
+        onNavigateAbout={() => navigateTo('about')}
+        onNavigateStrategicGtmAnalysis={() => navigateTo('strategic-gtm-analysis')}
+        onNavigateGtmTech={() => navigateTo('gtm-tech')}
+        onNavigateAuditCompliance={() => navigateTo('audit-compliance')}
+        onNavigateMarketingServices={() => navigateTo('marketing-services')}
+        onEnterPortal={() => navigateTo(currentUser ? 'portal' : 'login')}
+        onEnterOrg={handleEnterOrg}
+        onRequestAccount={() => navigateTo('request')}
+      />
+    );
+  }
+
+  if (unauthScreen === 'marketing-services') {
+    return (
+      <MarketingServicesPage 
+        currentUser={currentUser}
+        onSignOut={handleLogout}
+        onSignOutOrg={handleSignOutOrg}
+        onSignOutCRM={handleSignOutCRM}
+        onSwitchUser={handleLoginSuccess}
+        onNavigateHome={() => navigateTo('landing')}
+        onNavigateMeddpicc={() => navigateTo('meddpicc')}
+        onNavigateMarketingAnalysis={() => navigateTo('marketing-analysis')}
+        onNavigateJointDeliveryPartners={() => navigateTo('partners')}
+        onNavigateAbout={() => navigateTo('about')}
+        onNavigateStrategicGtmAnalysis={() => navigateTo('strategic-gtm-analysis')}
+        onNavigateGtmTech={() => navigateTo('gtm-tech')}
+        onNavigateAuditCompliance={() => navigateTo('audit-compliance')}
+        onNavigateMarketingServices={() => navigateTo('marketing-services')}
         onEnterPortal={() => navigateTo(currentUser ? 'portal' : 'login')}
         onEnterOrg={handleEnterOrg}
         onRequestAccount={() => navigateTo('request')}
@@ -397,6 +535,87 @@ export default function App() {
         onEnterOrg={handleEnterOrg}
         onRequestAccount={() => navigateTo('request')}
         onNavigateMeddpicc={() => navigateTo('meddpicc')}
+      />
+    );
+  }
+
+  if (unauthScreen === 'sales-team-accountability') {
+    return (
+      <SalesTeamAccountabilityPage 
+        currentUser={currentUser}
+        onSignOut={handleLogout}
+        onSignOutOrg={handleSignOutOrg}
+        onSignOutCRM={handleSignOutCRM}
+        onSwitchUser={handleLoginSuccess}
+        onNavigateHome={() => navigateTo('landing')}
+        onNavigateMeddpicc={() => navigateTo('meddpicc')}
+        onNavigateMarketingAnalysis={() => navigateTo('marketing-analysis')}
+        onNavigateJointDeliveryPartners={() => navigateTo('partners')}
+        onNavigateAbout={() => navigateTo('about')}
+        onNavigateStrategicGtmAnalysis={() => navigateTo('strategic-gtm-analysis')}
+        onNavigateGtmTech={() => navigateTo('gtm-tech')}
+        onNavigateAuditCompliance={() => navigateTo('audit-compliance')}
+        onNavigateMarketingServices={() => navigateTo('marketing-services')}
+        onNavigateSalesTeamAccountability={() => navigateTo('sales-team-accountability')}
+        onNavigateSalesHiringStrategy={() => navigateTo('sales-hiring-strategy')}
+        onNavigateTechnologyProjectManagement={() => navigateTo('technology-project-management')}
+        onEnterPortal={() => navigateTo(currentUser ? 'portal' : 'login')}
+        onEnterOrg={handleEnterOrg}
+        onRequestAccount={() => navigateTo('request')}
+      />
+    );
+  }
+
+  if (unauthScreen === 'sales-hiring-strategy') {
+    return (
+      <SalesHiringStrategyPage 
+        currentUser={currentUser}
+        onSignOut={handleLogout}
+        onSignOutOrg={handleSignOutOrg}
+        onSignOutCRM={handleSignOutCRM}
+        onSwitchUser={handleLoginSuccess}
+        onNavigateHome={() => navigateTo('landing')}
+        onNavigateMeddpicc={() => navigateTo('meddpicc')}
+        onNavigateMarketingAnalysis={() => navigateTo('marketing-analysis')}
+        onNavigateJointDeliveryPartners={() => navigateTo('partners')}
+        onNavigateAbout={() => navigateTo('about')}
+        onNavigateStrategicGtmAnalysis={() => navigateTo('strategic-gtm-analysis')}
+        onNavigateGtmTech={() => navigateTo('gtm-tech')}
+        onNavigateAuditCompliance={() => navigateTo('audit-compliance')}
+        onNavigateMarketingServices={() => navigateTo('marketing-services')}
+        onNavigateSalesTeamAccountability={() => navigateTo('sales-team-accountability')}
+        onNavigateSalesHiringStrategy={() => navigateTo('sales-hiring-strategy')}
+        onNavigateTechnologyProjectManagement={() => navigateTo('technology-project-management')}
+        onEnterPortal={() => navigateTo(currentUser ? 'portal' : 'login')}
+        onEnterOrg={handleEnterOrg}
+        onRequestAccount={() => navigateTo('request')}
+      />
+    );
+  }
+
+  if (unauthScreen === 'technology-project-management') {
+    return (
+      <TechnologyProjectManagementPage 
+        currentUser={currentUser}
+        onSignOut={handleLogout}
+        onSignOutOrg={handleSignOutOrg}
+        onSignOutCRM={handleSignOutCRM}
+        onSwitchUser={handleLoginSuccess}
+        onNavigateHome={() => navigateTo('landing')}
+        onNavigateMeddpicc={() => navigateTo('meddpicc')}
+        onNavigateMarketingAnalysis={() => navigateTo('marketing-analysis')}
+        onNavigateJointDeliveryPartners={() => navigateTo('partners')}
+        onNavigateAbout={() => navigateTo('about')}
+        onNavigateStrategicGtmAnalysis={() => navigateTo('strategic-gtm-analysis')}
+        onNavigateGtmTech={() => navigateTo('gtm-tech')}
+        onNavigateAuditCompliance={() => navigateTo('audit-compliance')}
+        onNavigateMarketingServices={() => navigateTo('marketing-services')}
+        onNavigateSalesTeamAccountability={() => navigateTo('sales-team-accountability')}
+        onNavigateSalesHiringStrategy={() => navigateTo('sales-hiring-strategy')}
+        onNavigateTechnologyProjectManagement={() => navigateTo('technology-project-management')}
+        onEnterPortal={() => navigateTo(currentUser ? 'portal' : 'login')}
+        onEnterOrg={handleEnterOrg}
+        onRequestAccount={() => navigateTo('request')}
       />
     );
   }

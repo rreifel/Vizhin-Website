@@ -35,7 +35,7 @@ interface DetailedSectionItem {
 const DETAILED_SECTIONS: DetailedSectionItem[] = [
   {
     id: 'strategic-gtm-analysis',
-    title: 'Strategic GTM Analysis',
+    title: 'Strategic Go-to-Market Analysis',
     icon: Layers,
     summary: 'Market Position Diagnosis: Uncovering the hidden friction in your revenue engine. I conduct a comprehensive evaluation of your target verticals, pricing models, and buyer personas to realign your sales strategy with maximum market opportunity.',
     paragraphs: [
@@ -205,6 +205,7 @@ interface LandingPageProps {
   onNavigateMarketingAnalysis: () => void;
   onNavigateJointDeliveryPartners?: () => void;
   onNavigateAbout?: () => void;
+  onNavigateStrategicGtmAnalysis?: () => void;
 }
 
 export default function LandingPage({ 
@@ -219,7 +220,8 @@ export default function LandingPage({
   onNavigateMeddpicc,
   onNavigateMarketingAnalysis,
   onNavigateJointDeliveryPartners,
-  onNavigateAbout
+  onNavigateAbout,
+  onNavigateStrategicGtmAnalysis
 }: LandingPageProps) {
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
 
@@ -254,6 +256,7 @@ export default function LandingPage({
         onNavigateMarketingAnalysis={onNavigateMarketingAnalysis}
         onNavigateJointDeliveryPartners={onNavigateJointDeliveryPartners}
         onNavigateAbout={onNavigateAbout}
+        onNavigateStrategicGtmAnalysis={onNavigateStrategicGtmAnalysis}
         onEnterPortal={onEnterPortal}
         onEnterOrg={onEnterOrg}
         onRequestAccount={onRequestAccount}
@@ -270,7 +273,7 @@ export default function LandingPage({
             className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-950/80 text-emerald-300 border border-emerald-800/60 backdrop-blur"
           >
             <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Go-to-Market Consulting & Fractional VP of Sales | Vizhin, Denver</span>
+            <span>Go-to-Market Consulting & Fractional VP of Sales | Vizhin</span>
           </motion.div>
 
           <motion.h1 

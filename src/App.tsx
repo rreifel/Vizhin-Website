@@ -20,6 +20,7 @@ import MeddpiccPage from './components/MeddpiccPage';
 import MarketingAnalysisPage from './components/MarketingAnalysisPage';
 import JointDeliveryPartnersPage from './components/JointDeliveryPartnersPage';
 import AboutPage from './components/AboutPage';
+import StrategicGtmAnalysisPage from './components/StrategicGtmAnalysisPage';
 import VizhinOrgPage from "./components/VizhinOrgPage";
 import VizhinOrgLoginScreen from './components/VizhinOrgLoginScreen';
 import VizhinLogo from './components/VizhinLogo';
@@ -27,7 +28,7 @@ import VizhinCRMLogo from './components/VizhinCRMLogo';
 import { USE_STANDALONE_VIZHIN_ORG, redirectToVizhinOrg, getVizhinOrgUrl } from './config/orgRouting';
 
 export default function App() {
-  type AppScreen = "landing" | "login" | "org" | "orgdemo" | "request" | "meddpicc" | "marketing-analysis" | "partners" | "about" | "portal";
+  type AppScreen = "landing" | "login" | "org" | "orgdemo" | "request" | "meddpicc" | "marketing-analysis" | "partners" | "about" | "strategic-gtm-analysis" | "portal";
 
   // Navigation state for unauthenticated users (landing, login, org-login, sandbox request screen, meddpicc guide, or marketing analysis)
   const getInitialScreen = (): AppScreen => {
@@ -47,6 +48,7 @@ export default function App() {
       }
       if (p === "/meddpicc") return "meddpicc";
       if (p === "/marketing-analysis") return "marketing-analysis";
+      if (p === "/strategic-gtm-analysis" || p === "/strategic-go-to-market-analysis" || p.startsWith("/strategic-gtm-analysis")) return "strategic-gtm-analysis";
       if (p === "/joint-delivery-partners" || p === "/partners/joint_delivery" || p === "/partners" || p.startsWith("/partners/")) return "partners";
       if (p === "/company/about" || p === "/about" || p.startsWith("/company/about")) return "about";
       if (p === "/login") return "login";
@@ -66,6 +68,7 @@ export default function App() {
       else if (screen === "orgdemo") p = "/ORGdemo";
       else if (screen === "meddpicc") p = "/meddpicc";
       else if (screen === "marketing-analysis") p = "/marketing-analysis";
+      else if (screen === "strategic-gtm-analysis") p = "/strategic-gtm-analysis";
       else if (screen === "partners") p = "/Partners/Joint_Delivery";
       else if (screen === "about") p = "/Company/About";
       else if (screen === "login") p = "/login";
@@ -85,19 +88,28 @@ export default function App() {
 
   useEffect(() => {
     if (typeof document !== 'undefined') {
-      document.title = 'Go-to-Market Consulting & Fractional VP of Sales | Vizhin';
       let meta = document.querySelector('meta[name="description"]');
       if (!meta) {
         meta = document.createElement('meta');
         meta.setAttribute('name', 'description');
         document.head.appendChild(meta);
       }
-      meta.setAttribute(
-        'content',
-        'Vizhin helps growth-stage companies align sales and marketing, fix CRM and pipeline friction, and build accountable teams that predictably grow revenue.'
-      );
+
+      if (unauthScreen === 'strategic-gtm-analysis') {
+        document.title = 'Go-to-Market Strategy Analysis | Vizhin Consulting';
+        meta.setAttribute(
+          'content',
+          'Uncover hidden friction in your revenue engine. Vizhin analyzes target verticals, pricing, and buyer personas to realign your sales strategy for growth.'
+        );
+      } else {
+        document.title = 'Go-to-Market Consulting & Fractional VP of Sales | Vizhin';
+        meta.setAttribute(
+          'content',
+          'Vizhin helps growth-stage companies align sales and marketing, fix CRM and pipeline friction, and build accountable teams that predictably grow revenue.'
+        );
+      }
     }
-  }, []);
+  }, [unauthScreen]);
 
   // Global Database state persisted to local storage
   const [partners, setPartners] = useState<Partner[]>(() => {
@@ -329,6 +341,28 @@ export default function App() {
         onNavigateMarketingAnalysis={() => navigateTo('marketing-analysis')}
         onNavigateJointDeliveryPartners={() => navigateTo('partners')}
         onNavigateAbout={() => navigateTo('about')}
+        onNavigateStrategicGtmAnalysis={() => navigateTo('strategic-gtm-analysis')}
+      />
+    );
+  }
+
+  if (unauthScreen === 'strategic-gtm-analysis') {
+    return (
+      <StrategicGtmAnalysisPage 
+        currentUser={currentUser}
+        onSignOut={handleLogout}
+        onSignOutOrg={handleSignOutOrg}
+        onSignOutCRM={handleSignOutCRM}
+        onSwitchUser={handleLoginSuccess}
+        onNavigateHome={() => navigateTo('landing')}
+        onNavigateMeddpicc={() => navigateTo('meddpicc')}
+        onNavigateMarketingAnalysis={() => navigateTo('marketing-analysis')}
+        onNavigateJointDeliveryPartners={() => navigateTo('partners')}
+        onNavigateAbout={() => navigateTo('about')}
+        onNavigateStrategicGtmAnalysis={() => navigateTo('strategic-gtm-analysis')}
+        onEnterPortal={() => navigateTo(currentUser ? 'portal' : 'login')}
+        onEnterOrg={handleEnterOrg}
+        onRequestAccount={() => navigateTo('request')}
       />
     );
   }

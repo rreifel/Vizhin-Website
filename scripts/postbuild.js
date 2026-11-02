@@ -1,7 +1,18 @@
 import fs from 'fs';
 import path from 'path';
 
-const routes = ['meddpicc', 'marketing-analysis', 'Partners/Joint_Delivery', 'joint-delivery-partners', 'Company/About', 'login', 'request', 'portal'];
+const routes = [
+  'meddpicc', 
+  'marketing-analysis', 
+  'strategic-gtm-analysis',
+  'strategic-go-to-market-analysis',
+  'Partners/Joint_Delivery', 
+  'joint-delivery-partners', 
+  'Company/About', 
+  'login', 
+  'request', 
+  'portal'
+];
 const distDir = path.resolve('dist');
 const indexPath = path.join(distDir, 'index.html');
 
@@ -10,7 +21,26 @@ if (fs.existsSync(indexPath)) {
   routes.forEach(route => {
     const routeDir = path.join(distDir, route);
     fs.mkdirSync(routeDir, { recursive: true });
-    fs.writeFileSync(path.join(routeDir, 'index.html'), indexHtml, 'utf8');
+
+    let routeHtml = indexHtml;
+    if (route === 'strategic-gtm-analysis' || route === 'strategic-go-to-market-analysis') {
+      routeHtml = routeHtml
+        .replace(/<title>.*?<\/title>/, '<title>Go-to-Market Strategy Analysis | Vizhin Consulting</title>')
+        .replace(
+          /<meta name="description" content=".*?"\s*\/?>/,
+          '<meta name="description" content="Uncover hidden friction in your revenue engine. Vizhin analyzes target verticals, pricing, and buyer personas to realign your sales strategy for growth.">'
+        )
+        .replace(
+          /<meta property="og:title" content=".*?"\s*\/?>/,
+          '<meta property="og:title" content="Go-to-Market Strategy Analysis | Vizhin Consulting">'
+        )
+        .replace(
+          /<meta property="og:description" content=".*?"\s*\/?>/,
+          '<meta property="og:description" content="Uncover hidden friction in your revenue engine. Vizhin analyzes target verticals, pricing, and buyer personas to realign your sales strategy for growth.">'
+        );
+    }
+
+    fs.writeFileSync(path.join(routeDir, 'index.html'), routeHtml, 'utf8');
     console.log(`✓ Created static SPA fallback: dist/${route}/index.html`);
   });
 

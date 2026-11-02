@@ -5,7 +5,7 @@ import VizhinLogo from './VizhinLogo';
 import { redirectToVizhinOrg, getVizhinOrgUrl, USE_STANDALONE_VIZHIN_ORG } from '../config/orgRouting';
 
 interface SiteHeaderProps {
-  currentPage?: 'landing' | 'meddpicc' | 'marketing-analysis' | 'org' | 'portal' | 'partners' | 'about';
+  currentPage?: 'landing' | 'meddpicc' | 'marketing-analysis' | 'org' | 'portal' | 'partners' | 'about' | 'services';
   currentUser?: {
     email: string;
     name?: string;
@@ -20,6 +20,7 @@ interface SiteHeaderProps {
   onNavigateMarketingAnalysis?: () => void;
   onNavigateJointDeliveryPartners?: () => void;
   onNavigateAbout?: () => void;
+  onNavigateStrategicGtmAnalysis?: () => void;
   onEnterPortal: () => void;
   onEnterOrg?: () => void;
   onRequestAccount?: () => void;
@@ -37,6 +38,7 @@ export default function SiteHeader({
   onNavigateMarketingAnalysis,
   onNavigateJointDeliveryPartners,
   onNavigateAbout,
+  onNavigateStrategicGtmAnalysis,
   onEnterPortal,
   onEnterOrg,
   onRequestAccount
@@ -180,10 +182,25 @@ export default function SiteHeader({
         <div className="p-4 w-80 space-y-4 text-left">
           <p className="text-xs font-bold text-emerald-400 uppercase tracking-widest font-mono">GTM Acceleration</p>
           <div className="space-y-3">
-            <div className="block p-2 rounded hover:bg-neutral-900 transition-colors cursor-pointer group">
-              <p className="text-xs font-semibold text-neutral-200 group-hover:text-white">GTM Situational Analysis</p>
+            <button
+              type="button"
+              onClick={() => {
+                setActiveDropdown(null);
+                setMobileMenuOpen(false);
+                if (onNavigateStrategicGtmAnalysis) {
+                  onNavigateStrategicGtmAnalysis();
+                } else {
+                  window.location.assign('/strategic-gtm-analysis');
+                }
+              }}
+              className="w-full text-left block p-2 rounded hover:bg-neutral-900 transition-colors cursor-pointer group"
+            >
+              <p className="text-xs font-semibold text-neutral-200 group-hover:text-emerald-400 transition-colors flex items-center justify-between">
+                <span>Strategic Go-to-Market Analysis</span>
+                <span className="text-[10px] text-emerald-400 font-mono">Explore →</span>
+              </p>
               <p className="text-[10px] text-neutral-500 leading-normal mt-0.5">Deep-dive audit assessing channel readiness, structural enablement gaps, and partner pipeline health.</p>
-            </div>
+            </button>
             <div className="block p-2 rounded hover:bg-neutral-900 transition-colors cursor-pointer group">
               <p className="text-xs font-semibold text-neutral-200 group-hover:text-white">GTM Consulting</p>
               <p className="text-[10px] text-neutral-500 leading-normal mt-0.5">Hands-on strategy and execution framework to scale reseller partners, define clear margins, and boost metrics.</p>

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { motion } from 'motion/react';
 import { 
   ArrowLeft, Target, Calendar, CheckCircle2, 
-  BarChart3, Users, TrendingUp, ShieldCheck, Mail 
+  ArrowRight, ShieldCheck, UserPlus, Layers 
 } from 'lucide-react';
 import SiteHeader from './SiteHeader';
 
@@ -72,6 +72,15 @@ export default function SalesTeamAccountabilityPage({
     }
   }, []);
 
+  const workingParts = [
+    'Leading indicators that actually predict closed deals',
+    'Structured weekly pipeline reviews',
+    'Performance tracking and direct coaching',
+    'Top performers identified',
+    'Middle-tier reps supported',
+    'Underperformers decisively managed out'
+  ];
+
   return (
     <div className="min-h-screen bg-[#070708] text-neutral-100 flex flex-col relative overflow-hidden font-sans">
       {/* Decorative Background Glows */}
@@ -81,7 +90,7 @@ export default function SalesTeamAccountabilityPage({
       {/* Grid Pattern Backdrop */}
       <div className="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.15] pointer-events-none" />
 
-      {/* Persistent Site Header */}
+      {/* Site Header & Navigation Toolbar */}
       <SiteHeader
         currentPage="services"
         currentUser={currentUser}
@@ -143,100 +152,150 @@ export default function SalesTeamAccountabilityPage({
           </div>
         </motion.div>
 
-        {/* Detailed Analysis Breakdown */}
+        {/* Detailed Sections in Exact Specified Order */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.1 }}
-          className="bg-neutral-900/40 border border-neutral-850/80 rounded-2xl p-6 md:p-10 backdrop-blur-xs space-y-6"
+          className="space-y-6"
         >
-          <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">
-            Building an Objective, Metrics-Driven Sales Culture
-          </h2>
-
-          <div className="space-y-4 text-xs md:text-sm text-neutral-300 leading-relaxed font-normal">
-            <p>
+          {/* Section: The problem */}
+          <div className="bg-neutral-900/40 border border-neutral-850/80 hover:border-neutral-750 transition-all rounded-2xl p-6 md:p-8 backdrop-blur-xs space-y-3">
+            <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight flex items-center gap-2.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
+              <span>The problem</span>
+            </h2>
+            <p className="text-sm md:text-base text-neutral-300 leading-relaxed font-normal">
               For many founders, managing a sales team feels like a constant guessing game. Reps report that they are &ldquo;busy&rdquo; and that deals are &ldquo;just around the corner,&rdquo; but those promises rarely translate into predictable revenue. Without a seasoned sales leader enforcing standard expectations, sales cultures can easily drift into complacency. I eliminate this ambiguity by building an objective, metrics-driven performance framework tailored to your specific business model. We define the precise leading indicators—such as meaningful executive conversations and pipeline velocity—that actually dictate closed deals, stripping the guesswork out of sales management.
             </p>
-            <p>
-              What this means for you as a founder is the freedom to stop micro-managing and start leading. I establish a culture of absolute ownership where sales reps are accountable to their data, not their excuses. Through structured weekly pipeline reviews, performance tracking, and direct coaching, I identify your top performers, support middle-tier reps, and decisively manage out underperformers. You gain total confidence that your sales payroll is actively driving profit, backed by a culture that prioritizes execution over effort.
+          </div>
+
+          {/* Section: What you get */}
+          <div className="bg-neutral-900/40 border border-neutral-850/80 hover:border-neutral-750 transition-all rounded-2xl p-6 md:p-8 backdrop-blur-xs space-y-5">
+            <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight flex items-center gap-2.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
+              <span>What you get</span>
+            </h2>
+
+            <p className="text-sm md:text-base text-neutral-300 leading-relaxed font-normal">
+              What this means for you as a founder is the freedom to stop micro-managing and start leading. I establish a culture of absolute ownership where sales reps are accountable to their data, not their excuses.
+            </p>
+
+            {/* Working parts list */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+              {workingParts.map((item, idx) => (
+                <div 
+                  key={idx} 
+                  className="p-3.5 rounded-xl bg-neutral-950/60 border border-neutral-850/80 flex items-start gap-3 group hover:border-emerald-600/50 transition-all"
+                >
+                  <div className="w-5 h-5 rounded-md bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0 mt-0.5">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                  </div>
+                  <span className="text-xs md:text-sm text-neutral-200 font-medium leading-snug">
+                    {item}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <p className="text-sm md:text-base text-neutral-300 leading-relaxed font-normal pt-2 border-t border-neutral-850/70">
+              You gain total confidence that your sales payroll is actively driving profit, backed by a culture that prioritizes execution over effort.
             </p>
           </div>
 
-          {/* Pillars of Accountability */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-neutral-800/80">
-            <div className="p-4 rounded-xl bg-neutral-950/60 border border-neutral-850 space-y-2">
-              <div className="w-8 h-8 rounded-lg bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400">
-                <BarChart3 className="w-4 h-4" />
-              </div>
-              <h3 className="text-xs font-bold text-white uppercase tracking-wider">Leading Indicator Metrics</h3>
-              <p className="text-[11px] text-neutral-400 leading-relaxed">
-                Prioritize high-impact pipeline velocity, executive engagement, and deal qualification over vanity activity dials.
-              </p>
-            </div>
-
-            <div className="p-4 rounded-xl bg-neutral-950/60 border border-neutral-850 space-y-2">
-              <div className="w-8 h-8 rounded-lg bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400">
-                <Users className="w-4 h-4" />
-              </div>
-              <h3 className="text-xs font-bold text-white uppercase tracking-wider">Rigorous Pipeline Reviews</h3>
-              <p className="text-[11px] text-neutral-400 leading-relaxed">
-                Weekly deal-stage inspectability with standardized MEDDPICC criteria eliminating deal slippage and pipeline bloat.
-              </p>
-            </div>
-
-            <div className="p-4 rounded-xl bg-neutral-950/60 border border-neutral-850 space-y-2">
-              <div className="w-8 h-8 rounded-lg bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400">
-                <TrendingUp className="w-4 h-4" />
-              </div>
-              <h3 className="text-xs font-bold text-white uppercase tracking-wider">Performance Governance</h3>
-              <p className="text-[11px] text-neutral-400 leading-relaxed">
-                Clear expectation matrices and coaching playbooks that enable reps to self-correct and consistently hit quota.
-              </p>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Action Strategy & Revenue Session CTA */}
-        <div className="bg-gradient-to-r from-neutral-900/90 via-emerald-950/40 to-neutral-900/90 border border-emerald-800/60 rounded-2xl p-6 md:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
-          <div className="space-y-2 text-center sm:text-left">
-            <h3 className="text-lg md:text-xl font-bold text-white">
-              Ready to institute sales accountability and predictable targets?
-            </h3>
-            <p className="text-xs md:text-sm text-neutral-400 max-w-xl">
-              Schedule a 25-minute Revenue Strategy Session to evaluate your current KPI structure, pipeline hygiene, and team accountability framework.
-            </p>
-          </div>
-
-          <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
+          {/* Action CTAs */}
+          <div className="pt-6 border-t border-neutral-800/80 flex flex-col sm:flex-row items-center gap-4">
             <a
               href="https://zcal.co/rreifel/30min"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-5 py-3 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white text-xs font-bold rounded-xl shadow-md border border-emerald-500/30 transition-all flex items-center gap-2 cursor-pointer group"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white text-xs font-bold rounded-xl shadow-md border border-emerald-500/30 transition-all cursor-pointer group"
             >
-              <Calendar className="w-4 h-4 text-emerald-300 group-hover:scale-110 transition-transform" />
+              <Calendar className="w-4 h-4 text-emerald-200 group-hover:scale-105 transition-transform" />
               <span>Schedule Strategy Call</span>
-              <span className="font-mono text-[10px] text-emerald-300">↗</span>
+              <span className="font-mono text-emerald-200">↗</span>
             </a>
-            <a
-              href="mailto:rreifel@vizhin.co?subject=Sales%20Team%20Accountability%20Inquiry"
-              className="px-4 py-3 bg-neutral-900 hover:bg-neutral-850 text-neutral-300 hover:text-white text-xs font-semibold rounded-xl border border-neutral-800 transition-all flex items-center gap-2"
+          </div>
+        </motion.div>
+
+        {/* Related Services & Bottom Navigation (Links to Sales Hiring Strategy and Strategic GTM Analysis) */}
+        <div className="pt-8 border-t border-neutral-850/80 space-y-4">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-mono uppercase tracking-wider text-neutral-400">
+              Related Advisory Services
+            </span>
+            <button
+              onClick={onNavigateHome}
+              className="text-xs font-mono text-emerald-400 hover:text-emerald-300 transition-colors inline-flex items-center gap-1 cursor-pointer"
             >
-              <Mail className="w-4 h-4 text-emerald-400" />
-              <span>Email Ric Directly</span>
+              <span>View All Services</span>
+              <span>→</span>
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Link to Sales Hiring Strategy */}
+            <a
+              href="/sales-hiring-strategy"
+              onClick={(e) => {
+                e.preventDefault();
+                if (onNavigateSalesHiringStrategy) {
+                  onNavigateSalesHiringStrategy();
+                } else {
+                  window.location.href = '/sales-hiring-strategy';
+                }
+              }}
+              className="p-5 rounded-xl bg-neutral-900/40 hover:bg-neutral-900/80 border border-neutral-850 hover:border-emerald-600/60 transition-all text-left flex items-start gap-3.5 group cursor-pointer"
+            >
+              <div className="w-9 h-9 rounded-lg bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0">
+                <UserPlus className="w-4 h-4" />
+              </div>
+              <div className="space-y-1">
+                <h3 className="text-sm font-bold text-white group-hover:text-emerald-300 transition-colors flex items-center gap-1.5">
+                  <span>Sales Hiring Strategy</span>
+                  <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all text-emerald-400" />
+                </h3>
+                <p className="text-xs text-neutral-400 leading-relaxed">
+                  End bad sales hires with metrics-driven vetting, scorecards, and 30-60-90 onboarding.
+                </p>
+              </div>
+            </a>
+
+            {/* Link to Strategic GTM Analysis */}
+            <a
+              href="/gtm"
+              onClick={(e) => {
+                e.preventDefault();
+                if (onNavigateStrategicGtmAnalysis) {
+                  onNavigateStrategicGtmAnalysis();
+                } else {
+                  window.location.href = '/gtm';
+                }
+              }}
+              className="p-5 rounded-xl bg-neutral-900/40 hover:bg-neutral-900/80 border border-neutral-850 hover:border-emerald-600/60 transition-all text-left flex items-start gap-3.5 group cursor-pointer"
+            >
+              <div className="w-9 h-9 rounded-lg bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0">
+                <Layers className="w-4 h-4" />
+              </div>
+              <div className="space-y-1">
+                <h3 className="text-sm font-bold text-white group-hover:text-emerald-300 transition-colors flex items-center gap-1.5">
+                  <span>Strategic Go-to-Market Analysis</span>
+                  <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all text-emerald-400" />
+                </h3>
+                <p className="text-xs text-neutral-400 leading-relaxed">
+                  Uncover hidden friction across your revenue engine, target verticals, and buyer personas.
+                </p>
+              </div>
             </a>
           </div>
         </div>
       </main>
 
-      {/* Footer */}
+      {/* Corporate Footer */}
       <footer className="border-t border-neutral-900/80 bg-[#060607] py-8 px-6 text-center text-xs text-neutral-500 font-mono z-10">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-center gap-4">
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-            <span>VIZHIN LLC • SALES PERFORMANCE & ACCOUNTABILITY FRAMEWORKS</span>
-          </div>
+        <div className="max-w-7xl mx-auto flex items-center justify-center gap-2">
+          <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+          <span>VIZHIN LLC • SALES PERFORMANCE & ACCOUNTABILITY FRAMEWORKS</span>
         </div>
       </footer>
     </div>

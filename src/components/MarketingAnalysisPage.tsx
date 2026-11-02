@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { 
-  Download, Printer, ArrowLeft, ExternalLink, Mail, Phone, 
-  FileText, CheckCircle2, ChevronRight, Eye, Sparkles, Share2, BarChart3, Calendar
+  ArrowLeft, ArrowRight, BarChart3, Calendar, CheckCircle2, 
+  Sparkles, Compass, Download, FileText, ChevronDown, ChevronUp, Printer,
+  ExternalLink
 } from 'lucide-react';
 import SiteHeader from './SiteHeader';
 
@@ -16,12 +17,30 @@ interface MarketingAnalysisPageProps {
   onSignOutOrg?: () => void;
   onSignOutCRM?: () => void;
   onSwitchUser?: (user: any) => void;
-  onBack: () => void;
+  onNavigateHome: () => void;
+  onNavigateMeddpicc: () => void;
+  onNavigateMarketingAnalysis?: () => void;
+  onNavigateJointDeliveryPartners?: () => void;
+  onNavigateAbout?: () => void;
+  onNavigateStrategicGtmAnalysis?: () => void;
+  onNavigateGtmTech?: () => void;
+  onNavigateAuditCompliance?: () => void;
+  onNavigateMarketingServices?: () => void;
+  onNavigateSalesTeamAccountability?: () => void;
+  onNavigateSalesHiringStrategy?: () => void;
   onEnterPortal: () => void;
   onEnterOrg?: () => void;
-  onRequestAccount: () => void;
-  onNavigateMeddpicc: () => void;
+  onRequestAccount?: () => void;
+  onBack?: () => void;
 }
+
+const workingParts = [
+  'Clear ROI models that prove revenue generated for every dollar spent',
+  'Winning channels confidently scaled up',
+  'Waste cut, instead of continuing to fund campaigns that drain budget',
+  'Customer acquisition cost optimized across the funnel',
+  'Precise, board-ready insights for growth decisions'
+];
 
 export default function MarketingAnalysisPage({
   currentUser,
@@ -29,13 +48,27 @@ export default function MarketingAnalysisPage({
   onSignOutOrg,
   onSignOutCRM,
   onSwitchUser,
-  onBack,
+  onNavigateHome,
+  onNavigateMeddpicc,
+  onNavigateMarketingAnalysis,
+  onNavigateJointDeliveryPartners,
+  onNavigateAbout,
+  onNavigateStrategicGtmAnalysis,
+  onNavigateGtmTech,
+  onNavigateAuditCompliance,
+  onNavigateMarketingServices,
   onEnterPortal,
   onEnterOrg,
   onRequestAccount,
-  onNavigateMeddpicc
+  onBack
 }: MarketingAnalysisPageProps) {
-  const [activeView, setActiveView] = useState<'both' | 'page1' | 'page2'>('both');
+  const [showBrochure, setShowBrochure] = useState(false);
+
+  const handleBack = () => {
+    if (onNavigateHome) onNavigateHome();
+    else if (onBack) onBack();
+    else window.location.assign('/');
+  };
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -54,735 +87,354 @@ export default function MarketingAnalysisPage({
     }
   }, []);
 
-  const handlePrint = () => {
-    window.print();
-  };
-
-  const handleDownloadStandalone = () => {
-    // Generate clean standalone offline HTML file with embedded styling
-    const pageHtml = document.getElementById('printable_brochure_container')?.outerHTML || '';
-    const fullDoc = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Sublime x Vizhin - GTM Assessment Brochure</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    @page { size: letter portrait; margin: 0; }
-    body { margin: 0; padding: 20px; background: #0c0d0e; color: #111; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    .brochure-sheet { max-width: 8.5in; margin: 0 auto 30px auto; background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border-radius: 4px; overflow: hidden; page-break-after: always; }
-    @media print {
-      body { padding: 0; background: white; }
-      .brochure-sheet { margin: 0; box-shadow: none; border-radius: 0; page-break-after: always; }
-    }
-  </style>
-</head>
-<body>
-  ${pageHtml}
-</body>
-</html>`;
-    const blob = new Blob([fullDoc], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'Sublime-Vizhin-GTM-Assessment-Brochure.html';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  };
-
   return (
-    <div className="min-h-screen bg-[#070708] text-neutral-100 flex flex-col font-sans relative selection:bg-emerald-500/30">
-      
-      {/* PERSISTENT GLOBAL SITE HEADER (Retained exactly as requested) */}
-      <div className="no-print">
-        <SiteHeader 
-          currentPage="marketing-analysis"
-          currentUser={currentUser}
-          onSignOut={onSignOut}
-          onSignOutOrg={onSignOutOrg}
-          onSignOutCRM={onSignOutCRM}
-          onSwitchUser={onSwitchUser}
-          onNavigateHome={onBack}
-          onNavigateMeddpicc={onNavigateMeddpicc}
-          onNavigateMarketingAnalysis={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          onEnterPortal={onEnterPortal}
-          onEnterOrg={onEnterOrg}
-          onRequestAccount={onRequestAccount}
-        />
-      </div>
+    <div className="min-h-screen bg-[#070708] text-neutral-100 flex flex-col relative overflow-hidden font-sans">
+      {/* Decorative Background Glows */}
+      <div className="absolute top-[-30%] left-[-20%] w-[80vw] h-[80vw] rounded-full bg-emerald-950/25 blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-[#0D5C46]/20 blur-[150px] pointer-events-none" />
 
-      {/* TOP CONTROL BAR & BREADCRUMB (Hidden during print) */}
-      <div className="no-print border-b border-neutral-850 bg-[#09090b]/80 backdrop-blur sticky top-16 z-30 px-4 sm:px-8 py-3.5">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-          
-          {/* Breadcrumb / Back button */}
-          <div className="flex items-center gap-3 w-full sm:w-auto">
-            <button
-              onClick={onBack}
-              className="inline-flex items-center gap-1.5 text-xs text-neutral-400 hover:text-white transition-colors cursor-pointer px-2.5 py-1.5 rounded-lg hover:bg-neutral-800"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Back</span>
-            </button>
-            <div className="h-4 w-[1px] bg-neutral-800 hidden sm:block" />
-            <div className="flex items-center gap-1.5 text-xs">
-              <span className="text-neutral-500">Services</span>
-              <span className="text-neutral-600">/</span>
-              <span className="font-semibold text-emerald-400">Marketing Analysis</span>
-              <span className="text-neutral-600">•</span>
-              <span className="text-neutral-400 font-mono text-[11px]">GTM Assessment Brochure</span>
-            </div>
-          </div>
+      {/* Grid Pattern Backdrop */}
+      <div className="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.15] pointer-events-none" />
 
-          {/* Controls: View modes & Actions */}
-          <div className="flex items-center gap-2.5 w-full sm:w-auto justify-end flex-wrap">
-            {/* Page View Toggle */}
-            <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-0.5 flex text-xs">
-              <button
-                onClick={() => setActiveView('both')}
-                className={`px-3 py-1 rounded-md font-medium transition-all ${
-                  activeView === 'both' 
-                    ? 'bg-emerald-600 text-white shadow-sm' 
-                    : 'text-neutral-400 hover:text-neutral-200'
-                }`}
-              >
-                All Pages
-              </button>
-              <button
-                onClick={() => setActiveView('page1')}
-                className={`px-3 py-1 rounded-md font-medium transition-all ${
-                  activeView === 'page1' 
-                    ? 'bg-emerald-600 text-white shadow-sm' 
-                    : 'text-neutral-400 hover:text-neutral-200'
-                }`}
-              >
-                Page 1
-              </button>
-              <button
-                onClick={() => setActiveView('page2')}
-                className={`px-3 py-1 rounded-md font-medium transition-all ${
-                  activeView === 'page2' 
-                    ? 'bg-emerald-600 text-white shadow-sm' 
-                    : 'text-neutral-400 hover:text-neutral-200'
-                }`}
-              >
-                Page 2
-              </button>
-            </div>
+      {/* Persistent Site Header */}
+      <SiteHeader
+        currentPage="services"
+        currentUser={currentUser}
+        onSignOut={onSignOut}
+        onSignOutOrg={onSignOutOrg}
+        onSignOutCRM={onSignOutCRM}
+        onSwitchUser={onSwitchUser}
+        onNavigateHome={handleBack}
+        onNavigateMeddpicc={onNavigateMeddpicc}
+        onNavigateMarketingAnalysis={onNavigateMarketingAnalysis}
+        onNavigateJointDeliveryPartners={onNavigateJointDeliveryPartners}
+        onNavigateAbout={onNavigateAbout}
+        onNavigateStrategicGtmAnalysis={onNavigateStrategicGtmAnalysis}
+        onNavigateGtmTech={onNavigateGtmTech}
+        onNavigateAuditCompliance={onNavigateAuditCompliance}
+        onNavigateMarketingServices={onNavigateMarketingServices}
+        onEnterPortal={onEnterPortal}
+        onEnterOrg={onEnterOrg}
+        onRequestAccount={onRequestAccount}
+      />
 
-            {/* Print / Save to PDF Action */}
-            <button
-              onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-neutral-850 hover:bg-neutral-800 text-neutral-200 hover:text-white rounded-lg text-xs font-semibold border border-neutral-750 transition-all shadow-sm cursor-pointer"
-              title="Print or Save as PDF using your browser dialog"
-            >
-              <Printer className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Print / Save PDF</span>
-            </button>
+      {/* Main Content Area */}
+      <main className="flex-1 px-6 pt-12 pb-24 max-w-5xl mx-auto z-10 w-full space-y-10">
+        {/* Navigation Breadcrumb */}
+        <div className="flex items-center justify-between">
+          <button
+            onClick={handleBack}
+            className="inline-flex items-center gap-2 text-xs font-mono text-neutral-400 hover:text-emerald-400 transition-colors cursor-pointer group"
+          >
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+            <span>Back to Home</span>
+          </button>
 
-            {/* Direct Download Action */}
-            <button
-              onClick={handleDownloadStandalone}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white rounded-lg text-xs font-bold border border-emerald-500/40 shadow-md shadow-emerald-950/40 transition-all cursor-pointer"
-              title="Download standalone brochure file"
-            >
-              <Download className="w-3.5 h-3.5" />
-              <span>Download Brochure</span>
-            </button>
-          </div>
-
+          <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-emerald-950/80 text-emerald-400 border border-emerald-800/60 font-semibold uppercase tracking-wider">
+            Revenue Analytics &amp; Marketing ROI
+          </span>
         </div>
-      </div>
 
-      {/* BROCHURE VIEWER STAGE */}
-      <main className="flex-1 py-8 px-3 sm:px-6 flex flex-col items-center justify-start overflow-x-hidden">
-        
-        {/* Executive Service Overview (Screen only) with EXACTLY ONE H1 HEADING */}
-        <div className="w-full max-w-[850px] space-y-8 no-print mb-8">
-          {/* Hero Section with EXACTLY ONE H1 HEADING */}
-          <div className="space-y-4">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shadow-md">
-              <BarChart3 className="w-6 h-6" />
-            </div>
-
-            <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight">
-              Revenue Analytics & Marketing ROI Optimization
-            </h1>
+        {/* Hero Section with EXACTLY ONE H1 HEADING */}
+        <div className="space-y-4">
+          <div className="w-12 h-12 rounded-2xl bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shadow-md">
+            <BarChart3 className="w-6 h-6" />
           </div>
 
-          {/* Primary Diagnosis Box - EXACT REQUIRED BODY TEXT */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="p-6 md:p-8 rounded-2xl bg-neutral-900/60 border border-emerald-850/80 hover:border-emerald-600/70 shadow-xl backdrop-blur-md transition-all space-y-4"
-          >
-            <div className="text-sm md:text-base text-neutral-200 leading-relaxed font-medium">
-              Revenue Analytics & ROI Optimization: Turning marketing data into executive decision-making power. I implement deep funnel tracking and ROI modeling to map exactly how marketing dollars convert into closed-won revenue, maximizing your demand generation efficiency.
-            </div>
-          </motion.div>
+          <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight">
+            Revenue Analytics &amp; Marketing ROI Optimization
+          </h1>
+        </div>
 
-          {/* Detailed Analysis Breakdown */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.1 }}
-            className="bg-neutral-900/40 border border-neutral-850/80 rounded-2xl p-6 md:p-8 backdrop-blur-xs space-y-4 text-xs md:text-sm text-neutral-300 leading-relaxed font-normal"
-          >
-            <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">
-              Mapping Funnel Attribution from First Click to Closed-Won Deal
+        {/* Primary Diagnosis Box - EXACT REQUIRED TEXT */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="p-6 md:p-8 rounded-2xl bg-neutral-900/60 border border-emerald-850/80 hover:border-emerald-600/70 shadow-xl backdrop-blur-md transition-all space-y-4"
+        >
+          <p className="text-sm md:text-base text-neutral-200 leading-relaxed font-normal">
+            Revenue Analytics &amp; ROI Optimization: Turning marketing data into executive decision-making power. I implement deep funnel tracking and ROI modeling to map exactly how marketing dollars convert into closed-won revenue, maximizing your demand generation efficiency.
+          </p>
+        </motion.div>
+
+        {/* Detailed Sections in Exact Specified Order */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          className="space-y-6"
+        >
+          {/* Section: The problem */}
+          <div className="bg-neutral-900/40 border border-neutral-850/80 hover:border-neutral-750 transition-all rounded-2xl p-6 md:p-8 backdrop-blur-xs space-y-3">
+            <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight flex items-center gap-2.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
+              <span>The problem</span>
             </h2>
-            <p>
+            <p className="text-sm md:text-base text-neutral-300 leading-relaxed font-normal">
               To scale a company predictably, you cannot afford to guess which marketing efforts are actually driving revenue. Many growth-stage companies suffer from &ldquo;vanity metrics&rdquo;—reporting high website traffic or lead volumes that ultimately result in zero closed deals. I look past the surface-level data to run deep conversion funnel diagnostics and attribution modeling. By tracking a prospect&apos;s journey from the first click to the signed contract, we uncover exactly which campaigns are yielding high-value sales opportunities and which ones are simply draining your budget.
             </p>
-            <p>
-              For you as a founder, this means complete financial clarity and data-backed confidence. Instead of wondering if your marketing budget is working, you will have clear ROI models that prove exactly how much revenue is generated for every dollar spent. This level of analytics strips the emotion and guesswork out of your growth strategy, giving you and your board the precise insights needed to confidently scale up your winning channels, cut the waste, and optimize your entire customer acquisition cost.
+          </div>
+
+          {/* Section: What this means for you */}
+          <div className="bg-neutral-900/40 border border-neutral-850/80 hover:border-neutral-750 transition-all rounded-2xl p-6 md:p-8 backdrop-blur-xs space-y-5">
+            <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight flex items-center gap-2.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
+              <span>What this means for you</span>
+            </h2>
+
+            <p className="text-sm md:text-base text-neutral-300 leading-relaxed font-normal">
+              For you as a founder, this means complete financial clarity and data-backed confidence. Instead of wondering if your marketing budget is working, you will have clear ROI models that prove exactly how much revenue is generated for every dollar spent.
             </p>
-          </motion.div>
-        </div>
 
-        {/* Printable & Interactive Brochure Container */}
-        <div id="printable_brochure_container" className="w-full max-w-[850px] space-y-10">
-
-          {/* ============================================================== */}
-          {/* PAGE 1: "MULTIPLY YOUR GTM RESULTS."                           */}
-          {/* ============================================================== */}
-          {(activeView === 'both' || activeView === 'page1') && (
-            <section 
-              id="brochure_page_1" 
-              className="brochure-sheet bg-[#FAFAFA] text-[#111111] rounded-xl shadow-2xl overflow-hidden border border-neutral-300 relative flex flex-col justify-between"
-              style={{ minHeight: '1080px' }}
-            >
-              {/* Subtle top-left warm gradient wash like original */}
-              <div 
-                className="absolute top-0 left-0 w-96 h-96 pointer-events-none opacity-40"
-                style={{
-                  background: 'radial-gradient(circle at 10% 10%, rgba(217, 119, 6, 0.25) 0%, rgba(251, 191, 36, 0.1) 40%, transparent 70%)'
-                }}
-              />
-
-              {/* PAGE 1 CONTENT WRAPPER */}
-              <div className="p-8 sm:p-12 relative z-10 flex-1 flex flex-col justify-between space-y-8">
-                
-                {/* Header Bar: Sublime x Vizhin | GTM ASSESSMENT */}
-                <div className="flex flex-wrap items-center justify-between pb-6 border-b border-neutral-200/80 gap-4">
-                  <div className="flex items-center gap-3">
-                    {/* Sublime Logo Text */}
-                    <div className="text-left">
-                      <span className="font-serif text-xl sm:text-2xl font-bold tracking-tight text-neutral-900 block leading-tight">
-                        sublime
-                      </span>
-                      <span className="text-[8px] font-sans tracking-[0.25em] text-neutral-600 block uppercase font-medium">
-                        DESIGNS MEDIA
-                      </span>
-                    </div>
-
-                    <span className="text-neutral-400 font-light text-lg px-1">×</span>
-
-                    {/* Vizhin Logo Text */}
-                    <div className="text-left">
-                      <span className="font-sans text-xl sm:text-2xl font-black tracking-wider text-neutral-900 block leading-tight">
-                        V<span className="text-emerald-600">I</span>ZH<span className="text-emerald-600">I</span>N
-                      </span>
-                      <span className="text-[8px] font-sans tracking-wider text-neutral-500 block italic">
-                        a better way forward.
-                      </span>
-                    </div>
+            {/* Working parts list */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+              {workingParts.map((item, idx) => (
+                <div 
+                  key={idx} 
+                  className="p-3.5 rounded-xl bg-neutral-950/60 border border-neutral-850/80 flex items-start gap-3 group hover:border-emerald-600/50 transition-all"
+                >
+                  <div className="w-5 h-5 rounded-md bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0 mt-0.5">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
                   </div>
-
-                  <div className="text-right">
-                    <span className="text-xs sm:text-sm font-bold tracking-[0.25em] text-[#0D5C46] uppercase font-mono">
-                      G T M &nbsp; A S S E S S M E N T
-                    </span>
-                  </div>
-                </div>
-
-                {/* Hero Title */}
-                <div>
-                  <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-neutral-950 tracking-tight leading-[1.05]">
-                    Multiply your<br />
-                    GTM results.
-                  </h2>
-                </div>
-
-                {/* Two-Column Intro & Callout Section */}
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-start">
-                  
-                  {/* Left Column: Narrative Copy */}
-                  <div className="md:col-span-7 space-y-4 text-sm sm:text-base text-neutral-700 leading-relaxed font-sans">
-                    <p>
-                      When sales and marketing pull in different directions, growth gets expensive. Leads stall, messages conflict, and your CRM becomes a place where pipeline goes to hide. The bottom line: your team isn't performing. The fix isn't more headcount or another tool—it's alignment and getting the right people in the right seats, with the right expectations.
-                    </p>
-                    <p>
-                      Sublime and Vizhin have joined forces to offer a <strong className="font-bold text-neutral-950">GTM assessment</strong> that looks across your entire revenue engine—sales and marketing together—to find exactly where momentum is leaking and what to do about it. Together, we bring decades of experience on both sides of the funnel, so nothing gets lost in the gap between teams.
-                    </p>
-                    <p>
-                      You'll walk away with a clear-eyed read on what's working, what isn't, and a prioritized plan to fix it. No fluff. No 80-page reports nobody opens. Just answers you can act on.
-                    </p>
-                  </div>
-
-                  {/* Right Column: High-Impact Typography & Bullets */}
-                  <div className="md:col-span-5 space-y-6 pt-1">
-                    
-                    <div>
-                      <h2 className="text-xl sm:text-2xl font-extrabold text-neutral-950 leading-tight">
-                        One revenue engine.<br />
-                        Not two departments.
-                      </h2>
-                    </div>
-
-                    {/* Sales + Marketing bullet */}
-                    <div className="space-y-1 relative pl-6 border-l-2 border-pink-500/70">
-                      <div className="absolute -left-[5px] top-1.5 w-2.5 h-2.5 rounded-full bg-pink-500 shadow-sm" />
-                      <h3 className="text-lg font-bold text-neutral-950">Sales + Marketing</h3>
-                      <p className="text-xs sm:text-sm text-neutral-600 leading-snug">
-                        One assessment across your full GTM motion—not another siloed audit
-                      </p>
-                    </div>
-
-                    {/* Decades of Experience bullet */}
-                    <div className="space-y-2 relative pl-6 border-l-2 border-cyan-500/70 pt-2">
-                      <div className="absolute -left-[5px] top-3.5 w-2.5 h-2.5 rounded-full bg-cyan-500 shadow-sm" />
-                      <h3 className="text-lg sm:text-xl font-extrabold text-neutral-950 leading-tight">
-                        Decades of combined experience building, fixing, and scaling B2B GTM teams
-                      </h3>
-                      <p className="text-xs sm:text-sm text-neutral-600 leading-snug">
-                        We're the partners who tell you what you need to hear—not just what you want to hear.
-                      </p>
-                    </div>
-
-                  </div>
-                </div>
-
-                {/* Middle 3 Features Band */}
-                <div className="bg-[#EDEDED] border border-neutral-300 rounded-xl p-6 sm:p-7 grid grid-cols-1 md:grid-cols-3 gap-6 divide-y md:divide-y-0 md:divide-x divide-neutral-300">
-                  
-                  {/* Feature 1 */}
-                  <div className="md:pr-5 space-y-2">
-                    <h4 className="text-base sm:text-lg font-bold text-neutral-950">
-                      Alignment that helps you win.
-                    </h4>
-                    <p className="text-xs sm:text-sm text-neutral-700 leading-relaxed">
-                      Most GTM problems aren't sales problems or marketing problems—they're handoff problems. We assess the whole system, so the fixes stick.
-                    </p>
-                  </div>
-
-                  {/* Feature 2 */}
-                  <div className="pt-4 md:pt-0 md:px-5 space-y-2">
-                    <h4 className="text-base sm:text-lg font-bold text-neutral-950">
-                      We start with your funnel first.
-                    </h4>
-                    <p className="text-xs sm:text-sm text-neutral-700 leading-relaxed">
-                      Before recommending anything, we dig into how your buyers actually move—from first touch to closed-down—and where they're falling out along the way.
-                    </p>
-                  </div>
-
-                  {/* Feature 3 */}
-                  <div className="pt-4 md:pt-0 md:pl-5 space-y-2">
-                    <h4 className="text-base sm:text-lg font-bold text-neutral-950">
-                      Findings you can act on.
-                    </h4>
-                    <p className="text-xs sm:text-sm text-neutral-700 leading-relaxed">
-                      Every assessment ends with a prioritized roadmap: what to fix now, what to fix next, and what's fine to leave alone. Clarity, not homework.
-                    </p>
-                  </div>
-
-                </div>
-
-              </div>
-
-              {/* Bottom Strip: "Is this for you?" */}
-              <div className="bg-[#050505] text-white p-6 sm:px-12 sm:py-7 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 border-t border-neutral-800">
-                
-                {/* Yellow Question Tag */}
-                <div className="shrink-0">
-                  <span className="text-amber-400 font-extrabold text-xl sm:text-2xl leading-none tracking-tight block">
-                    Is this<br />for you?
+                  <span className="text-xs md:text-sm text-neutral-200 font-medium leading-snug">
+                    {item}
                   </span>
                 </div>
+              ))}
+            </div>
 
-                {/* 3 Criteria columns */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
-                  
-                  {/* Criteria 1: Series B */}
-                  <div className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full border-2 border-pink-500 shrink-0 mt-0.5 flex items-center justify-center">
-                      <div className="w-1.5 h-1.5 rounded-full bg-pink-500" />
-                    </div>
-                    <div>
-                      <h5 className="font-bold text-sm sm:text-base text-white leading-tight">Series B and later</h5>
-                      <p className="text-xs text-neutral-400 leading-snug mt-1">
-                        You've found product-market fit—now GTM efficiency is the growth lever
-                      </p>
-                    </div>
-                  </div>
+            <p className="text-sm md:text-base text-neutral-300 leading-relaxed font-normal pt-2 border-t border-neutral-850/70">
+              This level of analytics strips the emotion and guesswork out of your growth strategy, giving you and your board the precise insights needed to confidently scale up your winning channels, cut the waste, and optimize your entire customer acquisition cost.
+            </p>
+          </div>
 
-                  {/* Criteria 2: B2B tech */}
-                  <div className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full border-2 border-cyan-400 shrink-0 mt-0.5 flex items-center justify-center">
-                      <div className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-                    </div>
-                    <div>
-                      <h5 className="font-bold text-sm sm:text-base text-white leading-tight">B2B tech companies</h5>
-                      <p className="text-xs text-neutral-400 leading-snug mt-1">
-                        We know your buyers, your funnel, and your stack inside and out
-                      </p>
-                    </div>
-                  </div>
+          {/* Action Strategy CTA */}
+          <div className="bg-gradient-to-r from-neutral-900/90 via-emerald-950/40 to-neutral-900/90 border border-emerald-800/60 rounded-2xl p-6 md:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
+            <div className="space-y-2 text-center sm:text-left">
+              <h3 className="text-lg md:text-xl font-bold text-white">
+                Ready to map real marketing attribution to closed-won revenue?
+              </h3>
+              <p className="text-xs md:text-sm text-neutral-400 max-w-xl">
+                Schedule a 25-minute Marketing Analytics Strategy Session to diagnose your current conversion funnel and attribution tracking.
+              </p>
+            </div>
 
-                  {/* Criteria 3: $10M+ in revenue */}
-                  <div className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full border-2 border-purple-500 shrink-0 mt-0.5 flex items-center justify-center">
-                      <div className="w-1.5 h-1.5 rounded-full bg-purple-500" />
-                    </div>
-                    <div>
-                      <h5 className="font-bold text-sm sm:text-base text-white leading-tight">$10M+ in revenue</h5>
-                      <p className="text-xs text-neutral-400 leading-snug mt-1">
-                        Enough GTM motion to assess—and meaningful upside to unlock
-                      </p>
-                    </div>
-                  </div>
+            <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
+              <a
+                href="https://zcal.co/rreifel/30min"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-5 py-3 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white text-xs font-bold rounded-xl shadow-md border border-emerald-500/30 transition-all flex items-center gap-2 cursor-pointer group"
+              >
+                <Calendar className="w-4 h-4 text-emerald-300 group-hover:scale-110 transition-transform" />
+                <span>Schedule Strategy Call</span>
+                <span className="font-mono text-[10px] text-emerald-300">↗</span>
+              </a>
 
-                </div>
+              <a
+                href="/assets/aistudio/Vizhin_GTM_Assessment_290913e5.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-3 bg-neutral-900 hover:bg-neutral-850 text-neutral-300 hover:text-white text-xs font-semibold rounded-xl border border-neutral-800 transition-all flex items-center gap-2 cursor-pointer group"
+              >
+                <FileText className="w-4 h-4 text-emerald-400 group-hover:scale-105 transition-transform" />
+                <span>View Brochure</span>
+                <span className="font-mono text-[10px] text-emerald-400">↗</span>
+              </a>
+            </div>
+          </div>
 
-              </div>
-            </section>
-          )}
-
-          {/* ============================================================== */}
-          {/* PAGE 2: "WHAT WE ASSESS" & "HOW IT WORKS"                      */}
-          {/* ============================================================== */}
-          {(activeView === 'both' || activeView === 'page2') && (
-            <section 
-              id="brochure_page_2" 
-              className="brochure-sheet bg-[#FAFAFA] text-[#111111] rounded-xl shadow-2xl overflow-hidden border border-neutral-300 relative flex flex-col justify-between"
-              style={{ minHeight: '1080px' }}
+          {/* Collapsible GTM Assessment Brochure Viewer */}
+          <div className="border border-neutral-850/80 rounded-2xl overflow-hidden bg-neutral-900/20">
+            <button
+              onClick={() => setShowBrochure(prev => !prev)}
+              className="w-full p-4 md:p-5 flex items-center justify-between text-left hover:bg-neutral-900/50 transition-colors cursor-pointer"
             >
-              {/* PAGE 2 TOP: DARK HEADER */}
-              <div className="bg-[#050505] text-white p-8 sm:px-12 sm:pt-10 sm:pb-8 relative">
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b-2 border-amber-400">
-                  <div>
-                    <h2 className="text-3xl sm:text-4xl font-black tracking-tight text-white">
-                      What we assess
-                    </h2>
-                  </div>
-                  <div className="max-w-md">
-                    <p className="text-xs sm:text-sm text-neutral-300 font-normal leading-snug">
-                      We look across sales and marketing to find where your GTM engine is humming—and where it's losing power.
-                    </p>
-                  </div>
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400">
+                  <FileText className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="text-xs md:text-sm font-bold text-white">
+                    Sublime x Vizhin GTM Assessment Brochure
+                  </h4>
+                  <p className="text-[11px] text-neutral-400">
+                    Click to {showBrochure ? 'collapse' : 'preview'} the 2-page executive evaluation brochure
+                  </p>
                 </div>
               </div>
-
-              {/* PAGE 2 BODY CONTENT */}
-              <div className="p-8 sm:p-12 space-y-8 flex-1 flex flex-col justify-between">
-                
-                {/* 6 Dimension Assessment Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                  
-                  {/* Card 1: CRM & Pipeline */}
-                  <div className="space-y-2.5">
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded-full border-2 border-pink-500 flex items-center justify-center shrink-0">
-                        <div className="w-1.5 h-1.5 rounded-full bg-pink-500" />
-                      </div>
-                      <h4 className="font-extrabold text-xs sm:text-sm text-neutral-950 uppercase tracking-wide">
-                        CRM & Pipeline Setup
-                      </h4>
-                    </div>
-                    <p className="text-xs sm:text-sm text-neutral-700 leading-relaxed">
-                      Is your CRM working for you—or are you working for it? Are you using automation and AI effectively? We audit your setup, stages, hygiene, and adoption so your pipeline reflects reality.
-                    </p>
-                  </div>
-
-                  {/* Card 2: Messaging & Positioning */}
-                  <div className="space-y-2.5">
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded-full border-2 border-cyan-500 flex items-center justify-center shrink-0">
-                        <div className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
-                      </div>
-                      <h4 className="font-extrabold text-xs sm:text-sm text-neutral-950 uppercase tracking-wide">
-                        Messaging & Positioning
-                      </h4>
-                    </div>
-                    <p className="text-xs sm:text-sm text-neutral-700 leading-relaxed">
-                      Does sales say what marketing promises? We test your message for consistency and impact at every touchpoint, from ads to outbound to demos.
-                    </p>
-                  </div>
-
-                  {/* Card 3: Lead Flow & Handoffs */}
-                  <div className="space-y-2.5">
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded-full border-2 border-amber-400 flex items-center justify-center shrink-0">
-                        <div className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                      </div>
-                      <h4 className="font-extrabold text-xs sm:text-sm text-neutral-950 uppercase tracking-wide">
-                        Lead Flow & Handoffs
-                      </h4>
-                    </div>
-                    <p className="text-xs sm:text-sm text-neutral-700 leading-relaxed">
-                      We trace how leads move from marketing to sales—routing, response time, follow-up—and find where good leads quietly die.
-                    </p>
-                  </div>
-
-                  {/* Card 4: Metrics & Reporting */}
-                  <div className="space-y-2.5">
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded-full border-2 border-purple-500 flex items-center justify-center shrink-0">
-                        <div className="w-1.5 h-1.5 rounded-full bg-purple-500" />
-                      </div>
-                      <h4 className="font-extrabold text-xs sm:text-sm text-neutral-950 uppercase tracking-wide">
-                        Metrics & Reporting
-                      </h4>
-                    </div>
-                    <p className="text-xs sm:text-sm text-neutral-700 leading-relaxed">
-                      Are sales and marketing measuring the same funnel? We assess your KPIs, attribution, and dashboards so both teams work from one truth.
-                    </p>
-                  </div>
-
-                  {/* Card 5: Tech Stack & Tools */}
-                  <div className="space-y-2.5">
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded-full border-2 border-cyan-500 flex items-center justify-center shrink-0">
-                        <div className="w-1.5 h-1.5 rounded-full bg-cyan-500" />
-                      </div>
-                      <h4 className="font-extrabold text-xs sm:text-sm text-neutral-950 uppercase tracking-wide">
-                        Tech Stack & Tools
-                      </h4>
-                    </div>
-                    <p className="text-xs sm:text-sm text-neutral-700 leading-relaxed">
-                      We map your GTM stack against how your team actually works—flagging overlap, gaps, and tools you're paying for but not using.
-                    </p>
-                  </div>
-
-                  {/* Card 6: Sales Content & Enablement */}
-                  <div className="space-y-2.5">
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded-full border-2 border-amber-400 flex items-center justify-center shrink-0">
-                        <div className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                      </div>
-                      <h4 className="font-extrabold text-xs sm:text-sm text-neutral-950 uppercase tracking-wide">
-                        Sales Content & Enablement
-                      </h4>
-                    </div>
-                    <p className="text-xs sm:text-sm text-neutral-700 leading-relaxed">
-                      Do your reps have what they need to sell—decks, one pagers, battlecards—and is any of it actually getting used?
-                    </p>
-                  </div>
-
-                </div>
-
-                {/* THE GTM AUDIT CALLOUT BANNER */}
-                <div className="bg-[#050505] text-white p-5 sm:px-8 rounded-xl flex flex-col sm:flex-row items-center gap-4 sm:gap-6 shadow-md">
-                  {/* Glowing Target Ring Graphic */}
-                  <div className="w-12 h-12 rounded-full border-4 border-pink-500 flex items-center justify-center shrink-0 shadow-lg shadow-pink-500/20">
-                    <div className="w-6 h-6 rounded-full border-2 border-cyan-400 flex items-center justify-center">
-                      <div className="w-2 h-2 rounded-full bg-white" />
-                    </div>
-                  </div>
-
-                  <div className="shrink-0 text-center sm:text-left">
-                    <span className="font-black text-lg sm:text-xl text-white block leading-tight">
-                      The GTM<br />Audit
-                    </span>
-                  </div>
-
-                  <div className="border-t sm:border-t-0 sm:border-l border-neutral-700 pt-2 sm:pt-0 sm:pl-6 text-center sm:text-left">
-                    <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed">
-                      <strong className="text-white font-semibold">GTM scorecard</strong> — an honest grade across every area we assess, benchmarked against what good looks like at your stage.
-                    </p>
-                  </div>
-                </div>
-
-                {/* HOW IT WORKS SECTION */}
-                <div className="space-y-6">
-                  <h3 className="text-2xl sm:text-3xl font-black text-neutral-950 text-center tracking-tight">
-                    How it works
-                  </h3>
-
-                  {/* 4 Steps Sequence */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-                    
-                    {/* Step 1: Discover */}
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2">
-                        <span className="w-6 h-6 rounded-full bg-amber-400 text-neutral-950 font-bold text-xs flex items-center justify-center">
-                          1
-                        </span>
-                        <h5 className="font-extrabold text-sm text-neutral-950 tracking-wider">
-                          DISCOVER
-                        </h5>
-                      </div>
-                      <p className="text-xs text-neutral-700 leading-relaxed">
-                        Interviews with sales, marketing, and leadership, plus access to your CRM, content, and reporting.
-                      </p>
-                    </div>
-
-                    {/* Step 2: Analyze */}
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2">
-                        <span className="w-6 h-6 rounded-full bg-pink-500 text-white font-bold text-xs flex items-center justify-center">
-                          2
-                        </span>
-                        <h5 className="font-extrabold text-sm text-neutral-950 tracking-wider">
-                          ANALYZE
-                        </h5>
-                      </div>
-                      <p className="text-xs text-neutral-700 leading-relaxed">
-                        We dig into your funnel, message, data, and stack—looking at the whole engine, not the parts in isolation.
-                      </p>
-                    </div>
-
-                    {/* Step 3: Readout */}
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2">
-                        <span className="w-6 h-6 rounded-full bg-cyan-400 text-neutral-950 font-bold text-xs flex items-center justify-center">
-                          3
-                        </span>
-                        <h5 className="font-extrabold text-sm text-neutral-950 tracking-wider">
-                          READOUT
-                        </h5>
-                      </div>
-                      <p className="text-xs text-neutral-700 leading-relaxed">
-                        Scorecard and findings, delivered in a working session built for decisions—not a deck dump.
-                      </p>
-                    </div>
-
-                    {/* Step 4: Act */}
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2">
-                        <span className="w-6 h-6 rounded-full bg-purple-500 text-white font-bold text-xs flex items-center justify-center">
-                          4
-                        </span>
-                        <h5 className="font-extrabold text-sm text-neutral-950 tracking-wider">
-                          ACT
-                        </h5>
-                      </div>
-                      <p className="text-xs text-neutral-700 leading-relaxed">
-                        A prioritized roadmap your team can run with—or we can help you execute, from messaging to CRM cleanup.
-                      </p>
-                    </div>
-
-                  </div>
-
-                  {/* Timeline Badge */}
-                  <div className="pt-2 flex items-center justify-center gap-4">
-                    <div className="h-[1px] bg-neutral-300 flex-1" />
-                    <span className="font-bold text-xs sm:text-sm text-neutral-900 tracking-wide font-sans">
-                      Average timeline: 3–4 weeks
-                    </span>
-                    <div className="h-[1px] bg-neutral-300 flex-1" />
-                  </div>
-
-                </div>
-
+              <div className="text-neutral-400">
+                {showBrochure ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
               </div>
+            </button>
 
-              {/* PAGE 2 FOOTER: "GET IN TOUCH" */}
-              <div className="bg-[#050505] text-white p-8 sm:px-12 sm:py-9 border-t border-neutral-800">
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-                  
-                  {/* Yellow Headline */}
-                  <div className="md:col-span-4">
-                    <span className="text-amber-400 font-black text-2xl sm:text-3xl tracking-tight uppercase block leading-tight">
-                      GET IN<br className="hidden sm:inline" /> TOUCH
-                    </span>
+            {showBrochure && (
+              <div className="p-4 md:p-6 border-t border-neutral-850 bg-neutral-950/80 space-y-4">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-neutral-850 text-xs">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="font-mono text-neutral-300 font-medium">Full Executive Assessment Brochure (Complete 2-Page Document)</span>
                   </div>
-
-                  {/* Sublime Contact */}
-                  <div className="md:col-span-4 space-y-1 text-xs text-neutral-300">
-                    <span className="text-[10px] tracking-widest text-neutral-400 uppercase font-mono block">
-                      SUBLIME DESIGNS MEDIA
-                    </span>
-                    <p className="font-bold text-sm text-white">Megan Adler</p>
-                    <p>
-                      <a href="mailto:megan@sublimedesignsmedia.com" className="hover:text-emerald-400 transition-colors">
-                        megan@sublimedesignsmedia.com
-                      </a>
-                    </p>
-                    <p>
-                      <a href="tel:4152251046" className="hover:text-emerald-400 transition-colors">
-                        Tel. 415.225.1046
-                      </a>
-                    </p>
-                    <p>
-                      <a href="https://www.sublimedesignsmedia.com" target="_blank" rel="noreferrer" className="hover:text-emerald-400 transition-colors">
-                        www.sublimedesignsmedia.com
-                      </a>
-                    </p>
+                  <div className="flex items-center gap-2">
+                    <a
+                      href="/assets/aistudio/Vizhin_GTM_Assessment_290913e5.pdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-3 py-1.5 rounded-lg text-xs font-mono bg-neutral-900 hover:bg-neutral-850 text-emerald-400 border border-neutral-800 hover:border-emerald-600/60 flex items-center gap-1.5 transition-colors cursor-pointer group"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
+                      <span>Open in New Tab</span>
+                    </a>
+                    <a
+                      href="/assets/aistudio/Vizhin_GTM_Assessment_290913e5.pdf"
+                      download="Vizhin_GTM_Assessment.pdf"
+                      className="px-3 py-1.5 rounded-lg text-xs font-mono bg-emerald-950/80 hover:bg-emerald-900 text-emerald-400 border border-emerald-800/60 flex items-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      <span>Download PDF</span>
+                    </a>
                   </div>
+                </div>
 
-                  {/* Vizhin Contact */}
-                  <div className="md:col-span-4 space-y-1 text-xs text-neutral-300">
-                    <span className="text-[10px] tracking-widest text-neutral-400 uppercase font-mono block">
-                      VIZHIN
-                    </span>
-                    <p className="font-bold text-sm text-white">Ric Reifel</p>
-                    <p>
-                      <a href="mailto:rreifel@vizhin.co" className="hover:text-emerald-400 transition-colors">
-                        rreifel@vizhin.co
-                      </a>
-                    </p>
-                    <p>
-                      <a href="tel:3035507740" className="hover:text-emerald-400 transition-colors">
-                        Tel. 303.550.7740
-                      </a>
-                    </p>
-                    <p>
-                      <a href="https://www.vizhin.co" target="_blank" rel="noreferrer" className="hover:text-emerald-400 transition-colors">
-                        www.vizhin.co
-                      </a>
-                    </p>
-                  </div>
-
+                {/* Embedded High-Fidelity PDF Document Viewer */}
+                <div className="w-full h-[650px] md:h-[850px] lg:h-[950px] rounded-xl overflow-hidden border border-neutral-800 bg-[#1e1e1e] shadow-2xl relative">
+                  <object
+                    data="/assets/aistudio/Vizhin_GTM_Assessment_290913e5.pdf#view=FitH&toolbar=1"
+                    type="application/pdf"
+                    className="w-full h-full"
+                    title="Sublime x Vizhin GTM Assessment Brochure"
+                  >
+                    <iframe
+                      src="/assets/aistudio/Vizhin_GTM_Assessment_290913e5.pdf#view=FitH"
+                      className="w-full h-full border-0"
+                      title="Sublime x Vizhin GTM Assessment Brochure"
+                    >
+                      <div className="flex flex-col items-center justify-center h-full p-8 text-center space-y-4 text-neutral-300">
+                        <FileText className="w-12 h-12 text-emerald-400" />
+                        <p className="text-sm font-medium">Your browser does not support inline PDF viewing.</p>
+                        <div className="flex items-center gap-3">
+                          <a
+                            href="/assets/aistudio/Vizhin_GTM_Assessment_290913e5.pdf"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-lg transition-colors flex items-center gap-1.5"
+                          >
+                            <ExternalLink className="w-3.5 h-3.5" />
+                            <span>Open Brochure in New Tab</span>
+                          </a>
+                          <a
+                            href="/assets/aistudio/Vizhin_GTM_Assessment_290913e5.pdf"
+                            download="Vizhin_GTM_Assessment.pdf"
+                            className="px-4 py-2 bg-neutral-800 hover:bg-neutral-750 text-neutral-200 text-xs font-semibold rounded-lg transition-colors flex items-center gap-1.5"
+                          >
+                            <Download className="w-3.5 h-3.5" />
+                            <span>Download PDF</span>
+                          </a>
+                        </div>
+                      </div>
+                    </iframe>
+                  </object>
                 </div>
               </div>
+            )}
+          </div>
+        </motion.div>
 
-            </section>
-          )}
+        {/* Related Services & Bottom Navigation */}
+        <div className="pt-8 border-t border-neutral-850/80 space-y-4">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-mono uppercase tracking-wider text-neutral-400">
+              Related Advisory Services
+            </span>
+            <button
+              onClick={handleBack}
+              className="text-xs font-mono text-emerald-400 hover:text-emerald-300 transition-colors inline-flex items-center gap-1 cursor-pointer"
+            >
+              <span>View All Services</span>
+              <span>→</span>
+            </button>
+          </div>
 
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Link to Sales-Marketing Integration Services */}
+            <a
+              href="/marketing-services"
+              onClick={(e) => {
+                e.preventDefault();
+                if (onNavigateMarketingServices) {
+                  onNavigateMarketingServices();
+                } else {
+                  window.location.href = '/marketing-services';
+                }
+              }}
+              className="p-4 rounded-xl bg-neutral-900/60 border border-neutral-800 hover:border-emerald-600/60 transition-all group flex items-start gap-3 cursor-pointer"
+            >
+              <div className="w-9 h-9 rounded-lg bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0 group-hover:scale-105 transition-transform">
+                <Sparkles className="w-4 h-4" />
+              </div>
+              <div className="space-y-1">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-white group-hover:text-emerald-300 transition-colors">
+                  <span>Sales-Marketing Integration Services</span>
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                </div>
+                <p className="text-[11px] text-neutral-400 leading-relaxed line-clamp-2">
+                  Bridge the gap between marketing initiatives and revenue generation so every brand asset feeds pipeline.
+                </p>
+              </div>
+            </a>
+
+            {/* Link to Strategic GTM Analysis */}
+            <a
+              href="/strategic-gtm-analysis"
+              onClick={(e) => {
+                e.preventDefault();
+                if (onNavigateStrategicGtmAnalysis) {
+                  onNavigateStrategicGtmAnalysis();
+                } else {
+                  window.location.href = '/strategic-gtm-analysis';
+                }
+              }}
+              className="p-4 rounded-xl bg-neutral-900/60 border border-neutral-800 hover:border-emerald-600/60 transition-all group flex items-start gap-3 cursor-pointer"
+            >
+              <div className="w-9 h-9 rounded-lg bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0 group-hover:scale-105 transition-transform">
+                <Compass className="w-4 h-4" />
+              </div>
+              <div className="space-y-1">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-white group-hover:text-emerald-300 transition-colors">
+                  <span>Strategic Go-to-Market Analysis</span>
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                </div>
+                <p className="text-[11px] text-neutral-400 leading-relaxed line-clamp-2">
+                  Diagnose hidden friction in your revenue engine, buyer personas, and market opportunity.
+                </p>
+              </div>
+            </a>
+          </div>
+
+          <div className="pt-4 flex items-center justify-center">
+            <a
+              href="/"
+              onClick={(e) => {
+                e.preventDefault();
+                handleBack();
+              }}
+              className="inline-flex items-center gap-2 text-xs font-mono text-neutral-400 hover:text-emerald-400 transition-colors"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Return to Vizhin Consulting Home</span>
+            </a>
+          </div>
         </div>
-
       </main>
 
-      {/* PRINT-SPECIFIC CSS STYLES */}
-      <style>{`
-        @media print {
-          body {
-            background-color: white !important;
-            color: black !important;
-            padding: 0 !important;
-            margin: 0 !important;
-          }
-          .no-print {
-            display: none !important;
-          }
-          #printable_brochure_container {
-            max-width: 100% !important;
-            width: 100% !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            space-y: 0 !important;
-          }
-          .brochure-sheet {
-            box-shadow: none !important;
-            border: none !important;
-            border-radius: 0 !important;
-            margin: 0 !important;
-            page-break-after: always !important;
-            break-after: page !important;
-            width: 100% !important;
-            min-height: 10.5in !important;
-          }
-          @page {
-            size: letter portrait;
-            margin: 0.25in;
-          }
-        }
-      `}</style>
-
+      {/* Corporate Footer */}
+      <footer className="border-t border-neutral-900/80 bg-[#060607] py-8 px-6 text-center text-xs text-neutral-500 font-mono z-10">
+        <div className="max-w-7xl mx-auto flex items-center justify-center gap-2">
+          <BarChart3 className="w-3.5 h-3.5 text-emerald-400" />
+          <span>VIZHIN LLC • REVENUE ANALYTICS &amp; MARKETING ROI OPTIMIZATION</span>
+        </div>
+      </footer>
     </div>
   );
 }

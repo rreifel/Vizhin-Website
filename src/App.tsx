@@ -405,6 +405,9 @@ export default function App() {
         onNavigateGtmTech={() => navigateTo('gtm-tech')}
         onNavigateAuditCompliance={() => navigateTo('audit-compliance')}
         onNavigateMarketingServices={() => navigateTo('marketing-services')}
+        onNavigateSalesTeamAccountability={() => navigateTo('sales-team-accountability')}
+        onNavigateSalesHiringStrategy={() => navigateTo('sales-hiring-strategy')}
+        onNavigateTechnologyProjectManagement={() => navigateTo('technology-project-management')}
       />
     );
   }
@@ -474,6 +477,7 @@ export default function App() {
         onNavigateGtmTech={() => navigateTo('gtm-tech')}
         onNavigateAuditCompliance={() => navigateTo('audit-compliance')}
         onNavigateMarketingServices={() => navigateTo('marketing-services')}
+        onNavigateSalesTeamAccountability={() => navigateTo('sales-team-accountability')}
         onEnterPortal={() => navigateTo(currentUser ? 'portal' : 'login')}
         onEnterOrg={handleEnterOrg}
         onRequestAccount={() => navigateTo('request')}
@@ -530,11 +534,15 @@ export default function App() {
         onSignOutOrg={handleSignOutOrg}
         onSignOutCRM={handleSignOutCRM}
         onSwitchUser={handleLoginSuccess}
+        onNavigateHome={() => navigateTo('landing')}
         onBack={() => navigateTo('landing')}
+        onNavigateMeddpicc={() => navigateTo('meddpicc')}
+        onNavigateMarketingAnalysis={() => navigateTo('marketing-analysis')}
+        onNavigateStrategicGtmAnalysis={() => navigateTo('strategic-gtm-analysis')}
+        onNavigateMarketingServices={() => navigateTo('marketing-services')}
         onEnterPortal={() => navigateTo(currentUser ? 'portal' : 'login')}
         onEnterOrg={handleEnterOrg}
         onRequestAccount={() => navigateTo('request')}
-        onNavigateMeddpicc={() => navigateTo('meddpicc')}
       />
     );
   }

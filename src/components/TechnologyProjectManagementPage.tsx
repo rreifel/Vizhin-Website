@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { motion } from 'motion/react';
 import { 
-  ArrowLeft, Activity, Calendar, CheckCircle2, 
-  Layers, Cpu, ShieldCheck, Mail, Database, GitMerge 
+  ArrowLeft, ArrowRight, Activity, Calendar, CheckCircle2, 
+  Layers, Users, ShieldCheck, Download
 } from 'lucide-react';
 import SiteHeader from './SiteHeader';
 
@@ -31,7 +31,15 @@ interface TechnologyProjectManagementPageProps {
   onEnterPortal: () => void;
   onEnterOrg?: () => void;
   onRequestAccount?: () => void;
+  onBack?: () => void;
 }
+
+const workingParts = [
+  'Defining technical requirements',
+  'Vetting vendors to avoid hidden fees',
+  'Mapping out aggressive implementation timelines',
+  'Managing the change management process across your team'
+];
 
 export default function TechnologyProjectManagementPage({
   currentUser,
@@ -48,13 +56,17 @@ export default function TechnologyProjectManagementPage({
   onNavigateGtmTech,
   onNavigateAuditCompliance,
   onNavigateMarketingServices,
-  onNavigateSalesTeamAccountability,
-  onNavigateSalesHiringStrategy,
-  onNavigateTechnologyProjectManagement,
   onEnterPortal,
   onEnterOrg,
-  onRequestAccount
+  onRequestAccount,
+  onBack
 }: TechnologyProjectManagementPageProps) {
+  const handleBack = () => {
+    if (onNavigateHome) onNavigateHome();
+    else if (onBack) onBack();
+    else window.location.assign('/');
+  };
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     if (typeof document !== 'undefined') {
@@ -89,7 +101,7 @@ export default function TechnologyProjectManagementPage({
         onSignOutOrg={onSignOutOrg}
         onSignOutCRM={onSignOutCRM}
         onSwitchUser={onSwitchUser}
-        onNavigateHome={onNavigateHome}
+        onNavigateHome={handleBack}
         onNavigateMeddpicc={onNavigateMeddpicc}
         onNavigateMarketingAnalysis={onNavigateMarketingAnalysis}
         onNavigateJointDeliveryPartners={onNavigateJointDeliveryPartners}
@@ -108,7 +120,7 @@ export default function TechnologyProjectManagementPage({
         {/* Navigation Breadcrumb */}
         <div className="flex items-center justify-between">
           <button
-            onClick={onNavigateHome}
+            onClick={handleBack}
             className="inline-flex items-center gap-2 text-xs font-mono text-neutral-400 hover:text-emerald-400 transition-colors cursor-pointer group"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
@@ -116,7 +128,7 @@ export default function TechnologyProjectManagementPage({
           </button>
 
           <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-emerald-950/80 text-emerald-400 border border-emerald-800/60 font-semibold uppercase tracking-wider">
-            Technical Leadership & Architecture
+            Technology Project Management
           </span>
         </div>
 
@@ -131,112 +143,182 @@ export default function TechnologyProjectManagementPage({
           </h1>
         </div>
 
-        {/* Primary Diagnosis Box - EXACT REQUIRED BODY TEXT */}
+        {/* Primary Diagnosis Box - EXACT REQUIRED TEXT */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
           className="p-6 md:p-8 rounded-2xl bg-neutral-900/60 border border-emerald-850/80 hover:border-emerald-600/70 shadow-xl backdrop-blur-md transition-all space-y-4"
         >
-          <div className="text-sm md:text-base text-neutral-200 leading-relaxed font-medium">
-            Strategic Technology Deployment: Removing the risk, delays, and hidden costs from your critical IT initiatives. I provide expert, platform-agnostic oversight for complex software selections, legacy migrations, and system implementations to ensure your tech investments deliver immediate operational value.
-          </div>
+          <p className="text-sm md:text-base text-neutral-200 leading-relaxed font-normal">
+            Strategic Technology Deployment: Removing the risk, delays, and hidden costs from your critical IT initiatives. We provide expert, platform-agnostic oversight for complex software selections, legacy migrations, and system implementations to ensure your tech investments deliver immediate operational value.
+          </p>
         </motion.div>
 
-        {/* Detailed Analysis Breakdown */}
+        {/* Detailed Sections in Exact Specified Order */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.1 }}
-          className="bg-neutral-900/40 border border-neutral-850/80 rounded-2xl p-6 md:p-10 backdrop-blur-xs space-y-6"
+          className="space-y-6"
         >
-          <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">
-            De-Risking Enterprise Implementations and Software Migrations
-          </h2>
-
-          <div className="space-y-4 text-xs md:text-sm text-neutral-300 leading-relaxed font-normal">
-            <p>
-              Software selections, system migrations, and digital transformations are notoriously risky undertakings for a growing business. When a company attempts to implement enterprise software, re-deploy a legacy system, or switch core platforms without dedicated technical leadership, projects routinely run over budget, stall out, or fail to gain team adoption. Founders simply do not have the time to sit through hours of vendor demos, manage integration engineers, or troubleshoot deployment bottlenecks. I act as your objective, expert project executive, sitting on your side of the table to protect your capital and ensure project execution matches your business goals.
-            </p>
-            <p>
-              Hiring me for your technology project management means you eliminate the operational chaos that typically derails major IT shifts. I handle the heavy lifting: defining technical requirements, vetting vendors to avoid hidden fees, mapping out aggressive implementation timelines, and managing the change management process across your team. Your technical projects get delivered on time and within scope, allowing you to unlock the operational efficiencies you paid for without pulling your focus away from running the company.
+          {/* Section: The problem */}
+          <div className="bg-neutral-900/40 border border-neutral-850/80 hover:border-neutral-750 transition-all rounded-2xl p-6 md:p-8 backdrop-blur-xs space-y-3">
+            <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight flex items-center gap-2.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
+              <span>The problem</span>
+            </h2>
+            <p className="text-sm md:text-base text-neutral-300 leading-relaxed font-normal">
+              Software selections, system migrations, and digital transformations are notoriously risky undertakings for a growing business. When a company attempts to implement enterprise software, re-deploy a legacy system, or switch core platforms without dedicated technical leadership, projects routinely run over budget, stall out, or fail to gain team adoption. Founders simply do not have the time to sit through hours of vendor demos, manage integration engineers, or troubleshoot deployment bottlenecks. We act as your objective, expert project executive, sitting on your side of the table to protect your capital and ensure project execution matches your business goals.
             </p>
           </div>
 
-          {/* Pillars of Project Management */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-neutral-800/80">
-            <div className="p-4 rounded-xl bg-neutral-950/60 border border-neutral-850 space-y-2">
-              <div className="w-8 h-8 rounded-lg bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400">
-                <Database className="w-4 h-4" />
-              </div>
-              <h3 className="text-xs font-bold text-white uppercase tracking-wider">Vendor-Neutral Selection</h3>
-              <p className="text-[11px] text-neutral-400 leading-relaxed">
-                Platform-agnostic RFP management, architectural requirement scoping, and contract negotiation eliminating costly lock-in.
+          {/* Section: What we handle */}
+          <div className="bg-neutral-900/40 border border-neutral-850/80 hover:border-neutral-750 transition-all rounded-2xl p-6 md:p-8 backdrop-blur-xs space-y-5">
+            <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight flex items-center gap-2.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
+              <span>What we handle</span>
+            </h2>
+
+            <p className="text-sm md:text-base text-neutral-300 leading-relaxed font-normal">
+              Hiring us for your technology project management means you eliminate the operational chaos that typically derails major IT shifts.
+            </p>
+
+            {/* Working parts list */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+              {workingParts.map((item, idx) => (
+                <div 
+                  key={idx} 
+                  className="p-3.5 rounded-xl bg-neutral-950/60 border border-neutral-850/80 flex items-start gap-3 group hover:border-emerald-600/50 transition-all"
+                >
+                  <div className="w-5 h-5 rounded-md bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0 mt-0.5">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                  </div>
+                  <span className="text-xs md:text-sm text-neutral-200 font-medium leading-snug">
+                    {item}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <p className="text-sm md:text-base text-neutral-300 leading-relaxed font-normal pt-2 border-t border-neutral-850/70">
+              Your technical projects get delivered on time and within scope, allowing you to unlock the operational efficiencies you paid for without pulling your focus away from running the company.
+            </p>
+          </div>
+
+          {/* Action Strategy CTA */}
+          <div className="bg-gradient-to-r from-neutral-900/90 via-emerald-950/40 to-neutral-900/90 border border-emerald-800/60 rounded-2xl p-6 md:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
+            <div className="space-y-2 text-center sm:text-left">
+              <h3 className="text-lg md:text-xl font-bold text-white">
+                Planning a software selection or major system migration?
+              </h3>
+              <p className="text-xs md:text-sm text-neutral-400 max-w-xl">
+                Schedule a 25-minute Technology Project Discovery Session to de-risk your deployment roadmap, evaluate vendors, and align technical scope.
               </p>
             </div>
 
-            <div className="p-4 rounded-xl bg-neutral-950/60 border border-neutral-850 space-y-2">
-              <div className="w-8 h-8 rounded-lg bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400">
-                <GitMerge className="w-4 h-4" />
-              </div>
-              <h3 className="text-xs font-bold text-white uppercase tracking-wider">Migration & Implementation</h3>
-              <p className="text-[11px] text-neutral-400 leading-relaxed">
-                Step-by-step data schema migration, integration architecture, and zero-downtime cutover plans protecting daily revenue.
-              </p>
-            </div>
+            <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
+              <a
+                href="https://zcal.co/rreifel/30min"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-5 py-3 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white text-xs font-bold rounded-xl shadow-md border border-emerald-500/30 transition-all flex items-center gap-2 cursor-pointer group"
+              >
+                <Calendar className="w-4 h-4 text-emerald-300 group-hover:scale-110 transition-transform" />
+                <span>Schedule Strategy Call</span>
+                <span className="font-mono text-[10px] text-emerald-300">↗</span>
+              </a>
 
-            <div className="p-4 rounded-xl bg-neutral-950/60 border border-neutral-850 space-y-2">
-              <div className="w-8 h-8 rounded-lg bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400">
-                <Cpu className="w-4 h-4" />
-              </div>
-              <h3 className="text-xs font-bold text-white uppercase tracking-wider">Adoption Governance</h3>
-              <p className="text-[11px] text-neutral-400 leading-relaxed">
-                Operational change management, workflow training, and audit trails that guarantee rapid adoption across the company.
-              </p>
+              <a
+                href="/assets/aistudio/Vizhin_GTM_Assessment_290913e5.pdf"
+                download="Vizhin_GTM_Assessment.pdf"
+                className="px-4 py-3 bg-neutral-900 hover:bg-neutral-850 text-neutral-300 hover:text-white text-xs font-semibold rounded-xl border border-neutral-800 transition-all flex items-center gap-2 cursor-pointer"
+              >
+                <Download className="w-4 h-4 text-emerald-400" />
+                <span>Download Assessment</span>
+              </a>
             </div>
           </div>
         </motion.div>
 
-        {/* Action Strategy & Revenue Session CTA */}
-        <div className="bg-gradient-to-r from-neutral-900/90 via-emerald-950/40 to-neutral-900/90 border border-emerald-800/60 rounded-2xl p-6 md:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
-          <div className="space-y-2 text-center sm:text-left">
-            <h3 className="text-lg md:text-xl font-bold text-white">
-              Planning a software selection or major system migration?
+        {/* Bottom Related Service Cards & Navigation */}
+        <div className="pt-8 border-t border-neutral-850/80 space-y-6">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-mono uppercase tracking-wider text-neutral-400 font-semibold">
+              Explore Related Strategic Services
             </h3>
-            <p className="text-xs md:text-sm text-neutral-400 max-w-xl">
-              Schedule a 25-minute Technology Project Discovery Session to de-risk your deployment roadmap, evaluate vendors, and align technical scope.
-            </p>
+            <span className="text-xs text-neutral-500 font-mono">Vizhin Advisory</span>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <a
-              href="https://zcal.co/rreifel/30min"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-5 py-3 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white text-xs font-bold rounded-xl shadow-md border border-emerald-500/30 transition-all flex items-center gap-2 cursor-pointer group"
+              href="/gtm-tech"
+              onClick={(e) => {
+                e.preventDefault();
+                if (onNavigateGtmTech) onNavigateGtmTech();
+                else window.location.href = '/gtm-tech';
+              }}
+              className="p-5 rounded-xl bg-neutral-900/50 border border-neutral-800 hover:border-emerald-600/60 transition-all flex items-start gap-4 group cursor-pointer"
             >
-              <Calendar className="w-4 h-4 text-emerald-300 group-hover:scale-110 transition-transform" />
-              <span>Schedule Tech Call</span>
-              <span className="font-mono text-[10px] text-emerald-300">↗</span>
+              <div className="w-9 h-9 rounded-lg bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0 group-hover:scale-105 transition-transform">
+                <Users className="w-4 h-4" />
+              </div>
+              <div className="space-y-1">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-white group-hover:text-emerald-300 transition-colors">
+                  <span>GTM Tech: Sales Technology Stack Optimization</span>
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                </div>
+                <p className="text-[11px] text-neutral-400 leading-relaxed line-clamp-2">
+                  Transform your CRM and tech stack into an automated revenue engine with clean pipeline visibility.
+                </p>
+              </div>
             </a>
+
             <a
-              href="mailto:rreifel@vizhin.co?subject=Technology%20Project%20Management%20Inquiry"
-              className="px-4 py-3 bg-neutral-900 hover:bg-neutral-850 text-neutral-300 hover:text-white text-xs font-semibold rounded-xl border border-neutral-800 transition-all flex items-center gap-2"
+              href="/gtm"
+              onClick={(e) => {
+                e.preventDefault();
+                if (onNavigateStrategicGtmAnalysis) onNavigateStrategicGtmAnalysis();
+                else window.location.href = '/gtm';
+              }}
+              className="p-5 rounded-xl bg-neutral-900/50 border border-neutral-800 hover:border-emerald-600/60 transition-all flex items-start gap-4 group cursor-pointer"
             >
-              <Mail className="w-4 h-4 text-emerald-400" />
-              <span>Email Ric Directly</span>
+              <div className="w-9 h-9 rounded-lg bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0 group-hover:scale-105 transition-transform">
+                <Layers className="w-4 h-4" />
+              </div>
+              <div className="space-y-1">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-white group-hover:text-emerald-300 transition-colors">
+                  <span>Strategic Go-to-Market Analysis</span>
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                </div>
+                <p className="text-[11px] text-neutral-400 leading-relaxed line-clamp-2">
+                  Diagnose hidden friction in your revenue engine, buyer personas, and market opportunity.
+                </p>
+              </div>
+            </a>
+          </div>
+
+          <div className="pt-4 flex items-center justify-center">
+            <a
+              href="/"
+              onClick={(e) => {
+                e.preventDefault();
+                handleBack();
+              }}
+              className="inline-flex items-center gap-2 text-xs font-mono text-neutral-400 hover:text-emerald-400 transition-colors"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Return to Vizhin Consulting Home</span>
             </a>
           </div>
         </div>
       </main>
 
-      {/* Footer */}
+      {/* Corporate Footer */}
       <footer className="border-t border-neutral-900/80 bg-[#060607] py-8 px-6 text-center text-xs text-neutral-500 font-mono z-10">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-center gap-4">
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-            <span>VIZHIN LLC • PLATFORM-AGNOSTIC TECHNOLOGY PROJECT MANAGEMENT & IMPLEMENTATION</span>
-          </div>
+        <div className="max-w-7xl mx-auto flex items-center justify-center gap-2">
+          <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+          <span>VIZHIN LLC • STRATEGIC TECHNOLOGY PROJECT MANAGEMENT</span>
         </div>
       </footer>
     </div>

@@ -27,6 +27,7 @@ interface DetailedSectionItem {
   title: string;
   icon: React.ComponentType<{ className?: string }>;
   summary: string;
+  lowerDescription?: React.ReactNode;
   paragraphs: string[];
   offerUrl?: string;
   expandableContent?: ExpandableSectionData;
@@ -123,31 +124,103 @@ const DETAILED_SECTIONS: DetailedSectionItem[] = [
     id: 'sales-team-accountability',
     title: 'Sales Team Accountability & KPIs',
     icon: Target,
-    summary: 'Performance Architecture: Shifting your sales culture from activity-driven to outcome-focused. I establish clear, high-impact key performance indicators (KPIs) and accountability structures that ensure every sales rep owns their pipeline and consistently hits their targets.',
-    paragraphs: [
-      'For many founders, managing a sales team feels like a constant guessing game. Reps report that they are "busy" and that deals are "just around the corner," but those promises rarely translate into predictable revenue. Without a seasoned sales leader enforcing standard expectations, sales cultures can easily drift into complacency. I eliminate this ambiguity by building an objective, metrics-driven performance framework tailored to your specific business model. We define the precise leading indicators—such as meaningful executive conversations and pipeline velocity—that actually dictate closed deals, stripping the guesswork out of sales management.',
-      'What this means for you as a founder is the freedom to stop micro-managing and start leading. I establish a culture of absolute ownership where sales reps are accountable to their data, not their excuses. Through structured weekly pipeline reviews, performance tracking, and direct coaching, I identify your top performers, support middle-tier reps, and decisively manage out underperformers. You gain total confidence that your sales payroll is actively driving profit, backed by a culture that prioritizes execution over effort.'
-    ]
+    summary: 'Performance Architecture: shifting your sales culture from activity-driven to outcome-focused. I establish clear, high-impact key performance indicators (KPIs) and accountability structures that ensure every sales rep owns their pipeline and consistently hits their targets.',
+    lowerDescription: (
+      <div className="space-y-4">
+        <div className="text-xs font-mono uppercase tracking-wider text-emerald-400 font-semibold">
+          Sales Team Accountability &amp; KPIs
+        </div>
+        <p>
+          Performance Architecture: shifting your sales culture from activity-driven to outcome-focused. I establish clear, high-impact key performance indicators (KPIs) and accountability structures that ensure every sales rep owns their pipeline and consistently hits their targets.
+        </p>
+        <p className="text-neutral-300 font-normal">
+          Accountability isn&apos;t more reporting. It&apos;s knowing sooner.
+        </p>
+        <div className="space-y-2 pt-1">
+          <p className="font-semibold text-white">
+            When it&apos;s working, you don&apos;t wait until quarter-end to find out who&apos;s performing:
+          </p>
+          <ul className="space-y-2 pl-1 text-xs md:text-sm text-neutral-300 font-normal">
+            <li className="flex items-start gap-2">
+              <span className="text-emerald-400 select-none">•</span>
+              <span>Every rep can say what their number is, where they stand against it, and what their next deal is</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-emerald-400 select-none">•</span>
+              <span>A pipeline review ends with a decision, not just a status update</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-emerald-400 select-none">•</span>
+              <span>A problem shows up mid-quarter, while there&apos;s still time to fix it</span>
+            </li>
+          </ul>
+        </div>
+        <p className="text-neutral-300 font-normal pt-1">
+          And it only sticks if the people were hired against a clear profile in the first place &mdash; which is why this pairs closely with Sales Hiring Strategy.
+        </p>
+      </div>
+    ),
+    paragraphs: []
   },
   {
     id: 'sales-hiring-strategy',
     title: 'Sales Hiring Strategy',
     icon: UserPlus,
     summary: 'Predictable Talent Acquisition: Ending the cycle of bad sales hires and missed quotas. I design and execute a rigorous, metrics-driven recruiting and vetting blueprint to attract, hire, and onboard elite sales professionals who fit your culture and consistently produce results.',
-    paragraphs: [
-      'For most founders, hiring sales reps is a costly roll of the dice. Charismatic candidates routinely interview exceptionally well, only to fail miserably once they are in the seat—costing you months of lost revenue, burned leads, and thousands in wasted salary. Without a dedicated sales leader who knows exactly how to screen for grit, process discipline, and true selling capability, growth-stage companies easily fall into the trap of hiring the wrong profile for their specific sales cycle. I eliminate this expensive guesswork by building a structured, repeatable talent acquisition engine designed to source and filter for elite performers.',
-      "When you partner with me for your sales hiring strategy, we don't just find people; we build a scalable hiring infrastructure. I define the exact candidate profile your business needs, create objective vetting scorecards, conduct deep-dive behavioral interviews, and structure competitive compensation packages that align a rep's incentives directly with your revenue goals. Furthermore, I build out a comprehensive 30-60-90 day onboarding playbook. This ensures your new hires hit the ground running with the exact training, scripts, and playbooks they need to shorten their time-to-productivity and start closing deals quickly."
-    ]
+    lowerDescription: (
+      <div className="space-y-4">
+        <p>
+          Predictable Talent Acquisition: Ending the cycle of bad sales hires and missed quotas. I design and execute a rigorous, metrics-driven recruiting and vetting blueprint to attract, hire, and onboard elite sales professionals who fit your culture and consistently produce results.
+        </p>
+        <p className="text-neutral-300 font-normal">
+          Hiring right is where the rest of your sales system starts. A rep hired against a clear profile is easier to coach, easier to measure, and easier to hold accountable &mdash; a rep hired on gut feel usually isn&apos;t.
+        </p>
+        <div className="space-y-2 pt-1">
+          <p className="font-semibold text-white">Start here if:</p>
+          <ul className="space-y-2 pl-1 text-xs md:text-sm text-neutral-300 font-normal">
+            <li className="flex items-start gap-2">
+              <span className="text-emerald-400 select-none">•</span>
+              <span>You&apos;re making your first sales hire and don&apos;t want to guess at the profile</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-emerald-400 select-none">•</span>
+              <span>You&apos;ve already had a hire miss, and don&apos;t want to repeat it</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-emerald-400 select-none">•</span>
+              <span>You&apos;re scaling and need the same hiring bar every time, not a one-off decision</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    ),
+    paragraphs: []
   },
   {
     id: 'audit-compliance',
     title: 'Sales Governance, Partner Accountability & Audit Readiness',
     icon: ShieldCheck,
-    summary: 'Sales Governance: Partner Accountability and Audit Readiness',
-    paragraphs: [
-      "When scaling a sales organization with external leadership, operational discipline is non-negotiable. As your Fractional VP of Sales, I establish rigorous governance frameworks where user access, customer boundaries, and stage progressions are continuously verified. This ensures absolute transparency and strict partner accountability across your entire sales infrastructure. You will always have full visibility into who has access to your customer data, who modified your pipeline stages, and how administrative permissions are managed, completely eliminating operational blind spots.",
-      "This level of structural oversight ensures your company is always prepared for senior leadership scrutiny, due diligence, or board reviews without the typical scramble. By verifying clean, continuous audit trails throughout daily sales operations, we protect your company's valuation and prepare a mature, compliant sales function. This gives you, your investors, and your future enterprise clients total confidence that your revenue engine is verified, accountable, and legally sound."
-    ]
+    summary: 'Be ready before reviewers ask. Vizhin prepares sales teams for review by senior managers and boards, verifying partner accountability, access, and audit trails so due diligence does not become a last-minute scramble.',
+    lowerDescription: (
+      <div className="space-y-4">
+        <div className="text-xs font-mono uppercase tracking-wider text-emerald-400 font-semibold">
+          Sales Governance, Partner Accountability &amp; Audit Readiness
+        </div>
+        <p>
+          A review rarely fails on the headline numbers. It fails on the follow-up questions: who approved this partner deal, who had access to what, what changed, and can you show the trail?
+        </p>
+        <p className="text-neutral-300 font-normal">
+          Vizhin checks those answers before a reviewer does. We review how partner activity is recorded, whether access permissions match what the team actually does, and whether the audit trail tells a clear, consistent story from first contact to close.
+        </p>
+        <p className="text-neutral-300 font-normal">
+          The point is not to rewrite how your team sells. It is to find the gaps while there is still time to close them, prepare the team to answer clearly and consistently, and organize the evidence so a senior manager, board, or due diligence review feels calm and controlled instead of rushed and defensive.
+        </p>
+        <p className="text-neutral-300 font-normal">
+          If a review is coming, or you suspect one is, this is the work to do first.
+        </p>
+      </div>
+    ),
+    paragraphs: []
   },
   {
     id: 'marketing-services',
@@ -163,21 +236,47 @@ const DETAILED_SECTIONS: DetailedSectionItem[] = [
     id: 'marketing-analysis',
     title: 'Marketing Analysis',
     icon: BarChart3,
-    summary: 'Revenue Analytics & ROI Optimization: Turning marketing data into executive decision-making power. I implement deep funnel tracking and ROI modeling to map exactly how marketing dollars convert into closed-won revenue, maximizing your demand generation efficiency.',
-    paragraphs: [
-      'To scale a company predictably, you cannot afford to guess which marketing efforts are actually driving revenue. Many growth-stage companies suffer from "vanity metrics"—reporting high website traffic or lead volumes that ultimately result in zero closed deals. I look past the surface-level data to run deep conversion funnel diagnostics and attribution modeling. By tracking a prospect\'s journey from the first click to the signed contract, we uncover exactly which campaigns are yielding high-value sales opportunities and which ones are simply draining your budget.',
-      'For you as a founder, this means complete financial clarity and data-backed confidence. Instead of wondering if your marketing budget is working, you will have clear ROI models that prove exactly how much revenue is generated for every dollar spent. This level of analytics strips the emotion and guesswork out of your growth strategy, giving you and your board the precise insights needed to confidently scale up your winning channels, cut the waste, and optimize your entire customer acquisition cost.'
-    ]
+    summary: "Stop judging marketing by traffic and leads alone. Vizhin turns marketing data into executive decisions, tracing what actually becomes closed-won revenue so you can put more behind what works and stop funding what doesn't.",
+    lowerDescription: (
+      <div className="space-y-4">
+        <div className="text-xs font-mono uppercase tracking-wider text-emerald-400 font-semibold">
+          Marketing Analysis
+        </div>
+        <p>
+          Every founder has sat in the budget conversation where marketing looks busy and revenue still feels uncertain. The reports show activity, but they don&apos;t answer the one question that matters: which spend produced which deals?
+        </p>
+        <p className="text-neutral-300 font-normal">
+          That gap is where waste hides. A channel can look successful on clicks and leads while contributing almost nothing to closed revenue, and a quieter channel can be doing the real work. Without a clear line from first click to signed contract, scaling is guesswork &mdash; you either under-invest in a winner or keep funding a loser because it looks active.
+        </p>
+        <p className="text-neutral-300 font-normal">
+          Marketing Analysis closes that gap by making the funnel visible end to end, so budget decisions, board conversations, and growth plans are based on revenue evidence, not on the loudest report.
+        </p>
+      </div>
+    ),
+    paragraphs: []
   },
   {
     id: 'project-management',
     title: 'Technology Project Management',
     icon: Activity,
-    summary: 'Strategic Technology Deployment: Removing the risk, delays, and hidden costs from your critical IT initiatives. I provide expert, platform-agnostic oversight for complex software selections, legacy migrations, and system implementations to ensure your tech investments deliver immediate operational value.',
-    paragraphs: [
-      'Software selections, system migrations, and digital transformations are notoriously risky undertakings for a growing business. When a company attempts to implement enterprise software, re-deploy a legacy system, or switch core platforms without dedicated technical leadership, projects routinely run over budget, stall out, or fail to gain team adoption. Founders simply do not have the time to sit through hours of vendor demos, manage integration engineers, or troubleshoot deployment bottlenecks. I act as your objective, expert project executive, sitting on your side of the table to protect your capital and ensure project execution matches your business goals.',
-      'Hiring me for your technology project management means you eliminate the operational chaos that typically derails major IT shifts. I handle the heavy lifting: defining technical requirements, vetting vendors to avoid hidden fees, mapping out aggressive implementation timelines, and managing the change management process across your team. Your technical projects get delivered on time and within scope, allowing you to unlock the operational efficiencies you paid for without pulling your focus away from running the company.'
-    ]
+    summary: 'Big technology changes should not pull a founder away from running the company. Vizhin provides platform-agnostic oversight for software selection, legacy migration, and system implementation, so your investment delivers operational value on time and in scope.',
+    lowerDescription: (
+      <div className="space-y-4">
+        <div className="text-xs font-mono uppercase tracking-wider text-emerald-400 font-semibold">
+          Technology Project Management
+        </div>
+        <p>
+          The hardest part of a technology change is rarely choosing a product. It is everything around the product: what the business actually needs, what the vendor is not saying about cost and effort, how the change will land with the team, and who keeps the project honest when timelines slip.
+        </p>
+        <p className="text-neutral-300 font-normal">
+          A vendor is paid to sell its platform. An internal team is already busy running the business. That leaves a gap &mdash; and that gap is where budgets grow, adoption stalls, and a promising system ends up underused.
+        </p>
+        <p className="text-neutral-300 font-normal">
+          This service fills that gap with an objective executive on your side of the table: someone who tests the requirements before the purchase, challenges the vendor plan before you commit, and keeps delivery tied to business outcomes, not just to a go-live date.
+        </p>
+      </div>
+    ),
+    paragraphs: []
   },
   {
     id: 'call-to-action',
@@ -209,6 +308,9 @@ interface LandingPageProps {
   onNavigateGtmTech?: () => void;
   onNavigateAuditCompliance?: () => void;
   onNavigateMarketingServices?: () => void;
+  onNavigateSalesTeamAccountability?: () => void;
+  onNavigateSalesHiringStrategy?: () => void;
+  onNavigateTechnologyProjectManagement?: () => void;
 }
 
 export default function LandingPage({ 
@@ -227,7 +329,10 @@ export default function LandingPage({
   onNavigateStrategicGtmAnalysis,
   onNavigateGtmTech,
   onNavigateAuditCompliance,
-  onNavigateMarketingServices
+  onNavigateMarketingServices,
+  onNavigateSalesTeamAccountability,
+  onNavigateSalesHiringStrategy,
+  onNavigateTechnologyProjectManagement
 }: LandingPageProps) {
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
 
@@ -347,23 +452,6 @@ export default function LandingPage({
                     </p>
                   </div>
                 </div>
-
-                {(isMarketingAnalysis || sec.id === 'marketing-services') && (
-                  <div className="pt-3 flex justify-end">
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onNavigateMarketingAnalysis();
-                      }}
-                      className="text-[10px] font-mono font-semibold text-emerald-400 hover:text-emerald-300 bg-neutral-900/90 hover:bg-neutral-850 px-2.5 py-1 rounded-lg border border-emerald-800/60 hover:border-emerald-500 transition-all flex items-center gap-1 group/btn cursor-pointer"
-                      title="View Marketing Assessment Brochure"
-                    >
-                      <span>View Brochure</span>
-                      <span className="group-hover/btn:translate-x-0.5 transition-transform">→</span>
-                    </button>
-                  </div>
-                )}
               </div>
             );
           })}
@@ -445,16 +533,18 @@ export default function LandingPage({
                 </div>
 
                 <div className="p-4 rounded-xl bg-neutral-950/70 border border-neutral-850 text-sm md:text-base text-neutral-200 leading-relaxed font-medium">
-                  {sec.summary}
+                  {sec.lowerDescription ? sec.lowerDescription : sec.summary}
                 </div>
 
-                <div className="space-y-3 pt-1 text-xs md:text-sm text-neutral-400 leading-relaxed">
-                  {sec.paragraphs.map((para, pIdx) => (
-                    <p key={pIdx}>
-                      {para}
-                    </p>
-                  ))}
-                </div>
+                {sec.paragraphs.length > 0 && (
+                  <div className="space-y-3 pt-1 text-xs md:text-sm text-neutral-400 leading-relaxed">
+                    {sec.paragraphs.map((para, pIdx) => (
+                      <p key={pIdx}>
+                        {para}
+                      </p>
+                    ))}
+                  </div>
+                )}
 
                 {/* Expandable toggle and delineated content */}
                 {sec.expandableContent && (
@@ -558,56 +648,124 @@ export default function LandingPage({
                       <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                     </a>
                   )}
+                  {sec.id === 'sales-team-accountability' && (
+                    <a
+                      href="/sales-team-accountability"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (onNavigateSalesTeamAccountability) {
+                          onNavigateSalesTeamAccountability();
+                        } else {
+                          window.location.href = '/sales-team-accountability';
+                        }
+                      }}
+                      className="inline-flex items-center gap-1.5 text-xs md:text-sm font-semibold text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer group"
+                    >
+                      <span>Explore Sales Team Accountability & KPI Architecture</span>
+                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                    </a>
+                  )}
+                  {sec.id === 'sales-hiring-strategy' && (
+                    <a
+                      href="/sales-hiring-strategy"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (onNavigateSalesHiringStrategy) {
+                          onNavigateSalesHiringStrategy();
+                        } else {
+                          window.location.href = '/sales-hiring-strategy';
+                        }
+                      }}
+                      className="inline-flex items-center gap-1.5 text-xs md:text-sm font-semibold text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer group"
+                    >
+                      <span>Explore Predictable Sales Hiring Strategy</span>
+                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                    </a>
+                  )}
+                  {sec.id === 'audit-compliance' && (
+                    <a
+                      href="/audit-compliance"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (onNavigateAuditCompliance) {
+                          onNavigateAuditCompliance();
+                        } else {
+                          window.location.href = '/audit-compliance';
+                        }
+                      }}
+                      className="inline-flex items-center gap-1.5 text-xs md:text-sm font-semibold text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer group"
+                    >
+                      <span>View the full Sales Governance &amp; Audit Readiness service</span>
+                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                    </a>
+                  )}
+                  {sec.id === 'marketing-services' && (
+                    <a
+                      href="/marketing-services"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (onNavigateMarketingServices) {
+                          onNavigateMarketingServices();
+                        } else {
+                          window.location.href = '/marketing-services';
+                        }
+                      }}
+                      className="inline-flex items-center gap-1.5 text-xs md:text-sm font-semibold text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer group"
+                    >
+                      <span>Explore Integration Services</span>
+                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                    </a>
+                  )}
+                  {sec.id === 'marketing-analysis' && (
+                    <a
+                      href="/marketing-analysis"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (onNavigateMarketingAnalysis) {
+                          onNavigateMarketingAnalysis();
+                        } else {
+                          window.location.href = '/marketing-analysis';
+                        }
+                      }}
+                      className="inline-flex items-center gap-1.5 text-xs md:text-sm font-semibold text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer group"
+                    >
+                      <span>View the full Marketing Analysis service</span>
+                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                    </a>
+                  )}
+                  {sec.id === 'project-management' && (
+                    <a
+                      href="/technology-project-management"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (onNavigateTechnologyProjectManagement) {
+                          onNavigateTechnologyProjectManagement();
+                        } else {
+                          window.location.href = '/technology-project-management';
+                        }
+                      }}
+                      className="inline-flex items-center gap-1.5 text-xs md:text-sm font-semibold text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer group"
+                    >
+                      <span>View the full Technology Project Management service</span>
+                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                    </a>
+                  )}
                 </div>
 
                 {/* Lower Right Actions */}
                 <div className="flex flex-wrap items-center sm:justify-end gap-2.5">
-                  {sec.offerUrl && (
+                  {(sec.id === 'strategic-gtm-analysis' || sec.id === 'marketing-services' || sec.id === 'marketing-analysis') && (
                     <div className="flex items-center gap-2">
                       <a
-                        href={sec.offerUrl}
+                        href="/assets/aistudio/Vizhin_GTM_Assessment_290913e5.pdf"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="px-5 py-2.5 bg-neutral-900 hover:bg-neutral-850 text-emerald-400 hover:text-emerald-300 text-xs font-bold rounded-xl border border-emerald-800/80 hover:border-emerald-600 shadow-md transition-all flex items-center gap-2 cursor-pointer group"
                       >
                         <FileText className="w-4 h-4 text-emerald-400 group-hover:scale-105 transition-transform" />
-                        <span>View Offer</span>
+                        <span>View Brochure</span>
                         <span className="font-mono text-[10px] text-emerald-400">↗</span>
                       </a>
-                      <a
-                        href={sec.offerUrl}
-                        download="Vizhin_GTM_Assessment.pdf"
-                        className="p-2.5 bg-neutral-900 hover:bg-neutral-850 text-neutral-400 hover:text-emerald-300 rounded-xl border border-neutral-800 hover:border-emerald-700/60 transition-all cursor-pointer"
-                        title="Download PDF Offer"
-                      >
-                        <Download className="w-4 h-4" />
-                      </a>
-                    </div>
-                  )}
-
-                  {sec.id === 'marketing-services' && onNavigateMarketingServices && (
-                    <button
-                      type="button"
-                      onClick={onNavigateMarketingServices}
-                      className="px-5 py-2.5 bg-neutral-900 hover:bg-neutral-850 text-emerald-400 hover:text-emerald-300 text-xs font-bold rounded-xl border border-emerald-800/80 hover:border-emerald-600 shadow-md transition-all flex items-center gap-2 cursor-pointer group"
-                    >
-                      <Sparkles className="w-4 h-4 text-emerald-400 group-hover:scale-105 transition-transform" />
-                      <span>Explore Integration Services</span>
-                      <span className="font-mono text-[10px] text-emerald-400">→</span>
-                    </button>
-                  )}
-
-                  {(sec.id === 'marketing-services' || sec.id === 'marketing-analysis') && (
-                    <div className="flex items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={onNavigateMarketingAnalysis}
-                        className="px-5 py-2.5 bg-neutral-900 hover:bg-neutral-850 text-emerald-400 hover:text-emerald-300 text-xs font-bold rounded-xl border border-emerald-800/80 hover:border-emerald-600 shadow-md transition-all flex items-center gap-2 cursor-pointer group"
-                      >
-                        <FileText className="w-4 h-4 text-emerald-400 group-hover:scale-105 transition-transform" />
-                        <span>View Brochure</span>
-                        <span className="font-mono text-[10px] text-emerald-400">→</span>
-                      </button>
                       <a
                         href="/assets/aistudio/Vizhin_GTM_Assessment_290913e5.pdf"
                         download="Vizhin_GTM_Assessment.pdf"

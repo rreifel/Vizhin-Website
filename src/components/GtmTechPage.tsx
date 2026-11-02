@@ -223,16 +223,6 @@ export default function GtmTechPage({
               <span>Schedule Strategy Call</span>
               <span className="font-mono text-emerald-200">↗</span>
             </a>
-
-            <button
-              type="button"
-              onClick={onNavigateStrategicGtmAnalysis}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-neutral-900 hover:bg-neutral-850 text-neutral-200 hover:text-white text-xs font-semibold rounded-xl border border-neutral-800 hover:border-emerald-600/60 transition-all cursor-pointer group"
-            >
-              <Layers className="w-4 h-4 text-emerald-400" />
-              <span>Explore Strategic GTM Analysis</span>
-              <ArrowRight className="w-3.5 h-3.5 text-neutral-400 group-hover:translate-x-0.5 transition-transform" />
-            </button>
           </div>
         </motion.div>
 

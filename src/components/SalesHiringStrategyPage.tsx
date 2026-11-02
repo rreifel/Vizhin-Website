@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { motion } from 'motion/react';
 import { 
-  ArrowLeft, UserPlus, Calendar, CheckCircle2, 
-  FileCheck, Users, ShieldCheck, Mail, ClipboardList, Award 
+  ArrowLeft, ArrowRight, UserPlus, Calendar, CheckCircle2, 
+  ShieldCheck, Target, Compass
 } from 'lucide-react';
 import SiteHeader from './SiteHeader';
 
@@ -33,6 +33,14 @@ interface SalesHiringStrategyPageProps {
   onRequestAccount?: () => void;
 }
 
+const hiringPillars = [
+  'Define the exact candidate profile your business needs',
+  'Create objective vetting scorecards',
+  'Conduct deep-dive behavioral interviews',
+  "Structure competitive compensation packages that align a rep's incentives directly with your revenue goals",
+  'Build a comprehensive 30-60-90 day onboarding playbook, with the exact training, scripts, and playbooks new hires need'
+];
+
 export default function SalesHiringStrategyPage({
   currentUser,
   onSignOut,
@@ -49,8 +57,6 @@ export default function SalesHiringStrategyPage({
   onNavigateAuditCompliance,
   onNavigateMarketingServices,
   onNavigateSalesTeamAccountability,
-  onNavigateSalesHiringStrategy,
-  onNavigateTechnologyProjectManagement,
   onEnterPortal,
   onEnterOrg,
   onRequestAccount
@@ -143,88 +149,165 @@ export default function SalesHiringStrategyPage({
           </div>
         </motion.div>
 
-        {/* Detailed Analysis Breakdown */}
+        {/* Detailed Sections in Exact Specified Order */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.1 }}
-          className="bg-neutral-900/40 border border-neutral-850/80 rounded-2xl p-6 md:p-10 backdrop-blur-xs space-y-6"
+          className="space-y-6"
         >
-          <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">
-            Systematizing the Sales Recruiting and Onboarding Pipeline
-          </h2>
-
-          <div className="space-y-4 text-xs md:text-sm text-neutral-300 leading-relaxed font-normal">
-            <p>
+          {/* Section: The problem */}
+          <div className="bg-neutral-900/40 border border-neutral-850/80 hover:border-neutral-750 transition-all rounded-2xl p-6 md:p-8 backdrop-blur-xs space-y-3">
+            <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight flex items-center gap-2.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
+              <span>The problem</span>
+            </h2>
+            <p className="text-sm md:text-base text-neutral-300 leading-relaxed font-normal">
               For most founders, hiring sales reps is a costly roll of the dice. Charismatic candidates routinely interview exceptionally well, only to fail miserably once they are in the seat—costing you months of lost revenue, burned leads, and thousands in wasted salary. Without a dedicated sales leader who knows exactly how to screen for grit, process discipline, and true selling capability, growth-stage companies easily fall into the trap of hiring the wrong profile for their specific sales cycle. I eliminate this expensive guesswork by building a structured, repeatable talent acquisition engine designed to source and filter for elite performers.
-            </p>
-            <p>
-              When you partner with me for your sales hiring strategy, we don&apos;t just find people; we build a scalable hiring infrastructure. I define the exact candidate profile your business needs, create objective vetting scorecards, conduct deep-dive behavioral interviews, and structure competitive compensation packages that align a rep&apos;s incentives directly with your revenue goals. Furthermore, I build out a comprehensive 30-60-90 day onboarding playbook. This ensures your new hires hit the ground running with the exact training, scripts, and playbooks they need to shorten their time-to-productivity and start closing deals quickly.
             </p>
           </div>
 
-          {/* Core Hiring System Pillars */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-neutral-800/80">
-            <div className="p-4 rounded-xl bg-neutral-950/60 border border-neutral-850 space-y-2">
-              <div className="w-8 h-8 rounded-lg bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400">
-                <FileCheck className="w-4 h-4" />
-              </div>
-              <h3 className="text-xs font-bold text-white uppercase tracking-wider">Objective Candidate Scorecards</h3>
-              <p className="text-[11px] text-neutral-400 leading-relaxed">
-                Structured competency rubrics testing discovery instincts, objection handling, and coachability rather than charismatic resumes.
+          {/* Section: What we build together */}
+          <div className="bg-neutral-900/40 border border-neutral-850/80 hover:border-neutral-750 transition-all rounded-2xl p-6 md:p-8 backdrop-blur-xs space-y-5">
+            <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight flex items-center gap-2.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
+              <span>What we build together</span>
+            </h2>
+
+            <p className="text-sm md:text-base text-neutral-300 leading-relaxed font-normal">
+              When you partner with me for your sales hiring strategy, we don&apos;t just find people; we build a scalable hiring infrastructure.
+            </p>
+
+            {/* Working parts list */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+              {hiringPillars.map((item, idx) => (
+                <div 
+                  key={idx} 
+                  className="p-3.5 rounded-xl bg-neutral-950/60 border border-neutral-850/80 flex items-start gap-3 group hover:border-emerald-600/50 transition-all"
+                >
+                  <div className="w-5 h-5 rounded-md bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0 mt-0.5">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                  </div>
+                  <span className="text-xs md:text-sm text-neutral-200 font-medium leading-snug">
+                    {item}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <p className="text-sm md:text-base text-neutral-300 leading-relaxed font-normal pt-2 border-t border-neutral-850/70">
+              This ensures your new hires hit the ground running with the exact training, scripts, and playbooks they need to shorten their time-to-productivity and start closing deals quickly.
+            </p>
+          </div>
+
+          {/* Action Strategy & Revenue Session CTA */}
+          <div className="bg-gradient-to-r from-neutral-900/90 via-emerald-950/40 to-neutral-900/90 border border-emerald-800/60 rounded-2xl p-6 md:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
+            <div className="space-y-2 text-center sm:text-left">
+              <h3 className="text-lg md:text-xl font-bold text-white">
+                Ready to stop costly sales hiring mistakes?
+              </h3>
+              <p className="text-xs md:text-sm text-neutral-400 max-w-xl">
+                Book a 25-minute Talent Strategy Session to review candidate profiles, vetting scorecards, and ramp schedules for your upcoming sales hires.
               </p>
             </div>
 
-            <div className="p-4 rounded-xl bg-neutral-950/60 border border-neutral-850 space-y-2">
-              <div className="w-8 h-8 rounded-lg bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400">
-                <ClipboardList className="w-4 h-4" />
-              </div>
-              <h3 className="text-xs font-bold text-white uppercase tracking-wider">30-60-90 Day Onboarding</h3>
-              <p className="text-[11px] text-neutral-400 leading-relaxed">
-                Phased ramp playbooks with defined milestone certifications to dramatically reduce rep ramp time and protect deal pipeline.
-              </p>
-            </div>
-
-            <div className="p-4 rounded-xl bg-neutral-950/60 border border-neutral-850 space-y-2">
-              <div className="w-8 h-8 rounded-lg bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400">
-                <Award className="w-4 h-4" />
-              </div>
-              <h3 className="text-xs font-bold text-white uppercase tracking-wider">Incentive Plan Engineering</h3>
-              <p className="text-[11px] text-neutral-400 leading-relaxed">
-                Commission models and quota accelerators specifically designed to drive profitable multi-year revenue and pipeline retention.
-              </p>
+            <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
+              <a
+                href="https://zcal.co/rreifel/30min"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-5 py-3 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white text-xs font-bold rounded-xl shadow-md border border-emerald-500/30 transition-all flex items-center gap-2 cursor-pointer group"
+              >
+                <Calendar className="w-4 h-4 text-emerald-300 group-hover:scale-110 transition-transform" />
+                <span>Schedule Talent Call</span>
+                <span className="font-mono text-[10px] text-emerald-300">↗</span>
+              </a>
             </div>
           </div>
         </motion.div>
 
-        {/* Action Strategy & Revenue Session CTA */}
-        <div className="bg-gradient-to-r from-neutral-900/90 via-emerald-950/40 to-neutral-900/90 border border-emerald-800/60 rounded-2xl p-6 md:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
-          <div className="space-y-2 text-center sm:text-left">
-            <h3 className="text-lg md:text-xl font-bold text-white">
-              Ready to stop costly sales hiring mistakes?
-            </h3>
-            <p className="text-xs md:text-sm text-neutral-400 max-w-xl">
-              Book a 25-minute Talent Strategy Session to review candidate profiles, vetting scorecards, and ramp schedules for your upcoming sales hires.
-            </p>
+        {/* Related Services & Bottom Navigation (Links to Sales Team Accountability and Strategic GTM Analysis) */}
+        <div className="pt-8 border-t border-neutral-850/80 space-y-4">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-mono uppercase tracking-wider text-neutral-400">
+              Related Advisory Services
+            </span>
+            <button
+              onClick={onNavigateHome}
+              className="text-xs font-mono text-emerald-400 hover:text-emerald-300 transition-colors inline-flex items-center gap-1 cursor-pointer"
+            >
+              <span>View All Services</span>
+              <span>→</span>
+            </button>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Link to Sales Team Accountability & KPIs */}
             <a
-              href="https://zcal.co/rreifel/30min"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-5 py-3 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white text-xs font-bold rounded-xl shadow-md border border-emerald-500/30 transition-all flex items-center gap-2 cursor-pointer group"
+              href="/sales-team-accountability"
+              onClick={(e) => {
+                e.preventDefault();
+                if (onNavigateSalesTeamAccountability) {
+                  onNavigateSalesTeamAccountability();
+                } else {
+                  window.location.href = '/sales-team-accountability';
+                }
+              }}
+              className="p-4 rounded-xl bg-neutral-900/60 border border-neutral-800 hover:border-emerald-600/60 transition-all group flex items-start gap-3 cursor-pointer"
             >
-              <Calendar className="w-4 h-4 text-emerald-300 group-hover:scale-110 transition-transform" />
-              <span>Schedule Talent Call</span>
-              <span className="font-mono text-[10px] text-emerald-300">↗</span>
+              <div className="w-9 h-9 rounded-lg bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0 group-hover:scale-105 transition-transform">
+                <Target className="w-4 h-4" />
+              </div>
+              <div className="space-y-1">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-white group-hover:text-emerald-300 transition-colors">
+                  <span>Sales Team Accountability & KPIs</span>
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                </div>
+                <p className="text-[11px] text-neutral-400 leading-relaxed line-clamp-2">
+                  Shift from activity-driven to outcome-focused sales with objective KPI architecture and pipeline reviews.
+                </p>
+              </div>
             </a>
+
+            {/* Link to Strategic GTM Analysis */}
             <a
-              href="mailto:rreifel@vizhin.co?subject=Sales%20Hiring%20Strategy%20Inquiry"
-              className="px-4 py-3 bg-neutral-900 hover:bg-neutral-850 text-neutral-300 hover:text-white text-xs font-semibold rounded-xl border border-neutral-800 transition-all flex items-center gap-2"
+              href="/strategic-gtm-analysis"
+              onClick={(e) => {
+                e.preventDefault();
+                if (onNavigateStrategicGtmAnalysis) {
+                  onNavigateStrategicGtmAnalysis();
+                } else {
+                  window.location.href = '/strategic-gtm-analysis';
+                }
+              }}
+              className="p-4 rounded-xl bg-neutral-900/60 border border-neutral-800 hover:border-emerald-600/60 transition-all group flex items-start gap-3 cursor-pointer"
             >
-              <Mail className="w-4 h-4 text-emerald-400" />
-              <span>Email Ric Directly</span>
+              <div className="w-9 h-9 rounded-lg bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0 group-hover:scale-105 transition-transform">
+                <Compass className="w-4 h-4" />
+              </div>
+              <div className="space-y-1">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-white group-hover:text-emerald-300 transition-colors">
+                  <span>Strategic Go-to-Market Analysis</span>
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                </div>
+                <p className="text-[11px] text-neutral-400 leading-relaxed line-clamp-2">
+                  Diagnose hidden friction in your revenue engine, buyer personas, and market opportunity.
+                </p>
+              </div>
+            </a>
+          </div>
+
+          <div className="pt-4 flex items-center justify-center">
+            <a
+              href="/"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigateHome();
+              }}
+              className="inline-flex items-center gap-2 text-xs font-mono text-neutral-400 hover:text-emerald-400 transition-colors"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Return to Vizhin Consulting Home</span>
             </a>
           </div>
         </div>

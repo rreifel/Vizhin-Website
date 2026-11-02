@@ -190,24 +190,16 @@ export default function MarketingServicesPage({
               <span className="font-mono text-emerald-200">↗</span>
             </a>
 
-            {onNavigateMarketingAnalysis && (
-              <button
-                onClick={onNavigateMarketingAnalysis}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-neutral-900 hover:bg-neutral-850 text-neutral-200 hover:text-white text-xs font-semibold rounded-xl border border-neutral-800 hover:border-emerald-600/60 transition-all cursor-pointer"
-              >
-                <FileText className="w-4 h-4 text-emerald-400" />
-                <span>View Marketing Assessment Brochure</span>
-                <span className="font-mono text-xs text-emerald-400">→</span>
-              </button>
-            )}
-
-            <button
-              onClick={onNavigateHome}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-neutral-900 hover:bg-neutral-850 text-neutral-200 hover:text-white text-xs font-semibold rounded-xl border border-neutral-800 hover:border-emerald-600/60 transition-all cursor-pointer"
+            <a
+              href="/assets/aistudio/Vizhin_GTM_Assessment_290913e5.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-neutral-900 hover:bg-neutral-850 text-neutral-200 hover:text-white text-xs font-semibold rounded-xl border border-neutral-800 hover:border-emerald-600/60 transition-all cursor-pointer group"
             >
-              <span>Explore All Services</span>
-              <ArrowRight className="w-3.5 h-3.5 text-neutral-400" />
-            </button>
+              <FileText className="w-4 h-4 text-emerald-400 group-hover:scale-105 transition-transform" />
+              <span>View Brochure</span>
+              <span className="font-mono text-xs text-emerald-400">↗</span>
+            </a>
           </div>
         </motion.div>
       </main>

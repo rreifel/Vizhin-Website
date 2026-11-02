@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { motion } from 'motion/react';
 import { 
-  ArrowLeft, ShieldCheck, FileCheck, Users, Eye, CheckCircle2, 
-  Calendar, ShieldAlert, ArrowRight, Lock, ClipboardCheck 
+  ArrowLeft, ArrowRight, ShieldCheck, CheckCircle2, 
+  Calendar, Target, Compass
 } from 'lucide-react';
 import SiteHeader from './SiteHeader';
 
@@ -25,10 +25,42 @@ interface AuditCompliancePageProps {
   onNavigateGtmTech?: () => void;
   onNavigateAuditCompliance?: () => void;
   onNavigateMarketingServices?: () => void;
+  onNavigateSalesTeamAccountability?: () => void;
+  onNavigateSalesHiringStrategy?: () => void;
   onEnterPortal: () => void;
   onEnterOrg?: () => void;
   onRequestAccount?: () => void;
 }
+
+const verificationPillars = [
+  {
+    label: 'Partner accountability',
+    detail: 'who owns each partner relationship, what was agreed, and what actually happened'
+  },
+  {
+    label: 'Access',
+    detail: 'who could view, change, or approve partner and sales records, and whether that matches current roles'
+  },
+  {
+    label: 'Audit trails',
+    detail: 'whether the record of decisions and changes is complete, consistent, and easy to follow'
+  },
+  {
+    label: 'Sales governance',
+    detail: 'whether approvals, responsibilities, and documentation are clear enough for an outside reviewer to understand'
+  },
+  {
+    label: 'Readiness for review',
+    detail: 'whether the team can answer the hard questions without contradicting the record'
+  }
+];
+
+const reviewSteps = [
+  'Review current partner, access, and governance records as they stand today',
+  'Verify what holds up, and flag where the trail is thin, inconsistent, or missing',
+  'Prepare the team on the questions reviewers are most likely to ask, and the evidence that answers them',
+  'Organize the material so the review can be walked through in order, without hunting for documents'
+];
 
 export default function AuditCompliancePage({
   currentUser,
@@ -45,12 +77,26 @@ export default function AuditCompliancePage({
   onNavigateGtmTech,
   onNavigateAuditCompliance,
   onNavigateMarketingServices,
+  onNavigateSalesTeamAccountability,
   onEnterPortal,
   onEnterOrg,
   onRequestAccount
 }: AuditCompliancePageProps) {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (typeof document !== 'undefined') {
+      document.title = 'Sales Governance & Audit Readiness Consulting | Vizhin';
+      let meta = document.querySelector('meta[name="description"]');
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.setAttribute('name', 'description');
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute(
+        'content',
+        'Vizhin prepares sales teams for review by senior managers and boards, verifying partner accountability, access, and audit trails for due diligence.'
+      );
+    }
   }, []);
 
   return (
@@ -62,7 +108,7 @@ export default function AuditCompliancePage({
       {/* Grid Pattern Backdrop */}
       <div className="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.15] pointer-events-none" />
 
-      {/* Site Header */}
+      {/* Persistent Site Header */}
       <SiteHeader
         currentPage="services"
         currentUser={currentUser}
@@ -85,7 +131,7 @@ export default function AuditCompliancePage({
       />
 
       {/* Main Content Area */}
-      <main className="flex-1 px-6 pt-12 pb-24 max-w-5xl mx-auto z-10 w-full space-y-12">
+      <main className="flex-1 px-6 pt-12 pb-24 max-w-5xl mx-auto z-10 w-full space-y-10">
         {/* Navigation Breadcrumb */}
         <div className="flex items-center justify-between">
           <button
@@ -97,7 +143,7 @@ export default function AuditCompliancePage({
           </button>
 
           <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-emerald-950/80 text-emerald-400 border border-emerald-800/60 font-semibold uppercase tracking-wider">
-            Sales Governance & Compliance
+            Sales Governance &amp; Audit Readiness
           </span>
         </div>
 
@@ -108,136 +154,207 @@ export default function AuditCompliancePage({
           </div>
 
           <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight">
-            Sales Governance, Partner Accountability & Audit Readiness
+            Sales Governance, Partner Accountability &amp; Audit Readiness
           </h1>
-
-          <p className="text-sm md:text-base text-neutral-400 max-w-3xl leading-relaxed">
-            Preparing and verifying that your sales team and partner channels are fully ready for review by senior managers, boards of directors, and due diligence reviewers—ensuring total accountability, verified access controls, and transparent audit trails.
-          </p>
         </div>
 
-        {/* Primary Overview Box */}
+        {/* Opening Context Box - EXACT REQUIRED TEXT */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
           className="p-6 md:p-8 rounded-2xl bg-neutral-900/60 border border-emerald-850/80 hover:border-emerald-600/70 shadow-xl backdrop-blur-md transition-all space-y-4"
         >
-          <div className="text-sm md:text-base text-neutral-200 leading-relaxed font-medium">
-            When scaling a sales organization with external channels and distributed teams, operational discipline is non-negotiable. Vizhin prepares your sales organization for rigorous scrutiny by senior managers, boards, and due diligence reviewers, verifying partner accountability, user access permissions, and continuous audit trails across every stage of your revenue process.
-          </div>
+          <p className="text-sm md:text-base text-neutral-200 leading-relaxed font-normal">
+            When a sales team is reviewed, the risk is rarely that people worked hard. The risk is that no one can prove, cleanly, how partner deals were handled, who was responsible, and what was approved along the way. Partner arrangements, shared access, and informal approvals can look reasonable day to day, and still look uncertain when a senior manager, a board, or a due diligence team starts asking for evidence.
+          </p>
         </motion.div>
 
-        {/* Core Review & Verification Pillars */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-6 rounded-2xl bg-neutral-900/40 border border-neutral-850 space-y-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400">
-              <Users className="w-5 h-5" />
-            </div>
-            <h3 className="text-base font-bold text-white">Partner Accountability</h3>
-            <p className="text-xs text-neutral-400 leading-relaxed">
-              Verifying clear channel guidelines, verifying deal registration integrity, and establishing strict operational expectations so reseller and referral partners remain fully aligned and accountable.
-            </p>
-          </div>
-
-          <div className="p-6 rounded-2xl bg-neutral-900/40 border border-neutral-850 space-y-3">
-            <div className="w-10 h-10 rounded-xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400">
-              <Lock className="w-5 h-5" />
-            </div>
-            <h3 className="text-base font-bold text-white">Access & Permissions Verification</h3>
-            <p className="text-xs text-neutral-400 leading-relaxed">
-              Checking user access rights, role scopes, customer data boundaries, and administrative privileges to eliminate data leakage and maintain security compliance.
-            </p>
-          </div>
-
-          <div className="p-6 rounded-2xl bg-neutral-900/40 border border-neutral-850 space-y-3">
-            <div className="w-10 h-10 rounded-xl bg-indigo-950/80 border border-indigo-800/60 flex items-center justify-center text-indigo-400">
-              <ClipboardCheck className="w-5 h-5" />
-            </div>
-            <h3 className="text-base font-bold text-white">Audit Trail Inspection</h3>
-            <p className="text-xs text-neutral-400 leading-relaxed">
-              Confirming that pipeline updates, stage progressions, pricing approvals, and contract versions maintain verifiable event histories ready for instant audit retrieval.
-            </p>
-          </div>
-        </div>
-
-        {/* Detailed Advisory & Preparation Context */}
+        {/* Detailed Sections in Exact Specified Order */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.1 }}
-          className="bg-neutral-900/40 border border-neutral-850/80 rounded-2xl p-6 md:p-10 backdrop-blur-xs space-y-6"
+          className="space-y-6"
         >
-          <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">
-            Preparing Sales Teams for Senior Leadership & Due Diligence Scrutiny
-          </h2>
+          {/* Section: What Vizhin verifies */}
+          <div className="bg-neutral-900/40 border border-neutral-850/80 hover:border-neutral-750 transition-all rounded-2xl p-6 md:p-8 backdrop-blur-xs space-y-5">
+            <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight flex items-center gap-2.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
+              <span>What Vizhin verifies</span>
+            </h2>
 
-          <div className="space-y-4 text-xs md:text-sm text-neutral-300 leading-relaxed font-normal">
-            <p>
-              When external reviewers, board members, or potential acquiring entities inspect a revenue engine, unverified claims and sloppy recordkeeping quickly erode valuation. As your Fractional VP of Sales and governance advisor, I prepare and verify your entire sales infrastructure for executive-level scrutiny. We inspect who has access to customer records, confirm that pipeline movements reflect authentic buyer commitments, and verify that administrative permissions prevent unauthorized modifications.
-            </p>
-            <p>
-              This level of structural oversight ensures your company is always prepared for enterprise-level scrutiny, due diligence, or board reviews without the typical scramble. By verifying clean, continuous audit trails throughout daily sales workflows, we protect your company's valuation and confirm that your sales operations operate with high transparency, accountability, and reliability.
-            </p>
-            <p>
-              This gives you, your executive peers, investors, and prospective enterprise partners total confidence that your revenue operations are thoroughly verified, accountable, and legally sound.
+            <ul className="space-y-3 pt-1">
+              {verificationPillars.map((item, idx) => (
+                <li 
+                  key={idx} 
+                  className="p-3.5 rounded-xl bg-neutral-950/60 border border-neutral-850/80 flex items-start gap-3 group hover:border-emerald-600/50 transition-all"
+                >
+                  <div className="w-5 h-5 rounded-md bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0 mt-0.5">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                  </div>
+                  <span className="text-xs md:text-sm text-neutral-200 leading-relaxed">
+                    <strong className="text-white font-semibold">{item.label}:</strong> {item.detail}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Section: How a readiness review runs */}
+          <div className="bg-neutral-900/40 border border-neutral-850/80 hover:border-neutral-750 transition-all rounded-2xl p-6 md:p-8 backdrop-blur-xs space-y-5">
+            <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight flex items-center gap-2.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
+              <span>How a readiness review runs</span>
+            </h2>
+
+            <ol className="space-y-3 pt-1">
+              {reviewSteps.map((step, idx) => (
+                <li 
+                  key={idx} 
+                  className="p-3.5 rounded-xl bg-neutral-950/60 border border-neutral-850/80 flex items-start gap-3 group hover:border-emerald-600/50 transition-all"
+                >
+                  <div className="w-6 h-6 rounded-md bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 font-mono text-xs font-bold shrink-0 mt-0.5">
+                    {idx + 1}
+                  </div>
+                  <span className="text-xs md:text-sm text-neutral-200 leading-relaxed">
+                    {step}
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </div>
+
+          {/* Section: What you walk away with */}
+          <div className="bg-neutral-900/40 border border-neutral-850/80 hover:border-neutral-750 transition-all rounded-2xl p-6 md:p-8 backdrop-blur-xs space-y-3">
+            <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight flex items-center gap-2.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
+              <span>What you walk away with</span>
+            </h2>
+
+            <p className="text-sm md:text-base text-neutral-200 leading-relaxed font-normal">
+              A sales team that can face a senior manager, board, or due diligence review with organized evidence, consistent answers, and gaps already addressed — instead of discovering those gaps during the review itself.
             </p>
           </div>
 
-          {/* Diligence Checklist */}
-          <div className="pt-4 border-t border-neutral-800/80 space-y-3">
-            <p className="text-xs font-mono uppercase tracking-wider text-neutral-400 font-semibold">
-              Key Areas of Verification & Audit Preparation:
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-neutral-300">
-              <div className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                <span>Checking partner tier eligibility and contract adherence</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                <span>Verifying user role scopes and sensitive customer data access</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                <span>Validating change logs for deal amounts, stages, and discounts</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                <span>Preparing documentation for board reviews and M&A due diligence</span>
-              </div>
+          {/* Action Strategy CTA */}
+          <div className="bg-gradient-to-r from-neutral-900/90 via-emerald-950/40 to-neutral-900/90 border border-emerald-800/60 rounded-2xl p-6 md:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
+            <div className="space-y-2 text-center sm:text-left">
+              <h3 className="text-lg md:text-xl font-bold text-white">
+                Preparing for an upcoming executive review or due diligence?
+              </h3>
+              <p className="text-xs md:text-sm text-neutral-400 max-w-xl">
+                Schedule a 25-minute Governance &amp; Audit Readiness Session to evaluate your current partner records, access controls, and audit trails.
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
+              <a
+                href="https://zcal.co/rreifel/30min"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-5 py-3 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white text-xs font-bold rounded-xl shadow-md border border-emerald-500/30 transition-all flex items-center gap-2 cursor-pointer group"
+              >
+                <Calendar className="w-4 h-4 text-emerald-300 group-hover:scale-110 transition-transform" />
+                <span>Schedule Readiness Call</span>
+                <span className="font-mono text-[10px] text-emerald-300">↗</span>
+              </a>
             </div>
           </div>
+        </motion.div>
 
-          {/* Action CTAs */}
-          <div className="pt-6 border-t border-neutral-800/80 flex flex-col sm:flex-row items-center gap-4">
-            <a
-              href="https://zcal.co/rreifel/30min"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white text-xs font-bold rounded-xl shadow-md border border-emerald-500/30 transition-all cursor-pointer group"
-            >
-              <Calendar className="w-4 h-4 text-emerald-200 group-hover:scale-105 transition-transform" />
-              <span>Schedule Audit Readiness Review</span>
-              <span className="font-mono text-emerald-200">↗</span>
-            </a>
-
+        {/* Related Services & Bottom Navigation (Links to Sales Team Accountability and Strategic GTM Analysis) */}
+        <div className="pt-8 border-t border-neutral-850/80 space-y-4">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-mono uppercase tracking-wider text-neutral-400">
+              Related Advisory Services
+            </span>
             <button
               onClick={onNavigateHome}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-neutral-900 hover:bg-neutral-850 text-neutral-200 hover:text-white text-xs font-semibold rounded-xl border border-neutral-800 hover:border-emerald-600/60 transition-all cursor-pointer"
+              className="text-xs font-mono text-emerald-400 hover:text-emerald-300 transition-colors inline-flex items-center gap-1 cursor-pointer"
             >
-              <span>Explore All GTM Services</span>
-              <ArrowRight className="w-3.5 h-3.5 text-neutral-400" />
+              <span>View All Services</span>
+              <span>→</span>
             </button>
           </div>
-        </motion.div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Link to Sales Team Accountability & KPIs */}
+            <a
+              href="/sales-team-accountability"
+              onClick={(e) => {
+                e.preventDefault();
+                if (onNavigateSalesTeamAccountability) {
+                  onNavigateSalesTeamAccountability();
+                } else {
+                  window.location.href = '/sales-team-accountability';
+                }
+              }}
+              className="p-4 rounded-xl bg-neutral-900/60 border border-neutral-800 hover:border-emerald-600/60 transition-all group flex items-start gap-3 cursor-pointer"
+            >
+              <div className="w-9 h-9 rounded-lg bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0 group-hover:scale-105 transition-transform">
+                <Target className="w-4 h-4" />
+              </div>
+              <div className="space-y-1">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-white group-hover:text-emerald-300 transition-colors">
+                  <span>Sales Team Accountability &amp; KPIs</span>
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                </div>
+                <p className="text-[11px] text-neutral-400 leading-relaxed line-clamp-2">
+                  Shift from activity-driven to outcome-focused sales with objective KPI architecture and pipeline reviews.
+                </p>
+              </div>
+            </a>
+
+            {/* Link to Strategic GTM Analysis */}
+            <a
+              href="/strategic-gtm-analysis"
+              onClick={(e) => {
+                e.preventDefault();
+                if (onNavigateStrategicGtmAnalysis) {
+                  onNavigateStrategicGtmAnalysis();
+                } else {
+                  window.location.href = '/strategic-gtm-analysis';
+                }
+              }}
+              className="p-4 rounded-xl bg-neutral-900/60 border border-neutral-800 hover:border-emerald-600/60 transition-all group flex items-start gap-3 cursor-pointer"
+            >
+              <div className="w-9 h-9 rounded-lg bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0 group-hover:scale-105 transition-transform">
+                <Compass className="w-4 h-4" />
+              </div>
+              <div className="space-y-1">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-white group-hover:text-emerald-300 transition-colors">
+                  <span>Strategic Go-to-Market Analysis</span>
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                </div>
+                <p className="text-[11px] text-neutral-400 leading-relaxed line-clamp-2">
+                  Diagnose hidden friction in your revenue engine, buyer personas, and market opportunity.
+                </p>
+              </div>
+            </a>
+          </div>
+
+          <div className="pt-4 flex items-center justify-center">
+            <a
+              href="/"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigateHome();
+              }}
+              className="inline-flex items-center gap-2 text-xs font-mono text-neutral-400 hover:text-emerald-400 transition-colors"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Return to Vizhin Consulting Home</span>
+            </a>
+          </div>
+        </div>
       </main>
 
       {/* Corporate Footer */}
       <footer className="border-t border-neutral-900/80 bg-[#060607] py-8 px-6 text-center text-xs text-neutral-500 font-mono z-10">
         <div className="max-w-7xl mx-auto flex items-center justify-center gap-2">
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-          <span>VIZHIN LLC • SALES GOVERNANCE, PARTNER ACCOUNTABILITY & AUDIT READINESS</span>
+          <span>VIZHIN LLC • SALES GOVERNANCE, PARTNER ACCOUNTABILITY &amp; AUDIT READINESS</span>
         </div>
       </footer>
     </div>

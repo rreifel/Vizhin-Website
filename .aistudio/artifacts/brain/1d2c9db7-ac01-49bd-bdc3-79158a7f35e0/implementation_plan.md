@@ -1,73 +1,22 @@
-# Homepage SEO Title Optimization
+# Implementation Plan: Embedded PDF Brochure Viewer for Marketing Analysis
 
-Upgrade the homepage title tag from the generic single-word brand to the user-selected high-intent search title: **"Go-to-Market Consulting & Fractional VP of Sales | Vizhin"**.
+Replace the simplified HTML text summary cards in the interactive document viewer on the Marketing Analysis page (`/marketing-analysis`) with a full embedded PDF document viewer that displays the entire brochure with all images, graphics, and pages.
 
-## User Review & Critical Decisions
+## Proposed Changes
 
-> [!IMPORTANT]
-> The target title has been selected by the user via interactive clarification.
+### `src/components/MarketingAnalysisPage.tsx`
+- **Replace Mocked Text Cards**: Remove the partial text-only mockups (`Page 1` and `Page 2` HTML cards).
+- **Embed Full PDF Document**:
+  - Implement a responsive `<object>` container backed by an `<iframe>` embedding `/assets/aistudio/Vizhin_GTM_Assessment_290913e5.pdf#view=FitH&toolbar=1`.
+  - Set container dimensions (`min-h-[650px] md:h-[850px] lg:h-[950px]`) with smooth scrolling and high-fidelity rendering of every vector, image, and page.
+- **Top Document Bar**:
+  - Keep interactive status indicator and title: "Sublime x Vizhin GTM Assessment Brochure (Complete 2-Page Document)".
+  - Add quick action buttons:
+    - **Open in New Tab ↗**: Opens the PDF in a clean browser window for maximum readability.
+    - **Download PDF ↓**: Direct download action.
+- **Graceful Fallback**: Include a mobile-friendly preview fallback message with a direct "Open Fullscreen PDF" button in case browser restrictions block inline iframe PDF rendering.
 
-- **Confirmed Decision**: Update the homepage `<title>` and OpenGraph `<meta property="og:title">` to:  
-  `Go-to-Market Consulting & Fractional VP of Sales | Vizhin`
-- **Scope Discipline**: No visible layout, text, or styling elements on the page will be changed; only `<head>` metadata, OpenGraph tags, and runtime document title synchronization will be updated.
-
----
-
-## 1. Overview & Core Concept
-
-- **What It Does**: Replaces the single-word `<title>Vizhin</title>` with a descriptive, keyword-rich title tag tailored for B2B search engine indexing and social snippet rendering.
-- **Target Audience**: Growth-stage founders, CEOs, and revenue leaders searching for GTM advisory, fractional sales leadership, and pipeline architecture.
-- **Key Value**: Improves search engine ranking visibility and CTR in Google search results by pairing target keywords (*"Go-to-Market Consulting"*, *"Fractional VP of Sales"*, *"Vizhin"*) with the recently deployed meta description.
-
----
-
-## 2. User Experience & Visual Design
-
-- **Search Snippet Presentation**:
-  - **Title in SERP**: `Go-to-Market Consulting & Fractional VP of Sales | Vizhin` (54 characters — optimal for desktop and mobile without truncation).
-  - **Description in SERP**: `Vizhin helps growth-stage companies align sales and marketing, fix CRM and pipeline friction, and build accountable teams that predictably grow revenue.`
-- **Browser Tab Experience**: Displays the branded, descriptive title in the browser tab and bookmarks bar.
-- **Social Sharing**: Slack, LinkedIn, X/Twitter, and iMessage preview cards will present the new title alongside the brand logo and snippet summary.
-
----
-
-## 3. Key Decisions & Trade-Offs
-
-- **Character Count Balance**:
-  - *Chosen Title*: `Go-to-Market Consulting & Fractional VP of Sales | Vizhin` (54 characters).
-  - *Why*: Google typically displays up to 60 characters in search results. This fits naturally without ellipses or truncation while targeting the two core high-value search queries.
-- **HTML + Client-Side Dynamic Synchronization**:
-  - *Chosen Approach*: Update `index.html`, `metadata.json`, and the client-side `document.title` handler so both static crawl bots (search spiders) and in-browser SPA transitions reflect the exact title.
-  - *Alternatives Considered*: Updating only `index.html` would work for direct hits, but adding the client-side hook ensures back/forward navigation within the SPA always retains the optimized title.
-
----
-
-## 4. Technical Architecture & Metadata Strategy
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                      HTML Document Head                     │
-│  <title>Go-to-Market Consulting & ... | Vizhin</title>      │
-│  <meta property="og:title" content="...">                   │
-│  <meta name="description" content="...">                    │
-└──────────────────────────────┬──────────────────────────────┘
-                               │
-                               ▼
-┌─────────────────────────────────────────────────────────────┐
-│                     Vite Build Process                      │
-│             index.html ──► dist/index.html                  │
-│             postbuild.js ──► dist/*/index.html fallbacks    │
-└──────────────────────────────┬──────────────────────────────┘
-                               │
-                               ▼
-┌─────────────────────────────────────────────────────────────┐
-│               Runtime Client (React SPA / DOM)              │
-│       document.title & meta tag dynamic consistency         │
-└─────────────────────────────────────────────────────────────┘
-```
-
-- **Static Entry Point**:
-  - Update `<title>` and `<meta property="og:title">` in `/index.html`.
-  - Update `name` or `description` alignment in `/metadata.json`.
-- **Production Build & Route Fallbacks**:
-  - Compile the applet to update `dist/index.html` and static route copies (`dist/meddpicc/index.html`, `dist/Company/About/index.html`, etc.).
+## Verification Plan
+1. Run `tsc --noEmit` via `lint_applet` to ensure type safety.
+2. Run `npm run build` via `compile_applet` to ensure build and postbuild scripts succeed.
+3. Verify the embedded viewer loads `/assets/aistudio/Vizhin_GTM_Assessment_290913e5.pdf` seamlessly when expanded.

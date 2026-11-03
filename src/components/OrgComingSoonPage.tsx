@@ -62,6 +62,15 @@ export default function OrgComingSoonPage({
   const [errorMessage, setErrorMessage] = useState('');
   const [savedData, setSavedData] = useState<{ company: string; email: string } | null>(null);
 
+  const handleDone = () => {
+    setShowNotifyModal(false);
+    if (typeof window !== 'undefined' && (window.location.hostname === 'vizhin.co' || window.location.hostname === 'www.vizhin.co')) {
+      window.location.assign('https://vizhin.co');
+      return;
+    }
+    onNavigateHome();
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage('');
@@ -96,32 +105,6 @@ export default function OrgComingSoonPage({
       const list = existingRaw ? JSON.parse(existingRaw) : [];
       list.unshift(newEntry);
       localStorage.setItem('vzn_org_waitlist', JSON.stringify(list));
-
-      // 2. Forward information to rreifel@vizhin.co via pre-populated mail client
-      const subject = encodeURIComponent(`ORGVizhin Early Access Notification Request - ${trimmedCompany}`);
-      const body = encodeURIComponent(
-        `Hello Vizhin Team,\n\nPlease notify us when ORGVizhin is ready.\n\n` +
-        `Company Name: ${trimmedCompany}\n` +
-        `Work Email: ${trimmedEmail}\n` +
-        `Submitted At: ${new Date().toLocaleString()}\n` +
-        `Destination: rreifel@vizhin.co\n` +
-        `Page: vizhin.co/org\n\n` +
-        `Thank you!`
-      );
-      const mailtoUrl = `mailto:rreifel@vizhin.co?subject=${subject}&body=${body}`;
-
-      // Open mailto link
-      try {
-        const link = document.createElement('a');
-        link.href = mailtoUrl;
-        link.target = '_blank';
-        link.rel = 'noopener noreferrer';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      } catch (err) {
-        console.warn('Mail client trigger encountered an issue:', err);
-      }
 
       setSavedData({ company: trimmedCompany, email: trimmedEmail });
       setIsSubmitted(true);
@@ -370,7 +353,7 @@ export default function OrgComingSoonPage({
                   </form>
                 </>
               ) : (
-                <div className="space-y-4 py-2 text-center">
+                <div className="space-y-5 py-2 text-center">
                   <div className="w-12 h-12 rounded-full bg-cyan-950 border border-cyan-800/80 flex items-center justify-center text-cyan-400 mx-auto">
                     <CheckCircle2 className="w-6 h-6" />
                   </div>
@@ -383,20 +366,14 @@ export default function OrgComingSoonPage({
                     </p>
                   </div>
 
-                  <div className="pt-2 flex flex-col gap-2">
+                  <div className="pt-2">
                     <button
                       type="button"
-                      onClick={() => setShowNotifyModal(false)}
-                      className="w-full py-2.5 bg-neutral-900 hover:bg-neutral-850 border border-neutral-800 text-white text-xs font-semibold rounded-xl transition-colors cursor-pointer"
+                      onClick={handleDone}
+                      className="w-full py-3 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white text-xs font-bold tracking-wider rounded-xl transition-all shadow-md shadow-emerald-950/40 cursor-pointer"
                     >
-                      Done
+                      DONE
                     </button>
-                    <a
-                      href={`mailto:rreifel@vizhin.co?subject=${encodeURIComponent(`ORGVizhin Notification Confirmation - ${savedData?.company || ''}`)}&body=${encodeURIComponent(`Company: ${savedData?.company}\nEmail: ${savedData?.email}\nRetained for ORGVizhin launch notification.`)}`}
-                      className="text-[11px] text-cyan-400 hover:text-cyan-300 font-mono underline"
-                    >
-                      Open in email client if it did not open automatically
-                    </a>
                   </div>
                 </div>
               )}

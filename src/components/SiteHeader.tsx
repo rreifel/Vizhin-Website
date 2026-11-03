@@ -127,12 +127,16 @@ export default function SiteHeader({
       label: 'Products', 
       content: (
         <div className="p-2.5 w-64 space-y-1.5 text-left">
-          {/* Top: ORGVision */}
+          {/* Top: ORGVizhin */}
           <a
-            href="https://vizhin.co/org/"
-            onClick={() => {
+            href="/org"
+            onClick={(e) => {
               setActiveDropdown(null);
               setMobileMenuOpen(false);
+              if (onEnterOrg) {
+                e.preventDefault();
+                onEnterOrg();
+              }
             }}
             className="w-full text-left p-2.5 rounded-lg hover:bg-neutral-900 transition-colors flex items-center gap-3 cursor-pointer group border border-transparent hover:border-cyan-850/60 block"
           >
@@ -142,7 +146,7 @@ export default function SiteHeader({
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-neutral-200 group-hover:text-cyan-400 transition-colors">
-                  ORGVision
+                  ORGVizhin
                 </span>
                 <span className="text-[10px] font-mono text-cyan-400">→</span>
               </div>

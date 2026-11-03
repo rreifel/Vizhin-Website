@@ -29,7 +29,9 @@ const routes = [
   'Company/About', 
   'login', 
   'request', 
-  'portal'
+  'portal',
+  'org',
+  'ORG'
 ];
 const distDir = path.resolve('dist');
 const indexPath = path.join(distDir, 'index.html');
@@ -161,6 +163,21 @@ if (fs.existsSync(indexPath)) {
           /<meta property="og:description" content=".*?"\s*\/?>/,
           '<meta property="og:description" content="De-risk software selection, migration, and implementation. Vizhin provides platform-agnostic oversight so your technology investments deliver value on time.">'
         );
+    } else if (route === 'org' || route === 'ORG') {
+      routeHtml = routeHtml
+        .replace(/<title>.*?<\/title>/, '<title>ORGVizhin - Workforce Architecture | Coming Soon | Vizhin</title>')
+        .replace(
+          /<meta name="description" content=".*?"\s*\/?>/,
+          '<meta name="description" content="ORGVizhin is coming soon. Dynamic workforce modeling, organizational visualization, and team alignment infrastructure. Request early access at vizhin.co/org.">'
+        )
+        .replace(
+          /<meta property="og:title" content=".*?"\s*\/?>/,
+          '<meta property="og:title" content="ORGVizhin - Workforce Architecture | Coming Soon | Vizhin">'
+        )
+        .replace(
+          /<meta property="og:description" content=".*?"\s*\/?>/,
+          '<meta property="og:description" content="ORGVizhin is coming soon. Dynamic workforce modeling, organizational visualization, and team alignment infrastructure. Request early access at vizhin.co/org.">'
+        );
     }
 
     fs.writeFileSync(path.join(routeDir, 'index.html'), routeHtml, 'utf8');
@@ -175,19 +192,7 @@ if (fs.existsSync(indexPath)) {
   # Exclude sitemap.xml and robots.txt explicitly from single-page fallback
   RewriteRule ^(sitemap\\.xml|robots\\.txt)$ - [L]
 
-  # 1. Forward /ORG and /org requests directly to /org/
-  RewriteCond %{REQUEST_URI} !^/org/
-  RewriteRule ^ORG/?$ /org/ [R=301,NC,L]
-
-  # 2. Forward /ORG/<path> directly to /org/<path>
-  RewriteCond %{REQUEST_URI} !^/org/
-  RewriteRule ^ORG/(.*)$ /org/$1 [R=301,NC,L]
-
-  # 3. Forward /ORGdemo directly to /org/ORGdemo
-  RewriteCond %{REQUEST_URI} !^/org/
-  RewriteRule ^ORGdemo/?$ /org/ORGdemo [R=301,NC,L]
-
-  # 4. Standard SPA rewrite for the root Vizhin marketing website (excluding sitemap.xml and robots.txt)
+  # Standard SPA rewrite for the root Vizhin marketing website (excluding sitemap.xml and robots.txt)
   RewriteCond %{REQUEST_URI} !^/(sitemap\\.xml|robots\\.txt)$ [NC]
   RewriteRule ^index\\.html$ - [L]
   RewriteCond %{REQUEST_FILENAME} !-f
@@ -212,13 +217,16 @@ if (fs.existsSync(indexPath)) {
 </Files>
 `;
   fs.writeFileSync(path.join(distDir, '.htaccess'), htaccessContent, 'utf8');
-  console.log('✓ Created dist/.htaccess with sitemap/robots exclusions and /ORG rewrite rules');
+  console.log('✓ Created dist/.htaccess with sitemap/robots exclusions and SPA rewrite rules');
 
   // Ensure sitemap.xml and robots.txt are directly in dist
   const sitemapContent = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.vizhin.co/</loc>
+  </url>
+  <url>
+    <loc>https://www.vizhin.co/org</loc>
   </url>
   <url>
     <loc>https://www.vizhin.co/strategic-gtm-analysis</loc>

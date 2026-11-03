@@ -27,6 +27,7 @@ import MarketingServicesPage from './components/MarketingServicesPage';
 import SalesTeamAccountabilityPage from './components/SalesTeamAccountabilityPage';
 import SalesHiringStrategyPage from './components/SalesHiringStrategyPage';
 import TechnologyProjectManagementPage from './components/TechnologyProjectManagementPage';
+import OrgComingSoonPage from './components/OrgComingSoonPage';
 import VizhinOrgPage from "./components/VizhinOrgPage";
 import VizhinOrgLoginScreen from './components/VizhinOrgLoginScreen';
 import VizhinLogo from './components/VizhinLogo';
@@ -46,10 +47,7 @@ export default function App() {
         }
         return "orgdemo";
       }
-      if (p === "/org" || p.startsWith("/org/")) {
-        if (USE_STANDALONE_VIZHIN_ORG) {
-          redirectToVizhinOrg('/org/');
-        }
+      if (p === "/org" || p === "/org/" || p.startsWith("/org")) {
         return "org";
       }
       if (p === "/meddpicc") return "meddpicc";
@@ -76,7 +74,7 @@ export default function App() {
     setUnauthScreen(screen);
     if (typeof window !== "undefined") {
       let p = "/";
-      if (screen === "org") p = "/ORG";
+      if (screen === "org") p = "/org";
       else if (screen === "orgdemo") p = "/ORGdemo";
       else if (screen === "meddpicc") p = "/meddpicc";
       else if (screen === "marketing-analysis") p = "/marketing-analysis";
@@ -160,6 +158,12 @@ export default function App() {
         meta.setAttribute(
           'content',
           'De-risk software selection, migration, and implementation. Vizhin provides platform-agnostic oversight so your technology investments deliver value on time.'
+        );
+      } else if (unauthScreen === 'org') {
+        document.title = 'ORGVizhin - Workforce Architecture | Coming Soon | Vizhin';
+        meta.setAttribute(
+          'content',
+          'ORGVizhin is coming soon. Workforce architecture, dynamic org visualization, and team alignment. Request early notification at vizhin.co/org.'
         );
       } else {
         document.title = 'Go-to-Market Consulting & Fractional VP of Sales | Vizhin';
@@ -373,15 +377,6 @@ export default function App() {
   };
 
   const handleEnterOrg = () => {
-    if (USE_STANDALONE_VIZHIN_ORG) {
-      redirectToVizhinOrg('/org/');
-      return;
-    }
-    if (!currentUser) {
-      setOrgInitialView('terminal');
-    } else {
-      setOrgInitialView('coming-soon');
-    }
     navigateTo('org');
   };
 
@@ -724,56 +719,28 @@ export default function App() {
   }
 
   if (unauthScreen === 'org') {
-    if (USE_STANDALONE_VIZHIN_ORG) {
-      if (typeof window !== 'undefined') {
-        redirectToVizhinOrg('/org/');
-      }
-      return (
-        <div className="min-h-screen bg-[#070708] text-white flex flex-col items-center justify-center p-6 text-center">
-          <div className="w-14 h-14 rounded-2xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400 mb-5 animate-pulse shadow-lg shadow-cyan-950/50">
-            <Network className="w-7 h-7" />
-          </div>
-          <h2 className="text-xl sm:text-2xl font-bold mb-2">Connecting to VizhinORG...</h2>
-          <p className="text-xs sm:text-sm text-neutral-400 max-w-md mb-6 leading-relaxed">
-            Opening your dedicated workforce architecture environment in the standalone Remix VizhinORG project.
-          </p>
-          <div className="flex items-center gap-3">
-            <a
-              href={getVizhinOrgUrl('/ORG')}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-5 py-2.5 bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-500 hover:to-teal-500 text-white rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer flex items-center gap-2"
-            >
-              <span>Launch Workspace Manually</span>
-              <span className="font-mono">→</span>
-            </a>
-            <button
-              onClick={() => navigateTo('landing')}
-              className="px-4 py-2.5 bg-neutral-900 hover:bg-neutral-800 text-neutral-300 border border-neutral-700 rounded-xl text-xs font-semibold cursor-pointer"
-            >
-              Back to Home
-            </button>
-          </div>
-        </div>
-      );
-    }
-
     return (
-      <VizhinOrgPage 
+      <OrgComingSoonPage 
         currentUser={currentUser}
         onSignOut={handleLogout}
         onSignOutOrg={handleSignOutOrg}
         onSignOutCRM={handleSignOutCRM}
         onSwitchUser={handleLoginSuccess}
-        onLoginSuccess={handleLoginSuccess}
-        initialViewMode={currentUser ? (orgInitialView || 'coming-soon') : 'terminal'}
-        onBack={() => navigateTo('landing')}
+        onNavigateHome={() => navigateTo('landing')}
+        onNavigateMeddpicc={() => navigateTo('meddpicc')}
+        onNavigateMarketingAnalysis={() => navigateTo('marketing-analysis')}
+        onNavigateJointDeliveryPartners={() => navigateTo('partners')}
+        onNavigateAbout={() => navigateTo('about')}
+        onNavigateStrategicGtmAnalysis={() => navigateTo('strategic-gtm-analysis')}
+        onNavigateGtmTech={() => navigateTo('gtm-tech')}
+        onNavigateAuditCompliance={() => navigateTo('audit-compliance')}
+        onNavigateMarketingServices={() => navigateTo('marketing-services')}
+        onNavigateSalesTeamAccountability={() => navigateTo('sales-team-accountability')}
+        onNavigateSalesHiringStrategy={() => navigateTo('sales-hiring-strategy')}
+        onNavigateTechnologyProjectManagement={() => navigateTo('technology-project-management')}
         onEnterPortal={() => navigateTo(currentUser ? 'portal' : 'login')}
         onEnterOrg={handleEnterOrg}
         onRequestAccount={() => navigateTo('request')}
-        onNavigateMeddpicc={() => navigateTo('meddpicc')}
-        onNavigateMarketingAnalysis={() => navigateTo('marketing-analysis')}
-        onNavigateOrgDemo={() => navigateTo('orgdemo')}
       />
     );
   }

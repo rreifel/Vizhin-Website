@@ -63,10 +63,34 @@ export default function ContactPage({
   const [notes, setNotes] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+  const [zcalEmbedUrl, setZcalEmbedUrl] = useState('');
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
+
+  useEffect(() => {
+    if (!zcalEmbedUrl) return;
+
+    // Remove any previously appended zcal embed script to force a clean re-execution
+    const oldScript = document.getElementById('zcal-embed-script');
+    if (oldScript) {
+      oldScript.remove();
+    }
+
+    // Allow DOM to mount the .zcal-inline-widget container first before loading widget script
+    const timer = setTimeout(() => {
+      const script = document.createElement('script');
+      script.id = 'zcal-embed-script';
+      script.type = 'text/javascript';
+      script.async = true;
+      script.src = 'https://static.zcal.co/embed/v1/embed.js';
+      document.body.appendChild(script);
+    }, 50);
+
+    return () => clearTimeout(timer);
+  }, [zcalEmbedUrl]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -136,10 +160,12 @@ export default function ContactPage({
       }
 
       if (response.ok && result?.success) {
-        // Redirect to scheduling link ONLY after email send succeeds, pre-populating zcal invite
+        // Render zcal embed inline pre-populating all 4 URL-encoded parameters
         const fullName = `${trimmedFirst} ${trimmedLast}`.trim();
         const zcalUrl = `https://zcal.co/rreifel/30min?name=${encodeURIComponent(fullName)}&email=${encodeURIComponent(trimmedEmail)}&a0=${encodeURIComponent(trimmedCompany)}&a1=${encodeURIComponent(trimmedNotes)}`;
-        window.location.assign(zcalUrl);
+        setZcalEmbedUrl(zcalUrl);
+        setSubmitted(true);
+        setIsSubmitting(false);
       } else {
         const errorMsg = result?.error || 'Unable to submit your message right now. Please try again or email rreifel@vizhin.co directly.';
         setFormError(errorMsg);
@@ -222,141 +248,175 @@ export default function ContactPage({
           transition={{ duration: 0.3 }}
           className="p-8 md:p-10 rounded-2xl bg-neutral-900/40 border border-neutral-800/80 shadow-2xl relative backdrop-blur-sm space-y-8"
         >
-          {/* Intro text displayed on the form */}
-          <div className="space-y-2 border-b border-neutral-800/70 pb-6">
-            <p className="text-base md:text-lg text-neutral-200 font-medium">
-              Give us a little info and we'll send you right to the scheduling link.
-            </p>
-            <p className="text-xs text-neutral-400 font-mono">
-              Fields marked with an asterisk (<span className="text-emerald-400">*</span>) are required.
-            </p>
-          </div>
+          {submitted && zcalEmbedUrl ? (
+            <div className="space-y-6">
+              <div className="space-y-2 border-b border-neutral-800/70 pb-6">
+                <div className="flex items-center gap-2 text-emerald-400">
+                  <CheckCircle2 className="w-5 h-5" />
+                  <span className="font-mono text-xs uppercase tracking-wider font-bold">Details Received</span>
+                </div>
+                <p className="text-base md:text-lg text-white font-medium">
+                  Select a time below to complete your strategy session booking.
+                </p>
+                <p className="text-xs text-neutral-400 font-mono">
+                  Your contact details have been sent to our team and pre-filled in the calendar below.
+                </p>
+              </div>
 
-          {formError && (
-            <div className="p-4 rounded-xl bg-red-950/50 border border-red-800/60 text-red-200 text-xs font-medium">
-              {formError}
+              {/* Inline zcal Javascript embed widget */}
+              <div className="w-full rounded-xl overflow-hidden bg-neutral-950/60 border border-neutral-800/80 p-2 sm:p-4">
+                <div 
+                  className="zcal-inline-widget w-full"
+                  style={{ minWidth: '320px', minHeight: '680px' }}
+                >
+                  <a 
+                    href={zcalEmbedUrl}
+                    className="text-emerald-400 hover:text-emerald-300 font-mono text-xs underline p-4 block text-center"
+                  >
+                    Schedule a meeting with Ric Reifel
+                  </a>
+                </div>
+              </div>
             </div>
+          ) : (
+            <>
+              {/* Intro text displayed on the form */}
+              <div className="space-y-2 border-b border-neutral-800/70 pb-6">
+                <p className="text-base md:text-lg text-neutral-200 font-medium">
+                  Give us a little info and we'll send you right to the scheduling link.
+                </p>
+                <p className="text-xs text-neutral-400 font-mono">
+                  Fields marked with an asterisk (<span className="text-emerald-400">*</span>) are required.
+                </p>
+              </div>
+
+              {formError && (
+                <div className="p-4 rounded-xl bg-red-950/50 border border-red-800/60 text-red-200 text-xs font-medium">
+                  {formError}
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  {/* First name */}
+                  <div className="space-y-2">
+                    <label htmlFor="firstName" className="block text-xs font-semibold text-neutral-300 uppercase tracking-wider font-mono">
+                      First name <span className="text-emerald-400">*</span>
+                    </label>
+                    <input
+                      id="firstName"
+                      name="firstName"
+                      type="text"
+                      required
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      placeholder="Richard"
+                      className="w-full px-4 py-3 bg-neutral-950/80 border border-neutral-800 focus:border-emerald-500/80 focus:ring-1 focus:ring-emerald-500/80 rounded-xl text-sm text-white placeholder-neutral-600 outline-none transition-colors"
+                    />
+                  </div>
+
+                  {/* Last name */}
+                  <div className="space-y-2">
+                    <label htmlFor="lastName" className="block text-xs font-semibold text-neutral-300 uppercase tracking-wider font-mono">
+                      Last name <span className="text-emerald-400">*</span>
+                    </label>
+                    <input
+                      id="lastName"
+                      name="lastName"
+                      type="text"
+                      required
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      placeholder="Hendricks"
+                      className="w-full px-4 py-3 bg-neutral-950/80 border border-neutral-800 focus:border-emerald-500/80 focus:ring-1 focus:ring-emerald-500/80 rounded-xl text-sm text-white placeholder-neutral-600 outline-none transition-colors"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  {/* Email */}
+                  <div className="space-y-2">
+                    <label htmlFor="email" className="block text-xs font-semibold text-neutral-300 uppercase tracking-wider font-mono">
+                      Email <span className="text-emerald-400">*</span>
+                    </label>
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="r.hendricks@piedpiper.com"
+                      className="w-full px-4 py-3 bg-neutral-950/80 border border-neutral-800 focus:border-emerald-500/80 focus:ring-1 focus:ring-emerald-500/80 rounded-xl text-sm text-white placeholder-neutral-600 outline-none transition-colors"
+                    />
+                  </div>
+
+                  {/* Company */}
+                  <div className="space-y-2">
+                    <label htmlFor="company" className="block text-xs font-semibold text-neutral-300 uppercase tracking-wider font-mono">
+                      Company <span className="text-emerald-400">*</span>
+                    </label>
+                    <input
+                      id="company"
+                      name="company"
+                      type="text"
+                      required
+                      value={company}
+                      onChange={(e) => setCompany(e.target.value)}
+                      placeholder="Pied Piper Inc."
+                      className="w-full px-4 py-3 bg-neutral-950/80 border border-neutral-800 focus:border-emerald-500/80 focus:ring-1 focus:ring-emerald-500/80 rounded-xl text-sm text-white placeholder-neutral-600 outline-none transition-colors"
+                    />
+                  </div>
+                </div>
+
+                {/* Cell phone (optional) */}
+                <div className="space-y-2">
+                  <label htmlFor="cellPhone" className="block text-xs font-semibold text-neutral-300 uppercase tracking-wider font-mono flex items-center justify-between">
+                    <span>Cell phone</span>
+                    <span className="text-[11px] text-neutral-500 lowercase font-normal">(optional)</span>
+                  </label>
+                  <input
+                    id="cellPhone"
+                    name="cellPhone"
+                    type="tel"
+                    value={cellPhone}
+                    onChange={(e) => setCellPhone(e.target.value)}
+                    placeholder="(555) 000-0000"
+                    className="w-full px-4 py-3 bg-neutral-950/80 border border-neutral-800 focus:border-emerald-500/80 focus:ring-1 focus:ring-emerald-500/80 rounded-xl text-sm text-white placeholder-neutral-600 outline-none transition-colors"
+                  />
+                </div>
+
+                {/* Tell me how I can help (notes textarea, required) */}
+                <div className="space-y-2">
+                  <label htmlFor="notes" className="block text-xs font-semibold text-neutral-300 uppercase tracking-wider font-mono">
+                    Tell me how I can help <span className="text-emerald-400">*</span>
+                  </label>
+                  <textarea
+                    id="notes"
+                    name="notes"
+                    required
+                    rows={4}
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    placeholder="Give us a brief overview of your current revenue model, sales headcount, CRM stack, or primary friction point..."
+                    className="w-full px-4 py-3 bg-neutral-950/80 border border-neutral-800 focus:border-emerald-500/80 focus:ring-1 focus:ring-emerald-500/80 rounded-xl text-sm text-white placeholder-neutral-600 outline-none transition-colors resize-y leading-relaxed"
+                  />
+                </div>
+
+                {/* Submit Button labeled Send Message */}
+                <div className="pt-2">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full sm:w-auto px-8 py-4 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 text-neutral-950 rounded-xl text-base font-bold transition-all shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:shadow-[0_0_40px_rgba(16,185,129,0.5)] cursor-pointer flex items-center justify-center gap-2 group"
+                  >
+                    <Send className="w-4 h-4 text-neutral-950 group-hover:translate-x-0.5 transition-transform" />
+                    <span>{isSubmitting ? 'Submitting...' : 'Send Message'}</span>
+                  </button>
+                </div>
+              </form>
+            </>
           )}
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {/* First name */}
-              <div className="space-y-2">
-                <label htmlFor="firstName" className="block text-xs font-semibold text-neutral-300 uppercase tracking-wider font-mono">
-                  First name <span className="text-emerald-400">*</span>
-                </label>
-                <input
-                  id="firstName"
-                  name="firstName"
-                  type="text"
-                  required
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  placeholder="Richard"
-                  className="w-full px-4 py-3 bg-neutral-950/80 border border-neutral-800 focus:border-emerald-500/80 focus:ring-1 focus:ring-emerald-500/80 rounded-xl text-sm text-white placeholder-neutral-600 outline-none transition-colors"
-                />
-              </div>
-
-              {/* Last name */}
-              <div className="space-y-2">
-                <label htmlFor="lastName" className="block text-xs font-semibold text-neutral-300 uppercase tracking-wider font-mono">
-                  Last name <span className="text-emerald-400">*</span>
-                </label>
-                <input
-                  id="lastName"
-                  name="lastName"
-                  type="text"
-                  required
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  placeholder="Hendricks"
-                  className="w-full px-4 py-3 bg-neutral-950/80 border border-neutral-800 focus:border-emerald-500/80 focus:ring-1 focus:ring-emerald-500/80 rounded-xl text-sm text-white placeholder-neutral-600 outline-none transition-colors"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {/* Email */}
-              <div className="space-y-2">
-                <label htmlFor="email" className="block text-xs font-semibold text-neutral-300 uppercase tracking-wider font-mono">
-                  Email <span className="text-emerald-400">*</span>
-                </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="r.hendricks@piedpiper.com"
-                  className="w-full px-4 py-3 bg-neutral-950/80 border border-neutral-800 focus:border-emerald-500/80 focus:ring-1 focus:ring-emerald-500/80 rounded-xl text-sm text-white placeholder-neutral-600 outline-none transition-colors"
-                />
-              </div>
-
-              {/* Company */}
-              <div className="space-y-2">
-                <label htmlFor="company" className="block text-xs font-semibold text-neutral-300 uppercase tracking-wider font-mono">
-                  Company <span className="text-emerald-400">*</span>
-                </label>
-                <input
-                  id="company"
-                  name="company"
-                  type="text"
-                  required
-                  value={company}
-                  onChange={(e) => setCompany(e.target.value)}
-                  placeholder="Pied Piper Inc."
-                  className="w-full px-4 py-3 bg-neutral-950/80 border border-neutral-800 focus:border-emerald-500/80 focus:ring-1 focus:ring-emerald-500/80 rounded-xl text-sm text-white placeholder-neutral-600 outline-none transition-colors"
-                />
-              </div>
-            </div>
-
-            {/* Cell phone (optional) */}
-            <div className="space-y-2">
-              <label htmlFor="cellPhone" className="block text-xs font-semibold text-neutral-300 uppercase tracking-wider font-mono flex items-center justify-between">
-                <span>Cell phone</span>
-                <span className="text-[11px] text-neutral-500 lowercase font-normal">(optional)</span>
-              </label>
-              <input
-                id="cellPhone"
-                name="cellPhone"
-                type="tel"
-                value={cellPhone}
-                onChange={(e) => setCellPhone(e.target.value)}
-                placeholder="(555) 000-0000"
-                className="w-full px-4 py-3 bg-neutral-950/80 border border-neutral-800 focus:border-emerald-500/80 focus:ring-1 focus:ring-emerald-500/80 rounded-xl text-sm text-white placeholder-neutral-600 outline-none transition-colors"
-              />
-            </div>
-
-            {/* Tell me how I can help (notes textarea, required) */}
-            <div className="space-y-2">
-              <label htmlFor="notes" className="block text-xs font-semibold text-neutral-300 uppercase tracking-wider font-mono">
-                Tell me how I can help <span className="text-emerald-400">*</span>
-              </label>
-              <textarea
-                id="notes"
-                name="notes"
-                required
-                rows={4}
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                placeholder="Give us a brief overview of your current revenue model, sales headcount, CRM stack, or primary friction point..."
-                className="w-full px-4 py-3 bg-neutral-950/80 border border-neutral-800 focus:border-emerald-500/80 focus:ring-1 focus:ring-emerald-500/80 rounded-xl text-sm text-white placeholder-neutral-600 outline-none transition-colors resize-y leading-relaxed"
-              />
-            </div>
-
-            {/* Submit Button labeled Send Message */}
-            <div className="pt-2">
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full sm:w-auto px-8 py-4 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 text-neutral-950 rounded-xl text-base font-bold transition-all shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:shadow-[0_0_40px_rgba(16,185,129,0.5)] cursor-pointer flex items-center justify-center gap-2 group"
-              >
-                <Send className="w-4 h-4 text-neutral-950 group-hover:translate-x-0.5 transition-transform" />
-                <span>{isSubmitting ? 'Submitting...' : 'Send Message'}</span>
-              </button>
-            </div>
-          </form>
         </motion.div>
 
         {/* Other ways to reach us section */}

@@ -25,15 +25,16 @@ jobs:
         run: npm run build
 
       - name: Deploy compiled website
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.3
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftps
           port: 21
+          security: loose
           local-dir: ./dist/
-          server-dir: /domains/vizhin.co/public_html/
+          server-dir: domains/vizhin.co/public_html/
           dangerous-clean-slate: false
           exclude: |
             **/.git*

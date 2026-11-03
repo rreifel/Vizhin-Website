@@ -180,13 +180,33 @@ if (fs.existsSync(indexPath)) {
         );
     }
 
+    // Ensure subpages do not inherit the homepage-only schema
+    routeHtml = routeHtml.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>\s*/, '');
+
     fs.writeFileSync(path.join(routeDir, 'index.html'), routeHtml, 'utf8');
-    console.log(`✓ Created static SPA fallback: dist/${route}/index.html`);
+
+    // Also mirror to root route directory for direct Git repo hosting
+    const rootRouteDir = path.resolve(route);
+    fs.mkdirSync(rootRouteDir, { recursive: true });
+    fs.writeFileSync(path.join(rootRouteDir, 'index.html'), routeHtml, 'utf8');
+    console.log(`✓ Created static SPA fallback: dist/${route}/index.html & ${route}/index.html`);
   });
+
+  // Copy dist/assets to ./assets for direct repo hosting compatibility
+  const distAssetsDir = path.join(distDir, 'assets');
+  const rootAssetsDir = path.resolve('assets');
+  if (fs.existsSync(distAssetsDir)) {
+    fs.cpSync(distAssetsDir, rootAssetsDir, { recursive: true });
+    console.log('✓ Synchronized assets directory to root for direct hosting');
+  }
+
+  // Synchronize compiled dist/index.html to root index.html
+  fs.copyFileSync(indexPath, path.resolve('index.html'));
+  console.log('✓ Synchronized compiled dist/index.html to root index.html');
 
   // Unified, production-grade LiteSpeed / Apache .htaccess configuration
   const htaccessContent = `# LiteSpeed / Apache DirectoryIndex and Access Configuration
-DirectoryIndex dist/index.html index.html index.htm index.php
+DirectoryIndex index.html index.htm index.php
 
 # Prevent directory browsing safely
 <IfModule mod_autoindex.c>
@@ -203,31 +223,17 @@ DirectoryIndex dist/index.html index.html index.htm index.php
   # 2. Redirect uppercase /ORG to canonical /org/
   RewriteRule ^ORG/?$ /org/ [R=301,L]
 
-  # 3. DUAL REPO ROOT / DIST SUPPORT:
-  # When repo root is deployed into public_html, route all traffic through dist/
-  RewriteCond %{DOCUMENT_ROOT}/dist/index.html -f
-  RewriteCond %{REQUEST_URI} ^/(index\\.html)?$
-  RewriteRule ^ dist/index.html [L]
-
-  RewriteCond %{DOCUMENT_ROOT}/dist/index.html -f
-  RewriteCond %{REQUEST_URI} !^/dist/
-  RewriteCond %{DOCUMENT_ROOT}/dist/$1 -f [OR]
-  RewriteCond %{DOCUMENT_ROOT}/dist/$1 -d
-  RewriteRule ^(.*)$ dist/$1 [L]
-
-  RewriteCond %{DOCUMENT_ROOT}/dist/index.html -f
-  RewriteCond %{REQUEST_URI} !^/dist/
-  RewriteRule ^ dist/index.html [L]
-
-  # 4. STANDARD SPA DEPLOYMENT (when dist/ contents were deployed directly to public_html)
-  RewriteCond %{REQUEST_FILENAME} -f
-  RewriteRule ^ - [L]
-
+  # 3. Existing static files and directories
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
-  RewriteCond %{REQUEST_FILENAME}/index.html -f
   RewriteRule ^ - [L]
 
-  # 5. SPA Fallback
+  # 4. Fallback for static route subdirectories (e.g. /org/index.html)
+  RewriteCond %{REQUEST_URI} ^/([^/]+)/?$
+  RewriteCond %{DOCUMENT_ROOT}/%1/index.html -f
+  RewriteRule ^ %1/index.html [L]
+
+  # 5. SPA Fallback to root index.html
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteRule ^ index.html [L]
 </IfModule>
@@ -258,7 +264,7 @@ DirectoryIndex dist/index.html index.html index.htm index.php
   fs.writeFileSync(publicHtaccessPath, htaccessContent, { encoding: 'utf8', mode: 0o644 });
   console.log('✓ Synchronized public/.htaccess with master configuration');
 
-  // Ensure sitemap.xml and robots.txt are directly in dist
+  // Ensure sitemap.xml and robots.txt are directly in dist and root
   const sitemapContent = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
@@ -294,14 +300,16 @@ DirectoryIndex dist/index.html index.html index.htm index.php
 </urlset>
 `;
   fs.writeFileSync(path.join(distDir, 'sitemap.xml'), sitemapContent, 'utf8');
-  console.log('✓ Created dist/sitemap.xml');
+  fs.writeFileSync(path.resolve('sitemap.xml'), sitemapContent, 'utf8');
+  console.log('✓ Created dist/sitemap.xml and root sitemap.xml');
 
   const robotsContent = `User-agent: *
 Allow: /
 Sitemap: https://www.vizhin.co/sitemap.xml
 `;
   fs.writeFileSync(path.join(distDir, 'robots.txt'), robotsContent, 'utf8');
-  console.log('✓ Created dist/robots.txt');
+  fs.writeFileSync(path.resolve('robots.txt'), robotsContent, 'utf8');
+  console.log('✓ Created dist/robots.txt and root robots.txt');
 } else {
   console.error('Error: dist/index.html does not exist.');
 }

@@ -54,9 +54,28 @@ function seoFilesPlugin(): Plugin {
   };
 }
 
+function devServerHtmlPlugin(): Plugin {
+  return {
+    name: 'dev-server-html',
+    apply: 'serve',
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const url = req.url ? req.url.split('?')[0] : '';
+        if (url === '/' || url === '/index.html') {
+          const devPath = path.resolve(__dirname, 'index.dev.html');
+          if (fs.existsSync(devPath)) {
+            req.url = '/index.dev.html';
+          }
+        }
+        next();
+      });
+    },
+  };
+}
+
 export default defineConfig(() => {
   return {
-    plugins: [react(), tailwindcss(), seoFilesPlugin()],
+    plugins: [devServerHtmlPlugin(), react(), tailwindcss(), seoFilesPlugin()],
     envPrefix: ['VITE_', 'NEXT_PUBLIC_'],
     resolve: {
       alias: {

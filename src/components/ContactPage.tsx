@@ -165,9 +165,9 @@ export default function ContactPage({
         const fullName = `${trimmedFirst} ${trimmedLast}`.trim();
         const queryParams = `name=${encodeURIComponent(fullName)}&email=${encodeURIComponent(trimmedEmail)}&a0=${encodeURIComponent(trimmedCompany)}&a1=${encodeURIComponent(trimmedNotes)}`;
         
-        // Official zcal embed route (returns HTTP 200 without X-Frame-Options: DENY)
-        const embedUrl = `https://zcal.co/emb/rreifel/30min?${queryParams}`;
-        // Direct standalone link for browser fallback
+        // Official zcal embed invite-ID URL
+        const embedUrl = `https://zcal.co/i/2i6fsJya?${queryParams}`;
+        // Standalone fallback link keeping proven prefilled URL
         const directUrl = `https://zcal.co/rreifel/30min?${queryParams}`;
 
         setZcalEmbedUrl(embedUrl);
@@ -281,7 +281,7 @@ export default function ContactPage({
                     href={zcalEmbedUrl}
                     className="text-emerald-400 hover:text-emerald-300 font-mono text-xs underline p-4 block text-center"
                   >
-                    Schedule a meeting with Ric Reifel
+                    30 Minute Meeting - Schedule a meeting
                   </a>
                 </div>
               </div>

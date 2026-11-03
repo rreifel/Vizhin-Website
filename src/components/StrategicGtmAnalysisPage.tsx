@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { 
   ArrowLeft, Layers, Calendar, FileText, ShieldCheck, ArrowRight, Download, Users, BarChart3, Sparkles 
 } from 'lucide-react';
 import SiteHeader from './SiteHeader';
+import BrochureViewer from './BrochureViewer';
 
 interface StrategicGtmAnalysisPageProps {
   currentUser?: {
@@ -48,6 +49,8 @@ export default function StrategicGtmAnalysisPage({
   onEnterOrg,
   onRequestAccount
 }: StrategicGtmAnalysisPageProps) {
+  const [showBrochure, setShowBrochure] = useState(false);
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
@@ -176,26 +179,23 @@ export default function StrategicGtmAnalysisPage({
               <span className="font-mono text-emerald-200">↗</span>
             </a>
 
-            <a
-              href="/assets/aistudio/Vizhin_GTM_Assessment_290913e5.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              type="button"
+              onClick={() => setShowBrochure(prev => !prev)}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-neutral-900 hover:bg-neutral-850 text-neutral-200 hover:text-white text-xs font-semibold rounded-xl border border-neutral-800 hover:border-emerald-600/60 transition-all cursor-pointer group"
             >
-              <FileText className="w-4 h-4 text-emerald-400" />
-              <span>View GTM Assessment Brochure</span>
-              <ArrowRight className="w-3.5 h-3.5 text-neutral-400 group-hover:translate-x-0.5 transition-transform" />
-            </a>
-
-            <a
-              href="/assets/aistudio/Vizhin_GTM_Assessment_290913e5.pdf"
-              download="Vizhin_GTM_Assessment.pdf"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-3 bg-neutral-900/60 hover:bg-neutral-850 text-neutral-300 hover:text-white text-xs font-semibold rounded-xl border border-neutral-800 transition-all cursor-pointer"
-            >
-              <Download className="w-4 h-4 text-neutral-400" />
-              <span>Download PDF</span>
-            </a>
+              <FileText className="w-4 h-4 text-emerald-400 group-hover:scale-105 transition-transform" />
+              <span>{showBrochure ? 'Hide Brochure' : 'View Brochure'}</span>
+              <span className="font-mono text-[10px] text-emerald-400">↓</span>
+            </button>
           </div>
+
+          {/* Embedded Full PDF Brochure Viewer */}
+          <BrochureViewer 
+            isOpen={showBrochure}
+            onToggle={() => setShowBrochure(prev => !prev)}
+            className="mt-6"
+          />
         </motion.div>
 
         {/* Related Services & Bottom Navigation */}

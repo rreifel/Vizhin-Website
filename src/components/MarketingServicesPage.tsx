@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { 
   ArrowLeft, Sparkles, Calendar, FileText, CheckCircle2, 
   ArrowRight, Download, MessageSquare, Target, Megaphone, Share2 
 } from 'lucide-react';
 import SiteHeader from './SiteHeader';
+import BrochureViewer from './BrochureViewer';
 
 interface MarketingServicesPageProps {
   currentUser?: {
@@ -49,6 +50,8 @@ export default function MarketingServicesPage({
   onEnterOrg,
   onRequestAccount
 }: MarketingServicesPageProps) {
+  const [showBrochure, setShowBrochure] = useState(false);
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
@@ -190,17 +193,23 @@ export default function MarketingServicesPage({
               <span className="font-mono text-emerald-200">↗</span>
             </a>
 
-            <a
-              href="/assets/aistudio/Vizhin_GTM_Assessment_290913e5.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              type="button"
+              onClick={() => setShowBrochure(prev => !prev)}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-neutral-900 hover:bg-neutral-850 text-neutral-200 hover:text-white text-xs font-semibold rounded-xl border border-neutral-800 hover:border-emerald-600/60 transition-all cursor-pointer group"
             >
               <FileText className="w-4 h-4 text-emerald-400 group-hover:scale-105 transition-transform" />
-              <span>View Brochure</span>
-              <span className="font-mono text-xs text-emerald-400">↗</span>
-            </a>
+              <span>{showBrochure ? 'Hide Brochure' : 'View Brochure'}</span>
+              <span className="font-mono text-xs text-emerald-400">↓</span>
+            </button>
           </div>
+
+          {/* Embedded Full PDF Brochure Viewer */}
+          <BrochureViewer 
+            isOpen={showBrochure}
+            onToggle={() => setShowBrochure(prev => !prev)}
+            className="mt-6"
+          />
         </motion.div>
       </main>
 

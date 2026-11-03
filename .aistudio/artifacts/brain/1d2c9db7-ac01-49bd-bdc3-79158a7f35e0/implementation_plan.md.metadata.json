@@ -1,6 +1,6 @@
 {
-  "summary": "Implementation plan for embedding the full 2-page PDF brochure (including all images, typography, and graphics) in the interactive document viewer on the Marketing Analysis page.",
-  "updatedAt": "2026-11-02T23:42:08.498111796Z",
+  "summary": "Implementation plan to remove the permanent rectangle bar from all pages and have ONLY the clean 'View Brochure' button, which expands the embedded PDF viewer inline directly below when clicked.",
+  "updatedAt": "2026-11-02T23:53:32.793731920Z",
   "requestFeedback": true,
   "userFacing": true
 }

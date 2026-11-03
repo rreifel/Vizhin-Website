@@ -4,6 +4,7 @@ import {
   ShieldCheck, Layers, Users, Activity, Sparkles, Mail, BarChart3, Calendar, ArrowUpRight, ArrowRight, FileText, Download, Target, UserPlus
 } from 'lucide-react';
 import SiteHeader from './SiteHeader';
+import BrochureViewer from './BrochureViewer';
 
 interface ExpandablePillar {
   title: string;
@@ -335,6 +336,7 @@ export default function LandingPage({
   onNavigateTechnologyProjectManagement
 }: LandingPageProps) {
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({});
+  const [expandedBrochureSec, setExpandedBrochureSec] = useState<string | null>(null);
 
   const toggleSection = (id: string) => {
     setExpandedSections(prev => ({
@@ -756,16 +758,15 @@ export default function LandingPage({
                 <div className="flex flex-wrap items-center sm:justify-end gap-2.5">
                   {(sec.id === 'strategic-gtm-analysis' || sec.id === 'marketing-services' || sec.id === 'marketing-analysis') && (
                     <div className="flex items-center gap-2">
-                      <a
-                        href="/assets/aistudio/Vizhin_GTM_Assessment_290913e5.pdf"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <button
+                        type="button"
+                        onClick={() => setExpandedBrochureSec(prev => prev === sec.id ? null : sec.id)}
                         className="px-5 py-2.5 bg-neutral-900 hover:bg-neutral-850 text-emerald-400 hover:text-emerald-300 text-xs font-bold rounded-xl border border-emerald-800/80 hover:border-emerald-600 shadow-md transition-all flex items-center gap-2 cursor-pointer group"
                       >
                         <FileText className="w-4 h-4 text-emerald-400 group-hover:scale-105 transition-transform" />
-                        <span>View Brochure</span>
-                        <span className="font-mono text-[10px] text-emerald-400">↗</span>
-                      </a>
+                        <span>{expandedBrochureSec === sec.id ? 'Hide Brochure' : 'View Brochure'}</span>
+                        <span className="font-mono text-[10px] text-emerald-400">↓</span>
+                      </button>
                       <a
                         href="/assets/aistudio/Vizhin_GTM_Assessment_290913e5.pdf"
                         download="Vizhin_GTM_Assessment.pdf"
@@ -789,6 +790,15 @@ export default function LandingPage({
                   </a>
                 </div>
               </div>
+
+              {/* Embedded Brochure Viewer for Brochure-Enabled Services */}
+              {(sec.id === 'strategic-gtm-analysis' || sec.id === 'marketing-services' || sec.id === 'marketing-analysis') && (
+                <BrochureViewer 
+                  isOpen={expandedBrochureSec === sec.id}
+                  onToggle={() => setExpandedBrochureSec(prev => prev === sec.id ? null : sec.id)}
+                  className="mt-5"
+                />
+              )}
             </div>
           );
         })}

@@ -6,6 +6,7 @@ import {
   ExternalLink
 } from 'lucide-react';
 import SiteHeader from './SiteHeader';
+import BrochureViewer from './BrochureViewer';
 
 interface MarketingAnalysisPageProps {
   currentUser?: {
@@ -232,113 +233,23 @@ export default function MarketingAnalysisPage({
                 <span className="font-mono text-[10px] text-emerald-300">↗</span>
               </a>
 
-              <a
-                href="/assets/aistudio/Vizhin_GTM_Assessment_290913e5.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                type="button"
+                onClick={() => setShowBrochure(prev => !prev)}
                 className="px-4 py-3 bg-neutral-900 hover:bg-neutral-850 text-neutral-300 hover:text-white text-xs font-semibold rounded-xl border border-neutral-800 transition-all flex items-center gap-2 cursor-pointer group"
               >
                 <FileText className="w-4 h-4 text-emerald-400 group-hover:scale-105 transition-transform" />
-                <span>View Brochure</span>
-                <span className="font-mono text-[10px] text-emerald-400">↗</span>
-              </a>
+                <span>{showBrochure ? 'Hide Brochure' : 'View Brochure'}</span>
+                <span className="font-mono text-[10px] text-emerald-400">↓</span>
+              </button>
             </div>
           </div>
 
-          {/* Collapsible GTM Assessment Brochure Viewer */}
-          <div className="border border-neutral-850/80 rounded-2xl overflow-hidden bg-neutral-900/20">
-            <button
-              onClick={() => setShowBrochure(prev => !prev)}
-              className="w-full p-4 md:p-5 flex items-center justify-between text-left hover:bg-neutral-900/50 transition-colors cursor-pointer"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400">
-                  <FileText className="w-4 h-4" />
-                </div>
-                <div>
-                  <h4 className="text-xs md:text-sm font-bold text-white">
-                    Sublime x Vizhin GTM Assessment Brochure
-                  </h4>
-                  <p className="text-[11px] text-neutral-400">
-                    Click to {showBrochure ? 'collapse' : 'preview'} the 2-page executive evaluation brochure
-                  </p>
-                </div>
-              </div>
-              <div className="text-neutral-400">
-                {showBrochure ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
-              </div>
-            </button>
-
-            {showBrochure && (
-              <div className="p-4 md:p-6 border-t border-neutral-850 bg-neutral-950/80 space-y-4">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-neutral-850 text-xs">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                    <span className="font-mono text-neutral-300 font-medium">Full Executive Assessment Brochure (Complete 2-Page Document)</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <a
-                      href="/assets/aistudio/Vizhin_GTM_Assessment_290913e5.pdf"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-3 py-1.5 rounded-lg text-xs font-mono bg-neutral-900 hover:bg-neutral-850 text-emerald-400 border border-neutral-800 hover:border-emerald-600/60 flex items-center gap-1.5 transition-colors cursor-pointer group"
-                    >
-                      <ExternalLink className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
-                      <span>Open in New Tab</span>
-                    </a>
-                    <a
-                      href="/assets/aistudio/Vizhin_GTM_Assessment_290913e5.pdf"
-                      download="Vizhin_GTM_Assessment.pdf"
-                      className="px-3 py-1.5 rounded-lg text-xs font-mono bg-emerald-950/80 hover:bg-emerald-900 text-emerald-400 border border-emerald-800/60 flex items-center gap-1.5 transition-colors cursor-pointer"
-                    >
-                      <Download className="w-3.5 h-3.5" />
-                      <span>Download PDF</span>
-                    </a>
-                  </div>
-                </div>
-
-                {/* Embedded High-Fidelity PDF Document Viewer */}
-                <div className="w-full h-[650px] md:h-[850px] lg:h-[950px] rounded-xl overflow-hidden border border-neutral-800 bg-[#1e1e1e] shadow-2xl relative">
-                  <object
-                    data="/assets/aistudio/Vizhin_GTM_Assessment_290913e5.pdf#view=FitH&toolbar=1"
-                    type="application/pdf"
-                    className="w-full h-full"
-                    title="Sublime x Vizhin GTM Assessment Brochure"
-                  >
-                    <iframe
-                      src="/assets/aistudio/Vizhin_GTM_Assessment_290913e5.pdf#view=FitH"
-                      className="w-full h-full border-0"
-                      title="Sublime x Vizhin GTM Assessment Brochure"
-                    >
-                      <div className="flex flex-col items-center justify-center h-full p-8 text-center space-y-4 text-neutral-300">
-                        <FileText className="w-12 h-12 text-emerald-400" />
-                        <p className="text-sm font-medium">Your browser does not support inline PDF viewing.</p>
-                        <div className="flex items-center gap-3">
-                          <a
-                            href="/assets/aistudio/Vizhin_GTM_Assessment_290913e5.pdf"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-lg transition-colors flex items-center gap-1.5"
-                          >
-                            <ExternalLink className="w-3.5 h-3.5" />
-                            <span>Open Brochure in New Tab</span>
-                          </a>
-                          <a
-                            href="/assets/aistudio/Vizhin_GTM_Assessment_290913e5.pdf"
-                            download="Vizhin_GTM_Assessment.pdf"
-                            className="px-4 py-2 bg-neutral-800 hover:bg-neutral-750 text-neutral-200 text-xs font-semibold rounded-lg transition-colors flex items-center gap-1.5"
-                          >
-                            <Download className="w-3.5 h-3.5" />
-                            <span>Download PDF</span>
-                          </a>
-                        </div>
-                      </div>
-                    </iframe>
-                  </object>
-                </div>
-              </div>
-            )}
-          </div>
+          {/* Embedded Full PDF Brochure Viewer */}
+          <BrochureViewer 
+            isOpen={showBrochure}
+            onToggle={() => setShowBrochure(prev => !prev)}
+          />
         </motion.div>
 
         {/* Related Services & Bottom Navigation */}

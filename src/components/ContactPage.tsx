@@ -136,8 +136,10 @@ export default function ContactPage({
       }
 
       if (response.ok && result?.success) {
-        // Redirect to scheduling link ONLY after email send succeeds
-        window.location.assign('https://zcal.co/rreifel/30min');
+        // Redirect to scheduling link ONLY after email send succeeds, pre-populating zcal invite
+        const fullName = `${trimmedFirst} ${trimmedLast}`.trim();
+        const zcalUrl = `https://zcal.co/rreifel/30min?name=${encodeURIComponent(fullName)}&email=${encodeURIComponent(trimmedEmail)}&a0=${encodeURIComponent(trimmedCompany)}&a1=${encodeURIComponent(trimmedNotes)}`;
+        window.location.assign(zcalUrl);
       } else {
         const errorMsg = result?.error || 'Unable to submit your message right now. Please try again or email rreifel@vizhin.co directly.';
         setFormError(errorMsg);

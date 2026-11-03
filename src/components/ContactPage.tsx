@@ -65,6 +65,7 @@ export default function ContactPage({
   const [formError, setFormError] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [zcalEmbedUrl, setZcalEmbedUrl] = useState('');
+  const [zcalDirectUrl, setZcalDirectUrl] = useState('');
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -160,10 +161,17 @@ export default function ContactPage({
       }
 
       if (response.ok && result?.success) {
-        // Render zcal embed inline pre-populating all 4 URL-encoded parameters
+        // Pre-populate query parameters with encodeURIComponent
         const fullName = `${trimmedFirst} ${trimmedLast}`.trim();
-        const zcalUrl = `https://zcal.co/rreifel/30min?name=${encodeURIComponent(fullName)}&email=${encodeURIComponent(trimmedEmail)}&a0=${encodeURIComponent(trimmedCompany)}&a1=${encodeURIComponent(trimmedNotes)}`;
-        setZcalEmbedUrl(zcalUrl);
+        const queryParams = `name=${encodeURIComponent(fullName)}&email=${encodeURIComponent(trimmedEmail)}&a0=${encodeURIComponent(trimmedCompany)}&a1=${encodeURIComponent(trimmedNotes)}`;
+        
+        // Official zcal embed route (returns HTTP 200 without X-Frame-Options: DENY)
+        const embedUrl = `https://zcal.co/emb/rreifel/30min?${queryParams}`;
+        // Direct standalone link for browser fallback
+        const directUrl = `https://zcal.co/rreifel/30min?${queryParams}`;
+
+        setZcalEmbedUrl(embedUrl);
+        setZcalDirectUrl(directUrl);
         setSubmitted(true);
         setIsSubmitting(false);
       } else {
@@ -276,6 +284,27 @@ export default function ContactPage({
                     Schedule a meeting with Ric Reifel
                   </a>
                 </div>
+              </div>
+
+              {/* Fallback & Clear Status Message */}
+              <div className="p-5 rounded-xl bg-neutral-950/90 border border-neutral-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+                <div className="space-y-1">
+                  <p className="text-xs text-neutral-200 font-semibold">
+                    Calendar taking a moment to load or blocked by browser settings?
+                  </p>
+                  <p className="text-[11px] text-neutral-400 font-mono">
+                    All your submitted information has been saved. You can pick your time directly on zcal:
+                  </p>
+                </div>
+                <a
+                  href={zcalDirectUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white text-xs font-bold rounded-xl shadow-md border border-emerald-500/30 transition-all cursor-pointer flex items-center gap-1.5 shrink-0"
+                >
+                  <span>Schedule a meeting on zcal.co</span>
+                  <span className="font-mono text-[10px]">↗</span>
+                </a>
               </div>
             </div>
           ) : (

@@ -186,7 +186,7 @@ if (fs.existsSync(indexPath)) {
 
   // Unified, production-grade LiteSpeed / Apache .htaccess configuration
   const htaccessContent = `# LiteSpeed / Apache DirectoryIndex and Access Configuration
-DirectoryIndex index.html index.htm index.php
+DirectoryIndex dist/index.html index.html index.htm index.php
 
 # Prevent directory browsing safely
 <IfModule mod_autoindex.c>
@@ -203,28 +203,31 @@ DirectoryIndex index.html index.htm index.php
   # 2. Redirect uppercase /ORG to canonical /org/
   RewriteRule ^ORG/?$ /org/ [R=301,L]
 
-  # 3. Serve physical files directly if they exist
+  # 3. DUAL REPO ROOT / DIST SUPPORT:
+  # When repo root is deployed into public_html, route all traffic through dist/
+  RewriteCond %{DOCUMENT_ROOT}/dist/index.html -f
+  RewriteCond %{REQUEST_URI} ^/(index\\.html)?$
+  RewriteRule ^ dist/index.html [L]
+
+  RewriteCond %{DOCUMENT_ROOT}/dist/index.html -f
+  RewriteCond %{REQUEST_URI} !^/dist/
+  RewriteCond %{DOCUMENT_ROOT}/dist/$1 -f [OR]
+  RewriteCond %{DOCUMENT_ROOT}/dist/$1 -d
+  RewriteRule ^(.*)$ dist/$1 [L]
+
+  RewriteCond %{DOCUMENT_ROOT}/dist/index.html -f
+  RewriteCond %{REQUEST_URI} !^/dist/
+  RewriteRule ^ dist/index.html [L]
+
+  # 4. STANDARD SPA DEPLOYMENT (when dist/ contents were deployed directly to public_html)
   RewriteCond %{REQUEST_FILENAME} -f
   RewriteRule ^ - [L]
 
-  # 4. If directory exists and contains an index.html, serve it directly
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteCond %{REQUEST_FILENAME}/index.html -f
   RewriteRule ^ - [L]
 
-  # 5. Dual root/dist support (when repo root is deployed into public_html)
-  RewriteCond %{DOCUMENT_ROOT}/dist/$1 -f
-  RewriteRule ^(.*)$ dist/$1 [L]
-
-  RewriteCond %{DOCUMENT_ROOT}/dist/$1/index.html -f
-  RewriteRule ^(.*)$ dist/$1/index.html [L]
-
-  RewriteCond %{DOCUMENT_ROOT}/dist/index.html -f
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteRule ^ dist/index.html [L]
-
-  # 6. Fallback everything else to root index.html (SPA Fallback)
-  # Prevents 403 Forbidden on directory requests lacking an index file
+  # 5. SPA Fallback
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteRule ^ index.html [L]
 </IfModule>

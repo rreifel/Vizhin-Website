@@ -191,9 +191,7 @@ export default function AboutPage({
 
               <div className="mt-4 pt-4 border-t border-neutral-800/80 w-full flex flex-col gap-2">
                 <a
-                  href="https://zcal.co/rreifel/30min"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="/contact"
                   className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white text-xs font-bold rounded-xl shadow-md border border-emerald-500/30 transition-all cursor-pointer"
                 >
                   <Calendar className="w-3.5 h-3.5 text-emerald-200" />

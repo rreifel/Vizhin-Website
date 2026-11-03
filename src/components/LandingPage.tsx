@@ -488,14 +488,12 @@ export default function LandingPage({
 
                   <div className="pt-2">
                     <a
-                      href="https://zcal.co/rreifel/30min"
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      href="/contact"
                       className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white text-xs md:text-sm font-bold rounded-xl shadow-md shadow-emerald-950/40 border border-emerald-500/30 transition-all transform hover:-translate-y-0.5 cursor-pointer group"
                     >
                       <Calendar className="w-4 h-4 text-emerald-300 group-hover:scale-110 transition-transform" />
                       <span>Schedule Your Strategy Session</span>
-                      <span className="font-mono text-xs text-emerald-300">↗</span>
+                      <span className="font-mono text-xs text-emerald-300">→</span>
                     </a>
                   </div>
 
@@ -779,14 +777,12 @@ export default function LandingPage({
                   )}
 
                   <a
-                    href="https://zcal.co/rreifel/30min"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href="/contact"
                     className="px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white text-xs font-bold rounded-xl shadow-md shadow-emerald-950/40 border border-emerald-500/30 transition-all transform hover:-translate-y-0.5 cursor-pointer flex items-center gap-2 group"
                   >
                     <Calendar className="w-4 h-4 text-emerald-300 group-hover:scale-110 transition-transform" />
                     <span>Schedule a Call</span>
-                    <span className="font-mono text-[10px] text-emerald-300">↗</span>
+                    <span className="font-mono text-[10px] text-emerald-300">→</span>
                   </a>
                 </div>
               </div>
@@ -815,13 +811,13 @@ export default function LandingPage({
             <p>Denver, CO 80201</p>
             
             <div className="pt-4 mt-4 border-t border-neutral-900/80 flex justify-center">
-              <button
-                onClick={() => window.location.href = 'mailto:rreifel@vizhin.co?subject=Inquiry to Vizhin LLC'}
+              <a
+                href="/contact"
                 className="px-6 py-2.5 bg-[#0e0e11] hover:bg-neutral-850 border border-neutral-800 hover:border-emerald-500/50 text-white rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer flex items-center gap-2 group"
               >
                 <Mail className="w-4 h-4 text-emerald-400 group-hover:text-emerald-300 transition-colors" />
                 <span>Contact Us</span>
-              </button>
+              </a>
             </div>
           </div>
 

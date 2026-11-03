@@ -206,14 +206,12 @@ export default function SalesTeamAccountabilityPage({
           {/* Action CTAs */}
           <div className="pt-6 border-t border-neutral-800/80 flex flex-col sm:flex-row items-center gap-4">
             <a
-              href="https://zcal.co/rreifel/30min"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/contact"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white text-xs font-bold rounded-xl shadow-md border border-emerald-500/30 transition-all cursor-pointer group"
             >
               <Calendar className="w-4 h-4 text-emerald-200 group-hover:scale-105 transition-transform" />
               <span>Schedule Strategy Call</span>
-              <span className="font-mono text-emerald-200">↗</span>
+              <span className="font-mono text-emerald-200">→</span>
             </a>
           </div>
         </motion.div>

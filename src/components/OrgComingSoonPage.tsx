@@ -391,14 +391,13 @@ export default function OrgComingSoonPage({
             <p>Denver, CO 80201</p>
             
             <div className="pt-4 mt-4 border-t border-neutral-900/80 flex justify-center">
-              <button
-                type="button"
-                onClick={() => window.location.href = 'mailto:rreifel@vizhin.co?subject=Inquiry to Vizhin LLC regarding ORGVizhin'}
+              <a
+                href="/contact"
                 className="px-6 py-2.5 bg-[#0e0e11] hover:bg-neutral-850 border border-neutral-800 hover:border-emerald-500/50 text-white rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer flex items-center gap-2 group"
               >
                 <Mail className="w-4 h-4 text-emerald-400 group-hover:text-emerald-300 transition-colors" />
                 <span>Contact Us</span>
-              </button>
+              </a>
             </div>
           </div>
         </div>

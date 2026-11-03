@@ -31,7 +31,8 @@ const routes = [
   'request', 
   'portal',
   'org',
-  'ORG'
+  'ORG',
+  'contact'
 ];
 const distDir = path.resolve('dist');
 const indexPath = path.join(distDir, 'index.html');
@@ -178,6 +179,21 @@ if (fs.existsSync(indexPath)) {
           /<meta property="og:description" content=".*?"\s*\/?>/,
           '<meta property="og:description" content="ORGVizhin is coming soon. Dynamic workforce modeling, organizational visualization, and team alignment infrastructure. Request early access at vizhin.co/org.">'
         );
+    } else if (route === 'contact') {
+      routeHtml = routeHtml
+        .replace(/<title>.*?<\/title>/, '<title>Contact Vizhin | Go-to-Market Consulting</title>')
+        .replace(
+          /<meta name="description" content=".*?"\s*\/?>/,
+          '<meta name="description" content="Contact Vizhin to discuss go-to-market strategy, sales performance, and sales hiring. Give us a little info and we\'ll send you right to the scheduling link.">'
+        )
+        .replace(
+          /<meta property="og:title" content=".*?"\s*\/?>/,
+          '<meta property="og:title" content="Contact Vizhin | Go-to-Market Consulting">'
+        )
+        .replace(
+          /<meta property="og:description" content=".*?"\s*\/?>/,
+          '<meta property="og:description" content="Contact Vizhin to discuss go-to-market strategy, sales performance, and sales hiring. Give us a little info and we\'ll send you right to the scheduling link.">'
+        );
     }
 
     // Ensure subpages do not inherit the homepage-only schema
@@ -198,6 +214,16 @@ if (fs.existsSync(indexPath)) {
   if (fs.existsSync(distAssetsDir)) {
     fs.cpSync(distAssetsDir, rootAssetsDir, { recursive: true });
     console.log('✓ Synchronized assets directory to root for direct hosting');
+  }
+
+  // Ensure public/api (contact.php) is synchronized to dist/api and root api
+  const distApiDir = path.join(distDir, 'api');
+  const rootApiDir = path.resolve('api');
+  const publicApiDir = path.resolve('public', 'api');
+  if (fs.existsSync(publicApiDir)) {
+    fs.cpSync(publicApiDir, distApiDir, { recursive: true });
+    fs.cpSync(publicApiDir, rootApiDir, { recursive: true });
+    console.log('✓ Synchronized api/contact.php to dist/api and root api');
   }
 
   // Synchronize compiled dist/index.html to root index.html
@@ -296,6 +322,9 @@ DirectoryIndex index.html index.htm index.php
   </url>
   <url>
     <loc>https://www.vizhin.co/technology-project-management</loc>
+  </url>
+  <url>
+    <loc>https://www.vizhin.co/contact</loc>
   </url>
 </urlset>
 `;

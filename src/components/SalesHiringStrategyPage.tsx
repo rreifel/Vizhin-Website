@@ -213,14 +213,12 @@ export default function SalesHiringStrategyPage({
 
             <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
               <a
-                href="https://zcal.co/rreifel/30min"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/contact"
                 className="px-5 py-3 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white text-xs font-bold rounded-xl shadow-md border border-emerald-500/30 transition-all flex items-center gap-2 cursor-pointer group"
               >
                 <Calendar className="w-4 h-4 text-emerald-300 group-hover:scale-110 transition-transform" />
                 <span>Schedule Talent Call</span>
-                <span className="font-mono text-[10px] text-emerald-300">↗</span>
+                <span className="font-mono text-[10px] text-emerald-300">→</span>
               </a>
             </div>
           </div>

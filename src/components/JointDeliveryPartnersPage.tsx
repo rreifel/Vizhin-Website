@@ -156,9 +156,7 @@ export default function JointDeliveryPartnersPage({
 
               <div className="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-3">
                 <a
-                  href="https://zcal.co/rreifel/30min"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="/contact"
                   className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white text-xs font-bold rounded-xl shadow-md shadow-emerald-950/40 border border-emerald-500/30 transition-all transform hover:-translate-y-0.5 cursor-pointer"
                 >
                   <Calendar className="w-3.5 h-3.5 text-emerald-200" />
@@ -249,9 +247,7 @@ export default function JointDeliveryPartnersPage({
 
               <div className="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-3">
                 <a
-                  href="https://zcal.co/rreifel/30min"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="/contact"
                   className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white text-xs font-bold rounded-xl shadow-md shadow-emerald-950/40 border border-emerald-500/30 transition-all transform hover:-translate-y-0.5 cursor-pointer"
                 >
                   <Calendar className="w-3.5 h-3.5 text-emerald-200" />

@@ -219,6 +219,51 @@ if (fs.existsSync(indexPath)) {
   fs.writeFileSync(path.join(distDir, '.htaccess'), htaccessContent, 'utf8');
   console.log('✓ Created dist/.htaccess with sitemap/robots exclusions and SPA rewrite rules');
 
+  // Root .htaccess for environments where repo root is directly deployed into public_html
+  const rootHtaccessContent = `<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Exclude sitemap.xml and robots.txt explicitly from single-page fallback
+  RewriteRule ^(sitemap\\.xml|robots\\.txt)$ dist/$1 [L]
+
+  # 1. If requesting a file or directory that exists in dist, transparently rewrite to dist/
+  RewriteCond %{DOCUMENT_ROOT}/dist/$1 -f [OR]
+  RewriteCond %{DOCUMENT_ROOT}/dist/$1 -d
+  RewriteRule ^(.*)$ dist/$1 [L]
+
+  # 2. If dist/index.html exists and requested route is not a physical file, serve compiled dist/index.html
+  RewriteCond %{DOCUMENT_ROOT}/dist/index.html -f
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule . /dist/index.html [L]
+
+  # 3. Standard SPA rewrite fallback
+  RewriteCond %{REQUEST_URI} !^/(sitemap\\.xml|robots\\.txt)$ [NC]
+  RewriteRule ^index\\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME} !-l
+  RewriteRule . /index.html [L]
+</IfModule>
+
+# Force correct Content-Types
+<Files "sitemap.xml">
+  ForceType application/xml
+  <IfModule mod_headers.c>
+    Header set Content-Type "application/xml; charset=utf-8"
+  </IfModule>
+</Files>
+
+<Files "robots.txt">
+  ForceType text/plain
+  <IfModule mod_headers.c>
+    Header set Content-Type "text/plain; charset=utf-8"
+  </IfModule>
+</Files>
+`;
+  fs.writeFileSync(path.resolve('.htaccess'), rootHtaccessContent, 'utf8');
+  console.log('✓ Created root .htaccess for dual root/dist deployment compatibility');
+
   // Ensure sitemap.xml and robots.txt are directly in dist
   const sitemapContent = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

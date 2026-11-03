@@ -38,7 +38,3 @@ jobs:
           exclude: |
             **/.git*
             **/.git*/**
-            ORG/**
-            ORG
-            org/**
-            org

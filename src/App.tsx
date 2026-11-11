@@ -388,7 +388,9 @@ export default function App() {
   };
 
   const handleEnterOrg = () => {
-    navigateTo('org');
+    if (typeof window !== 'undefined') {
+      window.location.assign('https://www.orgvizhin.com');
+    }
   };
 
   // Screen routing for both authenticated and unauthenticated sessions

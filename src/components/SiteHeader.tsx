@@ -129,14 +129,10 @@ export default function SiteHeader({
         <div className="p-2.5 w-64 space-y-1.5 text-left">
           {/* Top: ORGVizhin */}
           <a
-            href="/org"
-            onClick={(e) => {
+            href="https://www.orgvizhin.com"
+            onClick={() => {
               setActiveDropdown(null);
               setMobileMenuOpen(false);
-              if (onEnterOrg) {
-                e.preventDefault();
-                onEnterOrg();
-              }
             }}
             className="w-full text-left p-2.5 rounded-lg hover:bg-neutral-900 transition-colors flex items-center gap-3 cursor-pointer group border border-transparent hover:border-cyan-850/60 block"
           >

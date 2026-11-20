@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { MOVIE_100_EMPLOYEES, MovieEmployee } from '../../orgData/movieOrg100';
+import ThemeToggle from '../ThemeToggle';
 import { 
   ZoomIn, 
   ZoomOut, 
@@ -272,16 +273,16 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
 
   // Card dimensions and styling based on density mode
   const getCardStyle = (isUserNode: boolean, isSelected: boolean, isRoot: boolean) => {
-    let base = 'bg-white rounded-xl border-2 transition-all cursor-pointer select-none text-left relative hover:shadow-xl hover:border-slate-900 ';
+    let base = 'bg-white dark:bg-neutral-900 rounded-xl border-2 transition-all cursor-pointer select-none text-left relative hover:shadow-xl hover:border-slate-900 dark:hover:border-emerald-500 ';
     
     if (isUserNode) {
-      base += 'ring-2 ring-emerald-500 border-emerald-600 bg-emerald-50/80 shadow-lg ';
+      base += 'ring-2 ring-emerald-500 border-emerald-600 bg-emerald-50/80 dark:bg-emerald-950/50 shadow-lg ';
     } else if (isSelected) {
       base += 'ring-2 ring-blue-500 border-blue-600 shadow-lg ';
     } else if (isRoot) {
-      base += 'border-slate-900 shadow-md ring-1 ring-slate-900/60 ';
+      base += 'border-slate-900 dark:border-emerald-500/80 shadow-md ring-1 ring-slate-900/60 dark:ring-emerald-500/30 ';
     } else {
-      base += 'border-slate-300 hover:border-slate-800 shadow-xs ';
+      base += 'border-slate-300 dark:border-neutral-800 hover:border-slate-800 dark:hover:border-neutral-600 shadow-xs ';
     }
 
     switch (density) {
@@ -337,7 +338,7 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
 
     if (density === 'micro') {
       return (
-        <span className={`inline-flex items-center px-1 py-0.2 rounded font-mono text-[8px] font-black uppercase ${
+        <span className={`inline-flex items-center px-1 py-0.5 rounded font-mono text-[8px] font-black uppercase ${
           isUser ? 'bg-emerald-600 text-white' : level === 1 ? 'bg-amber-100 text-amber-900' : 'bg-slate-100 text-slate-800'
         }`}>
           {isUser ? 'YOU' : `L${level}`}
@@ -430,7 +431,7 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
                     <ShieldCheck className="w-3 h-3 text-emerald-200" />
                     <span>Your Account · God Mode</span>
                   </span>
-                  <span className="bg-emerald-800 px-1 py-0.2 rounded font-mono text-[8px]">
+                  <span className="bg-emerald-800 px-1 py-0.5 rounded font-mono text-[8px]">
                     Reports to CEO
                   </span>
                 </div>
@@ -438,8 +439,8 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
 
               <div className="flex items-center justify-between text-[10px] mb-2 gap-1">
                 {renderLevelBadge(nodeLevel, isUserNode)}
-                <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-800 border border-slate-300 font-mono text-[9px] font-bold shrink-0">
-                  <Clapperboard className="w-2.5 h-2.5 text-emerald-600" />
+                <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-slate-100 dark:bg-neutral-800 text-slate-800 dark:text-neutral-200 border border-slate-300 dark:border-neutral-700 font-mono text-[9px] font-bold shrink-0">
+                  <Clapperboard className="w-2.5 h-2.5 text-emerald-600 dark:text-emerald-400" />
                   <span className="truncate max-w-[85px]">{node.movie}</span>
                 </span>
               </div>
@@ -450,20 +451,20 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
                     ? 'bg-emerald-600 text-white ring-2 ring-emerald-300' 
                     : nodeLevel === 1 
                     ? 'bg-amber-500 text-neutral-950 ring-2 ring-amber-300' 
-                    : 'bg-black text-white'
+                    : 'bg-slate-900 dark:bg-neutral-800 text-white'
                 }`}>
                   {isUserNode ? '★' : `${node.first_name[0]}${node.last_name[0]}`}
                 </div>
 
                 <div className="min-w-0 flex-1">
-                  <h4 className="text-xs font-black text-black truncate leading-tight">
+                  <h4 className="text-xs font-black text-slate-950 dark:text-white truncate leading-tight">
                     {node.first_name} {node.last_name}
                   </h4>
-                  <p className="text-[10px] font-bold text-slate-800 truncate leading-tight mt-0.5">
+                  <p className="text-[10px] font-bold text-slate-800 dark:text-neutral-300 truncate leading-tight mt-0.5">
                     {node.title}
                   </p>
-                  <div className="flex items-center gap-1 text-[9px] font-mono text-slate-500 mt-1">
-                    <span className="font-extrabold text-slate-700 uppercase tracking-wider">{node.department}</span>
+                  <div className="flex items-center gap-1 text-[9px] font-mono text-slate-500 dark:text-neutral-400 mt-1">
+                    <span className="font-extrabold text-slate-700 dark:text-neutral-300 uppercase tracking-wider">{node.department}</span>
                     {node.manager_id && employeeMap.has(node.manager_id) && (
                       <span className="truncate">· Re: {employeeMap.get(node.manager_id)!.last_name}</span>
                     )}
@@ -471,17 +472,17 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
                 </div>
               </div>
 
-              <div className="mt-2.5 pt-2 border-t border-slate-200 flex items-center justify-between text-[10px]">
-                <span className="font-extrabold text-slate-800">
+              <div className="mt-2.5 pt-2 border-t border-slate-200 dark:border-neutral-800 flex items-center justify-between text-[10px]">
+                <span className="font-extrabold text-slate-800 dark:text-neutral-200">
                   {hasChildren ? (
                     <span>
                       {children.length} direct{children.length === 1 ? '' : 's'}
                       {subtreeCount > children.length && (
-                        <span className="text-slate-500 font-normal ml-1">({subtreeCount} in div)</span>
+                        <span className="text-slate-500 dark:text-neutral-400 font-normal ml-1">({subtreeCount} in div)</span>
                       )}
                     </span>
                   ) : (
-                    <span className="text-slate-500 font-medium">Individual Contributor</span>
+                    <span className="text-slate-500 dark:text-neutral-500 font-medium">Individual Contributor</span>
                   )}
                 </span>
 
@@ -493,7 +494,7 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
                         e.stopPropagation();
                         setRootId(node.id);
                       }}
-                      className="text-[9px] text-emerald-700 hover:text-emerald-900 font-bold hover:underline"
+                      className="text-[9px] text-emerald-700 dark:text-emerald-400 hover:text-emerald-900 dark:hover:text-emerald-300 font-bold hover:underline cursor-pointer"
                     >
                       Focus
                     </button>
@@ -506,7 +507,7 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
                         e.stopPropagation();
                         toggleExpand(node.id);
                       }}
-                      className="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-800 font-mono text-[9px] font-extrabold border border-slate-300 transition-colors"
+                      className="px-2 py-0.5 rounded bg-slate-100 dark:bg-neutral-800 hover:bg-slate-200 dark:hover:bg-neutral-700 text-slate-800 dark:text-neutral-200 font-mono text-[9px] font-extrabold border border-slate-300 dark:border-neutral-700 transition-colors cursor-pointer"
                     >
                       {isExpanded ? `Collapse (${children.length})` : `Expand (${children.length})`}
                     </button>
@@ -520,7 +521,7 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
           {density === 'compact' && (
             <>
               {isUserNode && (
-                <div className="mb-1 -mx-0.5 px-1.5 py-0.2 rounded bg-emerald-600 text-white flex items-center justify-between text-[8px] font-black uppercase">
+                <div className="mb-1 -mx-0.5 px-1.5 py-0.5 rounded bg-emerald-600 text-white flex items-center justify-between text-[8px] font-black uppercase">
                   <span>★ Your Account</span>
                   <span className="font-mono text-[7px]">CEO Direct</span>
                 </div>
@@ -528,29 +529,29 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
 
               <div className="flex items-center justify-between text-[9px] mb-1 gap-1">
                 {renderLevelBadge(nodeLevel, isUserNode)}
-                <span className="font-mono text-[8px] text-slate-500 truncate max-w-[65px]">
+                <span className="font-mono text-[8px] text-slate-500 dark:text-neutral-400 truncate max-w-[65px]">
                   {node.movie}
                 </span>
               </div>
 
               <div className="flex items-center gap-1.5">
                 <div className={`w-7 h-7 rounded-full flex items-center justify-center font-black text-[10px] shrink-0 ${
-                  isUserNode ? 'bg-emerald-600 text-white' : nodeLevel === 1 ? 'bg-amber-500 text-black' : 'bg-black text-white'
+                  isUserNode ? 'bg-emerald-600 text-white' : nodeLevel === 1 ? 'bg-amber-500 text-black' : 'bg-slate-900 dark:bg-neutral-800 text-white'
                 }`}>
                   {isUserNode ? '★' : `${node.first_name[0]}${node.last_name[0]}`}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h4 className="text-[11px] font-black text-black truncate leading-tight">
+                  <h4 className="text-[11px] font-black text-slate-950 dark:text-white truncate leading-tight">
                     {node.first_name} {node.last_name}
                   </h4>
-                  <p className="text-[9px] font-semibold text-slate-700 truncate leading-tight">
+                  <p className="text-[9px] font-semibold text-slate-700 dark:text-neutral-300 truncate leading-tight">
                     {node.title}
                   </p>
                 </div>
               </div>
 
-              <div className="mt-1.5 pt-1 border-t border-slate-200 flex items-center justify-between text-[8px] font-mono">
-                <span className="font-bold text-slate-700">
+              <div className="mt-1.5 pt-1 border-t border-slate-200 dark:border-neutral-800 flex items-center justify-between text-[8px] font-mono">
+                <span className="font-bold text-slate-700 dark:text-neutral-300">
                   {hasChildren ? `${children.length}d · ${subtreeCount}div` : node.department}
                 </span>
                 {hasChildren && (
@@ -560,7 +561,7 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
                       e.stopPropagation();
                       toggleExpand(node.id);
                     }}
-                    className="px-1.5 py-0.2 rounded bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold border border-slate-300"
+                    className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-neutral-800 hover:bg-slate-200 dark:hover:bg-neutral-700 text-slate-800 dark:text-neutral-200 font-bold border border-slate-300 dark:border-neutral-700 cursor-pointer"
                   >
                     {isExpanded ? '−' : `+${children.length}`}
                   </button>
@@ -575,15 +576,15 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
               <div className="flex items-center justify-between gap-1">
                 <div className="flex items-center gap-1 min-w-0">
                   <div className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[8px] shrink-0 ${
-                    isUserNode ? 'bg-emerald-600 text-white' : nodeLevel === 1 ? 'bg-amber-500 text-black' : 'bg-black text-white'
+                    isUserNode ? 'bg-emerald-600 text-white' : nodeLevel === 1 ? 'bg-amber-500 text-black' : 'bg-slate-900 dark:bg-neutral-800 text-white'
                   }`}>
                     {isUserNode ? '★' : `${node.first_name[0]}${node.last_name[0]}`}
                   </div>
                   <div className="min-w-0">
-                    <p className="text-[9px] font-black text-black truncate leading-tight">
+                    <p className="text-[9px] font-black text-slate-950 dark:text-white truncate leading-tight">
                       {node.first_name} {node.last_name}
                     </p>
-                    <p className="text-[7.5px] font-medium text-slate-600 truncate leading-tight">
+                    <p className="text-[7.5px] font-medium text-slate-600 dark:text-neutral-400 truncate leading-tight">
                       {node.title}
                     </p>
                   </div>
@@ -596,7 +597,7 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
                       e.stopPropagation();
                       toggleExpand(node.id);
                     }}
-                    className="w-4 h-4 rounded bg-slate-100 hover:bg-slate-200 text-slate-800 font-mono text-[8px] font-black border border-slate-300 flex items-center justify-center shrink-0"
+                    className="w-4 h-4 rounded bg-slate-100 dark:bg-neutral-800 hover:bg-slate-200 dark:hover:bg-neutral-700 text-slate-800 dark:text-neutral-200 font-mono text-[8px] font-black border border-slate-300 dark:border-neutral-700 flex items-center justify-center shrink-0 cursor-pointer"
                   >
                     {isExpanded ? '−' : children.length}
                   </button>
@@ -608,10 +609,10 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
           {/* Satellite Mode (Micro Pill for Panoramic Multi-Tier Topology) */}
           {density === 'satellite' && (
             <div className="flex items-center justify-between gap-1">
-              <span className="text-[8px] font-black text-black truncate">
+              <span className="text-[8px] font-black text-slate-950 dark:text-white truncate">
                 {isUserNode ? '★ You' : `${node.last_name}`}
               </span>
-              <span className="text-[7px] font-mono font-bold text-slate-500">
+              <span className="text-[7px] font-mono font-bold text-slate-500 dark:text-neutral-400">
                 {hasChildren ? `(${children.length})` : `L${nodeLevel}`}
               </span>
             </div>
@@ -729,21 +730,21 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-full bg-slate-100 text-slate-900 overflow-hidden relative">
+    <div className="flex flex-col h-full bg-slate-100 dark:bg-neutral-950 text-slate-900 dark:text-neutral-100 overflow-hidden relative transition-colors">
       
       {/* =========================================================================
           TOOLBAR HEADER: Navigation, Search, Department Filter, and Controls
           ========================================================================= */}
-      <div className="bg-white border-b-2 border-slate-300 px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 shrink-0 shadow-xs z-30">
+      <div className="bg-white dark:bg-neutral-900 border-b border-slate-200 dark:border-neutral-800 px-4 py-2.5 flex flex-wrap items-center justify-between gap-3 shrink-0 shadow-xs z-30 transition-colors">
         
         {/* Left: Back button & Breadcrumbs */}
         <div className="flex items-center gap-2.5">
           <button
             type="button"
             onClick={onBackToLogin}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-black text-white text-xs font-bold transition-all shadow-xs cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0D5C46] hover:bg-emerald-700 text-white text-xs font-bold transition-all shadow-xs cursor-pointer"
           >
-            <ArrowLeft className="w-3.5 h-3.5 text-emerald-400" />
+            <ArrowLeft className="w-3.5 h-3.5 text-emerald-200" />
             <span>Return to VizhinORG</span>
           </button>
 
@@ -751,44 +752,44 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
             <button
               type="button"
               onClick={() => setRootId(null)}
-              className="text-xs text-emerald-700 hover:text-emerald-900 font-bold flex items-center gap-1 border border-emerald-300 bg-emerald-50 px-2 py-1 rounded-md"
+              className="text-xs text-emerald-700 dark:text-emerald-400 hover:text-emerald-900 dark:hover:text-emerald-300 font-bold flex items-center gap-1 border border-emerald-300 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-1 rounded-md cursor-pointer"
             >
               <span>Reset to CEO (Root)</span>
             </button>
           )}
 
-          <div className="hidden lg:flex items-center gap-1.5 text-xs text-slate-600">
+          <div className="hidden lg:flex items-center gap-1.5 text-xs text-slate-600 dark:text-neutral-400">
             {ancestryChain.map((p) => (
               <React.Fragment key={p.id}>
                 <button
                   onClick={() => setRootId(p.id)}
-                  className="hover:text-black font-semibold"
+                  className="hover:text-slate-950 dark:hover:text-white font-semibold cursor-pointer"
                 >
                   {p.first_name} {p.last_name}
                 </button>
-                <ChevronRight className="w-3 h-3 text-slate-400" />
+                <ChevronRight className="w-3 h-3 text-slate-400 dark:text-neutral-500" />
               </React.Fragment>
             ))}
-            <span className="font-extrabold text-black">
+            <span className="font-extrabold text-slate-950 dark:text-white">
               {activeRoot.first_name} {activeRoot.last_name}
             </span>
-            <span className="text-slate-500 font-mono text-[11px]">({activeRoot.title})</span>
+            <span className="text-slate-500 dark:text-neutral-400 font-mono text-[11px]">({activeRoot.title})</span>
           </div>
         </div>
 
         {/* Middle: Search bar */}
         <div className="relative w-56 sm:w-72">
-          <div className="flex items-center bg-slate-50 rounded-lg px-2.5 py-1.5 border border-slate-300 focus-within:border-slate-800 focus-within:bg-white transition-colors">
-            <Search className="w-3.5 h-3.5 text-slate-500 mr-2 shrink-0" />
+          <div className="flex items-center bg-slate-50 dark:bg-neutral-950 rounded-lg px-2.5 py-1.5 border border-slate-300 dark:border-neutral-800 focus-within:border-[#0D5C46] dark:focus-within:border-emerald-500 focus-within:bg-white dark:focus-within:bg-neutral-950 transition-colors">
+            <Search className="w-3.5 h-3.5 text-slate-500 dark:text-neutral-400 mr-2 shrink-0" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search 100 cinema tech employees..."
-              className="text-xs bg-transparent border-0 focus:outline-none w-full text-black placeholder:text-slate-400"
+              className="text-xs bg-transparent border-0 focus:outline-none w-full text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-neutral-500"
             />
             {searchQuery && (
-              <button onClick={() => setSearchQuery('')} className="text-slate-400 hover:text-black">
+              <button onClick={() => setSearchQuery('')} className="text-slate-400 hover:text-slate-900 dark:hover:text-white cursor-pointer">
                 <X className="w-3 h-3" />
               </button>
             )}
@@ -796,7 +797,7 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
 
           {/* Search Dropdown Matches */}
           {searchMatches.length > 0 && (
-            <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-slate-300 rounded-xl shadow-xl p-1.5 z-50 max-h-60 overflow-y-auto">
+            <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-neutral-900 border border-slate-300 dark:border-neutral-800 rounded-xl shadow-xl p-1.5 z-50 max-h-60 overflow-y-auto">
               {searchMatches.map((m) => (
                 <button
                   key={m.id}
@@ -806,13 +807,13 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
                     setRootId(m.id);
                     setSearchQuery('');
                   }}
-                  className="w-full text-left p-2 rounded-lg hover:bg-slate-100 transition-colors flex items-center justify-between text-xs"
+                  className="w-full text-left p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-neutral-800 transition-colors flex items-center justify-between text-xs cursor-pointer"
                 >
                   <div>
-                    <p className="font-bold text-black">{m.first_name} {m.last_name}</p>
-                    <p className="text-[10px] text-slate-600">{m.title} · {m.department}</p>
+                    <p className="font-bold text-slate-950 dark:text-white">{m.first_name} {m.last_name}</p>
+                    <p className="text-[10px] text-slate-600 dark:text-neutral-400">{m.title} · {m.department}</p>
                   </div>
-                  <span className="text-[9px] font-mono bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded border border-slate-300 font-bold">
+                  <span className="text-[9px] font-mono bg-slate-100 dark:bg-neutral-800 text-slate-700 dark:text-neutral-300 px-1.5 py-0.5 rounded border border-slate-300 dark:border-neutral-700 font-bold">
                     {m.movie}
                   </span>
                 </button>
@@ -821,12 +822,12 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
           )}
         </div>
 
-        {/* Right Controls: Department Filter & Sign Out */}
+        {/* Right Controls: Department Filter, ThemeToggle & Sign Out */}
         <div className="flex items-center gap-2">
           <select
             value={departmentFilter}
             onChange={(e) => setDepartmentFilter(e.target.value)}
-            className="bg-white border border-slate-300 text-slate-800 font-bold py-1 px-2 rounded-lg text-xs focus:outline-none"
+            className="bg-white dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-800 dark:text-neutral-200 font-bold py-1.5 px-2 rounded-lg text-xs focus:outline-none cursor-pointer"
           >
             <option value="ALL">All Departments (100)</option>
             {departments.map((d) => (
@@ -838,13 +839,14 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
 
           {/* Active Session & Sign Out Button */}
           {currentUser && (
-            <div className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 border border-slate-300 text-xs">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span className="font-bold text-black text-[11px] truncate max-w-[120px]">
+            <div className="hidden md:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-neutral-800 border border-slate-200 dark:border-neutral-700 text-xs">
+              <span className="font-bold text-slate-900 dark:text-white text-[11px] truncate max-w-[120px]">
                 {currentUser.name || currentUser.email}
               </span>
             </div>
           )}
+
+          <ThemeToggle />
 
           <button
             type="button"
@@ -861,14 +863,14 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
       {/* =========================================================================
           SIFT-STYLE DISPLAY CONTROLS BAR: Density, Spacing, Fit Screen, & Zoom Presets
           ========================================================================= */}
-      <div className="bg-slate-200 border-b-2 border-slate-300 px-4 py-2 flex flex-wrap items-center justify-between gap-3 text-xs shrink-0 z-20 shadow-xs">
+      <div className="bg-slate-100 dark:bg-neutral-900/80 border-b border-slate-200 dark:border-neutral-800 px-4 py-2 flex flex-wrap items-center justify-between gap-3 text-xs shrink-0 z-20 shadow-xs transition-colors">
         
         {/* Left Side: Layout Mode, Density & Spacing Selectors */}
         <div className="flex flex-wrap items-center gap-2.5">
           
           {/* Staggered vs Dual-Column vs Wide Tree Layout Segmented Control */}
-          <div className="flex items-center gap-1 bg-white p-1 rounded-lg border border-slate-300 shadow-xs">
-            <span className="text-[9px] font-mono font-bold uppercase text-slate-500 px-1.5 hidden sm:inline">
+          <div className="flex items-center gap-1 bg-white dark:bg-neutral-900 p-1 rounded-lg border border-slate-300 dark:border-neutral-700 shadow-xs">
+            <span className="text-[9px] font-mono font-bold uppercase text-slate-500 dark:text-neutral-400 px-1.5 hidden sm:inline">
               Layout:
             </span>
             <button
@@ -877,7 +879,7 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
               className={`px-2 py-1 rounded text-[10px] font-bold flex items-center gap-1 transition-all cursor-pointer ${
                 layoutMode === 'staggered'
                   ? 'bg-emerald-600 text-white shadow-xs'
-                  : 'text-slate-700 hover:text-black hover:bg-slate-100'
+                  : 'text-slate-700 dark:text-neutral-300 hover:text-black dark:hover:text-white hover:bg-slate-100 dark:hover:bg-neutral-800'
               }`}
               title="Staggered Vertical Columns (Matches Reference Image, Fits Large Org on Screen)"
             >
@@ -889,8 +891,8 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
               onClick={() => setLayoutMode('dual-column')}
               className={`px-2 py-1 rounded text-[10px] font-bold flex items-center gap-1 transition-all cursor-pointer ${
                 layoutMode === 'dual-column'
-                  ? 'bg-slate-900 text-white shadow-xs'
-                  : 'text-slate-700 hover:text-black hover:bg-slate-100'
+                  ? 'bg-slate-900 dark:bg-emerald-600 text-white shadow-xs'
+                  : 'text-slate-700 dark:text-neutral-300 hover:text-black dark:hover:text-white hover:bg-slate-100 dark:hover:bg-neutral-800'
               }`}
               title="2-Column Staggered Cards (Compact Height & Width)"
             >
@@ -902,8 +904,8 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
               onClick={() => setLayoutMode('traditional')}
               className={`px-2 py-1 rounded text-[10px] font-bold flex items-center gap-1 transition-all cursor-pointer ${
                 layoutMode === 'traditional'
-                  ? 'bg-slate-900 text-white shadow-xs'
-                  : 'text-slate-700 hover:text-black hover:bg-slate-100'
+                  ? 'bg-slate-900 dark:bg-emerald-600 text-white shadow-xs'
+                  : 'text-slate-700 dark:text-neutral-300 hover:text-black dark:hover:text-white hover:bg-slate-100 dark:hover:bg-neutral-800'
               }`}
               title="Traditional Wide Horizontal Tree"
             >
@@ -913,8 +915,8 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
           </div>
 
           {/* Card Density Segmented Control */}
-          <div className="flex items-center gap-1 bg-white p-1 rounded-lg border border-slate-300 shadow-xs">
-            <span className="text-[9px] font-mono font-bold uppercase text-slate-500 px-1.5 hidden sm:inline">
+          <div className="flex items-center gap-1 bg-white dark:bg-neutral-900 p-1 rounded-lg border border-slate-300 dark:border-neutral-700 shadow-xs">
+            <span className="text-[9px] font-mono font-bold uppercase text-slate-500 dark:text-neutral-400 px-1.5 hidden sm:inline">
               Density:
             </span>
             {[
@@ -932,8 +934,8 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
                   title={mode.hint}
                   className={`px-2 py-1 rounded text-[10px] font-bold flex items-center gap-1 transition-all cursor-pointer ${
                     density === mode.id
-                      ? 'bg-slate-900 text-white shadow-xs'
-                      : 'text-slate-700 hover:text-black hover:bg-slate-100'
+                      ? 'bg-slate-900 dark:bg-emerald-600 text-white shadow-xs'
+                      : 'text-slate-700 dark:text-neutral-300 hover:text-black dark:hover:text-white hover:bg-slate-100 dark:hover:bg-neutral-800'
                   }`}
                 >
                   <Icon className="w-3 h-3" />
@@ -944,8 +946,8 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
           </div>
 
           {/* Branch Spacing Toggle */}
-          <div className="flex items-center gap-1 bg-white p-1 rounded-lg border border-slate-300 shadow-xs">
-            <span className="text-[9px] font-mono font-bold uppercase text-slate-500 px-1.5 hidden sm:inline">
+          <div className="flex items-center gap-1 bg-white dark:bg-neutral-900 p-1 rounded-lg border border-slate-300 dark:border-neutral-700 shadow-xs">
+            <span className="text-[9px] font-mono font-bold uppercase text-slate-500 dark:text-neutral-400 px-1.5 hidden sm:inline">
               Spacing:
             </span>
             <button
@@ -954,7 +956,7 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
               className={`px-2 py-1 rounded text-[10px] font-bold transition-all cursor-pointer ${
                 spacing === 'condensed'
                   ? 'bg-emerald-600 text-white shadow-xs'
-                  : 'text-slate-700 hover:text-black hover:bg-slate-100'
+                  : 'text-slate-700 dark:text-neutral-300 hover:text-black dark:hover:text-white hover:bg-slate-100 dark:hover:bg-neutral-800'
               }`}
               title="Condensed Horizontal Gap (Fitted)"
             >
@@ -965,8 +967,8 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
               onClick={() => setSpacing('comfortable')}
               className={`px-2 py-1 rounded text-[10px] font-bold transition-all cursor-pointer ${
                 spacing === 'comfortable'
-                  ? 'bg-slate-900 text-white shadow-xs'
-                  : 'text-slate-700 hover:text-black hover:bg-slate-100'
+                  ? 'bg-slate-900 dark:bg-emerald-600 text-white shadow-xs'
+                  : 'text-slate-700 dark:text-neutral-300 hover:text-black dark:hover:text-white hover:bg-slate-100 dark:hover:bg-neutral-800'
               }`}
               title="Comfortable Horizontal Gap"
             >
@@ -983,10 +985,10 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
           <button
             type="button"
             onClick={handleCenterView}
-            className="px-2.5 py-1 rounded-lg bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 font-bold text-[10px] flex items-center gap-1.5 shadow-xs cursor-pointer transition-colors"
+            className="px-2.5 py-1 rounded-lg bg-white dark:bg-neutral-900 hover:bg-slate-50 dark:hover:bg-neutral-800 text-slate-800 dark:text-neutral-200 border border-slate-300 dark:border-neutral-700 font-bold text-[10px] flex items-center gap-1.5 shadow-xs cursor-pointer transition-colors"
             title="Smoothly scroll to center the root executive"
           >
-            <Crosshair className="w-3 h-3 text-slate-600" />
+            <Crosshair className="w-3 h-3 text-slate-600 dark:text-neutral-400" />
             <span>Center View</span>
           </button>
 
@@ -1002,7 +1004,7 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
           </button>
 
           {/* Quick Zoom Presets */}
-          <div className="flex items-center bg-white rounded-lg p-0.5 border border-slate-300 shadow-xs">
+          <div className="flex items-center bg-white dark:bg-neutral-900 rounded-lg p-0.5 border border-slate-300 dark:border-neutral-700 shadow-xs">
             {[
               { label: '35%', scale: 0.35 },
               { label: '50%', scale: 0.5 },
@@ -1015,8 +1017,8 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
                 onClick={() => setZoomScale(p.scale)}
                 className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-bold transition-all cursor-pointer ${
                   Math.abs(zoomScale - p.scale) < 0.05
-                    ? 'bg-slate-900 text-white'
-                    : 'text-slate-700 hover:text-black hover:bg-slate-100'
+                    ? 'bg-slate-900 dark:bg-emerald-600 text-white'
+                    : 'text-slate-700 dark:text-neutral-300 hover:text-black dark:hover:text-white hover:bg-slate-100 dark:hover:bg-neutral-800'
                 }`}
               >
                 {p.label}
@@ -1027,7 +1029,7 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
             <button
               type="button"
               onClick={() => setZoomScale(prev => Math.max(0.25, prev - 0.1))}
-              className="p-1 hover:bg-slate-100 rounded text-slate-700"
+              className="p-1 hover:bg-slate-100 dark:hover:bg-neutral-800 rounded text-slate-700 dark:text-neutral-300 cursor-pointer"
               title="Zoom Out"
             >
               <ZoomOut className="w-3 h-3" />
@@ -1035,7 +1037,7 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
             <button
               type="button"
               onClick={() => setZoomScale(prev => Math.min(1.4, prev + 0.1))}
-              className="p-1 hover:bg-slate-100 rounded text-slate-700"
+              className="p-1 hover:bg-slate-100 dark:hover:bg-neutral-800 rounded text-slate-700 dark:text-neutral-300 cursor-pointer"
               title="Zoom In"
             >
               <ZoomIn className="w-3 h-3" />
@@ -1049,36 +1051,36 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
       {/* =========================================================================
           LEVEL DEPTH & EXPANSION BAR
           ========================================================================= */}
-      <div className="bg-slate-100 border-b border-slate-300 px-4 py-1.5 flex flex-wrap items-center justify-between gap-2 text-[10px] shrink-0 z-10">
+      <div className="bg-slate-50 dark:bg-neutral-900 border-b border-slate-200 dark:border-neutral-800 px-4 py-1.5 flex flex-wrap items-center justify-between gap-2 text-[10px] shrink-0 z-10 transition-colors">
         <div className="flex items-center gap-1.5 overflow-x-auto">
-          <span className="text-slate-600 font-mono font-bold uppercase mr-1">
+          <span className="text-slate-600 dark:text-neutral-400 font-mono font-bold uppercase mr-1">
             Hierarchy Depth:
           </span>
           <button
             type="button"
             onClick={handleExpandAll}
-            className="px-2 py-0.5 rounded bg-slate-900 text-white font-bold hover:bg-black transition-colors"
+            className="px-2 py-0.5 rounded bg-[#0D5C46] text-white font-bold hover:bg-emerald-700 transition-colors cursor-pointer"
           >
             All 5 Levels (100)
           </button>
           <button
             type="button"
             onClick={() => handleExpandToLevel(3)}
-            className="px-2 py-0.5 rounded bg-white text-slate-800 font-bold border border-slate-300 hover:bg-slate-50 transition-colors"
+            className="px-2 py-0.5 rounded bg-white dark:bg-neutral-800 text-slate-800 dark:text-neutral-200 font-bold border border-slate-300 dark:border-neutral-700 hover:bg-slate-50 dark:hover:bg-neutral-700 transition-colors cursor-pointer"
           >
             Levels 1-3 (C-Suite & VPs)
           </button>
           <button
             type="button"
             onClick={() => handleExpandToLevel(2)}
-            className="px-2 py-0.5 rounded bg-white text-slate-800 font-bold border border-slate-300 hover:bg-slate-50 transition-colors"
+            className="px-2 py-0.5 rounded bg-white dark:bg-neutral-800 text-slate-800 dark:text-neutral-200 font-bold border border-slate-300 dark:border-neutral-700 hover:bg-slate-50 dark:hover:bg-neutral-700 transition-colors cursor-pointer"
           >
             Levels 1-2 (C-Suite Only)
           </button>
           <button
             type="button"
             onClick={handleCollapseAll}
-            className="px-2 py-0.5 rounded bg-white text-slate-600 font-bold border border-slate-300 hover:bg-slate-50 transition-colors"
+            className="px-2 py-0.5 rounded bg-white dark:bg-neutral-800 text-slate-600 dark:text-neutral-400 font-bold border border-slate-300 dark:border-neutral-700 hover:bg-slate-50 dark:hover:bg-neutral-700 transition-colors cursor-pointer"
           >
             Collapse All
           </button>
@@ -1086,30 +1088,30 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
 
         {/* 5-Level Architecture Breakdown Legend */}
         <div className="hidden lg:flex items-center gap-1.5 font-mono font-bold text-[9px]">
-          <span className="px-1.5 py-0.2 rounded bg-amber-100 text-amber-900 border border-amber-300">
+          <span className="px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-amber-800/60">
             L1: CEO (1)
           </span>
           <span>→</span>
-          <span className="px-1.5 py-0.2 rounded bg-purple-100 text-purple-900 border border-purple-300">
+          <span className="px-1.5 py-0.5 rounded bg-purple-100 dark:bg-purple-950/60 text-purple-900 dark:text-purple-300 border border-purple-300 dark:border-purple-800/60">
             L2: C-Suite (7)
           </span>
           <span>→</span>
-          <span className="px-1.5 py-0.2 rounded bg-blue-100 text-blue-900 border border-blue-300">
+          <span className="px-1.5 py-0.5 rounded bg-blue-100 dark:bg-blue-950/60 text-blue-900 dark:text-blue-300 border border-blue-300 dark:border-blue-800/60">
             L3: VPs (17)
           </span>
           <span>→</span>
-          <span className="px-1.5 py-0.2 rounded bg-indigo-50 text-indigo-900 border border-indigo-200">
+          <span className="px-1.5 py-0.5 rounded bg-indigo-50 dark:bg-indigo-950/60 text-indigo-900 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/60">
             L4: Dirs (21)
           </span>
           <span>→</span>
-          <span className="px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 border border-slate-300">
+          <span className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-neutral-800 text-slate-700 dark:text-neutral-300 border border-slate-300 dark:border-neutral-700">
             L5: ICs (69)
           </span>
         </div>
       </div>
 
       {/* =========================================================================
-          CANVAS AREA: Interactive Tree Structure (Light Grey Canvas + White Cards)
+          CANVAS AREA: Interactive Tree Structure
           ========================================================================= */}
       <div 
         ref={scrollContainerRef}
@@ -1117,14 +1119,9 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
-        className={`flex-1 overflow-auto relative select-none ${
+        className={`flex-1 overflow-auto relative select-none bg-[#F8FAFC] dark:bg-[#070708] bg-[radial-gradient(#cbd5e1_1.5px,transparent_1.5px)] dark:bg-[radial-gradient(#1e293b_1.5px,transparent_1.5px)] [background-size:24px_24px] transition-colors ${
           isDragging ? 'cursor-grabbing' : 'cursor-grab'
         }`}
-        style={{
-          backgroundColor: '#e2e8f0', // Crisp slate light grey
-          backgroundImage: 'radial-gradient(circle, #94a3b8 1.5px, transparent 1.5px)',
-          backgroundSize: '24px 24px',
-        }}
       >
         {/* Outer canvas container: min-w-full w-max prevents negative scroll coordinates */}
         <div className="min-w-full w-max p-8 sm:p-12 block">
@@ -1144,19 +1141,19 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
       </div>
 
       {/* =========================================================================
-          SIDE PROFILE DRAWER: Rich Persona Dossier and Ancestry Permissions
-          ========================================================================= */}
+           SIDE PROFILE DRAWER: Rich Persona Dossier and Ancestry Permissions
+           ========================================================================= */}
       {selectedUser && (
-        <div className="absolute top-0 right-0 bottom-0 w-80 sm:w-96 bg-white border-l-2 border-slate-300 shadow-2xl p-5 flex flex-col z-40 overflow-y-auto animate-in slide-in-from-right duration-200">
+        <div className="absolute top-0 right-0 bottom-0 w-80 sm:w-96 bg-white dark:bg-neutral-950 border-l border-slate-200 dark:border-neutral-800 shadow-2xl p-5 flex flex-col z-40 overflow-y-auto animate-in slide-in-from-right duration-200">
           
-          <div className="flex items-center justify-between pb-3 border-b border-slate-200">
-            <span className="text-[10px] font-mono font-bold uppercase text-slate-500 tracking-wider">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-neutral-800">
+            <span className="text-[10px] font-mono font-bold uppercase text-slate-500 dark:text-neutral-400 tracking-wider">
               Workforce Intelligence Profile
             </span>
             <button
               type="button"
               onClick={() => setSelectedUser(null)}
-              className="p-1 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-black transition-colors"
+              className="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-neutral-800 text-slate-500 dark:text-neutral-400 hover:text-slate-950 dark:hover:text-white transition-colors cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -1170,22 +1167,22 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
                   ? 'bg-emerald-600 text-white ring-2 ring-emerald-300' 
                   : getNodeLevel(selectedUser.id) === 1
                   ? 'bg-amber-500 text-neutral-950 ring-2 ring-amber-300'
-                  : 'bg-black text-white'
+                  : 'bg-slate-900 dark:bg-neutral-800 text-white'
               }`}>
                 {selectedUser.isUser ? '★' : `${selectedUser.first_name[0]}${selectedUser.last_name[0]}`}
               </div>
 
               <div>
-                <h3 className="text-base font-black text-black leading-tight">
+                <h3 className="text-base font-black text-slate-950 dark:text-white leading-tight">
                   {selectedUser.first_name} {selectedUser.last_name}
                 </h3>
-                <p className="text-xs font-bold text-slate-800 mt-0.5">
+                <p className="text-xs font-bold text-slate-700 dark:text-neutral-300 mt-0.5">
                   {selectedUser.title}
                 </p>
                 <div className="flex items-center gap-1.5 mt-1.5">
                   {renderLevelBadge(getNodeLevel(selectedUser.id), selectedUser.isUser)}
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-100 border border-slate-300 font-mono text-[10px] font-bold text-slate-800">
-                    <Clapperboard className="w-3 h-3 text-emerald-600" />
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-100 dark:bg-neutral-800 border border-slate-300 dark:border-neutral-700 font-mono text-[10px] font-bold text-slate-800 dark:text-neutral-200">
+                    <Clapperboard className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                     <span>{selectedUser.movie}</span>
                   </span>
                 </div>
@@ -1194,54 +1191,54 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
 
             {/* Special User Account Privilege Callout */}
             {selectedUser.isUser && (
-              <div className="p-3 bg-emerald-50 border border-emerald-300 rounded-xl text-xs text-emerald-950 font-medium shadow-xs">
-                <div className="flex items-center gap-1.5 font-bold text-emerald-900 mb-1">
-                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
+              <div className="p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800/60 rounded-xl text-xs text-emerald-950 dark:text-emerald-200 font-medium shadow-xs">
+                <div className="flex items-center gap-1.5 font-bold text-emerald-900 dark:text-emerald-300 mb-1">
+                  <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                   <span>Level 2 Executive · Super Admin (God Mode)</span>
                 </div>
-                <p className="text-[11px] text-emerald-800 leading-relaxed">
+                <p className="text-[11px] text-emerald-800 dark:text-emerald-300/90 leading-relaxed">
                   Your account is positioned at Level 2, reporting directly to CEO Sarah Connor. You hold unrestricted cross-departmental administrative rights across all 100 workforce nodes.
                 </p>
               </div>
             )}
 
             {/* Details Table */}
-            <div className="space-y-2 pt-2 border-t border-slate-100 text-xs text-slate-700">
-              <div className="flex items-center justify-between py-1 border-b border-slate-100">
-                <span className="text-slate-500 font-medium">Department</span>
-                <span className="font-bold text-black">{selectedUser.department}</span>
+            <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-neutral-800 text-xs text-slate-700 dark:text-neutral-300">
+              <div className="flex items-center justify-between py-1 border-b border-slate-100 dark:border-neutral-800">
+                <span className="text-slate-500 dark:text-neutral-400 font-medium">Department</span>
+                <span className="font-bold text-slate-950 dark:text-white">{selectedUser.department}</span>
               </div>
 
-              <div className="flex items-center justify-between py-1 border-b border-slate-100">
-                <span className="text-slate-500 font-medium">Management Level</span>
-                <span className="font-bold text-black">Level {getNodeLevel(selectedUser.id)} of 5</span>
+              <div className="flex items-center justify-between py-1 border-b border-slate-100 dark:border-neutral-800">
+                <span className="text-slate-500 dark:text-neutral-400 font-medium">Management Level</span>
+                <span className="font-bold text-slate-950 dark:text-white">Level {getNodeLevel(selectedUser.id)} of 5</span>
               </div>
 
-              <div className="flex items-center justify-between py-1 border-b border-slate-100">
-                <span className="text-slate-500 font-medium">Division Headcount Scope</span>
-                <span className="font-bold text-black font-mono">
+              <div className="flex items-center justify-between py-1 border-b border-slate-100 dark:border-neutral-800">
+                <span className="text-slate-500 dark:text-neutral-400 font-medium">Division Headcount Scope</span>
+                <span className="font-bold text-slate-950 dark:text-white font-mono tabular-nums">
                   {getSubtreeCount(selectedUser.id)} total employees
                 </span>
               </div>
 
-              <div className="flex items-center justify-between py-1 border-b border-slate-100">
-                <span className="text-slate-500 font-medium">Corporate Email</span>
-                <span className="font-mono text-slate-900">{selectedUser.email}</span>
+              <div className="flex items-center justify-between py-1 border-b border-slate-100 dark:border-neutral-800">
+                <span className="text-slate-500 dark:text-neutral-400 font-medium">Corporate Email</span>
+                <span className="font-mono text-slate-900 dark:text-neutral-200">{selectedUser.email}</span>
               </div>
 
-              <div className="flex items-center justify-between py-1 border-b border-slate-100">
-                <span className="text-slate-500 font-medium">RBAC Security Role</span>
-                <span className="font-mono text-emerald-700 font-bold uppercase text-[10px]">
+              <div className="flex items-center justify-between py-1 border-b border-slate-100 dark:border-neutral-800">
+                <span className="text-slate-500 dark:text-neutral-400 font-medium">RBAC Security Role</span>
+                <span className="font-mono text-[#0D5C46] dark:text-emerald-400 font-bold uppercase text-[10px]">
                   {selectedUser.role}
                 </span>
               </div>
 
               {selectedUser.manager_id && employeeMap.has(selectedUser.manager_id) && (
-                <div className="flex items-center justify-between py-1 border-b border-slate-100">
-                  <span className="text-slate-500 font-medium">Reports To</span>
+                <div className="flex items-center justify-between py-1 border-b border-slate-100 dark:border-neutral-800">
+                  <span className="text-slate-500 dark:text-neutral-400 font-medium">Reports To</span>
                   <button
                     onClick={() => setSelectedUser(employeeMap.get(selectedUser.manager_id!)!)}
-                    className="font-bold text-black hover:text-emerald-700 hover:underline"
+                    className="font-bold text-slate-950 dark:text-white hover:text-[#0D5C46] dark:hover:text-emerald-400 hover:underline cursor-pointer"
                   >
                     {employeeMap.get(selectedUser.manager_id!)!.first_name} {employeeMap.get(selectedUser.manager_id!)!.last_name}
                   </button>
@@ -1251,9 +1248,9 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
 
             {/* Direct Reports Section in Drawer */}
             <div className="pt-2">
-              <h4 className="text-xs font-bold text-black mb-2 flex items-center justify-between">
+              <h4 className="text-xs font-bold text-slate-950 dark:text-white mb-2 flex items-center justify-between">
                 <span>Direct Reports</span>
-                <span className="font-mono text-[10px] bg-slate-100 px-1.5 py-0.5 rounded border border-slate-300 text-slate-700 font-bold">
+                <span className="font-mono tabular-nums text-[10px] bg-slate-100 dark:bg-neutral-800 px-1.5 py-0.5 rounded border border-slate-300 dark:border-neutral-700 text-slate-700 dark:text-neutral-300 font-bold">
                   {(reportsByManager.get(selectedUser.id) || []).length}
                 </span>
               </h4>
@@ -1264,20 +1261,20 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
                     key={rep.id}
                     type="button"
                     onClick={() => setSelectedUser(rep)}
-                    className="w-full text-left p-2 rounded-lg bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors flex items-center justify-between text-xs"
+                    className="w-full text-left p-2 rounded-lg bg-slate-50 dark:bg-neutral-900 hover:bg-slate-100 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 transition-colors flex items-center justify-between text-xs cursor-pointer"
                   >
                     <div>
-                      <p className="font-bold text-black truncate">{rep.first_name} {rep.last_name}</p>
-                      <p className="text-[10px] text-slate-600 truncate">{rep.title}</p>
+                      <p className="font-bold text-slate-950 dark:text-white truncate">{rep.first_name} {rep.last_name}</p>
+                      <p className="text-[10px] text-slate-600 dark:text-neutral-400 truncate">{rep.title}</p>
                     </div>
-                    <span className="text-[9px] font-mono text-slate-500 shrink-0">
+                    <span className="text-[9px] font-mono text-slate-500 dark:text-neutral-400 shrink-0">
                       Level {getNodeLevel(rep.id)}
                     </span>
                   </button>
                 ))}
 
                 {(reportsByManager.get(selectedUser.id) || []).length === 0 && (
-                  <p className="text-[11px] text-slate-400 italic">
+                  <p className="text-[11px] text-slate-400 dark:text-neutral-500 italic">
                     No direct reports (Individual Contributor).
                   </p>
                 )}
@@ -1292,9 +1289,9 @@ export const MovieOrgChartView: React.FC<MovieOrgChartViewProps> = ({
                   setRootId(selectedUser.id);
                   setSelectedUser(null);
                 }}
-                className="w-full py-2 bg-slate-900 hover:bg-black text-white text-xs font-bold rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-sm"
+                className="w-full py-2 bg-[#0D5C46] hover:bg-emerald-700 text-white text-xs font-bold rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-sm cursor-pointer"
               >
-                <Users className="w-3.5 h-3.5 text-emerald-400" />
+                <Users className="w-3.5 h-3.5 text-emerald-200" />
                 <span>Focus Subtree on {selectedUser.first_name}</span>
               </button>
             </div>

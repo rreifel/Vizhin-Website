@@ -280,7 +280,7 @@ export default function VizhinOrgPage({
   };
 
   return (
-    <div className="min-h-screen bg-[#070708] text-neutral-100 flex flex-col font-sans selection:bg-emerald-500 selection:text-neutral-950">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#070708] text-slate-900 dark:text-neutral-100 flex flex-col font-sans selection:bg-emerald-500 selection:text-white dark:selection:text-neutral-950 transition-colors">
       
       {/* 1. COMPLETE VIZHIN.CO SITE HEADER */}
       <SiteHeader
@@ -301,13 +301,13 @@ export default function VizhinOrgPage({
       {/* =========================================================================
           TOP VIEW MODE SWITCHER BANNER: Direct Toggle for 100-Employee Hierarchy
           ========================================================================= */}
-      <div className="bg-[#0c0d10] border-b border-neutral-800 px-6 py-2.5 flex flex-wrap items-center justify-between gap-3 shrink-0 z-20">
+      <div className="bg-white dark:bg-[#0c0d10] border-b border-slate-200 dark:border-neutral-800 px-6 py-2.5 flex flex-wrap items-center justify-between gap-3 shrink-0 z-20">
         <div className="flex items-center gap-2.5">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span className="text-xs font-mono font-bold text-neutral-200 uppercase tracking-wide">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse"></span>
+          <span className="text-xs font-mono font-bold text-slate-800 dark:text-neutral-200 uppercase tracking-wide">
             VIZHINORG • WORKFORCE ARCHITECTURE
           </span>
-          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-amber-950/90 text-amber-300 border border-amber-700/60 uppercase">
+          <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-amber-50 dark:bg-amber-950/90 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-700/60 uppercase">
             COMING SOON
           </span>
         </div>
@@ -315,12 +315,12 @@ export default function VizhinOrgPage({
           {/* Active User Session Pill & Sign Out Button */}
           {currentUser && (
             <div className="flex items-center gap-2 mr-2">
-              <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-neutral-900 border border-neutral-800 text-xs">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span className="font-bold text-white text-[11px] truncate max-w-[130px]">
+              <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-xs">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse"></span>
+                <span className="font-bold text-slate-900 dark:text-white text-[11px] truncate max-w-[130px]">
                   {currentUser.name || currentUser.email}
                 </span>
-                <span className="font-mono text-[9px] text-emerald-400 bg-emerald-950/80 px-1 py-0.2 rounded border border-emerald-800/60 uppercase">
+                <span className="font-mono text-[9px] text-[#0D5C46] dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/80 px-1.5 py-0.5 rounded border border-emerald-200 dark:border-emerald-800/60 uppercase">
                   {currentUser.role || 'Active'}
                 </span>
               </div>
@@ -329,28 +329,28 @@ export default function VizhinOrgPage({
                 <button
                   type="button"
                   onClick={() => setOrgSignOutDropdownOpen(prev => !prev)}
-                  className="px-3.5 py-1.5 rounded-lg bg-red-950/70 hover:bg-red-900/90 text-red-300 hover:text-white border border-red-800/70 text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm cursor-pointer hover:scale-105"
+                  className="px-3.5 py-1.5 rounded-lg bg-red-50 dark:bg-red-950/70 hover:bg-red-100 dark:hover:bg-red-900/90 text-red-700 dark:text-red-300 hover:text-red-900 dark:hover:text-white border border-red-200 dark:border-red-800/70 text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer hover:scale-105"
                   title="Sign out of specific application"
                 >
-                  <LogOut className="w-3.5 h-3.5 text-red-400" />
+                  <LogOut className="w-3.5 h-3.5 text-red-600 dark:text-red-400" />
                   <span>Sign Out</span>
-                  <ChevronDown className="w-3 h-3 text-red-300" />
+                  <ChevronDown className="w-3 h-3 text-red-600 dark:text-red-300" />
                 </button>
 
                 {orgSignOutDropdownOpen && (
-                  <div className="absolute top-full right-0 mt-2 w-64 bg-neutral-950/95 border border-neutral-800 rounded-xl shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150 backdrop-blur-md">
+                  <div className="absolute top-full right-0 mt-2 w-64 bg-white dark:bg-neutral-950/95 border border-slate-200 dark:border-neutral-800 rounded-xl shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150 backdrop-blur-md">
                     <button
                       type="button"
                       onClick={() => {
                         setOrgSignOutDropdownOpen(false);
                         handleLocalSignOutOrg();
                       }}
-                      className="w-full text-left p-2 rounded-lg hover:bg-neutral-900 text-xs font-bold text-cyan-300 hover:text-cyan-200 flex items-center gap-2 cursor-pointer"
+                      className="w-full text-left p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-neutral-900 text-xs font-bold text-cyan-800 dark:text-cyan-300 hover:text-cyan-950 dark:hover:text-cyan-200 flex items-center gap-2 cursor-pointer"
                     >
-                      <Network className="w-4 h-4 text-cyan-400 shrink-0" />
+                      <Network className="w-4 h-4 text-cyan-700 dark:text-cyan-400 shrink-0" />
                       <div>
                         <p>Sign Out of VizhinORG</p>
-                        <p className="text-[10px] text-neutral-400 font-normal">Split Setup & Sign-In Screen</p>
+                        <p className="text-[10px] text-slate-500 dark:text-neutral-400 font-normal">Split Setup & Sign-In Screen</p>
                       </div>
                     </button>
                     <button
@@ -360,24 +360,24 @@ export default function VizhinOrgPage({
                         if (onSignOutCRM) onSignOutCRM();
                         else onSignOut?.();
                       }}
-                      className="w-full text-left p-2 rounded-lg hover:bg-neutral-900 text-xs font-bold text-emerald-300 hover:text-emerald-200 flex items-center gap-2 cursor-pointer mt-1"
+                      className="w-full text-left p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-neutral-900 text-xs font-bold text-emerald-800 dark:text-emerald-300 hover:text-emerald-950 dark:hover:text-emerald-200 flex items-center gap-2 cursor-pointer mt-1"
                     >
-                      <Building2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                      <Building2 className="w-4 h-4 text-emerald-700 dark:text-emerald-400 shrink-0" />
                       <div>
                         <p>Sign Out of VizhinCRM</p>
-                        <p className="text-[10px] text-neutral-400 font-normal">CRM Setup Screen</p>
+                        <p className="text-[10px] text-slate-500 dark:text-neutral-400 font-normal">CRM Setup Screen</p>
                       </div>
                     </button>
-                    <div className="pt-1.5 mt-1.5 border-t border-neutral-800">
+                    <div className="pt-1.5 mt-1.5 border-t border-slate-200 dark:border-neutral-800">
                       <button
                         type="button"
                         onClick={() => {
                           setOrgSignOutDropdownOpen(false);
                           onSignOut?.();
                         }}
-                        className="w-full p-1.5 rounded-lg bg-red-950/60 hover:bg-red-900 text-red-300 text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer"
+                        className="w-full p-1.5 rounded-lg bg-red-50 dark:bg-red-950/60 hover:bg-red-100 dark:hover:bg-red-900 text-red-700 dark:text-red-300 text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer"
                       >
-                        <LogOut className="w-3.5 h-3.5 text-red-400" />
+                        <LogOut className="w-3.5 h-3.5 text-red-600 dark:text-red-400" />
                         <span>Sign Out of All</span>
                       </button>
                     </div>
@@ -393,8 +393,8 @@ export default function VizhinOrgPage({
               onClick={() => setViewMode('coming-soon')}
               className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs ${
                 viewMode === 'coming-soon'
-                  ? 'bg-emerald-500 text-neutral-950 font-black ring-2 ring-emerald-400 shadow-emerald-950/40'
-                  : 'bg-neutral-900 hover:bg-neutral-800 text-neutral-300 border border-neutral-700'
+                  ? 'bg-[#0D5C46] dark:bg-emerald-500 text-white dark:text-neutral-950 font-black ring-2 ring-[#0D5C46]/40 dark:ring-emerald-400 dark:shadow-emerald-950/40'
+                  : 'bg-white dark:bg-neutral-900 hover:bg-slate-100 dark:hover:bg-neutral-800 text-slate-700 dark:text-neutral-300 border border-slate-300 dark:border-neutral-700'
               }`}
             >
               <Sparkles className="w-3.5 h-3.5" />
@@ -406,11 +406,11 @@ export default function VizhinOrgPage({
             onClick={handleOpenOrgDemo}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs ${
               viewMode === 'chart'
-                ? 'bg-emerald-500 text-neutral-950 font-black ring-2 ring-emerald-400 shadow-emerald-950/40'
-                : 'bg-neutral-900 hover:bg-neutral-800 text-white border border-neutral-700 hover:border-emerald-500'
+                ? 'bg-[#0D5C46] dark:bg-emerald-500 text-white dark:text-neutral-950 font-black ring-2 ring-[#0D5C46]/40 dark:ring-emerald-400 dark:shadow-emerald-950/40'
+                : 'bg-white dark:bg-neutral-900 hover:bg-slate-100 dark:hover:bg-neutral-800 text-slate-800 dark:text-white border border-slate-300 dark:border-neutral-700 hover:border-[#0D5C46] dark:hover:border-emerald-500'
             }`}
           >
-            <Network className="w-3.5 h-3.5 text-emerald-400" />
+            <Network className={`w-3.5 h-3.5 ${viewMode === 'chart' ? 'text-white dark:text-neutral-950' : 'text-[#0D5C46] dark:text-emerald-400'}`} />
             <span>100-Employee Org Demo</span>
           </button>
           <button
@@ -424,11 +424,11 @@ export default function VizhinOrgPage({
             }}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs ${
               viewMode === 'terminal'
-                ? 'bg-emerald-500 text-neutral-950 font-black ring-2 ring-emerald-400 shadow-emerald-950/40'
-                : 'bg-neutral-900 hover:bg-neutral-800 text-neutral-300 border border-neutral-700'
+                ? 'bg-[#0D5C46] dark:bg-emerald-500 text-white dark:text-neutral-950 font-black ring-2 ring-[#0D5C46]/40 dark:ring-emerald-400 dark:shadow-emerald-950/40'
+                : 'bg-white dark:bg-neutral-900 hover:bg-slate-100 dark:hover:bg-neutral-800 text-slate-700 dark:text-neutral-300 border border-slate-300 dark:border-neutral-700'
             }`}
           >
-            <LockKeyhole className="w-3.5 h-3.5 text-emerald-400" />
+            <LockKeyhole className={`w-3.5 h-3.5 ${viewMode === 'terminal' ? 'text-white dark:text-neutral-950' : 'text-[#0D5C46] dark:text-emerald-400'}`} />
             <span>Account Setup</span>
           </button>
         </div>
@@ -465,73 +465,73 @@ export default function VizhinOrgPage({
         <main className="flex-1 flex flex-col items-center justify-center px-6 py-14 lg:py-20 max-w-5xl mx-auto w-full text-center relative z-10 space-y-12 animate-in fade-in duration-200">
           
           {/* Ambient Glow & Grid Accent */}
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none -z-10" />
+          <div className="hidden dark:block absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none -z-10" />
 
           {/* Top Pill */}
-          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-emerald-950/80 border border-emerald-800/60 text-emerald-400 text-xs font-mono uppercase tracking-widest shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800/60 text-[#0D5C46] dark:text-emerald-400 text-xs font-mono uppercase tracking-widest shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse"></span>
             <span>VizhinORG • Enterprise Workforce Intelligence</span>
-            <span className="text-[10px] bg-amber-950/90 text-amber-300 border border-amber-700/60 px-2 py-0.5 rounded font-bold">
+            <span className="text-[10px] bg-amber-50 dark:bg-amber-950/90 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-700/60 px-2 py-0.5 rounded font-bold">
               COMING SOON
             </span>
           </div>
 
           {/* Hero Headline */}
           <div className="space-y-4 max-w-3xl">
-            <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white leading-tight">
+            <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-slate-900 dark:text-white leading-tight">
               VizhinORG is{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0D5C46] via-teal-600 to-cyan-700 dark:from-emerald-400 dark:via-teal-300 dark:to-cyan-400">
                 Coming Soon
               </span>
             </h1>
-            <p className="text-sm sm:text-base text-neutral-300 leading-relaxed font-normal max-w-2xl mx-auto">
+            <p className="text-sm sm:text-base text-slate-600 dark:text-neutral-300 leading-relaxed font-normal max-w-2xl mx-auto">
               You are signed up! We are finalizing the production deployment of our multi-tenant enterprise terminal, live HRIS roster connectors (ADP, BambooHR, Deel, Oracle, Paycom, Rippling, SAP, UKG and more), and deterministic PostgreSQL CTE ancestry permissions.
             </p>
           </div>
 
           {/* Launch Status / Ready Card */}
-          <div className="w-full max-w-2xl bg-[#0c0d10]/90 border border-neutral-800 rounded-2xl p-6 sm:p-8 text-left space-y-6 shadow-2xl backdrop-blur-sm relative overflow-hidden">
+          <div className="w-full max-w-2xl bg-white dark:bg-[#0c0d10]/90 border border-slate-200 dark:border-neutral-800 rounded-2xl p-6 sm:p-8 text-left space-y-6 shadow-xl dark:shadow-2xl backdrop-blur-sm relative overflow-hidden">
             
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-500"></div>
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#0D5C46] via-teal-500 to-cyan-500 dark:from-emerald-500 dark:via-teal-400 dark:to-cyan-500"></div>
 
-            <div className="flex items-center justify-between pb-4 border-b border-neutral-800/80">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-neutral-800/80">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400">
+                <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800/60 flex items-center justify-center text-[#0D5C46] dark:text-emerald-400">
                   <ShieldCheck className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-white">Production Release Status</h3>
-                  <p className="text-xs text-neutral-400">Deployment Phase 2 of 2</p>
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white">Production Release Status</h3>
+                  <p className="text-xs text-slate-500 dark:text-neutral-400">Deployment Phase 2 of 2</p>
                 </div>
               </div>
-              <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800 flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+              <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950 text-[#0D5C46] dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-ping"></span>
                 <span>Rolling Out Soon</span>
               </span>
             </div>
 
             {/* Checklist */}
             <div className="space-y-3 font-mono text-xs">
-              <div className="flex items-center justify-between p-2.5 rounded-lg bg-neutral-900/60 border border-neutral-800/60">
-                <span className="text-neutral-200 flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+              <div className="flex items-center justify-between p-2.5 rounded-lg bg-slate-50 dark:bg-neutral-900/60 border border-slate-200 dark:border-neutral-800/60">
+                <span className="text-slate-800 dark:text-neutral-200 flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                   <span>Account Provisioning & Super Admin Roles</span>
                 </span>
-                <span className="text-emerald-400 font-bold text-[11px]">Ready</span>
+                <span className="text-emerald-700 dark:text-emerald-400 font-bold text-[11px]">Ready</span>
               </div>
-              <div className="flex items-center justify-between p-2.5 rounded-lg bg-neutral-900/60 border border-neutral-800/60">
-                <span className="text-neutral-200 flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+              <div className="flex items-center justify-between p-2.5 rounded-lg bg-slate-50 dark:bg-neutral-900/60 border border-slate-200 dark:border-neutral-800/60">
+                <span className="text-slate-800 dark:text-neutral-200 flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                   <span>Recursive CTE Hierarchy Ancestry Engine</span>
                 </span>
-                <span className="text-emerald-400 font-bold text-[11px]">Ready</span>
+                <span className="text-emerald-700 dark:text-emerald-400 font-bold text-[11px]">Ready</span>
               </div>
-              <div className="flex items-center justify-between p-2.5 rounded-lg bg-neutral-900/60 border border-neutral-800/60">
-                <span className="text-neutral-200 flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-amber-400 shrink-0 animate-spin" />
+              <div className="flex items-center justify-between p-2.5 rounded-lg bg-slate-50 dark:bg-neutral-900/60 border border-slate-200 dark:border-neutral-800/60">
+                <span className="text-slate-800 dark:text-neutral-200 flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 animate-spin" />
                   <span>Live HRIS Ingestion Gateways (ADP, BambooHR, Deel, Oracle, Paycom, Rippling, SAP, UKG and more)</span>
                 </span>
-                <span className="text-amber-400 font-bold text-[11px]">Final QA</span>
+                <span className="text-amber-700 dark:text-amber-400 font-bold text-[11px]">Final QA</span>
               </div>
             </div>
 
@@ -540,7 +540,7 @@ export default function VizhinOrgPage({
               <button
                 type="button"
                 onClick={handleOpenOrgDemo}
-                className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-neutral-950 font-black text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-lg shadow-emerald-950/50 hover:scale-[1.02] cursor-pointer"
+                className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-[#0D5C46] to-teal-700 dark:from-emerald-500 dark:to-teal-500 hover:opacity-95 text-white dark:text-neutral-950 font-black text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md dark:shadow-lg dark:shadow-emerald-950/50 hover:scale-[1.02] cursor-pointer"
               >
                 <Network className="w-4 h-4" />
                 <span>Launch 100-Employee Interactive Org Chart Demo →</span>
@@ -550,16 +550,16 @@ export default function VizhinOrgPage({
                 <button
                   type="button"
                   onClick={() => setViewMode('terminal')}
-                  className="w-full py-2.5 px-4 rounded-xl bg-neutral-900 hover:bg-neutral-850 text-neutral-300 hover:text-white border border-neutral-800 hover:border-neutral-700 text-xs font-bold transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-2.5 px-4 rounded-xl bg-slate-100 dark:bg-neutral-900 hover:bg-slate-200 dark:hover:bg-neutral-800 text-slate-700 dark:text-neutral-300 hover:text-slate-950 dark:hover:text-white border border-slate-200 dark:border-neutral-800 hover:border-slate-300 dark:hover:border-neutral-700 text-xs font-bold transition-colors flex items-center justify-center gap-2 cursor-pointer"
                 >
-                  <Lock className="w-3.5 h-3.5 text-neutral-400" />
+                  <Lock className="w-3.5 h-3.5 text-slate-500 dark:text-neutral-400" />
                   <span>Open Split-Pane Account Setup</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={onBack}
-                  className="w-full py-2.5 px-4 rounded-xl bg-[#08090b] hover:bg-neutral-900 text-neutral-400 hover:text-white border border-neutral-800 text-xs font-semibold transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full py-2.5 px-4 rounded-xl bg-white dark:bg-[#08090b] hover:bg-slate-50 dark:hover:bg-neutral-900 text-slate-600 dark:text-neutral-400 hover:text-slate-950 dark:hover:text-white border border-slate-200 dark:border-neutral-800 text-xs font-semibold transition-colors flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" />
                   <span>Return to Home</span>
@@ -570,33 +570,33 @@ export default function VizhinOrgPage({
           </div>
 
           {/* 3 Value Pillars */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full text-left pt-6 border-t border-neutral-900/80">
-            <div className="p-5 rounded-xl bg-neutral-950/60 border border-neutral-900 space-y-2">
-              <div className="w-8 h-8 rounded-lg bg-emerald-950 border border-emerald-900 flex items-center justify-center text-emerald-400">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full text-left pt-6 border-t border-slate-200 dark:border-neutral-900/80">
+            <div className="p-5 rounded-xl bg-white dark:bg-neutral-950/60 border border-slate-200 dark:border-neutral-900 space-y-2 shadow-xs dark:shadow-none">
+              <div className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-900 flex items-center justify-center text-[#0D5C46] dark:text-emerald-400">
                 <Network className="w-4 h-4" />
               </div>
-              <h4 className="text-sm font-bold text-white">Recursive RBAC Ancestry</h4>
-              <p className="text-xs text-neutral-400 leading-relaxed">
+              <h4 className="text-sm font-bold text-slate-900 dark:text-white">Recursive RBAC Ancestry</h4>
+              <p className="text-xs text-slate-600 dark:text-neutral-400 leading-relaxed">
                 Deterministic PostgreSQL CTE trees ensuring strict upward visibility and downward evaluation boundaries.
               </p>
             </div>
 
-            <div className="p-5 rounded-xl bg-neutral-950/60 border border-neutral-900 space-y-2">
-              <div className="w-8 h-8 rounded-lg bg-teal-950 border border-teal-900 flex items-center justify-center text-teal-400">
+            <div className="p-5 rounded-xl bg-white dark:bg-neutral-950/60 border border-slate-200 dark:border-neutral-900 space-y-2 shadow-xs dark:shadow-none">
+              <div className="w-8 h-8 rounded-lg bg-teal-50 dark:bg-teal-950 border border-teal-200 dark:border-teal-900 flex items-center justify-center text-teal-700 dark:text-teal-400">
                 <Layers className="w-4 h-4" />
               </div>
-              <h4 className="text-sm font-bold text-white">Two-Pass HRIS Ingestion</h4>
-              <p className="text-xs text-neutral-400 leading-relaxed">
+              <h4 className="text-sm font-bold text-slate-900 dark:text-white">Two-Pass HRIS Ingestion</h4>
+              <p className="text-xs text-slate-600 dark:text-neutral-400 leading-relaxed">
                 Zero-failure parent-child graph resolving across ADP, BambooHR, Deel, Oracle, Paycom, Rippling, SAP, UKG and more.
               </p>
             </div>
 
-            <div className="p-5 rounded-xl bg-neutral-950/60 border border-neutral-900 space-y-2">
-              <div className="w-8 h-8 rounded-lg bg-cyan-950 border border-cyan-900 flex items-center justify-center text-cyan-400">
+            <div className="p-5 rounded-xl bg-white dark:bg-neutral-950/60 border border-slate-200 dark:border-neutral-900 space-y-2 shadow-xs dark:shadow-none">
+              <div className="w-8 h-8 rounded-lg bg-cyan-50 dark:bg-cyan-950 border border-cyan-200 dark:border-cyan-900 flex items-center justify-center text-cyan-700 dark:text-cyan-400">
                 <ShieldCheck className="w-4 h-4" />
               </div>
-              <h4 className="text-sm font-bold text-white">Executive Calibration</h4>
-              <p className="text-xs text-neutral-400 leading-relaxed">
+              <h4 className="text-sm font-bold text-slate-900 dark:text-white">Executive Calibration</h4>
+              <p className="text-xs text-slate-600 dark:text-neutral-400 leading-relaxed">
                 Multi-layer talent evaluation with time-bounded temporary review delegations and audit tracking.
               </p>
             </div>
@@ -616,16 +616,16 @@ export default function VizhinOrgPage({
             
             {/* Header Title & Badges */}
             <div className="space-y-3">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-800/60 text-emerald-400 text-[10px] font-mono uppercase tracking-wider">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800/60 text-[#0D5C46] dark:text-emerald-400 text-[10px] font-mono uppercase tracking-wider">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse"></span>
                 <span>Enterprise Workforce Architecture</span>
               </div>
 
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white leading-tight">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
                 Recursive RBAC Org Charts & Performance Intelligence
               </h1>
 
-              <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed max-w-2xl">
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-neutral-400 leading-relaxed max-w-2xl">
                 Deterministic PostgreSQL CTE ancestry permissions, two-pass HRIS roster ingestion, and executive review calibration across multi-tenant enterprise hierarchies.
               </p>
             </div>
@@ -722,7 +722,7 @@ export default function VizhinOrgPage({
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-black text-black truncate">Sarah Connor</span>
-                        <span className="text-[8px] font-mono bg-amber-100 text-amber-900 border border-amber-300 px-1 py-0.2 rounded uppercase font-bold">CEO</span>
+                        <span className="text-[8px] font-mono bg-amber-100 text-amber-900 border border-amber-300 px-1 py-0.5 rounded uppercase font-bold">CEO</span>
                       </div>
                       <p className="text-[10px] text-slate-700 font-semibold truncate">Chief Executive Officer & Founder</p>
                       <p className="text-[9px] text-emerald-700 font-mono font-bold mt-0.5">Terminator · Level 1 Root</p>
@@ -1008,32 +1008,32 @@ export default function VizhinOrgPage({
 
             {/* Trust Badges */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="bg-[#0c0d10] border border-neutral-800/80 p-3.5 rounded-xl">
-                <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs">
+              <div className="bg-white dark:bg-[#0c0d10] border border-slate-200 dark:border-neutral-800/80 p-3.5 rounded-xl shadow-xs dark:shadow-none">
+                <div className="flex items-center gap-2 text-[#0D5C46] dark:text-emerald-400 font-bold text-xs">
                   <ShieldCheck className="w-4 h-4" />
                   <span>SOC-2 Certified</span>
                 </div>
-                <p className="text-[11px] text-neutral-400 mt-1 leading-snug">
+                <p className="text-[11px] text-slate-600 dark:text-neutral-400 mt-1 leading-snug">
                   Enterprise security controls & audit trail logging for every review access.
                 </p>
               </div>
 
-              <div className="bg-[#0c0d10] border border-neutral-800/80 p-3.5 rounded-xl">
-                <div className="flex items-center gap-2 text-indigo-400 font-bold text-xs">
+              <div className="bg-white dark:bg-[#0c0d10] border border-slate-200 dark:border-neutral-800/80 p-3.5 rounded-xl shadow-xs dark:shadow-none">
+                <div className="flex items-center gap-2 text-indigo-700 dark:text-indigo-400 font-bold text-xs">
                   <Server className="w-4 h-4" />
                   <span>Deterministic RLS</span>
                 </div>
-                <p className="text-[11px] text-neutral-400 mt-1 leading-snug">
+                <p className="text-[11px] text-slate-600 dark:text-neutral-400 mt-1 leading-snug">
                   Multi-tenant row-level database security prevents cross-tenant data leakage.
                 </p>
               </div>
 
-              <div className="bg-[#0c0d10] border border-neutral-800/80 p-3.5 rounded-xl">
-                <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
+              <div className="bg-white dark:bg-[#0c0d10] border border-slate-200 dark:border-neutral-800/80 p-3.5 rounded-xl shadow-xs dark:shadow-none">
+                <div className="flex items-center gap-2 text-amber-700 dark:text-amber-400 font-bold text-xs">
                   <Radio className="w-4 h-4" />
                   <span>HRIS Sync</span>
                 </div>
-                <p className="text-[11px] text-neutral-400 mt-1 leading-snug">
+                <p className="text-[11px] text-slate-600 dark:text-neutral-400 mt-1 leading-snug">
                   Native connectors for ADP, BambooHR, Deel, Oracle, Paycom, Rippling, SAP, UKG and more.
                 </p>
               </div>
@@ -1046,17 +1046,17 @@ export default function VizhinOrgPage({
               --------------------------------------------------------------------- */}
           <section className="lg:col-span-5 w-full">
             
-            <div className="bg-[#0c0d10] rounded-2xl shadow-2xl border border-neutral-800/90 overflow-hidden backdrop-blur-sm">
+            <div className="bg-white dark:bg-[#0c0d10] rounded-2xl shadow-xl dark:shadow-2xl border border-slate-200 dark:border-neutral-800/90 overflow-hidden backdrop-blur-sm">
               
               {/* Warning Banner: Shown when already registered user attempts new signup */}
               {isExistingUserRedirected && (
-                <div className="bg-amber-950/40 border-b border-amber-800/80 p-4 text-xs text-amber-200 flex items-start gap-3 animate-in fade-in slide-in-from-top-1 duration-150">
-                  <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                <div className="bg-amber-50 dark:bg-amber-950/40 border-b border-amber-200 dark:border-amber-800/80 p-4 text-xs text-amber-900 dark:text-amber-200 flex items-start gap-3 animate-in fade-in slide-in-from-top-1 duration-150">
+                  <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
                   <div className="space-y-1">
-                    <p className="font-bold text-amber-300">
+                    <p className="font-bold text-amber-900 dark:text-amber-300">
                       Existing Account Detected
                     </p>
-                    <p className="text-[11px] text-amber-200/90 leading-relaxed">
+                    <p className="text-[11px] text-amber-800 dark:text-amber-200/90 leading-relaxed">
                       An active organization account is already registered for <strong>{redirectedWarningEmail}</strong>. You have been redirected to the <strong>Active User Login</strong> terminal.
                     </p>
                   </div>
@@ -1064,8 +1064,8 @@ export default function VizhinOrgPage({
               )}
 
               {/* Segmented Top Control: "Existing Member Sign In" / "Active User Login" vs "Setup New Workspace" */}
-              <div className="p-3 bg-[#08090b] border-b border-neutral-800/80">
-                <div className="grid grid-cols-2 p-1 bg-neutral-900/90 rounded-xl border border-neutral-800 text-xs font-semibold">
+              <div className="p-3 bg-slate-50 dark:bg-[#08090b] border-b border-slate-200 dark:border-neutral-800/80">
+                <div className="grid grid-cols-2 p-1 bg-slate-200/70 dark:bg-neutral-900/90 rounded-xl border border-slate-200 dark:border-neutral-800 text-xs font-semibold">
                   
                   {/* Tab 1: Sign In (Default) */}
                   <button
@@ -1075,8 +1075,8 @@ export default function VizhinOrgPage({
                     }}
                     className={`py-2 px-3 rounded-lg transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer ${
                       authMode === 'signin' || authMode === 'forgot-password' || authMode === 'forgot-username'
-                        ? 'bg-emerald-500 text-neutral-950 font-bold shadow-sm'
-                        : 'text-neutral-400 hover:text-white'
+                        ? 'bg-[#0D5C46] dark:bg-emerald-500 text-white dark:text-neutral-950 font-bold shadow-sm'
+                        : 'text-slate-600 dark:text-neutral-400 hover:text-slate-950 dark:hover:text-white'
                     }`}
                   >
                     <Lock className="w-3.5 h-3.5" />
@@ -1094,8 +1094,8 @@ export default function VizhinOrgPage({
                     }}
                     className={`py-2 px-3 rounded-lg transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer ${
                       authMode === 'signup'
-                        ? 'bg-emerald-500 text-neutral-950 font-bold shadow-sm'
-                        : 'text-neutral-400 hover:text-white'
+                        ? 'bg-[#0D5C46] dark:bg-emerald-500 text-white dark:text-neutral-950 font-bold shadow-sm'
+                        : 'text-slate-600 dark:text-neutral-400 hover:text-slate-950 dark:hover:text-white'
                     }`}
                   >
                     <Sparkles className="w-3.5 h-3.5" />
@@ -1115,32 +1115,32 @@ export default function VizhinOrgPage({
                   <div className="space-y-5">
                     
                     <div>
-                      <h2 className="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+                      <h2 className="text-lg font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
                         <span>{isExistingUserRedirected ? 'Active User Authentication' : 'Sign In to VizhinORG'}</span>
                         {isExistingUserRedirected && (
-                          <span className="text-[9px] font-mono bg-amber-500/20 text-amber-300 border border-amber-500/40 px-1.5 py-0.5 rounded uppercase">
+                          <span className="text-[9px] font-mono bg-amber-100 dark:bg-amber-500/20 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-500/40 px-1.5 py-0.5 rounded uppercase">
                             Registered
                           </span>
                         )}
                       </h2>
-                      <p className="text-xs text-neutral-400 mt-0.5">
+                      <p className="text-xs text-slate-600 dark:text-neutral-400 mt-0.5">
                         Enter your corporate credentials to access your organization workspace.
                       </p>
                     </div>
 
                     {/* Direct button to 100-Employee Multi-Tiered Example */}
-                    <div className="p-3 bg-emerald-950/40 border border-emerald-800/80 rounded-xl flex items-center justify-between gap-2 shadow-xs">
+                    <div className="p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/80 rounded-xl flex items-center justify-between gap-2 shadow-xs">
                       <div className="flex items-center gap-2">
-                        <Network className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <Network className="w-4 h-4 text-[#0D5C46] dark:text-emerald-400 shrink-0" />
                         <div>
-                          <p className="text-xs font-bold text-white leading-tight">Explore 100-Employee Org Chart</p>
-                          <p className="text-[10px] text-emerald-300/80 leading-tight mt-0.5">5 Management Levels · Sarah Connor CEO & 6 C-Suite Divisions</p>
+                          <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">Explore 100-Employee Org Chart</p>
+                          <p className="text-[10px] text-emerald-800 dark:text-emerald-300/80 leading-tight mt-0.5">5 Management Levels · Sarah Connor CEO & 6 C-Suite Divisions</p>
                         </div>
                       </div>
                       <button
                         type="button"
                         onClick={handleOpenOrgDemo}
-                        className="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-neutral-950 rounded-lg text-xs font-black transition-all shrink-0 cursor-pointer shadow-sm hover:scale-105"
+                        className="px-3 py-1.5 bg-[#0D5C46] dark:bg-emerald-500 hover:bg-[#094333] dark:hover:bg-emerald-400 text-white dark:text-neutral-950 rounded-lg text-xs font-black transition-all shrink-0 cursor-pointer shadow-sm hover:scale-105"
                       >
                         View Chart →
                       </button>
@@ -1151,26 +1151,26 @@ export default function VizhinOrgPage({
                       {/* Corporate Work Email */}
                       <div>
                         <div className="flex items-center justify-between mb-1">
-                          <label className="text-xs font-semibold text-neutral-300">
+                          <label className="text-xs font-semibold text-slate-700 dark:text-neutral-300">
                             Corporate Work Email
                           </label>
                           <button
                             type="button"
                             onClick={() => setAuthMode('forgot-username')}
-                            className="text-[11px] text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer"
+                            className="text-[11px] text-[#0D5C46] dark:text-emerald-400 hover:underline transition-colors cursor-pointer"
                           >
                             Forgot Username?
                           </button>
                         </div>
                         <div className="relative">
-                          <Mail className="w-3.5 h-3.5 absolute left-3 top-3 text-neutral-500" />
+                          <Mail className="w-3.5 h-3.5 absolute left-3 top-3 text-slate-400 dark:text-neutral-500" />
                           <input
                             type="email"
                             required
                             placeholder="name@company.com"
                             value={loginEmail}
                             onChange={(e) => setLoginEmail(e.target.value)}
-                            className="w-full text-xs pl-8 pr-3 py-2.5 bg-[#08090b] border border-neutral-800 rounded-lg text-neutral-100 placeholder-neutral-600 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors"
+                            className="w-full text-xs pl-8 pr-3 py-2.5 bg-slate-50 dark:bg-[#08090b] border border-slate-200 dark:border-neutral-800 rounded-lg text-slate-900 dark:text-neutral-100 placeholder-slate-400 dark:placeholder-neutral-600 focus:outline-none focus:border-[#0D5C46] dark:focus:border-emerald-500 focus:ring-1 focus:ring-[#0D5C46] dark:focus:ring-emerald-500 transition-colors"
                           />
                         </div>
                       </div>
@@ -1178,31 +1178,31 @@ export default function VizhinOrgPage({
                       {/* Password */}
                       <div>
                         <div className="flex items-center justify-between mb-1">
-                          <label className="text-xs font-semibold text-neutral-300">
+                          <label className="text-xs font-semibold text-slate-700 dark:text-neutral-300">
                             Password
                           </label>
                           <button
                             type="button"
                             onClick={() => setAuthMode('forgot-password')}
-                            className="text-[11px] text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer"
+                            className="text-[11px] text-[#0D5C46] dark:text-emerald-400 hover:underline transition-colors cursor-pointer"
                           >
                             Forgot Password?
                           </button>
                         </div>
                         <div className="relative">
-                          <Lock className="w-3.5 h-3.5 absolute left-3 top-3 text-neutral-500" />
+                          <Lock className="w-3.5 h-3.5 absolute left-3 top-3 text-slate-400 dark:text-neutral-500" />
                           <input
                             type={showPassword ? 'text' : 'password'}
                             required
                             placeholder="••••••••••••"
                             value={loginPassword}
                             onChange={(e) => setLoginPassword(e.target.value)}
-                            className="w-full text-xs pl-8 pr-10 py-2.5 bg-[#08090b] border border-neutral-800 rounded-lg text-neutral-100 placeholder-neutral-600 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors"
+                            className="w-full text-xs pl-8 pr-10 py-2.5 bg-slate-50 dark:bg-[#08090b] border border-slate-200 dark:border-neutral-800 rounded-lg text-slate-900 dark:text-neutral-100 placeholder-slate-400 dark:placeholder-neutral-600 focus:outline-none focus:border-[#0D5C46] dark:focus:border-emerald-500 focus:ring-1 focus:ring-[#0D5C46] dark:focus:ring-emerald-500 transition-colors"
                           />
                           <button
                             type="button"
                             onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-3 top-3 text-neutral-500 hover:text-neutral-300 cursor-pointer"
+                            className="absolute right-3 top-3 text-slate-400 dark:text-neutral-500 hover:text-slate-700 dark:hover:text-neutral-300 cursor-pointer"
                           >
                             {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                           </button>
@@ -1211,12 +1211,12 @@ export default function VizhinOrgPage({
 
                       {/* Remember Device Toggle */}
                       <div className="flex items-center justify-between text-xs pt-1">
-                        <label className="flex items-center gap-2 text-neutral-300 cursor-pointer">
+                        <label className="flex items-center gap-2 text-slate-600 dark:text-neutral-300 cursor-pointer">
                           <input
                             type="checkbox"
                             checked={rememberDevice}
                             onChange={(e) => setRememberDevice(e.target.checked)}
-                            className="rounded border-neutral-700 bg-[#08090b] text-emerald-500 focus:ring-emerald-500 cursor-pointer"
+                            className="rounded border-slate-300 dark:border-neutral-700 bg-white dark:bg-[#08090b] text-[#0D5C46] dark:text-emerald-500 focus:ring-emerald-500 cursor-pointer"
                           />
                           <span>Remember this corporate device for 30 days</span>
                         </label>
@@ -1225,7 +1225,7 @@ export default function VizhinOrgPage({
                       {/* Primary Sign In Button */}
                       <button
                         type="submit"
-                        className="w-full py-3 px-4 bg-emerald-500 hover:bg-emerald-400 text-neutral-950 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer mt-2"
+                        className="w-full py-3 px-4 bg-[#0D5C46] dark:bg-emerald-500 hover:bg-[#094333] dark:hover:bg-emerald-400 text-white dark:text-neutral-950 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-sm cursor-pointer mt-2"
                       >
                         <span>{isExistingUserRedirected ? 'Authenticate Active User' : 'Sign In to VizhinORG'}</span>
                         <ArrowRight className="w-3.5 h-3.5" />
@@ -1236,10 +1236,10 @@ export default function VizhinOrgPage({
                     {/* SSO Divider */}
                     <div className="relative my-4">
                       <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-neutral-800"></div>
+                        <div className="w-full border-t border-slate-200 dark:border-neutral-800"></div>
                       </div>
                       <div className="relative flex justify-center text-[10px] uppercase font-mono tracking-wider">
-                        <span className="bg-[#0c0d10] px-3 text-neutral-500">Or Enterprise SSO</span>
+                        <span className="bg-white dark:bg-[#0c0d10] px-3 text-slate-500 dark:text-neutral-500">Or Enterprise SSO</span>
                       </div>
                     </div>
 
@@ -1262,14 +1262,14 @@ export default function VizhinOrgPage({
                         setViewMode('coming-soon');
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                       }}
-                      className="w-full py-2.5 px-4 bg-[#08090b] hover:bg-neutral-900 text-neutral-300 border border-neutral-800 hover:border-neutral-700 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                      className="w-full py-2.5 px-4 bg-slate-50 dark:bg-[#08090b] hover:bg-slate-100 dark:hover:bg-neutral-900 text-slate-700 dark:text-neutral-300 border border-slate-200 dark:border-neutral-800 hover:border-slate-300 dark:hover:border-neutral-700 rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-2 cursor-pointer"
                     >
-                      <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                      <ShieldCheck className="w-4 h-4 text-[#0D5C46] dark:text-emerald-400" />
                       <span>Single Sign-On (SAML / Okta / Azure AD)</span>
                     </button>
 
                     {/* Switcher Footer */}
-                    <p className="text-center text-xs text-neutral-400 pt-2 border-t border-neutral-800/60">
+                    <p className="text-center text-xs text-slate-600 dark:text-neutral-400 pt-2 border-t border-slate-200 dark:border-neutral-800/60">
                       Need a new corporate instance?{' '}
                       <button
                         type="button"
@@ -1277,7 +1277,7 @@ export default function VizhinOrgPage({
                           setAuthMode('signup');
                           setStep(1);
                         }}
-                        className="text-emerald-400 font-bold hover:underline cursor-pointer"
+                        className="text-[#0D5C46] dark:text-emerald-400 font-bold hover:underline cursor-pointer"
                       >
                         Setup organization workspace →
                       </button>
@@ -1295,29 +1295,29 @@ export default function VizhinOrgPage({
                       <button
                         type="button"
                         onClick={() => setAuthMode('signin')}
-                        className="p-1 rounded hover:bg-neutral-900 text-neutral-400 hover:text-white transition-colors cursor-pointer"
+                        className="p-1 rounded hover:bg-slate-100 dark:hover:bg-neutral-900 text-slate-500 dark:text-neutral-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
                       >
                         <ArrowLeft className="w-4 h-4" />
                       </button>
                       <div>
-                        <h2 className="text-lg font-bold text-white">
+                        <h2 className="text-lg font-bold text-slate-900 dark:text-white">
                           Reset Corporate Password
                         </h2>
-                        <p className="text-xs text-neutral-400 mt-0.5">
+                        <p className="text-xs text-slate-600 dark:text-neutral-400 mt-0.5">
                           Dispatch a verified reset link to your corporate inbox.
                         </p>
                       </div>
                     </div>
 
                     {forgotPasswordSubmitted ? (
-                      <div className="p-5 bg-emerald-950/40 border border-emerald-800/80 rounded-xl space-y-3">
-                        <div className="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                      <div className="p-5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/80 rounded-xl space-y-3">
+                        <div className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-500/20 text-[#0D5C46] dark:text-emerald-400 flex items-center justify-center">
                           <Check className="w-4 h-4" />
                         </div>
-                        <p className="text-xs font-bold text-white">
+                        <p className="text-xs font-bold text-slate-900 dark:text-white">
                           Password Reset Link Dispatched
                         </p>
-                        <p className="text-[11px] text-neutral-300 leading-relaxed">
+                        <p className="text-[11px] text-slate-600 dark:text-neutral-300 leading-relaxed">
                           If an account exists for <strong>{forgotPasswordEmail}</strong>, an authentication reset link with a 15-minute token has been sent to your email.
                         </p>
                         <button
@@ -1326,7 +1326,7 @@ export default function VizhinOrgPage({
                             setForgotPasswordSubmitted(false);
                             setAuthMode('signin');
                           }}
-                          className="text-xs text-emerald-400 font-semibold hover:underline cursor-pointer"
+                          className="text-xs text-[#0D5C46] dark:text-emerald-400 font-semibold hover:underline cursor-pointer"
                         >
                           ← Return to Sign In
                         </button>
@@ -1334,29 +1334,29 @@ export default function VizhinOrgPage({
                     ) : (
                       <form onSubmit={handleForgotPasswordSubmit} className="space-y-4">
                         <div>
-                          <label className="block text-xs font-semibold text-neutral-300 mb-1">
+                          <label className="block text-xs font-semibold text-slate-700 dark:text-neutral-300 mb-1">
                             Registered Corporate Work Email
                           </label>
                           <div className="relative">
-                            <Mail className="w-3.5 h-3.5 absolute left-3 top-3 text-neutral-500" />
+                            <Mail className="w-3.5 h-3.5 absolute left-3 top-3 text-slate-400 dark:text-neutral-500" />
                             <input
                               type="email"
                               required
                               placeholder="name@company.com"
                               value={forgotPasswordEmail}
                               onChange={(e) => setForgotPasswordEmail(e.target.value)}
-                              className="w-full text-xs pl-8 pr-3 py-2.5 bg-[#08090b] border border-neutral-800 rounded-lg text-neutral-100 placeholder-neutral-600 focus:outline-none focus:border-emerald-500"
+                              className="w-full text-xs pl-8 pr-3 py-2.5 bg-slate-50 dark:bg-[#08090b] border border-slate-200 dark:border-neutral-800 rounded-lg text-slate-900 dark:text-neutral-100 placeholder-slate-400 dark:placeholder-neutral-600 focus:outline-none focus:border-[#0D5C46] dark:focus:border-emerald-500"
                             />
                           </div>
                         </div>
 
-                        <div className="p-3 bg-neutral-900/60 border border-neutral-800 rounded-lg text-[11px] text-neutral-400 leading-relaxed">
+                        <div className="p-3 bg-slate-50 dark:bg-neutral-900/60 border border-slate-200 dark:border-neutral-800 rounded-lg text-[11px] text-slate-600 dark:text-neutral-400 leading-relaxed">
                           For security reasons, password resets are restricted to your verified company domain.
                         </div>
 
                         <button
                           type="submit"
-                          className="w-full py-3 px-4 bg-emerald-500 hover:bg-emerald-400 text-neutral-950 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
+                          className="w-full py-3 px-4 bg-[#0D5C46] dark:bg-emerald-500 hover:bg-[#094333] dark:hover:bg-emerald-400 text-white dark:text-neutral-950 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
                         >
                           <span>Send Password Reset Instructions</span>
                           <ArrowRight className="w-3.5 h-3.5" />
@@ -1365,7 +1365,7 @@ export default function VizhinOrgPage({
                         <button
                           type="button"
                           onClick={() => setAuthMode('signin')}
-                          className="w-full text-center text-xs text-neutral-400 hover:text-white cursor-pointer"
+                          className="w-full text-center text-xs text-slate-500 dark:text-neutral-400 hover:text-slate-900 dark:hover:text-white cursor-pointer"
                         >
                           Cancel and return to sign in
                         </button>
@@ -1383,29 +1383,29 @@ export default function VizhinOrgPage({
                       <button
                         type="button"
                         onClick={() => setAuthMode('signin')}
-                        className="p-1 rounded hover:bg-neutral-900 text-neutral-400 hover:text-white transition-colors cursor-pointer"
+                        className="p-1 rounded hover:bg-slate-100 dark:hover:bg-neutral-900 text-slate-500 dark:text-neutral-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
                       >
                         <ArrowLeft className="w-4 h-4" />
                       </button>
                       <div>
-                        <h2 className="text-lg font-bold text-white">
+                        <h2 className="text-lg font-bold text-slate-900 dark:text-white">
                           Lookup Workspace & Username
                         </h2>
-                        <p className="text-xs text-neutral-400 mt-0.5">
+                        <p className="text-xs text-slate-600 dark:text-neutral-400 mt-0.5">
                           Recover your active organization domain and user ID.
                         </p>
                       </div>
                     </div>
 
                     {forgotUsernameSubmitted ? (
-                      <div className="p-5 bg-emerald-950/40 border border-emerald-800/80 rounded-xl space-y-3">
-                        <div className="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                      <div className="p-5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/80 rounded-xl space-y-3">
+                        <div className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-500/20 text-[#0D5C46] dark:text-emerald-400 flex items-center justify-center">
                           <Check className="w-4 h-4" />
                         </div>
-                        <p className="text-xs font-bold text-white">
+                        <p className="text-xs font-bold text-slate-900 dark:text-white">
                           Workspace Details Dispatched
                         </p>
-                        <p className="text-[11px] text-neutral-300 leading-relaxed">
+                        <p className="text-[11px] text-slate-600 dark:text-neutral-300 leading-relaxed">
                           We scanned our tenant directories. If an organization profile is attached to <strong>{forgotUsernameEmail}</strong>, your workspace sign-in URL and corporate user ID have been sent to your inbox.
                         </p>
                         <button
@@ -1414,7 +1414,7 @@ export default function VizhinOrgPage({
                             setForgotUsernameSubmitted(false);
                             setAuthMode('signin');
                           }}
-                          className="text-xs text-emerald-400 font-semibold hover:underline cursor-pointer"
+                          className="text-xs text-[#0D5C46] dark:text-emerald-400 font-semibold hover:underline cursor-pointer"
                         >
                           ← Return to Sign In
                         </button>
@@ -1422,29 +1422,29 @@ export default function VizhinOrgPage({
                     ) : (
                       <form onSubmit={handleForgotUsernameSubmit} className="space-y-4">
                         <div>
-                          <label className="block text-xs font-semibold text-neutral-300 mb-1">
+                          <label className="block text-xs font-semibold text-slate-700 dark:text-neutral-300 mb-1">
                             Corporate Work Email
                           </label>
                           <div className="relative">
-                            <Mail className="w-3.5 h-3.5 absolute left-3 top-3 text-neutral-500" />
+                            <Mail className="w-3.5 h-3.5 absolute left-3 top-3 text-slate-400 dark:text-neutral-500" />
                             <input
                               type="email"
                               required
                               placeholder="name@company.com"
                               value={forgotUsernameEmail}
                               onChange={(e) => setForgotUsernameEmail(e.target.value)}
-                              className="w-full text-xs pl-8 pr-3 py-2.5 bg-[#08090b] border border-neutral-800 rounded-lg text-neutral-100 placeholder-neutral-600 focus:outline-none focus:border-emerald-500"
+                              className="w-full text-xs pl-8 pr-3 py-2.5 bg-slate-50 dark:bg-[#08090b] border border-slate-200 dark:border-neutral-800 rounded-lg text-slate-900 dark:text-neutral-100 placeholder-slate-400 dark:placeholder-neutral-600 focus:outline-none focus:border-[#0D5C46] dark:focus:border-emerald-500"
                             />
                           </div>
                         </div>
 
-                        <div className="p-3 bg-neutral-900/60 border border-neutral-800 rounded-lg text-[11px] text-neutral-400 leading-relaxed">
+                        <div className="p-3 bg-slate-50 dark:bg-neutral-900/60 border border-slate-200 dark:border-neutral-800 rounded-lg text-[11px] text-slate-600 dark:text-neutral-400 leading-relaxed">
                           Vizhin will cross-reference your domain with tenant boundaries in our PostgreSQL RLS matrix.
                         </div>
 
                         <button
                           type="submit"
-                          className="w-full py-3 px-4 bg-emerald-500 hover:bg-emerald-400 text-neutral-950 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
+                          className="w-full py-3 px-4 bg-[#0D5C46] dark:bg-emerald-500 hover:bg-[#094333] dark:hover:bg-emerald-400 text-white dark:text-neutral-950 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
                         >
                           <span>Locate My Workspace</span>
                           <ArrowRight className="w-3.5 h-3.5" />
@@ -1453,7 +1453,7 @@ export default function VizhinOrgPage({
                         <button
                           type="button"
                           onClick={() => setAuthMode('signin')}
-                          className="w-full text-center text-xs text-neutral-400 hover:text-white cursor-pointer"
+                          className="w-full text-center text-xs text-slate-500 dark:text-neutral-400 hover:text-slate-900 dark:hover:text-white cursor-pointer"
                         >
                           Cancel and return to sign in
                         </button>
@@ -1470,10 +1470,10 @@ export default function VizhinOrgPage({
                     {step === 1 ? (
                       <div className="space-y-4">
                         <div>
-                          <h2 className="text-lg font-bold text-white">
+                          <h2 className="text-lg font-bold text-slate-900 dark:text-white">
                             Setup New Company Workspace
                           </h2>
-                          <p className="text-xs text-neutral-400 mt-0.5">
+                          <p className="text-xs text-slate-600 dark:text-neutral-400 mt-0.5">
                             Step 1: Establish tenant boundary and Super Admin access.
                           </p>
                         </div>
@@ -1481,7 +1481,7 @@ export default function VizhinOrgPage({
                         <form onSubmit={handleSignUpSubmit} className="space-y-3">
                           <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <label className="block text-xs font-semibold text-neutral-300 mb-1">
+                              <label className="block text-xs font-semibold text-slate-700 dark:text-neutral-300 mb-1">
                                 First Name
                               </label>
                               <input
@@ -1490,11 +1490,11 @@ export default function VizhinOrgPage({
                                 placeholder="Jane"
                                 value={firstName}
                                 onChange={(e) => setFirstName(e.target.value)}
-                                className="w-full text-xs px-3 py-2 bg-[#08090b] border border-neutral-800 rounded-lg text-neutral-100 focus:outline-none focus:border-emerald-500"
+                                className="w-full text-xs px-3 py-2 bg-slate-50 dark:bg-[#08090b] border border-slate-200 dark:border-neutral-800 rounded-lg text-slate-900 dark:text-neutral-100 focus:outline-none focus:border-[#0D5C46] dark:focus:border-emerald-500"
                               />
                             </div>
                             <div>
-                              <label className="block text-xs font-semibold text-neutral-300 mb-1">
+                              <label className="block text-xs font-semibold text-slate-700 dark:text-neutral-300 mb-1">
                                 Last Name
                               </label>
                               <input
@@ -1503,13 +1503,13 @@ export default function VizhinOrgPage({
                                 placeholder="Smith"
                                 value={lastName}
                                 onChange={(e) => setLastName(e.target.value)}
-                                className="w-full text-xs px-3 py-2 bg-[#08090b] border border-neutral-800 rounded-lg text-neutral-100 focus:outline-none focus:border-emerald-500"
+                                className="w-full text-xs px-3 py-2 bg-slate-50 dark:bg-[#08090b] border border-slate-200 dark:border-neutral-800 rounded-lg text-slate-900 dark:text-neutral-100 focus:outline-none focus:border-[#0D5C46] dark:focus:border-emerald-500"
                               />
                             </div>
                           </div>
 
                           <div>
-                            <label className="block text-xs font-semibold text-neutral-300 mb-1">
+                            <label className="block text-xs font-semibold text-slate-700 dark:text-neutral-300 mb-1">
                               Corporate Work Email
                             </label>
                             <input
@@ -1518,12 +1518,12 @@ export default function VizhinOrgPage({
                               placeholder="jane@company.com"
                               value={workEmail}
                               onChange={(e) => setWorkEmail(e.target.value)}
-                              className="w-full text-xs px-3 py-2 bg-[#08090b] border border-neutral-800 rounded-lg text-neutral-100 focus:outline-none focus:border-emerald-500"
+                              className="w-full text-xs px-3 py-2 bg-slate-50 dark:bg-[#08090b] border border-slate-200 dark:border-neutral-800 rounded-lg text-slate-900 dark:text-neutral-100 focus:outline-none focus:border-[#0D5C46] dark:focus:border-emerald-500"
                             />
                           </div>
 
                           <div>
-                            <label className="block text-xs font-semibold text-neutral-300 mb-1">
+                            <label className="block text-xs font-semibold text-slate-700 dark:text-neutral-300 mb-1">
                               Password
                             </label>
                             <input
@@ -1532,12 +1532,12 @@ export default function VizhinOrgPage({
                               placeholder="••••••••••••"
                               value={signupPassword}
                               onChange={(e) => setSignupPassword(e.target.value)}
-                              className="w-full text-xs px-3 py-2 bg-[#08090b] border border-neutral-800 rounded-lg text-neutral-100 focus:outline-none focus:border-emerald-500"
+                              className="w-full text-xs px-3 py-2 bg-slate-50 dark:bg-[#08090b] border border-slate-200 dark:border-neutral-800 rounded-lg text-slate-900 dark:text-neutral-100 focus:outline-none focus:border-[#0D5C46] dark:focus:border-emerald-500"
                             />
                           </div>
 
                           <div>
-                            <label className="block text-xs font-semibold text-neutral-300 mb-1">
+                            <label className="block text-xs font-semibold text-slate-700 dark:text-neutral-300 mb-1">
                               Company Name
                             </label>
                             <input
@@ -1546,17 +1546,17 @@ export default function VizhinOrgPage({
                               placeholder="e.g. Apex Technologies"
                               value={companyName}
                               onChange={(e) => setCompanyName(e.target.value)}
-                              className="w-full text-xs px-3 py-2 bg-[#08090b] border border-neutral-800 rounded-lg text-neutral-100 focus:outline-none focus:border-emerald-500"
+                              className="w-full text-xs px-3 py-2 bg-slate-50 dark:bg-[#08090b] border border-slate-200 dark:border-neutral-800 rounded-lg text-slate-900 dark:text-neutral-100 focus:outline-none focus:border-[#0D5C46] dark:focus:border-emerald-500"
                             />
                           </div>
 
-                          <div className="p-2.5 bg-amber-950/30 border border-amber-900/60 rounded-lg text-[11px] text-amber-200">
-                            <span className="font-semibold text-amber-300">God Mode Privileges:</span> As the initial tenant creator, you receive Super Admin calibration rights across all reviews.
+                          <div className="p-2.5 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/60 rounded-lg text-[11px] text-amber-800 dark:text-amber-200">
+                            <span className="font-semibold text-amber-900 dark:text-amber-300">God Mode Privileges:</span> As the initial tenant creator, you receive Super Admin calibration rights across all reviews.
                           </div>
 
                           <button
                             type="submit"
-                            className="w-full py-2.5 px-4 bg-emerald-500 hover:bg-emerald-400 text-neutral-950 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
+                            className="w-full py-2.5 px-4 bg-[#0D5C46] dark:bg-emerald-500 hover:bg-[#094333] dark:hover:bg-emerald-400 text-white dark:text-neutral-950 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
                           >
                             <span>Create Workspace & Continue</span>
                             <ArrowRight className="w-3.5 h-3.5" />
@@ -1567,46 +1567,46 @@ export default function VizhinOrgPage({
                       /* Step 2: Inverted Sandbox Hook */
                       <div className="space-y-4">
                         <div className="text-center pb-1">
-                          <div className="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto mb-1.5">
+                          <div className="w-8 h-8 rounded-full bg-emerald-50 dark:bg-emerald-500/20 text-[#0D5C46] dark:text-emerald-400 flex items-center justify-center mx-auto mb-1.5">
                             <Check className="w-4 h-4" />
                           </div>
-                          <h3 className="text-base font-bold text-white">
+                          <h3 className="text-base font-bold text-slate-900 dark:text-white">
                             {companyName} Workspace Created!
                           </h3>
-                          <p className="text-[11px] text-neutral-400">
+                          <p className="text-[11px] text-slate-500 dark:text-neutral-400">
                             Choose how you want to experience your org chart:
                           </p>
                         </div>
 
                         {/* Option A: Explore with Demo Data */}
-                        <div className="border border-emerald-500/80 bg-emerald-950/30 rounded-xl p-4 space-y-2">
+                        <div className="border border-emerald-300 dark:border-emerald-500/80 bg-emerald-50/70 dark:bg-emerald-950/30 rounded-xl p-4 space-y-2">
                           <div className="flex items-center justify-between">
-                            <span className="text-xs font-bold text-white">Option A: Explore with Demo Data</span>
-                            <span className="text-[9px] bg-emerald-500 text-neutral-950 font-bold px-2 py-0.5 rounded-full uppercase">
+                            <span className="text-xs font-bold text-slate-900 dark:text-white">Option A: Explore with Demo Data</span>
+                            <span className="text-[9px] bg-[#0D5C46] dark:bg-emerald-500 text-white dark:text-neutral-950 font-bold px-2 py-0.5 rounded-full uppercase">
                               Recommended
                             </span>
                           </div>
-                          <p className="text-[11px] text-neutral-300 leading-snug">
+                          <p className="text-[11px] text-slate-600 dark:text-neutral-300 leading-snug">
                             Populates 100-person cinema-themed tech hierarchy with dummy performance reviews and delegations.
                           </p>
-                          <div className="text-[10px] text-emerald-300 bg-emerald-950/80 border border-emerald-800/80 p-2 rounded flex items-center gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                          <div className="text-[10px] text-emerald-800 dark:text-emerald-300 bg-white dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800/80 p-2 rounded flex items-center gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse"></span>
                             <span>Just for fun: You will be placed reporting directly to the CEO!</span>
                           </div>
                           <button
                             type="button"
                             onClick={() => setViewMode('chart')}
-                            className="w-full py-2 bg-emerald-500 hover:bg-emerald-400 text-neutral-950 rounded-lg text-xs font-bold transition-all shadow-sm cursor-pointer"
+                            className="w-full py-2 bg-[#0D5C46] dark:bg-emerald-500 hover:bg-[#094333] dark:hover:bg-emerald-400 text-white dark:text-neutral-950 rounded-lg text-xs font-bold transition-all shadow-sm cursor-pointer"
                           >
                             Launch Sandbox Workspace →
                           </button>
                         </div>
 
                         {/* Option B: Connect HRIS */}
-                        <div className="border border-neutral-800 bg-[#08090b] rounded-xl p-3 flex items-center justify-between">
+                        <div className="border border-slate-200 dark:border-neutral-800 bg-slate-50 dark:bg-[#08090b] rounded-xl p-3 flex items-center justify-between">
                           <div>
-                            <p className="text-xs font-semibold text-white">Option B: Connect HRIS</p>
-                            <p className="text-[10px] text-neutral-400">ADP, BambooHR, Deel, Oracle, Paycom, Rippling, SAP, UKG and more via Nango</p>
+                            <p className="text-xs font-semibold text-slate-900 dark:text-white">Option B: Connect HRIS</p>
+                            <p className="text-[10px] text-slate-500 dark:text-neutral-400">ADP, BambooHR, Deel, Oracle, Paycom, Rippling, SAP, UKG and more via Nango</p>
                           </div>
                           <button
                             type="button"
@@ -1626,17 +1626,17 @@ export default function VizhinOrgPage({
                               setViewMode('coming-soon');
                               window.scrollTo({ top: 0, behavior: 'smooth' });
                             }}
-                            className="px-3 py-1.5 bg-neutral-900 hover:bg-neutral-850 text-xs font-medium rounded-lg text-neutral-200 border border-neutral-700 cursor-pointer"
+                            className="px-3 py-1.5 bg-white dark:bg-neutral-900 hover:bg-slate-100 dark:hover:bg-neutral-800 text-xs font-medium rounded-lg text-slate-700 dark:text-neutral-200 border border-slate-300 dark:border-neutral-700 cursor-pointer"
                           >
                             Connect HRIS
                           </button>
                         </div>
 
                         {/* Option C: Import CSV */}
-                        <div className="border border-neutral-800 bg-[#08090b] rounded-xl p-3 flex items-center justify-between">
+                        <div className="border border-slate-200 dark:border-neutral-800 bg-slate-50 dark:bg-[#08090b] rounded-xl p-3 flex items-center justify-between">
                           <div>
-                            <p className="text-xs font-semibold text-white">Option C: Import CSV</p>
-                            <p className="text-[10px] text-neutral-400">Standard two-pass HRIS template</p>
+                            <p className="text-xs font-semibold text-slate-900 dark:text-white">Option C: Import CSV</p>
+                            <p className="text-[10px] text-slate-500 dark:text-neutral-400">Standard two-pass HRIS template</p>
                           </div>
                           <button
                             type="button"
@@ -1656,7 +1656,7 @@ export default function VizhinOrgPage({
                               setViewMode('coming-soon');
                               window.scrollTo({ top: 0, behavior: 'smooth' });
                             }}
-                            className="px-3 py-1.5 bg-neutral-900 hover:bg-neutral-850 text-xs font-medium rounded-lg text-neutral-200 border border-neutral-700 cursor-pointer"
+                            className="px-3 py-1.5 bg-white dark:bg-neutral-900 hover:bg-slate-100 dark:hover:bg-neutral-800 text-xs font-medium rounded-lg text-slate-700 dark:text-neutral-200 border border-slate-300 dark:border-neutral-700 cursor-pointer"
                           >
                             Upload CSV
                           </button>
@@ -1676,13 +1676,13 @@ export default function VizhinOrgPage({
       )}
 
       {/* 4. COMPLETE VIZHIN.CO CORPORATE FOOTER */}
-      <footer className="border-t border-neutral-900/80 bg-[#060607] py-6 px-6 text-center text-xs text-neutral-500 font-mono z-10 shrink-0">
+      <footer className="border-t border-slate-200 dark:border-neutral-900/80 bg-slate-100 dark:bg-[#060607] py-6 px-6 text-center text-xs text-slate-500 dark:text-neutral-500 font-mono z-10 shrink-0">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+            <ShieldCheck className="w-3.5 h-3.5 text-[#0D5C46] dark:text-emerald-400" />
             <span>VIZHIN LLC • SECURED WORKFORCE ARCHITECTURE & RECURSIVE RBAC SYSTEMS</span>
           </div>
-          <div className="flex items-center gap-4 text-neutral-400">
+          <div className="flex items-center gap-4 text-slate-500 dark:text-neutral-400">
             <span>SOC-2 Type II Certified</span>
             <span>·</span>
             <span>Deterministic RLS Isolation</span>

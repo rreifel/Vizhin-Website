@@ -1,8 +1,26 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="light" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('vzn_site_theme');
+          var theme = saved === 'dark' ? 'dark' : 'light';
+          var root = document.documentElement;
+          if (theme === 'dark') {
+            root.classList.remove('light');
+            root.classList.add('dark');
+          } else {
+            root.classList.remove('dark');
+            root.classList.add('light');
+          }
+          root.setAttribute('data-theme', theme);
+          root.style.colorScheme = theme;
+        } catch (e) {}
+      })();
+    </script>
     <title>Go-to-Market Consulting & Fractional VP of Sales | Vizhin</title>
     <meta name="description" content="Vizhin helps growth-stage companies align sales and marketing, fix CRM and pipeline friction, and build accountable teams that predictably grow revenue.">
     <meta property="og:title" content="Go-to-Market Consulting & Fractional VP of Sales | Vizhin">

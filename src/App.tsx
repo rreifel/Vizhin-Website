@@ -33,6 +33,7 @@ import VizhinOrgPage from "./components/VizhinOrgPage";
 import VizhinOrgLoginScreen from './components/VizhinOrgLoginScreen';
 import VizhinLogo from './components/VizhinLogo';
 import VizhinCRMLogo from './components/VizhinCRMLogo';
+import ThemeToggle from './components/ThemeToggle';
 import { USE_STANDALONE_VIZHIN_ORG, redirectToVizhinOrg, getVizhinOrgUrl } from './config/orgRouting';
 
 export default function App() {
@@ -709,12 +710,12 @@ export default function App() {
         redirectToVizhinOrg('/org/ORGdemo');
       }
       return (
-        <div className="min-h-screen bg-[#070708] text-white flex flex-col items-center justify-center p-6 text-center">
-          <div className="w-14 h-14 rounded-2xl bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400 mb-5 animate-pulse shadow-lg shadow-cyan-950/50">
+        <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#070708] text-slate-900 dark:text-white flex flex-col items-center justify-center p-6 text-center transition-colors">
+          <div className="w-14 h-14 rounded-2xl bg-cyan-50 dark:bg-cyan-950/80 border border-cyan-200 dark:border-cyan-800/60 flex items-center justify-center text-cyan-600 dark:text-cyan-400 mb-5 animate-pulse shadow-lg shadow-cyan-500/10 dark:shadow-cyan-950/50">
             <Network className="w-7 h-7" />
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold mb-2">Connecting to VizhinORG...</h2>
-          <p className="text-xs sm:text-sm text-neutral-400 max-w-md mb-6 leading-relaxed">
+          <h2 className="text-xl sm:text-2xl font-bold mb-2 text-slate-900 dark:text-white">Connecting to VizhinORG...</h2>
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-neutral-400 max-w-md mb-6 leading-relaxed">
             Redirecting to the 100-employee workforce architecture workspace in the standalone Remix VizhinORG project.
           </p>
           <div className="flex items-center gap-3">
@@ -729,7 +730,7 @@ export default function App() {
             </a>
             <button
               onClick={() => navigateTo('landing')}
-              className="px-4 py-2.5 bg-neutral-900 hover:bg-neutral-800 text-neutral-300 border border-neutral-700 rounded-xl text-xs font-semibold cursor-pointer"
+              className="px-4 py-2.5 bg-white dark:bg-neutral-900 hover:bg-slate-100 dark:hover:bg-neutral-800 text-slate-700 dark:text-neutral-300 border border-slate-300 dark:border-neutral-700 rounded-xl text-xs font-semibold cursor-pointer"
             >
               Back to Home
             </button>
@@ -832,10 +833,10 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0A0A0B] text-neutral-100 flex flex-col font-sans selection:bg-neutral-800" id="main_shell">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0A0A0B] text-slate-900 dark:text-neutral-100 flex flex-col font-sans selection:bg-emerald-100 dark:selection:bg-neutral-800 transition-colors" id="main_shell">
       
       {/* GLOBAL ENTERPRISE TOP NAVIGATION RAIL */}
-      <header className="bg-neutral-900/60 border-b border-neutral-850 sticky top-0 backdrop-blur-md z-45 px-6 py-4 flex items-center justify-between" id="header_rail">
+      <header className="bg-white/90 dark:bg-neutral-900/60 border-b border-slate-200 dark:border-neutral-800 sticky top-0 backdrop-blur-md z-40 px-6 py-4 flex items-center justify-between" id="header_rail">
         <div className="flex items-center gap-6" id="header_branding">
           {/* Dynamically branded Logo */}
           <div className="flex items-center">
@@ -844,16 +845,16 @@ export default function App() {
             ) : (
               <div className="flex items-center gap-3">
                 {resolvedLogo && (
-                  <div className="w-9 h-9 rounded-xl flex items-center justify-center overflow-hidden bg-neutral-950 border border-neutral-805" style={{ borderColor: `${resolvedAccent}44` }}>
+                  <div className="w-9 h-9 rounded-xl flex items-center justify-center overflow-hidden bg-slate-100 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800" style={{ borderColor: `${resolvedAccent}44` }}>
                     <img src={resolvedLogo} alt="Co Brand Logo" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                   </div>
                 )}
                 <div>
-                  <span className="text-base font-bold tracking-tight text-white flex items-center gap-2">
+                  <span className="text-base font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
                     {currentUser.role === 'PARTNER_ADMIN' && currentPartnerObj?.name}
                     {currentUser.role === 'CUSTOMER_ADMIN' && currentCustomerObj?.name}
                   </span>
-                  <span className="text-[10px] block font-mono text-neutral-500 uppercase tracking-widest font-semibold">
+                  <span className="text-[10px] block font-mono text-slate-500 dark:text-neutral-500 uppercase tracking-widest font-semibold">
                     {currentUser.role === 'PARTNER_ADMIN' && 'Reseller Co-Branded Portal'}
                     {currentUser.role === 'CUSTOMER_ADMIN' && 'Agency Portal Services'}
                   </span>
@@ -863,40 +864,40 @@ export default function App() {
           </div>
 
           {/* Global Multi-Platform Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1 bg-neutral-950/80 p-1 rounded-lg border border-neutral-800" id="header_nav">
+          <nav className="hidden md:flex items-center gap-1 bg-slate-100 dark:bg-neutral-950/80 p-1 rounded-lg border border-slate-200 dark:border-neutral-800" id="header_nav">
             <button
               onClick={() => setActiveWorkspace('dashboard')}
               className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors cursor-pointer ${
-                activeWorkspace === 'dashboard' ? 'bg-neutral-850 text-white' : 'text-neutral-400 hover:text-white'
+                activeWorkspace === 'dashboard' ? 'bg-white dark:bg-neutral-800 text-slate-900 dark:text-white shadow-xs dark:shadow-none' : 'text-slate-600 dark:text-neutral-400 hover:text-slate-950 dark:hover:text-white'
               }`}
             >
               CRM Portal
             </button>
             <button
               onClick={() => navigateTo('org')}
-              className="px-3 py-1.5 text-xs font-semibold rounded-md transition-colors text-neutral-400 hover:text-white cursor-pointer"
+              className="px-3 py-1.5 text-xs font-semibold rounded-md transition-colors text-slate-600 dark:text-neutral-400 hover:text-slate-950 dark:hover:text-white cursor-pointer"
             >
               VizhinORG
             </button>
             <button
               onClick={() => navigateTo('meddpicc')}
-              className="px-3 py-1.5 text-xs font-semibold rounded-md transition-colors text-neutral-400 hover:text-white cursor-pointer"
+              className="px-3 py-1.5 text-xs font-semibold rounded-md transition-colors text-slate-600 dark:text-neutral-400 hover:text-slate-950 dark:hover:text-white cursor-pointer"
             >
               MEDDPICC
             </button>
             <button
               onClick={() => navigateTo('landing')}
-              className="px-3 py-1.5 text-xs font-semibold rounded-md transition-colors text-neutral-400 hover:text-white cursor-pointer"
+              className="px-3 py-1.5 text-xs font-semibold rounded-md transition-colors text-slate-600 dark:text-neutral-400 hover:text-slate-950 dark:hover:text-white cursor-pointer"
             >
               Home
             </button>
             <button
               onClick={() => setActiveWorkspace('guide')}
               className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors flex items-center gap-1.5 cursor-pointer ${
-                activeWorkspace === 'guide' ? 'bg-neutral-850 text-white' : 'text-neutral-400 hover:text-white'
+                activeWorkspace === 'guide' ? 'bg-white dark:bg-neutral-800 text-slate-900 dark:text-white shadow-xs dark:shadow-none' : 'text-slate-600 dark:text-neutral-400 hover:text-slate-950 dark:hover:text-white'
               }`}
             >
-              <Code2 className="w-3.5 h-3.5 text-emerald-400" />
+              <Code2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
               Dev Guide
             </button>
           </nav>
@@ -906,31 +907,33 @@ export default function App() {
         <div className="flex items-center gap-3 sm:gap-4" id="header_user_module">
           <div className="hidden sm:flex items-center gap-2.5 text-right">
             <div>
-              <div className="text-xs font-bold text-neutral-200">{currentUser.name}</div>
-              <div className="text-[10px] text-neutral-500 font-mono">{currentUser.email}</div>
+              <div className="text-xs font-bold text-slate-900 dark:text-neutral-200">{currentUser.name}</div>
+              <div className="text-[10px] text-slate-500 dark:text-neutral-500 font-mono">{currentUser.email}</div>
             </div>
           </div>
+
+          <ThemeToggle />
 
           {/* Logout Trigger button with dropdown */}
           <div className="relative">
             <button
               onClick={() => setCrmSignOutDropdownOpen(prev => !prev)}
-              className="p-2 sm:px-3 sm:py-1.5 rounded-lg bg-red-950/70 hover:bg-red-900/90 border border-red-800/70 text-red-300 hover:text-white transition-all cursor-pointer inline-flex items-center gap-1.5 text-xs font-bold shadow-xs hover:scale-105"
+              className="p-2 sm:px-3 sm:py-1.5 rounded-lg bg-red-50 dark:bg-red-950/70 hover:bg-red-100 dark:hover:bg-red-900/90 border border-red-200 dark:border-red-800/70 text-red-700 dark:text-red-300 hover:text-red-900 dark:hover:text-white transition-all cursor-pointer inline-flex items-center gap-1.5 text-xs font-bold shadow-xs hover:scale-105"
               title="Select application to sign out of"
               id="btn_logout"
             >
-              <LogOut className="w-4 h-4 text-red-400" />
+              <LogOut className="w-4 h-4 text-red-600 dark:text-red-400" />
               <span>Sign Out</span>
-              <ChevronDown className={`w-3 h-3 text-red-300 transition-transform ${crmSignOutDropdownOpen ? 'rotate-180' : ''}`} />
+              <ChevronDown className={`w-3 h-3 text-red-600 dark:text-red-300 transition-transform ${crmSignOutDropdownOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {crmSignOutDropdownOpen && (
-              <div className="absolute top-full right-0 mt-2 w-72 bg-neutral-950/95 border border-neutral-800 rounded-xl shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150 backdrop-blur-md">
-                <div className="px-2.5 py-1.5 border-b border-neutral-800/80 mb-1.5">
-                  <p className="text-[10px] font-mono uppercase tracking-wider text-neutral-400">
+              <div className="absolute top-full right-0 mt-2 w-72 bg-white dark:bg-neutral-950/95 border border-slate-200 dark:border-neutral-800 rounded-xl shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150 backdrop-blur-md">
+                <div className="px-2.5 py-1.5 border-b border-slate-200 dark:border-neutral-800/80 mb-1.5">
+                  <p className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-neutral-400">
                     Select App to Sign Out
                   </p>
-                  <p className="text-[11px] text-neutral-300 font-medium">
+                  <p className="text-[11px] text-slate-700 dark:text-neutral-300 font-medium">
                     Choose which platform to disconnect:
                   </p>
                 </div>
@@ -942,18 +945,18 @@ export default function App() {
                       setCrmSignOutDropdownOpen(false);
                       handleSignOutOrg();
                     }}
-                    className="w-full text-left p-2.5 rounded-lg hover:bg-neutral-900 transition-colors flex items-start gap-3 cursor-pointer group border border-transparent hover:border-cyan-800/60"
+                    className="w-full text-left p-2.5 rounded-lg hover:bg-slate-50 dark:hover:bg-neutral-900 transition-colors flex items-start gap-3 cursor-pointer group border border-transparent hover:border-cyan-200 dark:hover:border-cyan-800/60"
                   >
-                    <div className="w-8 h-8 rounded-lg bg-cyan-950/80 border border-cyan-800/60 flex items-center justify-center text-cyan-400 shrink-0 group-hover:scale-105 transition-transform mt-0.5">
+                    <div className="w-8 h-8 rounded-lg bg-cyan-50 dark:bg-cyan-950/80 border border-cyan-200 dark:border-cyan-800/60 flex items-center justify-center text-cyan-700 dark:text-cyan-400 shrink-0 group-hover:scale-105 transition-transform mt-0.5">
                       <Network className="w-4 h-4" />
                     </div>
                     <div>
                       <div className="flex items-center gap-1.5">
-                        <span className="text-xs font-bold text-neutral-200 group-hover:text-cyan-400 transition-colors">
+                        <span className="text-xs font-bold text-slate-800 dark:text-neutral-200 group-hover:text-cyan-700 dark:group-hover:text-cyan-400 transition-colors">
                           Sign Out of VizhinORG
                         </span>
                       </div>
-                      <p className="text-[10px] text-neutral-400 leading-tight mt-0.5">
+                      <p className="text-[10px] text-slate-500 dark:text-neutral-400 leading-tight mt-0.5">
                         Returns to the split setup & sign-in screen
                       </p>
                     </div>
@@ -965,34 +968,34 @@ export default function App() {
                       setCrmSignOutDropdownOpen(false);
                       handleSignOutCRM();
                     }}
-                    className="w-full text-left p-2.5 rounded-lg hover:bg-neutral-900 transition-colors flex items-start gap-3 cursor-pointer group border border-transparent hover:border-emerald-800/60"
+                    className="w-full text-left p-2.5 rounded-lg hover:bg-slate-50 dark:hover:bg-neutral-900 transition-colors flex items-start gap-3 cursor-pointer group border border-transparent hover:border-emerald-200 dark:hover:border-emerald-800/60"
                   >
-                    <div className="w-8 h-8 rounded-lg bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0 group-hover:scale-105 transition-transform mt-0.5">
+                    <div className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800/60 flex items-center justify-center text-emerald-700 dark:text-emerald-400 shrink-0 group-hover:scale-105 transition-transform mt-0.5">
                       <Building2 className="w-4 h-4" />
                     </div>
                     <div>
                       <div className="flex items-center gap-1.5">
-                        <span className="text-xs font-bold text-neutral-200 group-hover:text-emerald-400 transition-colors">
+                        <span className="text-xs font-bold text-slate-800 dark:text-neutral-200 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">
                           Sign Out of VizhinCRM
                         </span>
                       </div>
-                      <p className="text-[10px] text-neutral-400 leading-tight mt-0.5">
+                      <p className="text-[10px] text-slate-500 dark:text-neutral-400 leading-tight mt-0.5">
                         Returns to the CRM setup / login screen
                       </p>
                     </div>
                   </button>
                 </div>
 
-                <div className="pt-2 mt-2 border-t border-neutral-800/80">
+                <div className="pt-2 mt-2 border-t border-slate-200 dark:border-neutral-800/80">
                   <button
                     type="button"
                     onClick={() => {
                       setCrmSignOutDropdownOpen(false);
                       handleLogout();
                     }}
-                    className="w-full py-2 px-3 rounded-lg bg-red-950/60 hover:bg-red-900 text-red-300 hover:text-white border border-red-800/60 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-colors"
+                    className="w-full py-2 px-3 rounded-lg bg-red-50 dark:bg-red-950/60 hover:bg-red-100 dark:hover:bg-red-900 text-red-700 dark:text-red-300 hover:text-red-900 dark:hover:text-white border border-red-200 dark:border-red-800/60 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-colors"
                   >
-                    <LogOut className="w-3.5 h-3.5 text-red-400" />
+                    <LogOut className="w-3.5 h-3.5 text-red-600 dark:text-red-400" />
                     <span>Sign Out of All Platforms</span>
                   </button>
                 </div>
@@ -1003,12 +1006,12 @@ export default function App() {
       </header>
 
       {/* DEV WATERMARK WARNING BAR */}
-      <div className="bg-gradient-to-r from-[#0D5C46]/80 via-slate-900 to-emerald-950/80 px-6 py-2 border-b border-emerald-900/40 text-center text-[10px] md:text-xs text-emerald-300 font-medium font-mono flex items-center justify-center gap-2" id="dev_alert_strip">
-        <Activity className="w-3.5 h-3.5 animate-pulse text-emerald-400 shrink-0" />
+      <div className="bg-gradient-to-r from-emerald-50 via-slate-50 to-emerald-50 dark:from-[#0D5C46]/80 dark:via-slate-900 dark:to-emerald-950/80 px-6 py-2 border-b border-emerald-200 dark:border-emerald-900/40 text-center text-[10px] md:text-xs text-emerald-800 dark:text-emerald-300 font-medium font-mono flex items-center justify-center gap-2" id="dev_alert_strip">
+        <Activity className="w-3.5 h-3.5 animate-pulse text-emerald-600 dark:text-emerald-400 shrink-0" />
         <span>DEVELOPMENT SANDBOX ACTIVE: Access is restricted and credentials verification is protected. Click the <strong>Developer Integration Guide</strong> tab to view tables & recipes.</span>
         <button 
           onClick={resetToFactoryDefault}
-          className="underline text-yellow-400 font-semibold hover:text-yellow-300 cursor-pointer ml-2 shrink-0"
+          className="underline text-amber-700 dark:text-yellow-400 font-semibold hover:text-amber-800 dark:hover:text-yellow-300 cursor-pointer ml-2 shrink-0"
         >
           Reset Demo Database
         </button>
@@ -1081,17 +1084,17 @@ export default function App() {
       </main>
 
       {/* FOOTER CO-BRAND BANNER */}
-      <footer className="mt-12 bg-neutral-905 border-t border-neutral-850 py-8 px-6 text-center text-xs text-neutral-500 font-mono" id="app_footer">
+      <footer className="mt-12 bg-white dark:bg-neutral-950 border-t border-slate-200 dark:border-neutral-800 py-8 px-6 text-center text-xs text-slate-500 dark:text-neutral-500 font-mono" id="app_footer">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 max-w-7xl w-full mx-auto">
           <div>
             VIZHIN TECHNOLOGIES CO • ACTIVE ROLE SECURE PORTAL
           </div>
           <div className="flex gap-4">
-            <span className="hover:text-neutral-400 transition-colors">SSL Secured</span>
+            <span className="hover:text-slate-700 dark:hover:text-neutral-400 transition-colors">SSL Secured</span>
             <span>•</span>
-            <span className="hover:text-neutral-400 transition-colors">Supabase Connected</span>
+            <span className="hover:text-slate-700 dark:hover:text-neutral-400 transition-colors">Supabase Connected</span>
             <span>•</span>
-            <span className="hover:text-neutral-400 transition-colors">Enterprise Isolation</span>
+            <span className="hover:text-slate-700 dark:hover:text-neutral-400 transition-colors">Enterprise Isolation</span>
           </div>
         </div>
       </footer>

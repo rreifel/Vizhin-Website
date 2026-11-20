@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { 
-  ArrowLeft, Mail, MapPin, Globe, ArrowRight, ShieldCheck, 
-  Send, Layers, BarChart3, Users, CheckCircle2, Shield
+  ArrowLeft, Mail, MapPin, Globe, ShieldCheck, 
+  Send, CheckCircle2
 } from 'lucide-react';
 import SiteHeader from './SiteHeader';
 
@@ -74,13 +74,11 @@ export default function ContactPage({
   useEffect(() => {
     if (!zcalEmbedUrl) return;
 
-    // Remove any previously appended zcal embed script to force a clean re-execution
     const oldScript = document.getElementById('zcal-embed-script');
     if (oldScript) {
       oldScript.remove();
     }
 
-    // Allow DOM to mount the .zcal-inline-widget container first before loading widget script
     const timer = setTimeout(() => {
       const script = document.createElement('script');
       script.id = 'zcal-embed-script';
@@ -126,7 +124,6 @@ export default function ContactPage({
       timestamp: new Date().toISOString()
     };
 
-    // Secondary local backup (never the primary submission method)
     try {
       const backupEntry = {
         ...submissionPayload,
@@ -143,7 +140,6 @@ export default function ContactPage({
     }
 
     try {
-      // Send form data to lightweight PHP endpoint on Apache/LiteSpeed host
       const response = await fetch('/api/contact.php', {
         method: 'POST',
         headers: {
@@ -161,13 +157,10 @@ export default function ContactPage({
       }
 
       if (response.ok && result?.success) {
-        // Pre-populate query parameters with encodeURIComponent
         const fullName = `${trimmedFirst} ${trimmedLast}`.trim();
         const queryParams = `name=${encodeURIComponent(fullName)}&email=${encodeURIComponent(trimmedEmail)}&a0=${encodeURIComponent(trimmedCompany)}&a1=${encodeURIComponent(trimmedNotes)}`;
         
-        // Official zcal embed invite-ID URL
         const embedUrl = `https://zcal.co/i/2i6fsJya?${queryParams}`;
-        // Standalone fallback link keeping proven prefilled URL
         const directUrl = `https://zcal.co/rreifel/30min?${queryParams}`;
 
         setZcalEmbedUrl(embedUrl);
@@ -187,13 +180,13 @@ export default function ContactPage({
   };
 
   return (
-    <div className="min-h-screen bg-[#070708] text-neutral-100 flex flex-col relative overflow-hidden font-sans">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#070708] text-slate-900 dark:text-neutral-100 flex flex-col relative overflow-hidden font-sans transition-colors">
       {/* Decorative Background Glows */}
-      <div className="absolute top-[-30%] left-[-20%] w-[80vw] h-[80vw] rounded-full bg-emerald-950/25 blur-[150px] pointer-events-none" />
-      <div className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-[#0D5C46]/20 blur-[150px] pointer-events-none" />
+      <div className="absolute top-[-30%] left-[-20%] w-[80vw] h-[80vw] rounded-full bg-emerald-200/40 dark:bg-emerald-950/25 blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-teal-200/30 dark:bg-[#0D5C46]/20 blur-[150px] pointer-events-none" />
 
       {/* Grid Pattern Backdrop */}
-      <div className="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.15] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] dark:bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.45] dark:opacity-[0.15] pointer-events-none" />
 
       {/* Site Header & Navigation Toolbar */}
       <SiteHeader
@@ -227,24 +220,24 @@ export default function ContactPage({
               e.preventDefault();
               onNavigateHome();
             }}
-            className="inline-flex items-center gap-2 text-xs font-mono text-neutral-400 hover:text-emerald-400 transition-colors cursor-pointer group"
+            className="inline-flex items-center gap-2 text-xs font-mono text-slate-600 dark:text-neutral-400 hover:text-[#0D5C46] dark:hover:text-emerald-400 transition-colors cursor-pointer group"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             <span>Back to Home</span>
           </a>
 
-          <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-emerald-950/80 text-emerald-400 border border-emerald-800/60 font-semibold uppercase tracking-wider">
+          <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/60 font-semibold uppercase tracking-wider">
             Direct Inquiry
           </span>
         </div>
 
         {/* Hero Section with EXACTLY ONE H1 HEADING */}
         <div className="space-y-4 text-center sm:text-left">
-          <div className="w-12 h-12 rounded-2xl bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shadow-md inline-flex">
+          <div className="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800/60 flex items-center justify-center text-[#0D5C46] dark:text-emerald-400 shadow-sm inline-flex">
             <Mail className="w-6 h-6" />
           </div>
 
-          <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight">
+          <h1 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
             Contact Vizhin
           </h1>
         </div>
@@ -254,32 +247,32 @@ export default function ContactPage({
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="p-8 md:p-10 rounded-2xl bg-neutral-900/40 border border-neutral-800/80 shadow-2xl relative backdrop-blur-sm space-y-8"
+          className="p-8 md:p-10 rounded-2xl bg-white dark:bg-neutral-900/40 border border-slate-200 dark:border-neutral-800/80 shadow-lg dark:shadow-2xl relative backdrop-blur-sm space-y-8"
         >
           {submitted && zcalEmbedUrl ? (
             <div className="space-y-6">
-              <div className="space-y-2 border-b border-neutral-800/70 pb-6">
-                <div className="flex items-center gap-2 text-emerald-400">
+              <div className="space-y-2 border-b border-slate-200 dark:border-neutral-800/70 pb-6">
+                <div className="flex items-center gap-2 text-[#0D5C46] dark:text-emerald-400">
                   <CheckCircle2 className="w-5 h-5" />
                   <span className="font-mono text-xs uppercase tracking-wider font-bold">Details Received</span>
                 </div>
-                <p className="text-base md:text-lg text-white font-medium">
+                <p className="text-base md:text-lg text-slate-900 dark:text-white font-medium">
                   Select a time below to complete your strategy session booking.
                 </p>
-                <p className="text-xs text-neutral-400 font-mono">
+                <p className="text-xs text-slate-500 dark:text-neutral-400 font-mono">
                   Your contact details have been sent to our team and pre-filled in the calendar below.
                 </p>
               </div>
 
               {/* Inline zcal Javascript embed widget */}
-              <div className="w-full rounded-xl overflow-hidden bg-neutral-950/60 border border-neutral-800/80 p-2 sm:p-4">
+              <div className="w-full rounded-xl overflow-hidden bg-slate-50 dark:bg-neutral-950/60 border border-slate-200 dark:border-neutral-800/80 p-2 sm:p-4">
                 <div 
                   className="zcal-inline-widget w-full"
                   style={{ minWidth: '320px', minHeight: '680px' }}
                 >
                   <a 
                     href={zcalEmbedUrl}
-                    className="text-emerald-400 hover:text-emerald-300 font-mono text-xs underline p-4 block text-center"
+                    className="text-[#0D5C46] dark:text-emerald-400 hover:text-emerald-900 dark:hover:text-emerald-300 font-mono text-xs underline p-4 block text-center"
                   >
                     30 Minute Meeting - Schedule a meeting
                   </a>
@@ -287,12 +280,12 @@ export default function ContactPage({
               </div>
 
               {/* Fallback & Clear Status Message */}
-              <div className="p-5 rounded-xl bg-neutral-950/90 border border-neutral-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+              <div className="p-5 rounded-xl bg-slate-50 dark:bg-neutral-950/90 border border-slate-200 dark:border-neutral-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
                 <div className="space-y-1">
-                  <p className="text-xs text-neutral-200 font-semibold">
+                  <p className="text-xs text-slate-900 dark:text-neutral-200 font-semibold">
                     Calendar taking a moment to load or blocked by browser settings?
                   </p>
-                  <p className="text-[11px] text-neutral-400 font-mono">
+                  <p className="text-[11px] text-slate-500 dark:text-neutral-400 font-mono">
                     All your submitted information has been saved. You can pick your time directly on zcal:
                   </p>
                 </div>
@@ -310,17 +303,17 @@ export default function ContactPage({
           ) : (
             <>
               {/* Intro text displayed on the form */}
-              <div className="space-y-2 border-b border-neutral-800/70 pb-6">
-                <p className="text-base md:text-lg text-neutral-200 font-medium">
+              <div className="space-y-2 border-b border-slate-200 dark:border-neutral-800/70 pb-6">
+                <p className="text-base md:text-lg text-slate-800 dark:text-neutral-200 font-medium">
                   Give us a little info and we'll send you right to the scheduling link.
                 </p>
-                <p className="text-xs text-neutral-400 font-mono">
-                  Fields marked with an asterisk (<span className="text-emerald-400">*</span>) are required.
+                <p className="text-xs text-slate-500 dark:text-neutral-400 font-mono">
+                  Fields marked with an asterisk (<span className="text-[#0D5C46] dark:text-emerald-400">*</span>) are required.
                 </p>
               </div>
 
               {formError && (
-                <div className="p-4 rounded-xl bg-red-950/50 border border-red-800/60 text-red-200 text-xs font-medium">
+                <div className="p-4 rounded-xl bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800/60 text-red-700 dark:text-red-200 text-xs font-medium">
                   {formError}
                 </div>
               )}
@@ -329,8 +322,8 @@ export default function ContactPage({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {/* First name */}
                   <div className="space-y-2">
-                    <label htmlFor="firstName" className="block text-xs font-semibold text-neutral-300 uppercase tracking-wider font-mono">
-                      First name <span className="text-emerald-400">*</span>
+                    <label htmlFor="firstName" className="block text-xs font-semibold text-slate-700 dark:text-neutral-300 uppercase tracking-wider font-mono">
+                      First name <span className="text-[#0D5C46] dark:text-emerald-400">*</span>
                     </label>
                     <input
                       id="firstName"
@@ -340,14 +333,14 @@ export default function ContactPage({
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
                       placeholder="Richard"
-                      className="w-full px-4 py-3 bg-neutral-950/80 border border-neutral-800 focus:border-emerald-500/80 focus:ring-1 focus:ring-emerald-500/80 rounded-xl text-sm text-white placeholder-neutral-600 outline-none transition-colors"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-neutral-950/80 border border-slate-300 dark:border-neutral-800 focus:border-[#0D5C46] dark:focus:border-emerald-500/80 focus:ring-1 focus:ring-[#0D5C46] dark:focus:ring-emerald-500/80 rounded-xl text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-600 outline-none transition-colors"
                     />
                   </div>
 
                   {/* Last name */}
                   <div className="space-y-2">
-                    <label htmlFor="lastName" className="block text-xs font-semibold text-neutral-300 uppercase tracking-wider font-mono">
-                      Last name <span className="text-emerald-400">*</span>
+                    <label htmlFor="lastName" className="block text-xs font-semibold text-slate-700 dark:text-neutral-300 uppercase tracking-wider font-mono">
+                      Last name <span className="text-[#0D5C46] dark:text-emerald-400">*</span>
                     </label>
                     <input
                       id="lastName"
@@ -357,7 +350,7 @@ export default function ContactPage({
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
                       placeholder="Hendricks"
-                      className="w-full px-4 py-3 bg-neutral-950/80 border border-neutral-800 focus:border-emerald-500/80 focus:ring-1 focus:ring-emerald-500/80 rounded-xl text-sm text-white placeholder-neutral-600 outline-none transition-colors"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-neutral-950/80 border border-slate-300 dark:border-neutral-800 focus:border-[#0D5C46] dark:focus:border-emerald-500/80 focus:ring-1 focus:ring-[#0D5C46] dark:focus:ring-emerald-500/80 rounded-xl text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-600 outline-none transition-colors"
                     />
                   </div>
                 </div>
@@ -365,8 +358,8 @@ export default function ContactPage({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {/* Email */}
                   <div className="space-y-2">
-                    <label htmlFor="email" className="block text-xs font-semibold text-neutral-300 uppercase tracking-wider font-mono">
-                      Email <span className="text-emerald-400">*</span>
+                    <label htmlFor="email" className="block text-xs font-semibold text-slate-700 dark:text-neutral-300 uppercase tracking-wider font-mono">
+                      Email <span className="text-[#0D5C46] dark:text-emerald-400">*</span>
                     </label>
                     <input
                       id="email"
@@ -376,14 +369,14 @@ export default function ContactPage({
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="r.hendricks@piedpiper.com"
-                      className="w-full px-4 py-3 bg-neutral-950/80 border border-neutral-800 focus:border-emerald-500/80 focus:ring-1 focus:ring-emerald-500/80 rounded-xl text-sm text-white placeholder-neutral-600 outline-none transition-colors"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-neutral-950/80 border border-slate-300 dark:border-neutral-800 focus:border-[#0D5C46] dark:focus:border-emerald-500/80 focus:ring-1 focus:ring-[#0D5C46] dark:focus:ring-emerald-500/80 rounded-xl text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-600 outline-none transition-colors"
                     />
                   </div>
 
                   {/* Company */}
                   <div className="space-y-2">
-                    <label htmlFor="company" className="block text-xs font-semibold text-neutral-300 uppercase tracking-wider font-mono">
-                      Company <span className="text-emerald-400">*</span>
+                    <label htmlFor="company" className="block text-xs font-semibold text-slate-700 dark:text-neutral-300 uppercase tracking-wider font-mono">
+                      Company <span className="text-[#0D5C46] dark:text-emerald-400">*</span>
                     </label>
                     <input
                       id="company"
@@ -393,16 +386,16 @@ export default function ContactPage({
                       value={company}
                       onChange={(e) => setCompany(e.target.value)}
                       placeholder="Pied Piper Inc."
-                      className="w-full px-4 py-3 bg-neutral-950/80 border border-neutral-800 focus:border-emerald-500/80 focus:ring-1 focus:ring-emerald-500/80 rounded-xl text-sm text-white placeholder-neutral-600 outline-none transition-colors"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-neutral-950/80 border border-slate-300 dark:border-neutral-800 focus:border-[#0D5C46] dark:focus:border-emerald-500/80 focus:ring-1 focus:ring-[#0D5C46] dark:focus:ring-emerald-500/80 rounded-xl text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-600 outline-none transition-colors"
                     />
                   </div>
                 </div>
 
                 {/* Cell phone (optional) */}
                 <div className="space-y-2">
-                  <label htmlFor="cellPhone" className="block text-xs font-semibold text-neutral-300 uppercase tracking-wider font-mono flex items-center justify-between">
+                  <label htmlFor="cellPhone" className="block text-xs font-semibold text-slate-700 dark:text-neutral-300 uppercase tracking-wider font-mono flex items-center justify-between">
                     <span>Cell phone</span>
-                    <span className="text-[11px] text-neutral-500 lowercase font-normal">(optional)</span>
+                    <span className="text-[11px] text-slate-400 dark:text-neutral-500 lowercase font-normal">(optional)</span>
                   </label>
                   <input
                     id="cellPhone"
@@ -411,14 +404,14 @@ export default function ContactPage({
                     value={cellPhone}
                     onChange={(e) => setCellPhone(e.target.value)}
                     placeholder="(555) 000-0000"
-                    className="w-full px-4 py-3 bg-neutral-950/80 border border-neutral-800 focus:border-emerald-500/80 focus:ring-1 focus:ring-emerald-500/80 rounded-xl text-sm text-white placeholder-neutral-600 outline-none transition-colors"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-neutral-950/80 border border-slate-300 dark:border-neutral-800 focus:border-[#0D5C46] dark:focus:border-emerald-500/80 focus:ring-1 focus:ring-[#0D5C46] dark:focus:ring-emerald-500/80 rounded-xl text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-600 outline-none transition-colors"
                   />
                 </div>
 
                 {/* Tell me how I can help (notes textarea, required) */}
                 <div className="space-y-2">
-                  <label htmlFor="notes" className="block text-xs font-semibold text-neutral-300 uppercase tracking-wider font-mono">
-                    Tell me how I can help <span className="text-emerald-400">*</span>
+                  <label htmlFor="notes" className="block text-xs font-semibold text-slate-700 dark:text-neutral-300 uppercase tracking-wider font-mono">
+                    Tell me how I can help <span className="text-[#0D5C46] dark:text-emerald-400">*</span>
                   </label>
                   <textarea
                     id="notes"
@@ -428,7 +421,7 @@ export default function ContactPage({
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                     placeholder="Give us a brief overview of your current revenue model, sales headcount, CRM stack, or primary friction point..."
-                    className="w-full px-4 py-3 bg-neutral-950/80 border border-neutral-800 focus:border-emerald-500/80 focus:ring-1 focus:ring-emerald-500/80 rounded-xl text-sm text-white placeholder-neutral-600 outline-none transition-colors resize-y leading-relaxed"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-neutral-950/80 border border-slate-300 dark:border-neutral-800 focus:border-[#0D5C46] dark:focus:border-emerald-500/80 focus:ring-1 focus:ring-[#0D5C46] dark:focus:ring-emerald-500/80 rounded-xl text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-neutral-600 outline-none transition-colors resize-y leading-relaxed"
                   />
                 </div>
 
@@ -437,9 +430,9 @@ export default function ContactPage({
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full sm:w-auto px-8 py-4 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 text-neutral-950 rounded-xl text-base font-bold transition-all shadow-[0_0_30px_rgba(16,185,129,0.3)] hover:shadow-[0_0_40px_rgba(16,185,129,0.5)] cursor-pointer flex items-center justify-center gap-2 group"
+                    className="w-full sm:w-auto px-8 py-4 bg-[#0D5C46] hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-400 disabled:opacity-50 text-white dark:text-neutral-950 rounded-xl text-base font-bold transition-all shadow-lg shadow-emerald-900/15 dark:shadow-[0_0_30px_rgba(16,185,129,0.3)] cursor-pointer flex items-center justify-center gap-2 group"
                   >
-                    <Send className="w-4 h-4 text-neutral-950 group-hover:translate-x-0.5 transition-transform" />
+                    <Send className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
                     <span>{isSubmitting ? 'Submitting...' : 'Send Message'}</span>
                   </button>
                 </div>
@@ -449,30 +442,30 @@ export default function ContactPage({
         </motion.div>
 
         {/* Other ways to reach us section */}
-        <div className="p-8 md:p-10 rounded-2xl bg-neutral-950 border border-neutral-900 shadow-xl space-y-6 text-left">
-          <div className="border-b border-neutral-900 pb-4">
-            <h2 className="text-xl font-bold text-white tracking-tight">
+        <div className="p-8 md:p-10 rounded-2xl bg-white dark:bg-neutral-950 border border-slate-200 dark:border-neutral-900 shadow-sm dark:shadow-xl space-y-6 text-left">
+          <div className="border-b border-slate-200 dark:border-neutral-900 pb-4">
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
               Other ways to reach us
             </h2>
-            <p className="text-xs text-neutral-400 font-mono mt-1">
+            <p className="text-xs text-slate-500 dark:text-neutral-400 font-mono mt-1">
               Direct communication channels & corporate headquarters
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Email link */}
-            <div className="p-5 rounded-xl bg-neutral-900/40 border border-neutral-850 space-y-2">
-              <div className="flex items-center gap-2 text-emerald-400">
+            <div className="p-5 rounded-xl bg-slate-50 dark:bg-neutral-900/40 border border-slate-200 dark:border-neutral-800 space-y-2">
+              <div className="flex items-center gap-2 text-[#0D5C46] dark:text-emerald-400">
                 <Mail className="w-4 h-4" />
                 <span className="text-xs font-mono font-bold uppercase tracking-wider">Direct Email</span>
               </div>
-              <p className="text-xs text-neutral-400 leading-relaxed">
+              <p className="text-xs text-slate-600 dark:text-neutral-400 leading-relaxed">
                 Send inquiries directly to our leadership team:
               </p>
               <div>
                 <a
                   href="mailto:rreifel@vizhin.co"
-                  className="text-sm font-semibold text-emerald-400 hover:text-emerald-300 hover:underline transition-colors break-all"
+                  className="text-sm font-semibold text-[#0D5C46] dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300 hover:underline transition-colors break-all"
                 >
                   rreifel@vizhin.co
                 </a>
@@ -480,16 +473,16 @@ export default function ContactPage({
             </div>
 
             {/* Base address & nationwide service */}
-            <div className="p-5 rounded-xl bg-neutral-900/40 border border-neutral-850 space-y-2">
-              <div className="flex items-center gap-2 text-emerald-400">
+            <div className="p-5 rounded-xl bg-slate-50 dark:bg-neutral-900/40 border border-slate-200 dark:border-neutral-800 space-y-2">
+              <div className="flex items-center gap-2 text-[#0D5C46] dark:text-emerald-400">
                 <MapPin className="w-4 h-4" />
                 <span className="text-xs font-mono font-bold uppercase tracking-wider">Base Location & Service Area</span>
               </div>
-              <p className="text-xs text-neutral-300 font-medium">
+              <p className="text-xs text-slate-800 dark:text-neutral-300 font-medium">
                 Vizhin LLC, 951 20th St #652, Denver, CO 80201
               </p>
-              <div className="flex items-start gap-1.5 pt-1 text-[11px] text-neutral-400">
-                <Globe className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+              <div className="flex items-start gap-1.5 pt-1 text-[11px] text-slate-600 dark:text-neutral-400">
+                <Globe className="w-3.5 h-3.5 text-[#0D5C46] dark:text-emerald-400 shrink-0 mt-0.5" />
                 <span>
                   Headquartered in Denver, Colorado. Vizhin serves growth-stage companies nationwide across the entire United States.
                 </span>
@@ -499,13 +492,13 @@ export default function ContactPage({
         </div>
 
         {/* Links back to the homepage and to the services pages */}
-        <div className="pt-8 border-t border-neutral-850/80 space-y-6">
+        <div className="pt-8 border-t border-slate-200 dark:border-neutral-800/80 space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h3 className="text-sm font-mono uppercase tracking-wider text-neutral-300 font-bold">
+              <h3 className="text-sm font-mono uppercase tracking-wider text-slate-800 dark:text-neutral-300 font-bold">
                 Advisory Services & Navigation
               </h3>
-              <p className="text-xs text-neutral-500 font-mono mt-0.5">
+              <p className="text-xs text-slate-500 dark:text-neutral-500 font-mono mt-0.5">
                 Explore our full suite of go-to-market solutions
               </p>
             </div>
@@ -515,7 +508,7 @@ export default function ContactPage({
                 e.preventDefault();
                 onNavigateHome();
               }}
-              className="text-xs font-mono text-emerald-400 hover:text-emerald-300 transition-colors inline-flex items-center gap-1 cursor-pointer font-bold"
+              className="text-xs font-mono text-[#0D5C46] dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300 transition-colors inline-flex items-center gap-1 cursor-pointer font-bold"
             >
               <span>Return to Homepage</span>
               <span>→</span>
@@ -531,12 +524,12 @@ export default function ContactPage({
                   onNavigateStrategicGtmAnalysis();
                 }
               }}
-              className="p-4 rounded-xl bg-neutral-900/40 hover:bg-neutral-900/80 border border-neutral-850 hover:border-emerald-600/60 transition-all block group"
+              className="p-4 rounded-xl bg-white dark:bg-neutral-900/40 hover:bg-slate-50 dark:hover:bg-neutral-900/80 border border-slate-200 dark:border-neutral-800 hover:border-[#0D5C46]/60 dark:hover:border-emerald-600/60 shadow-xs dark:shadow-none transition-all block group"
             >
-              <p className="text-xs font-bold text-white group-hover:text-emerald-300 transition-colors">
+              <p className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-[#0D5C46] dark:group-hover:text-emerald-300 transition-colors">
                 Strategic Go-to-Market Analysis
               </p>
-              <p className="text-[11px] text-neutral-400 mt-1 leading-snug">
+              <p className="text-[11px] text-slate-600 dark:text-neutral-400 mt-1 leading-snug">
                 Uncover hidden friction and realign pricing & buyer personas.
               </p>
             </a>
@@ -549,12 +542,12 @@ export default function ContactPage({
                   onNavigateGtmTech();
                 }
               }}
-              className="p-4 rounded-xl bg-neutral-900/40 hover:bg-neutral-900/80 border border-neutral-850 hover:border-emerald-600/60 transition-all block group"
+              className="p-4 rounded-xl bg-white dark:bg-neutral-900/40 hover:bg-slate-50 dark:hover:bg-neutral-900/80 border border-slate-200 dark:border-neutral-800 hover:border-[#0D5C46]/60 dark:hover:border-emerald-600/60 shadow-xs dark:shadow-none transition-all block group"
             >
-              <p className="text-xs font-bold text-white group-hover:text-emerald-300 transition-colors">
+              <p className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-[#0D5C46] dark:group-hover:text-emerald-300 transition-colors">
                 GTM Tech Stack Optimization
               </p>
-              <p className="text-[11px] text-neutral-400 mt-1 leading-snug">
+              <p className="text-[11px] text-slate-600 dark:text-neutral-400 mt-1 leading-snug">
                 Audit CRM, email, RevOps, and intelligence platforms.
               </p>
             </a>
@@ -567,12 +560,12 @@ export default function ContactPage({
                   onNavigateAuditCompliance();
                 }
               }}
-              className="p-4 rounded-xl bg-neutral-900/40 hover:bg-neutral-900/80 border border-neutral-850 hover:border-emerald-600/60 transition-all block group"
+              className="p-4 rounded-xl bg-white dark:bg-neutral-900/40 hover:bg-slate-50 dark:hover:bg-neutral-900/80 border border-slate-200 dark:border-neutral-800 hover:border-[#0D5C46]/60 dark:hover:border-emerald-600/60 shadow-xs dark:shadow-none transition-all block group"
             >
-              <p className="text-xs font-bold text-white group-hover:text-emerald-300 transition-colors">
+              <p className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-[#0D5C46] dark:group-hover:text-emerald-300 transition-colors">
                 Sales Governance & Audit
               </p>
-              <p className="text-[11px] text-neutral-400 mt-1 leading-snug">
+              <p className="text-[11px] text-slate-600 dark:text-neutral-400 mt-1 leading-snug">
                 Verify partner accountability, access, and audit trails.
               </p>
             </a>
@@ -585,12 +578,12 @@ export default function ContactPage({
                   onNavigateMarketingServices();
                 }
               }}
-              className="p-4 rounded-xl bg-neutral-900/40 hover:bg-neutral-900/80 border border-neutral-850 hover:border-emerald-600/60 transition-all block group"
+              className="p-4 rounded-xl bg-white dark:bg-neutral-900/40 hover:bg-slate-50 dark:hover:bg-neutral-900/80 border border-slate-200 dark:border-neutral-800 hover:border-[#0D5C46]/60 dark:hover:border-emerald-600/60 shadow-xs dark:shadow-none transition-all block group"
             >
-              <p className="text-xs font-bold text-white group-hover:text-emerald-300 transition-colors">
+              <p className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-[#0D5C46] dark:group-hover:text-emerald-300 transition-colors">
                 Sales-Marketing Integration
               </p>
-              <p className="text-[11px] text-neutral-400 mt-1 leading-snug">
+              <p className="text-[11px] text-slate-600 dark:text-neutral-400 mt-1 leading-snug">
                 Bridge marketing assets and campaigns directly to revenue.
               </p>
             </a>
@@ -603,12 +596,12 @@ export default function ContactPage({
                   onNavigateMarketingAnalysis();
                 }
               }}
-              className="p-4 rounded-xl bg-neutral-900/40 hover:bg-neutral-900/80 border border-neutral-850 hover:border-emerald-600/60 transition-all block group"
+              className="p-4 rounded-xl bg-white dark:bg-neutral-900/40 hover:bg-slate-50 dark:hover:bg-neutral-900/80 border border-slate-200 dark:border-neutral-800 hover:border-[#0D5C46]/60 dark:hover:border-emerald-600/60 shadow-xs dark:shadow-none transition-all block group"
             >
-              <p className="text-xs font-bold text-white group-hover:text-emerald-300 transition-colors">
+              <p className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-[#0D5C46] dark:group-hover:text-emerald-300 transition-colors">
                 Revenue Analytics & ROI
               </p>
-              <p className="text-[11px] text-neutral-400 mt-1 leading-snug">
+              <p className="text-[11px] text-slate-600 dark:text-neutral-400 mt-1 leading-snug">
                 Map first-click to closed-won conversion attribution.
               </p>
             </a>
@@ -621,12 +614,12 @@ export default function ContactPage({
                   onNavigateSalesTeamAccountability();
                 }
               }}
-              className="p-4 rounded-xl bg-neutral-900/40 hover:bg-neutral-900/80 border border-neutral-850 hover:border-emerald-600/60 transition-all block group"
+              className="p-4 rounded-xl bg-white dark:bg-neutral-900/40 hover:bg-slate-50 dark:hover:bg-neutral-900/80 border border-slate-200 dark:border-neutral-800 hover:border-[#0D5C46]/60 dark:hover:border-emerald-600/60 shadow-xs dark:shadow-none transition-all block group"
             >
-              <p className="text-xs font-bold text-white group-hover:text-emerald-300 transition-colors">
+              <p className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-[#0D5C46] dark:group-hover:text-emerald-300 transition-colors">
                 Sales Team Accountability
               </p>
-              <p className="text-[11px] text-neutral-400 mt-1 leading-snug">
+              <p className="text-[11px] text-slate-600 dark:text-neutral-400 mt-1 leading-snug">
                 Architect KPI scorecards and quota ramp accountability.
               </p>
             </a>
@@ -639,12 +632,12 @@ export default function ContactPage({
                   onNavigateSalesHiringStrategy();
                 }
               }}
-              className="p-4 rounded-xl bg-neutral-900/40 hover:bg-neutral-900/80 border border-neutral-850 hover:border-emerald-600/60 transition-all block group"
+              className="p-4 rounded-xl bg-white dark:bg-neutral-900/40 hover:bg-slate-50 dark:hover:bg-neutral-900/80 border border-slate-200 dark:border-neutral-800 hover:border-[#0D5C46]/60 dark:hover:border-emerald-600/60 shadow-xs dark:shadow-none transition-all block group"
             >
-              <p className="text-xs font-bold text-white group-hover:text-emerald-300 transition-colors">
+              <p className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-[#0D5C46] dark:group-hover:text-emerald-300 transition-colors">
                 Predictable Sales Hiring
               </p>
-              <p className="text-[11px] text-neutral-400 mt-1 leading-snug">
+              <p className="text-[11px] text-slate-600 dark:text-neutral-400 mt-1 leading-snug">
                 Candidate vetting scorecards and predictable sales ramp.
               </p>
             </a>
@@ -657,12 +650,12 @@ export default function ContactPage({
                   onNavigateTechnologyProjectManagement();
                 }
               }}
-              className="p-4 rounded-xl bg-neutral-900/40 hover:bg-neutral-900/80 border border-neutral-850 hover:border-emerald-600/60 transition-all block group"
+              className="p-4 rounded-xl bg-white dark:bg-neutral-900/40 hover:bg-slate-50 dark:hover:bg-neutral-900/80 border border-slate-200 dark:border-neutral-800 hover:border-[#0D5C46]/60 dark:hover:border-emerald-600/60 shadow-xs dark:shadow-none transition-all block group"
             >
-              <p className="text-xs font-bold text-white group-hover:text-emerald-300 transition-colors">
+              <p className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-[#0D5C46] dark:group-hover:text-emerald-300 transition-colors">
                 Technology Project Mgmt
               </p>
-              <p className="text-[11px] text-neutral-400 mt-1 leading-snug">
+              <p className="text-[11px] text-slate-600 dark:text-neutral-400 mt-1 leading-snug">
                 De-risk deployment roadmaps and align technical scope.
               </p>
             </a>
@@ -671,9 +664,9 @@ export default function ContactPage({
       </main>
 
       {/* Corporate Footer (Sitewide Standard) */}
-      <footer className="border-t border-neutral-900/80 bg-[#060607] py-8 px-6 text-center text-xs text-neutral-500 font-mono z-10" id="contact_footer">
+      <footer className="border-t border-slate-200 dark:border-neutral-900/80 bg-slate-100 dark:bg-[#060607] py-8 px-6 text-center text-xs text-slate-500 dark:text-neutral-500 font-mono z-10" id="contact_footer">
         <div className="max-w-7xl mx-auto flex items-center justify-center gap-2">
-          <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+          <ShieldCheck className="w-3.5 h-3.5 text-[#0D5C46] dark:text-emerald-400" />
           <span>VIZHIN LLC • SECURED GTM LEADERSHIP & WHITE-LABELED TECHNOLOGY SOLUTIONS</span>
         </div>
       </footer>

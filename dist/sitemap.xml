@@ -4,10 +4,10 @@
     <loc>https://www.vizhin.co/</loc>
   </url>
   <url>
-    <loc>https://www.vizhin.co/strategic-gtm-analysis</loc>
+    <loc>https://www.vizhin.co/org</loc>
   </url>
   <url>
-    <loc>https://www.vizhin.co/gtm</loc>
+    <loc>https://www.vizhin.co/strategic-gtm-analysis</loc>
   </url>
   <url>
     <loc>https://www.vizhin.co/gtm-tech</loc>
@@ -29,5 +29,8 @@
   </url>
   <url>
     <loc>https://www.vizhin.co/technology-project-management</loc>
+  </url>
+  <url>
+    <loc>https://www.vizhin.co/contact</loc>
   </url>
 </urlset>

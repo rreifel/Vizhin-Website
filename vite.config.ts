@@ -61,7 +61,20 @@ function devServerHtmlPlugin(): Plugin {
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
         const url = req.url ? req.url.split('?')[0] : '';
-        if (url === '/' || url === '/index.html') {
+        const isGetOrHead = !req.method || req.method === 'GET' || req.method === 'HEAD';
+        const isInternalOrAsset =
+          url.startsWith('/@') ||
+          url.startsWith('/src/') ||
+          url.startsWith('/node_modules/') ||
+          url.startsWith('/assets/') ||
+          url.startsWith('/public/') ||
+          url.startsWith('/api/') ||
+          url === '/index.dev.html' ||
+          url === '/sitemap.xml' ||
+          url === '/robots.txt' ||
+          /\.[a-zA-Z0-9]+$/.test(url);
+
+        if (isGetOrHead && (url === '/' || url === '/index.html' || !isInternalOrAsset)) {
           const devPath = path.resolve(__dirname, 'index.dev.html');
           if (fs.existsSync(devPath)) {
             req.url = '/index.dev.html';

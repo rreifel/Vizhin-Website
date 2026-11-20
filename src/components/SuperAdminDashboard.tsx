@@ -237,67 +237,67 @@ export default function SuperAdminDashboard({
     <div className="space-y-8" id="super_admin_view">
       
       {/* Title block */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-neutral-800 pb-5" id="sa_title_card">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 dark:border-neutral-800 pb-5" id="sa_title_card">
         <div>
-          <span className="text-[10px] uppercase font-mono font-bold tracking-widest text-red-400 bg-red-950/50 border border-red-900/60 px-2 py-0.5 rounded-full inline-flex items-center gap-1.5 mb-2">
+          <span className="text-[10px] uppercase font-mono font-bold tracking-widest text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-900/60 px-2 py-0.5 rounded-full inline-flex items-center gap-1.5 mb-2">
             <Shield className="w-3 h-3" /> System Root Tier (God Mode)
           </span>
-          <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
             Welcome back, {currentUser.name}
           </h1>
-          <p className="text-xs text-neutral-400 mt-1">
+          <p className="text-xs text-slate-500 dark:text-neutral-400 mt-1">
             Global management over all instances of partners, customer logos, security logging, and sub-admin registrations.
           </p>
         </div>
-        <div className="flex items-center gap-2 text-xs font-mono text-neutral-400 bg-neutral-900 p-3 rounded-lg border border-neutral-800" id="session_metrics">
-          <Activity className="w-4 h-4 text-emerald-400 animate-pulse" />
-          <span>Active Connections: <strong>{partners.length + customers.length} Nodes</strong></span>
+        <div className="flex items-center gap-2 text-xs font-mono text-slate-600 dark:text-neutral-400 bg-white dark:bg-neutral-900 p-3 rounded-lg border border-slate-200 dark:border-neutral-800 shadow-xs dark:shadow-none" id="session_metrics">
+          <Activity className="w-4 h-4 text-emerald-600 dark:text-emerald-400 animate-pulse" />
+          <span>Active Connections: <strong className="text-slate-900 dark:text-white">{partners.length + customers.length} Nodes</strong></span>
         </div>
       </div>
 
       {/* Stats Bento Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4" id="sa_bento_grid">
-        <div className="bg-neutral-905 p-5 rounded-xl border border-neutral-800 flex flex-col justify-between" id="bento_stat_1">
-          <span className="text-xs text-neutral-500 font-mono">CORE PARTNERS</span>
+        <div className="bg-white dark:bg-neutral-950 p-5 rounded-xl border border-slate-200 dark:border-neutral-800 flex flex-col justify-between shadow-xs dark:shadow-none" id="bento_stat_1">
+          <span className="text-xs text-slate-500 dark:text-neutral-500 font-mono">CORE PARTNERS</span>
           <div>
-            <h3 className="text-3xl font-bold text-white mt-1">{partners.length}</h3>
-            <p className="text-[10px] text-neutral-400 mt-1 flex items-center gap-1">
+            <h3 className="text-3xl font-bold text-slate-900 dark:text-white mt-1">{partners.length}</h3>
+            <p className="text-[10px] text-slate-500 dark:text-neutral-400 mt-1 flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-blue-500" /> Isolated reseller groups
             </p>
           </div>
         </div>
 
-        <div className="bg-neutral-905 p-5 rounded-xl border border-neutral-800 flex flex-col justify-between" id="bento_stat_2">
-          <span className="text-xs text-neutral-500 font-mono">TOTAL CUSTOMERS</span>
+        <div className="bg-white dark:bg-neutral-950 p-5 rounded-xl border border-slate-200 dark:border-neutral-800 flex flex-col justify-between shadow-xs dark:shadow-none" id="bento_stat_2">
+          <span className="text-xs text-slate-500 dark:text-neutral-500 font-mono">TOTAL CUSTOMERS</span>
           <div>
-            <h3 className="text-3xl font-bold text-white mt-1">{customers.length}</h3>
-            <p className="text-[10px] text-neutral-400 mt-1 flex items-center gap-1">
+            <h3 className="text-3xl font-bold text-slate-900 dark:text-white mt-1">{customers.length}</h3>
+            <p className="text-[10px] text-slate-500 dark:text-neutral-400 mt-1 flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Including white-labeled instances
             </p>
           </div>
         </div>
 
-        <div className="bg-neutral-905 p-5 rounded-xl border border-neutral-800 flex flex-col justify-between" id="bento_stat_3">
-          <span className="text-xs text-neutral-500 font-mono">DELEGATED ADMINS</span>
+        <div className="bg-white dark:bg-neutral-950 p-5 rounded-xl border border-slate-200 dark:border-neutral-800 flex flex-col justify-between shadow-xs dark:shadow-none" id="bento_stat_3">
+          <span className="text-xs text-slate-500 dark:text-neutral-500 font-mono">DELEGATED ADMINS</span>
           <div>
-            <h3 className="text-3xl font-bold text-white mt-1">
+            <h3 className="text-3xl font-bold text-slate-900 dark:text-white mt-1">
               {users.filter(u => u.role !== 'SUPER_ADMIN').length}
             </h3>
-            <p className="text-[10px] text-neutral-400 mt-1 flex items-center gap-1">
+            <p className="text-[10px] text-slate-500 dark:text-neutral-400 mt-1 flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Multi-admins enabled
             </p>
           </div>
         </div>
 
-        <div className="bg-neutral-905 p-5 rounded-xl border border-neutral-800 flex flex-col justify-between bg-gradient-to-br from-neutral-900 via-neutral-900 to-emerald-950/20" id="bento_stat_4">
-          <span className="text-xs text-neutral-400 font-mono uppercase font-bold text-emerald-400 flex items-center gap-1">
+        <div className="bg-gradient-to-br from-white via-white to-emerald-50 dark:from-neutral-900 dark:via-neutral-900 dark:to-emerald-950/20 p-5 rounded-xl border border-slate-200 dark:border-neutral-800 flex flex-col justify-between shadow-xs dark:shadow-none" id="bento_stat_4">
+          <span className="text-xs font-mono uppercase font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-1">
             <Sparkles className="w-3.5 h-3.5" /> SUPABASE LINK STATUS
           </span>
           <div>
-            <h3 className="text-base font-bold text-emerald-400 mt-1 flex items-center gap-1">
+            <h3 className="text-base font-bold text-emerald-700 dark:text-emerald-400 mt-1 flex items-center gap-1">
               <Check className="w-4 h-4" /> Ready to sync
             </h3>
-            <p className="text-[10px] text-neutral-400 mt-1">
+            <p className="text-[10px] text-slate-500 dark:text-neutral-400 mt-1">
               View integration code below.
             </p>
           </div>
@@ -305,7 +305,7 @@ export default function SuperAdminDashboard({
       </div>
 
       {/* Tabs navigation */}
-      <div className="flex border-b border-neutral-800 gap-1 overflow-x-auto" id="sa_tabs_container">
+      <div className="flex border-b border-slate-200 dark:border-neutral-800 gap-1 overflow-x-auto" id="sa_tabs_container">
         {[
           { id: 'partners', label: 'Partners Directory', icon: Building2 },
           { id: 'customers', label: 'Customer Portals', icon: Globe },
@@ -319,8 +319,8 @@ export default function SuperAdminDashboard({
               onClick={() => setActiveTab(tab.id as any)}
               className={`flex items-center gap-2 px-4 py-2.5 text-xs font-semibold rounded-t-lg transition-all border-b-2 whitespace-nowrap cursor-pointer ${
                 activeTab === tab.id
-                  ? 'bg-neutral-900 text-white border-emerald-500'
-                  : 'text-neutral-450 hover:text-white border-transparent hover:bg-neutral-900/50'
+                  ? 'bg-white dark:bg-neutral-900 text-slate-900 dark:text-white border-emerald-600 dark:border-emerald-500'
+                  : 'text-slate-500 dark:text-neutral-400 hover:text-slate-900 dark:hover:text-white border-transparent hover:bg-slate-100/70 dark:hover:bg-neutral-900/50'
               }`}
             >
               <Icon className="w-4 h-4 shrink-0" />
@@ -334,18 +334,18 @@ export default function SuperAdminDashboard({
       {activeTab === 'partners' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6" id="sa_tab_partners">
           <div className="lg:col-span-2 space-y-4">
-            <div className="bg-neutral-950 rounded-xl border border-neutral-800 overflow-hidden">
-              <div className="p-4 border-b border-neutral-850 bg-neutral-900/40">
-                <h3 className="text-sm font-semibold text-white">Registered Reselling Partners</h3>
+            <div className="bg-white dark:bg-neutral-950 rounded-xl border border-slate-200 dark:border-neutral-800 overflow-hidden shadow-xs dark:shadow-none">
+              <div className="p-4 border-b border-slate-200 dark:border-neutral-800 bg-slate-50 dark:bg-neutral-900/40">
+                <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Registered Reselling Partners</h3>
               </div>
-              <div className="divide-y divide-neutral-850">
+              <div className="divide-y divide-slate-200 dark:divide-neutral-800">
                 {partners.map(p => (
-                  <div key={p.id} className="p-4 flex items-center justify-between hover:bg-neutral-900/30 transition-colors">
+                  <div key={p.id} className="p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-neutral-900/30 transition-colors">
                     <div className="flex items-center gap-3">
-                      <img src={p.logoUrl} alt={p.name} className="w-10 h-10 rounded-lg object-cover bg-neutral-800 border border-neutral-700" referrerPolicy="no-referrer" />
+                      <img src={p.logoUrl} alt={p.name} className="w-10 h-10 rounded-lg object-cover bg-slate-100 dark:bg-neutral-800 border border-slate-200 dark:border-neutral-700" referrerPolicy="no-referrer" />
                       <div>
-                        <h4 className="font-semibold text-sm text-neutral-200">{p.name}</h4>
-                        <div className="flex items-center gap-2 mt-1 text-xs text-neutral-550 font-mono">
+                        <h4 className="font-semibold text-sm text-slate-900 dark:text-neutral-200">{p.name}</h4>
+                        <div className="flex items-center gap-2 mt-1 text-xs text-slate-500 dark:text-neutral-500 font-mono">
                           <span className="flex items-center gap-1"><Globe className="w-3.5 h-3.5" /> {p.domain || 'no domain'}</span>
                           <span>•</span>
                           <span>{countAdmins(p.id, 'partner')} Admin accounts</span>
@@ -355,7 +355,7 @@ export default function SuperAdminDashboard({
                     {/* Visual Badge showing primary colors of partners */}
                     <div className="flex items-center gap-3">
                       <div className="text-right">
-                        <span className="text-[10px] font-mono text-neutral-500 block">Accent Accent</span>
+                        <span className="text-[10px] font-mono text-slate-500 dark:text-neutral-500 block">Accent Accent</span>
                         <div className="inline-flex items-center gap-1 text-[11px] font-mono" style={{ color: p.accentColor }}>
                           <span className="w-2.5 h-2.5 rounded-full inline-block" style={{ backgroundColor: p.accentColor }} />
                           {p.accentColor}
@@ -369,64 +369,64 @@ export default function SuperAdminDashboard({
           </div>
 
           {/* Quick Creator */}
-          <div className="bg-neutral-900/25 border border-neutral-800 rounded-xl p-5 space-y-4">
-            <h3 className="text-sm font-bold text-white flex items-center gap-1.5">
-              <Plus className="w-4 h-4 text-emerald-400" /> Setup New Reselling Partner
+          <div className="bg-white dark:bg-neutral-900/25 border border-slate-200 dark:border-neutral-800 rounded-xl p-5 space-y-4 shadow-xs dark:shadow-none h-fit">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+              <Plus className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> Setup New Reselling Partner
             </h3>
             
             {pMsg && (
-              <div className="p-2 bg-emerald-950/40 border border-emerald-900 text-emerald-400 rounded text-xs">
+              <div className="p-2 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900 text-emerald-700 dark:text-emerald-400 rounded text-xs">
                 {pMsg}
               </div>
             )}
 
             <form onSubmit={handleCreatePartner} className="space-y-4 text-xs">
               <div className="space-y-1">
-                <label className="block text-neutral-450 uppercase font-semibold tracking-wider text-[10px]">Company Name</label>
+                <label className="block text-slate-600 dark:text-neutral-400 uppercase font-semibold tracking-wider text-[10px]">Company Name</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Acuity Group"
-                  className="w-full bg-neutral-950 border border-neutral-800 rounded px-3 py-2 text-neutral-200 placeholder-neutral-700 focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 rounded px-3 py-2 text-slate-900 dark:text-neutral-200 placeholder-slate-400 dark:placeholder-neutral-700 focus:outline-none focus:border-emerald-500"
                   value={pName}
                   onChange={(e) => setPName(e.target.value)}
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="block text-neutral-450 uppercase font-semibold tracking-wider text-[10px]">Branded domain</label>
+                <label className="block text-slate-600 dark:text-neutral-400 uppercase font-semibold tracking-wider text-[10px]">Branded domain</label>
                 <input
                   type="text"
                   placeholder="e.g. acuity.io"
-                  className="w-full bg-neutral-950 border border-neutral-800 rounded px-3 py-2 text-neutral-200 placeholder-neutral-700 focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 rounded px-3 py-2 text-slate-900 dark:text-neutral-200 placeholder-slate-400 dark:placeholder-neutral-700 focus:outline-none focus:border-emerald-500"
                   value={pDomain}
                   onChange={(e) => setPDomain(e.target.value)}
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="block text-neutral-450 uppercase font-semibold tracking-wider text-[10px]">Logo URL Address</label>
+                <label className="block text-slate-600 dark:text-neutral-400 uppercase font-semibold tracking-wider text-[10px]">Logo URL Address</label>
                 <input
                   type="url"
                   placeholder="https://images.unsplash.com/..."
-                  className="w-full bg-neutral-950 border border-neutral-800 rounded px-3 py-2 text-neutral-250 placeholder-neutral-750 focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 rounded px-3 py-2 text-slate-900 dark:text-neutral-200 placeholder-slate-400 dark:placeholder-neutral-700 focus:outline-none focus:border-emerald-500"
                   value={pLogo}
                   onChange={(e) => setPLogo(e.target.value)}
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="block text-neutral-450 uppercase font-semibold tracking-wider text-[10px]">Brand Accent Color</label>
+                <label className="block text-slate-600 dark:text-neutral-400 uppercase font-semibold tracking-wider text-[10px]">Brand Accent Color</label>
                 <div className="flex gap-2">
                   <input
                     type="color"
-                    className="w-10 h-8 bg-neutral-950 border border-neutral-800 rounded cursor-pointer"
+                    className="w-10 h-8 bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 rounded cursor-pointer"
                     value={pColor}
                     onChange={(e) => setPColor(e.target.value)}
                   />
                   <input
                     type="text"
-                    className="flex-1 bg-neutral-950 border border-neutral-800 rounded px-3 py-1.5 font-mono text-neutral-200 focus:outline-none focus:border-emerald-500"
+                    className="flex-1 bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 rounded px-3 py-1.5 font-mono text-slate-900 dark:text-neutral-200 focus:outline-none focus:border-emerald-500"
                     value={pColor}
                     onChange={(e) => setPColor(e.target.value)}
                   />
@@ -435,7 +435,7 @@ export default function SuperAdminDashboard({
 
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white font-semibold py-2 rounded transition-colors cursor-pointer block mt-2 shadow-md shadow-emerald-950/40 border border-emerald-500/30"
+                className="w-full bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white font-semibold py-2 rounded transition-colors cursor-pointer block mt-2 shadow-md shadow-emerald-900/15 dark:shadow-emerald-950/40 border border-emerald-500/30"
               >
                 Assemble Partner Framework
               </button>
@@ -448,25 +448,25 @@ export default function SuperAdminDashboard({
       {activeTab === 'customers' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6" id="sa_tab_customers">
           <div className="lg:col-span-2 space-y-4">
-            <div className="bg-neutral-950 rounded-xl border border-neutral-800 overflow-hidden">
-              <div className="p-4 border-b border-neutral-850 bg-neutral-900/40">
-                <h3 className="text-sm font-semibold text-white">Active Customer Organizations</h3>
+            <div className="bg-white dark:bg-neutral-950 rounded-xl border border-slate-200 dark:border-neutral-800 overflow-hidden shadow-xs dark:shadow-none">
+              <div className="p-4 border-b border-slate-200 dark:border-neutral-800 bg-slate-50 dark:bg-neutral-900/40">
+                <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Active Customer Organizations</h3>
               </div>
-              <div className="divide-y divide-neutral-850">
+              <div className="divide-y divide-slate-200 dark:divide-neutral-800">
                 {customers.map(c => {
                   const parentPartner = partners.find(p => p.id === c.partnerId);
                   return (
-                    <div key={c.id} className="p-4 flex items-center justify-between hover:bg-neutral-900/30 transition-colors">
+                    <div key={c.id} className="p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-neutral-900/30 transition-colors">
                       <div className="flex items-center gap-3">
-                        <img src={c.logoUrl} alt={c.name} className="w-10 h-10 rounded-lg object-cover bg-neutral-800 border border-neutral-700" referrerPolicy="no-referrer" />
+                        <img src={c.logoUrl} alt={c.name} className="w-10 h-10 rounded-lg object-cover bg-slate-100 dark:bg-neutral-800 border border-slate-200 dark:border-neutral-700" referrerPolicy="no-referrer" />
                         <div>
-                          <h4 className="font-semibold text-sm text-neutral-200">{c.name}</h4>
-                          <div className="flex items-center gap-2 mt-1 text-xs text-neutral-550 font-mono">
+                          <h4 className="font-semibold text-sm text-slate-900 dark:text-neutral-200">{c.name}</h4>
+                          <div className="flex items-center gap-2 mt-1 text-xs text-slate-500 dark:text-neutral-500 font-mono">
                             <span className="flex items-center gap-1">
                               Owner: {parentPartner ? (
-                                <strong className="text-emerald-400">{parentPartner.name}</strong>
+                                <strong className="text-emerald-700 dark:text-emerald-400">{parentPartner.name}</strong>
                               ) : (
-                                <strong className="text-neutral-400">Direct Retail Account</strong>
+                                <strong className="text-slate-600 dark:text-neutral-400">Direct Retail Account</strong>
                               )}
                             </span>
                             <span>•</span>
@@ -476,7 +476,7 @@ export default function SuperAdminDashboard({
                       </div>
                       <div className="flex items-center gap-2 text-xs">
                         {parentPartner && (
-                          <span className="text-[9px] px-2 py-0.5 rounded-full border bg-neutral-900 text-neutral-400 border-neutral-850">
+                          <span className="text-[9px] px-2 py-0.5 rounded-full border bg-slate-100 dark:bg-neutral-900 text-slate-600 dark:text-neutral-400 border-slate-200 dark:border-neutral-800">
                             Partner Co-Branded
                           </span>
                         )}
@@ -490,34 +490,34 @@ export default function SuperAdminDashboard({
           </div>
 
           {/* Quick Creator */}
-          <div className="bg-neutral-900/25 border border-neutral-800 rounded-xl p-5 space-y-4">
-            <h3 className="text-sm font-bold text-white flex items-center gap-1.5">
-              <Plus className="w-4 h-4 text-blue-400" /> Register Customer Portal
+          <div className="bg-white dark:bg-neutral-900/25 border border-slate-200 dark:border-neutral-800 rounded-xl p-5 space-y-4 shadow-xs dark:shadow-none h-fit">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+              <Plus className="w-4 h-4 text-blue-600 dark:text-blue-400" /> Register Customer Portal
             </h3>
             
             {cMsg && (
-              <div className="p-2 bg-emerald-950/40 border border-emerald-900 text-emerald-400 rounded text-xs">
+              <div className="p-2 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900 text-emerald-700 dark:text-emerald-400 rounded text-xs">
                 {cMsg}
               </div>
             )}
 
             <form onSubmit={handleCreateCustomer} className="space-y-4 text-xs">
               <div className="space-y-1">
-                <label className="block text-neutral-450 uppercase font-semibold tracking-wider text-[10px]">Customer Brand Name</label>
+                <label className="block text-slate-600 dark:text-neutral-400 uppercase font-semibold tracking-wider text-[10px]">Customer Brand Name</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Zenith Analytics"
-                  className="w-full bg-neutral-950 border border-neutral-800 rounded px-3 py-2 text-neutral-200 placeholder-neutral-700 focus:outline-none focus:border-blue-500"
+                  className="w-full bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 rounded px-3 py-2 text-slate-900 dark:text-neutral-200 placeholder-slate-400 dark:placeholder-neutral-700 focus:outline-none focus:border-blue-500"
                   value={cName}
                   onChange={(e) => setCName(e.target.value)}
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="block text-neutral-450 uppercase font-semibold tracking-wider text-[10px]">Delegate Parent Partner</label>
+                <label className="block text-slate-600 dark:text-neutral-400 uppercase font-semibold tracking-wider text-[10px]">Delegate Parent Partner</label>
                 <select
-                  className="w-full bg-neutral-950 border border-neutral-800 rounded px-3 py-2 text-neutral-400 focus:outline-none focus:border-blue-500 cursor-pointer"
+                  className="w-full bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 rounded px-3 py-2 text-slate-700 dark:text-neutral-400 focus:outline-none focus:border-blue-500 cursor-pointer"
                   value={cPartner}
                   onChange={(e) => setCPartner(e.target.value)}
                 >
@@ -529,28 +529,28 @@ export default function SuperAdminDashboard({
               </div>
 
               <div className="space-y-1">
-                <label className="block text-neutral-450 uppercase font-semibold tracking-wider text-[10px]">Custome Logo Url</label>
+                <label className="block text-slate-600 dark:text-neutral-400 uppercase font-semibold tracking-wider text-[10px]">Custome Logo Url</label>
                 <input
                   type="url"
                   placeholder="https://images.unsplash.com/..."
-                  className="w-full bg-neutral-950 border border-neutral-800 rounded px-3 py-2 text-neutral-250 placeholder-neutral-750 focus:outline-none focus:border-blue-500"
+                  className="w-full bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 rounded px-3 py-2 text-slate-900 dark:text-neutral-200 placeholder-slate-400 dark:placeholder-neutral-700 focus:outline-none focus:border-blue-500"
                   value={cLogo}
                   onChange={(e) => setCLogo(e.target.value)}
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="block text-neutral-450 uppercase font-semibold tracking-wider text-[10px]">Identity Accent Color</label>
+                <label className="block text-slate-600 dark:text-neutral-400 uppercase font-semibold tracking-wider text-[10px]">Identity Accent Color</label>
                 <div className="flex gap-2">
                   <input
                     type="color"
-                    className="w-10 h-8 bg-neutral-950 border border-neutral-800 rounded cursor-pointer"
+                    className="w-10 h-8 bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 rounded cursor-pointer"
                     value={cColor}
                     onChange={(e) => setCColor(e.target.value)}
                   />
                   <input
                     type="text"
-                    className="flex-1 bg-neutral-950 border border-neutral-800 rounded px-3 py-1.5 font-mono text-neutral-200 focus:outline-none focus:border-blue-500"
+                    className="flex-1 bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 rounded px-3 py-1.5 font-mono text-slate-900 dark:text-neutral-200 focus:outline-none focus:border-blue-500"
                     value={cColor}
                     onChange={(e) => setCColor(e.target.value)}
                   />
@@ -572,35 +572,35 @@ export default function SuperAdminDashboard({
       {activeTab === 'admins' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6" id="sa_tab_admins">
           <div className="lg:col-span-2 space-y-4">
-            <div className="bg-neutral-950 rounded-xl border border-neutral-800 overflow-hidden">
-              <div className="p-4 border-b border-neutral-850 bg-neutral-900/40 flex justify-between items-center">
-                <h3 className="text-sm font-semibold text-white">Delegated Profile Credentials (Supabase Profiles)</h3>
-                <span className="text-xs text-neutral-500 font-mono">Allows More Than One Administrator Per Account</span>
+            <div className="bg-white dark:bg-neutral-950 rounded-xl border border-slate-200 dark:border-neutral-800 overflow-hidden shadow-xs dark:shadow-none">
+              <div className="p-4 border-b border-slate-200 dark:border-neutral-800 bg-slate-50 dark:bg-neutral-900/40 flex justify-between items-center flex-wrap gap-2">
+                <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Delegated Profile Credentials (Supabase Profiles)</h3>
+                <span className="text-xs text-slate-500 dark:text-neutral-500 font-mono">Allows More Than One Administrator Per Account</span>
               </div>
-              <div className="divide-y divide-neutral-850">
+              <div className="divide-y divide-slate-200 dark:divide-neutral-800">
                 {users.map(u => {
                   const partner = partners.find(p => p.id === u.partnerId);
                   const cust = customers.find(c => c.id === u.customerId);
                   return (
-                    <div key={u.id} className="p-4 flex items-center justify-between hover:bg-neutral-900/30 transition-colors">
+                    <div key={u.id} className="p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-neutral-900/30 transition-colors">
                       <div className="flex items-center gap-3">
-                        <img src={u.avatarUrl || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=60&h=60&fit=crop'} alt="" className="w-9 h-9 rounded-full object-cover bg-neutral-800 border border-neutral-700" referrerPolicy="no-referrer" />
+                        <img src={u.avatarUrl || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=60&h=60&fit=crop'} alt="" className="w-9 h-9 rounded-full object-cover bg-slate-100 dark:bg-neutral-800 border border-slate-200 dark:border-neutral-700" referrerPolicy="no-referrer" />
                         <div>
                           <div className="flex items-center gap-2">
-                            <h4 className="font-semibold text-sm text-neutral-200">{u.name}</h4>
+                            <h4 className="font-semibold text-sm text-slate-900 dark:text-neutral-200">{u.name}</h4>
                             <span className={`text-[9px] px-1.5 py-0.5 rounded uppercase font-mono font-medium ${
-                              u.role === 'SUPER_ADMIN' ? 'bg-red-950 text-red-400 border border-red-900' :
-                              u.role === 'PARTNER_ADMIN' ? 'bg-emerald-950 text-emerald-400 border border-emerald-900' :
-                              'bg-teal-950 text-teal-300 border border-teal-900'
+                              u.role === 'SUPER_ADMIN' ? 'bg-red-50 dark:bg-red-950 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-900' :
+                              u.role === 'PARTNER_ADMIN' ? 'bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900' :
+                              'bg-teal-50 dark:bg-teal-950 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-900'
                             }`}>
                               {u.role.replace('_', ' ')}
                             </span>
                           </div>
-                          <div className="text-xs text-neutral-500 mt-0.5">
+                          <div className="text-xs text-slate-500 dark:text-neutral-500 mt-0.5">
                             {u.email} • Assigned to:{' '}
-                            {u.role === 'SUPER_ADMIN' && <strong className="text-red-400">Everything (Tenant Owner)</strong>}
-                            {u.role === 'PARTNER_ADMIN' && partner && <span className="text-emerald-400 font-semibold">{partner.name}</span>}
-                            {u.role === 'CUSTOMER_ADMIN' && cust && <span className="text-teal-300 font-semibold">{cust.name}</span>}
+                            {u.role === 'SUPER_ADMIN' && <strong className="text-red-700 dark:text-red-400">Everything (Tenant Owner)</strong>}
+                            {u.role === 'PARTNER_ADMIN' && partner && <span className="text-emerald-700 dark:text-emerald-400 font-semibold">{partner.name}</span>}
+                            {u.role === 'CUSTOMER_ADMIN' && cust && <span className="text-teal-700 dark:text-teal-300 font-semibold">{cust.name}</span>}
                           </div>
                         </div>
                       </div>
@@ -609,13 +609,13 @@ export default function SuperAdminDashboard({
                       {u.id !== 'user_super' ? (
                         <button
                           onClick={() => deleteUser(u.id, u.name)}
-                          className="p-1.5 rounded bg-neutral-950 hover:bg-red-950/40 text-neutral-600 hover:text-red-400 border border-neutral-800 hover:border-red-900 transition-all cursor-pointer"
+                          className="p-1.5 rounded bg-slate-100 dark:bg-neutral-950 hover:bg-red-50 dark:hover:bg-red-950/40 text-slate-500 dark:text-neutral-600 hover:text-red-600 dark:hover:text-red-400 border border-slate-200 dark:border-neutral-800 hover:border-red-200 dark:hover:border-red-900 transition-all cursor-pointer"
                           title="Revoke Admin permissions"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
                       ) : (
-                        <span className="text-[10px] uppercase font-mono text-neutral-600 tracking-wider">Unrevokable</span>
+                        <span className="text-[10px] uppercase font-mono text-slate-400 dark:text-neutral-600 tracking-wider">Unrevokable</span>
                       )}
                     </div>
                   );
@@ -625,17 +625,17 @@ export default function SuperAdminDashboard({
           </div>
 
           {/* User Creator Form */}
-          <div className="bg-neutral-900/25 border border-neutral-800 rounded-xl p-5 space-y-4">
-            <div className="flex items-center justify-between border-b border-neutral-850 pb-2">
-              <h3 className="text-sm font-bold text-white flex items-center gap-1.5">
-                <Plus className="w-4 h-4 text-emerald-400" /> Delegate Credentials
+          <div className="bg-white dark:bg-neutral-900/25 border border-slate-200 dark:border-neutral-800 rounded-xl p-5 space-y-4 shadow-xs dark:shadow-none h-fit">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-neutral-800 pb-2">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                <Plus className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> Delegate Credentials
               </h3>
-              <div className="flex bg-neutral-950 p-0.5 rounded-lg border border-neutral-800">
+              <div className="flex bg-slate-100 dark:bg-neutral-950 p-0.5 rounded-lg border border-slate-200 dark:border-neutral-800">
                 <button
                   type="button"
                   onClick={() => setDelegationMode('single')}
                   className={`px-2.5 py-1 text-[10px] font-semibold rounded-md transition-all cursor-pointer ${
-                    delegationMode === 'single' ? 'bg-neutral-800 text-white' : 'text-neutral-500 hover:text-neutral-300'
+                    delegationMode === 'single' ? 'bg-white dark:bg-neutral-800 text-slate-900 dark:text-white shadow-xs dark:shadow-none' : 'text-slate-500 dark:text-neutral-500 hover:text-slate-800 dark:hover:text-neutral-300'
                   }`}
                 >
                   Single Profile
@@ -644,7 +644,7 @@ export default function SuperAdminDashboard({
                   type="button"
                   onClick={() => setDelegationMode('bulk')}
                   className={`px-2.5 py-1 text-[10px] font-semibold rounded-md transition-all cursor-pointer ${
-                    delegationMode === 'bulk' ? 'bg-neutral-800 text-white' : 'text-neutral-500 hover:text-neutral-300'
+                    delegationMode === 'bulk' ? 'bg-white dark:bg-neutral-800 text-slate-900 dark:text-white shadow-xs dark:shadow-none' : 'text-slate-500 dark:text-neutral-500 hover:text-slate-800 dark:hover:text-neutral-300'
                   }`}
                 >
                   Bulk CSV Import
@@ -653,7 +653,7 @@ export default function SuperAdminDashboard({
             </div>
             
             {uMsg && (
-              <div className="p-2.5 bg-neutral-950/80 border border-neutral-800 text-emerald-400 rounded text-xs leading-relaxed text-center font-medium">
+              <div className="p-2.5 bg-emerald-50 dark:bg-neutral-950/80 border border-emerald-200 dark:border-neutral-800 text-emerald-700 dark:text-emerald-400 rounded text-xs leading-relaxed text-center font-medium">
                 {uMsg}
               </div>
             )}
@@ -661,33 +661,33 @@ export default function SuperAdminDashboard({
             {delegationMode === 'single' ? (
               <form onSubmit={handleCreateUser} className="space-y-4 text-xs">
                 <div className="space-y-1">
-                  <label className="block text-neutral-450 uppercase font-semibold tracking-wider text-[10px]">User Full Name</label>
+                  <label className="block text-slate-600 dark:text-neutral-400 uppercase font-semibold tracking-wider text-[10px]">User Full Name</label>
                   <input
                     type="text"
                     required
                     placeholder="e.g. Richard Reifel Co-Admin"
-                    className="w-full bg-neutral-950 border border-neutral-800 rounded px-3 py-2 text-neutral-200 placeholder-neutral-700 focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 rounded px-3 py-2 text-slate-900 dark:text-neutral-200 placeholder-slate-400 dark:placeholder-neutral-700 focus:outline-none focus:border-emerald-500"
                     value={uName}
                     onChange={(e) => setUName(e.target.value)}
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <label className="block text-neutral-450 uppercase font-semibold tracking-wider text-[10px]">Email Address</label>
+                  <label className="block text-slate-600 dark:text-neutral-400 uppercase font-semibold tracking-wider text-[10px]">Email Address</label>
                   <input
                     type="email"
                     required
                     placeholder="e.g. admin@partner.co"
-                    className="w-full bg-neutral-950 border border-neutral-800 rounded px-3 py-2 text-neutral-200 placeholder-neutral-700 focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 rounded px-3 py-2 text-slate-900 dark:text-neutral-200 placeholder-slate-400 dark:placeholder-neutral-700 focus:outline-none focus:border-emerald-500"
                     value={uEmail}
                     onChange={(e) => setUEmail(e.target.value)}
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <label className="block text-neutral-450 uppercase font-semibold tracking-wider text-[10px]">Role Designation Tiers</label>
+                  <label className="block text-slate-600 dark:text-neutral-400 uppercase font-semibold tracking-wider text-[10px]">Role Designation Tiers</label>
                   <select
-                    className="w-full bg-neutral-950 border border-neutral-800 rounded px-3 py-2 text-neutral-400 focus:outline-none focus:border-emerald-500 cursor-pointer"
+                    className="w-full bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 rounded px-3 py-2 text-slate-700 dark:text-neutral-400 focus:outline-none focus:border-emerald-500 cursor-pointer"
                     value={uRole}
                     onChange={(e) => setURole(e.target.value as any)}
                   >
@@ -699,10 +699,10 @@ export default function SuperAdminDashboard({
 
                 {uRole === 'PARTNER_ADMIN' && (
                   <div className="space-y-1">
-                    <label className="block text-neutral-450 uppercase font-semibold tracking-wider text-[10px]">Select Partner Scope</label>
+                    <label className="block text-slate-600 dark:text-neutral-400 uppercase font-semibold tracking-wider text-[10px]">Select Partner Scope</label>
                     <select
                       required
-                      className="w-full bg-neutral-950 border border-neutral-800 rounded px-3 py-2 text-neutral-400 focus:outline-none focus:border-emerald-500 cursor-pointer"
+                      className="w-full bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 rounded px-3 py-2 text-slate-700 dark:text-neutral-400 focus:outline-none focus:border-emerald-500 cursor-pointer"
                       value={uPartnerId}
                       onChange={(e) => setUPartnerId(e.target.value)}
                     >
@@ -716,10 +716,10 @@ export default function SuperAdminDashboard({
 
                 {uRole === 'CUSTOMER_ADMIN' && (
                   <div className="space-y-1">
-                    <label className="block text-neutral-450 uppercase font-semibold tracking-wider text-[10px]">Select Customer Scope</label>
+                    <label className="block text-slate-600 dark:text-neutral-400 uppercase font-semibold tracking-wider text-[10px]">Select Customer Scope</label>
                     <select
                       required
-                      className="w-full bg-neutral-950 border border-neutral-800 rounded px-3 py-2 text-neutral-400 focus:outline-none focus:border-emerald-500 cursor-pointer"
+                      className="w-full bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 rounded px-3 py-2 text-slate-700 dark:text-neutral-400 focus:outline-none focus:border-emerald-500 cursor-pointer"
                       value={uCustomerId}
                       onChange={(e) => setUCustomerId(e.target.value)}
                     >
@@ -733,7 +733,7 @@ export default function SuperAdminDashboard({
 
                 <button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white font-semibold py-2 rounded transition-colors cursor-pointer block mt-2 shadow-md shadow-emerald-950/40 border border-emerald-500/30"
+                  className="w-full bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white font-semibold py-2 rounded transition-colors cursor-pointer block mt-2 shadow-md shadow-emerald-900/15 dark:shadow-emerald-950/40 border border-emerald-500/30"
                 >
                   Provision Role Profile
                 </button>
@@ -743,8 +743,8 @@ export default function SuperAdminDashboard({
                 <div
                   className={`border-2 border-dashed rounded-xl p-6 text-center transition-all ${
                     dragActive
-                      ? 'border-emerald-500 bg-emerald-950/10'
-                      : 'border-neutral-800 hover:border-neutral-700 bg-neutral-950/50'
+                      ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/10'
+                      : 'border-slate-300 dark:border-neutral-800 hover:border-slate-400 dark:hover:border-neutral-700 bg-slate-50 dark:bg-neutral-950/50'
                   }`}
                   onDragEnter={(e) => {
                     e.preventDefault();
@@ -762,8 +762,8 @@ export default function SuperAdminDashboard({
                 >
                   <div className="flex flex-col items-center justify-center gap-2">
                     <span className="text-2xl">📥</span>
-                    <p className="text-neutral-300 font-medium">Drag & Drop your CSV file here</p>
-                    <p className="text-[10px] text-neutral-500">Supported formats: .csv, .txt</p>
+                    <p className="text-slate-700 dark:text-neutral-300 font-medium">Drag & Drop your CSV file here</p>
+                    <p className="text-[10px] text-slate-500 dark:text-neutral-500">Supported formats: .csv, .txt</p>
                     <div className="relative mt-1">
                       <input
                         type="file"
@@ -774,7 +774,7 @@ export default function SuperAdminDashboard({
                       />
                       <label
                         htmlFor="bulk-csv-upload-input"
-                        className="px-3 py-1.5 bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-neutral-300 rounded text-[10px] font-semibold cursor-pointer transition-colors block"
+                        className="px-3 py-1.5 bg-white dark:bg-neutral-900 hover:bg-slate-100 dark:hover:bg-neutral-800 border border-slate-300 dark:border-neutral-800 text-slate-700 dark:text-neutral-300 rounded text-[10px] font-semibold cursor-pointer transition-colors block"
                       >
                         Choose File
                       </label>
@@ -782,22 +782,22 @@ export default function SuperAdminDashboard({
                   </div>
                 </div>
 
-                <div className="relative flex py-2 items-center text-neutral-600">
-                  <div className="flex-grow border-t border-neutral-850"></div>
-                  <span className="flex-shrink mx-3 text-[10px] uppercase font-bold tracking-widest font-mono text-neutral-500">Or Paste Raw Data</span>
-                  <div className="flex-grow border-t border-neutral-850"></div>
+                <div className="relative flex py-2 items-center text-slate-400 dark:text-neutral-600">
+                  <div className="flex-grow border-t border-slate-200 dark:border-neutral-800"></div>
+                  <span className="flex-shrink mx-3 text-[10px] uppercase font-bold tracking-widest font-mono text-slate-500 dark:text-neutral-500">Or Paste Raw Data</span>
+                  <div className="flex-grow border-t border-slate-200 dark:border-neutral-800"></div>
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="block text-neutral-400 uppercase tracking-wider text-[9px] font-bold">CSV/Text Rows (Name, Email, Role)</label>
+                  <label className="block text-slate-600 dark:text-neutral-400 uppercase tracking-wider text-[9px] font-bold">CSV/Text Rows (Name, Email, Role)</label>
                   <textarea
                     rows={4}
                     placeholder="John Doe, john@acuity.com, PARTNER_ADMIN&#10;Alice Smith, alice@apex.com, CUSTOMER_ADMIN"
-                    className="w-full bg-neutral-950 border border-neutral-800 rounded-lg p-2.5 text-neutral-200 font-mono text-xs focus:outline-none focus:border-emerald-500 placeholder-neutral-750"
+                    className="w-full bg-slate-50 dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 rounded-lg p-2.5 text-slate-900 dark:text-neutral-200 font-mono text-xs focus:outline-none focus:border-emerald-500 placeholder-slate-400 dark:placeholder-neutral-700"
                     value={bulkText}
                     onChange={(e) => setBulkText(e.target.value)}
                   />
-                  <span className="text-[10px] text-neutral-550 block">Columns order: Full Name, Email, Role (SUPER_ADMIN, PARTNER_ADMIN, or CUSTOMER_ADMIN)</span>
+                  <span className="text-[10px] text-slate-500 dark:text-neutral-500 block">Columns order: Full Name, Email, Role (SUPER_ADMIN, PARTNER_ADMIN, or CUSTOMER_ADMIN)</span>
                 </div>
 
                 <button
@@ -806,8 +806,8 @@ export default function SuperAdminDashboard({
                   disabled={!bulkText.trim()}
                   className={`w-full font-semibold py-2 rounded transition-colors block ${
                     bulkText.trim()
-                      ? 'bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white cursor-pointer shadow-md shadow-emerald-950/40 border border-emerald-500/30'
-                      : 'bg-neutral-900 text-neutral-500 border border-neutral-850 cursor-not-allowed'
+                      ? 'bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white cursor-pointer shadow-md shadow-emerald-900/15 dark:shadow-emerald-950/40 border border-emerald-500/30'
+                      : 'bg-slate-100 dark:bg-neutral-900 text-slate-400 dark:text-neutral-500 border border-slate-200 dark:border-neutral-800 cursor-not-allowed'
                   }`}
                 >
                   Parse & Import Rows
@@ -821,15 +821,15 @@ export default function SuperAdminDashboard({
       {/* TAB 4: AUDIT LOG TRAIL */}
       {activeTab === 'audit' && (
         <div className="space-y-4" id="sa_tab_audits">
-          <div className="bg-neutral-950 rounded-xl border border-neutral-800 overflow-hidden">
-            <div className="p-4 border-b border-neutral-850 bg-neutral-900/40 flex justify-between items-center">
-              <h3 className="text-sm font-semibold text-white">Full-Stack Tenant Logging Security Ledger</h3>
+          <div className="bg-white dark:bg-neutral-950 rounded-xl border border-slate-200 dark:border-neutral-800 overflow-hidden shadow-xs dark:shadow-none">
+            <div className="p-4 border-b border-slate-200 dark:border-neutral-800 bg-slate-50 dark:bg-neutral-900/40 flex justify-between items-center">
+              <h3 className="text-sm font-semibold text-slate-900 dark:text-white">Full-Stack Tenant Logging Security Ledger</h3>
               <button 
                 onClick={() => {
                   setAuditLogs([]);
                   addAudit('LOG_LEDGER_PURGED', 'Security compliance ledgers were purged by root administrator approval.', 'warning');
                 }}
-                className="text-xs text-neutral-500 hover:text-red-400 transition-colors cursor-pointer"
+                className="text-xs text-slate-500 dark:text-neutral-500 hover:text-red-600 dark:hover:text-red-400 transition-colors cursor-pointer"
               >
                 Clear Ledger History
               </button>
@@ -838,7 +838,7 @@ export default function SuperAdminDashboard({
             <div className="overflow-x-auto text-xs">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="bg-neutral-900/60 text-neutral-450 uppercase tracking-widest text-[9px] font-mono border-b border-neutral-850">
+                  <tr className="bg-slate-50 dark:bg-neutral-900/60 text-slate-500 dark:text-neutral-400 uppercase tracking-widest text-[9px] font-mono border-b border-slate-200 dark:border-neutral-800">
                     <th className="p-3">Timestamp / IP</th>
                     <th className="p-3">Actor Email</th>
                     <th className="p-3">Compliance Event</th>
@@ -846,23 +846,23 @@ export default function SuperAdminDashboard({
                     <th className="p-3 text-right">Severity</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-neutral-850 font-sans text-neutral-250">
+                <tbody className="divide-y divide-slate-200 dark:divide-neutral-800 font-sans text-slate-700 dark:text-neutral-200">
                   {auditLogs.map(log => (
-                    <tr key={log.id} className="hover:bg-neutral-900/25 transition-colors">
+                    <tr key={log.id} className="hover:bg-slate-50 dark:hover:bg-neutral-900/25 transition-colors">
                       <td className="p-3 font-mono">
-                        <span className="block text-neutral-200">{new Date(log.timestamp).toLocaleTimeString()}</span>
-                        <span className="block text-[9px] text-neutral-550">{log.ipAddress}</span>
+                        <span className="block text-slate-900 dark:text-neutral-200">{new Date(log.timestamp).toLocaleTimeString()}</span>
+                        <span className="block text-[9px] text-slate-500 dark:text-neutral-500">{log.ipAddress}</span>
                       </td>
-                      <td className="p-3 text-neutral-300 font-medium">{log.actorEmail}</td>
+                      <td className="p-3 text-slate-700 dark:text-neutral-300 font-medium">{log.actorEmail}</td>
                       <td className="p-3 font-mono text-[10px]">
-                        <span className="px-2 py-0.5 rounded bg-neutral-910 border border-neutral-800">{log.action}</span>
+                        <span className="px-2 py-0.5 rounded bg-slate-100 dark:bg-neutral-900 border border-slate-200 dark:border-neutral-800 text-slate-800 dark:text-neutral-200">{log.action}</span>
                       </td>
-                      <td className="p-3 text-neutral-400 max-w-sm shrink-none">{log.details}</td>
+                      <td className="p-3 text-slate-600 dark:text-neutral-400 max-w-sm shrink-none">{log.details}</td>
                       <td className="p-3 text-right">
                         <span className={`inline-block text-[9px] px-2 py-0.5 rounded font-mono font-bold uppercase tracking-wider ${
-                          log.severity === 'security' ? 'bg-red-950 text-red-400 border border-red-900/70' :
-                          log.severity === 'warning' ? 'bg-yellow-950 text-yellow-500 border border-yellow-905' :
-                          'bg-neutral-900 text-neutral-500 border border-neutral-800'
+                          log.severity === 'security' ? 'bg-red-50 dark:bg-red-950 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-900/70' :
+                          log.severity === 'warning' ? 'bg-amber-50 dark:bg-yellow-950 text-amber-700 dark:text-yellow-500 border border-amber-200 dark:border-yellow-900' :
+                          'bg-slate-100 dark:bg-neutral-900 text-slate-600 dark:text-neutral-500 border border-slate-200 dark:border-neutral-800'
                         }`}>
                           {log.severity}
                         </span>
@@ -871,7 +871,7 @@ export default function SuperAdminDashboard({
                   ))}
                   {auditLogs.length === 0 && (
                     <tr>
-                      <td colSpan={5} className="p-6 text-center text-neutral-500 font-mono">
+                      <td colSpan={5} className="p-6 text-center text-slate-500 dark:text-neutral-500 font-mono">
                         No auditable telemetry packets loaded. Record events above to view updates.
                       </td>
                     </tr>

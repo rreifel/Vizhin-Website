@@ -161,7 +161,7 @@ export const OrgChartView: React.FC<OrgChartViewProps> = ({ onOpenReview }) => {
         {hasVisibleChildren && (
           <div className="flex flex-col items-center w-full">
             {/* Vertical stem down from parent */}
-            <div className="w-[2px] h-6 bg-slate-700"></div>
+            <div className="w-[2px] h-6 bg-slate-400 dark:bg-neutral-700"></div>
 
             {/* Horizontal bar across children */}
             <div className="flex justify-center relative">
@@ -178,20 +178,20 @@ export const OrgChartView: React.FC<OrgChartViewProps> = ({ onOpenReview }) => {
                         {/* Left half segment */}
                         <div
                           className={`absolute top-0 left-0 right-1/2 h-[2px] ${
-                            isFirst ? 'bg-transparent' : 'bg-slate-700'
+                            isFirst ? 'bg-transparent' : 'bg-slate-400 dark:bg-neutral-700'
                           }`}
                         />
                         {/* Right half segment */}
                         <div
                           className={`absolute top-0 left-1/2 right-0 h-[2px] ${
-                            isLast ? 'bg-transparent' : 'bg-slate-700'
+                            isLast ? 'bg-transparent' : 'bg-slate-400 dark:bg-neutral-700'
                           }`}
                         />
                       </>
                     )}
 
                     {/* Vertical stem down into child node */}
-                    <div className="w-[2px] h-6 bg-slate-700"></div>
+                    <div className="w-[2px] h-6 bg-slate-400 dark:bg-neutral-700"></div>
 
                     {/* Recursive child branch */}
                     {renderTreeBranch(child, level + 1)}
@@ -206,55 +206,55 @@ export const OrgChartView: React.FC<OrgChartViewProps> = ({ onOpenReview }) => {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] bg-slate-50 select-none overflow-hidden">
+    <div className="flex flex-col h-[calc(100vh-4rem)] bg-slate-50 dark:bg-neutral-950 select-none overflow-hidden transition-colors">
       
       {/* Top Filter and Controls Bar */}
-      <div className="bg-white border-b border-slate-200 px-6 py-3 flex flex-wrap items-center justify-between gap-3 shrink-0">
+      <div className="bg-white dark:bg-neutral-900 border-b border-slate-200 dark:border-neutral-800 px-6 py-3 flex flex-wrap items-center justify-between gap-3 shrink-0 transition-colors">
         
         {/* Left: Breadcrumbs / Scope */}
         <div className="flex items-center gap-2 text-xs">
           {rootUserId && activeRoot && (
             <button
               onClick={() => setRootUserId(null)}
-              className="px-2.5 py-1 text-slate-700 bg-slate-100 hover:bg-slate-200 rounded font-medium flex items-center gap-1 transition-colors"
+              className="px-2.5 py-1 text-slate-700 dark:text-neutral-200 bg-slate-100 dark:bg-neutral-800 hover:bg-slate-200 dark:hover:bg-neutral-700 rounded font-medium flex items-center gap-1 transition-colors cursor-pointer"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Full Org View</span>
             </button>
           )}
 
-          <div className="flex items-center gap-1.5 text-slate-600 font-medium">
-            <span className="text-slate-400">Tree Root:</span>
+          <div className="flex items-center gap-1.5 text-slate-600 dark:text-neutral-400 font-medium">
+            <span className="text-slate-400 dark:text-neutral-500">Tree Root:</span>
             {rootAncestry.length > 0 && (
               <>
-                <span className="text-slate-500">{rootAncestry[rootAncestry.length - 1].first_name}</span>
-                <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+                <span className="text-slate-500 dark:text-neutral-400">{rootAncestry[rootAncestry.length - 1].first_name}</span>
+                <ChevronRight className="w-3.5 h-3.5 text-slate-400 dark:text-neutral-500" />
               </>
             )}
-            <span className="text-slate-900 font-bold">
+            <span className="text-slate-900 dark:text-white font-bold">
               {activeRoot?.first_name} {activeRoot?.last_name}
             </span>
-            <span className="text-slate-400">({activeRoot?.title})</span>
+            <span className="text-slate-400 dark:text-neutral-500">({activeRoot?.title})</span>
           </div>
         </div>
 
         {/* Middle: Search input with dropdown match preview */}
         <div className="relative w-64">
-          <div className="flex items-center bg-slate-100 rounded-md px-2.5 py-1.5 border border-slate-200 focus-within:border-slate-400 focus-within:bg-white transition-colors">
-            <Search className="w-3.5 h-3.5 text-slate-400 mr-2" />
+          <div className="flex items-center bg-slate-100 dark:bg-neutral-950 rounded-md px-2.5 py-1.5 border border-slate-200 dark:border-neutral-800 focus-within:border-slate-400 dark:focus-within:border-emerald-500 focus-within:bg-white dark:focus-within:bg-neutral-950 transition-colors">
+            <Search className="w-3.5 h-3.5 text-slate-400 dark:text-neutral-500 mr-2" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search person, title, email..."
-              className="text-xs bg-transparent border-0 focus:outline-none w-full text-slate-900 placeholder:text-slate-400"
+              className="text-xs bg-transparent border-0 focus:outline-none w-full text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-neutral-500"
             />
           </div>
 
           {/* Quick Search Results Dropdown */}
           {searchMatches.length > 0 && (
-            <div className="absolute top-full mt-1 left-0 right-0 bg-white rounded-lg shadow-xl border border-slate-200 max-h-60 overflow-y-auto z-30 p-1">
-              <div className="text-[10px] text-slate-400 font-semibold px-2 py-1 uppercase">
+            <div className="absolute top-full mt-1 left-0 right-0 bg-white dark:bg-neutral-900 rounded-lg shadow-xl border border-slate-200 dark:border-neutral-800 max-h-60 overflow-y-auto z-30 p-1">
+              <div className="text-[10px] text-slate-400 dark:text-neutral-500 font-semibold px-2 py-1 uppercase">
                 Matching Colleagues ({searchMatches.length})
               </div>
               {searchMatches.slice(0, 6).map((match) => (
@@ -264,13 +264,13 @@ export const OrgChartView: React.FC<OrgChartViewProps> = ({ onOpenReview }) => {
                     setInspectedUser(match);
                     setSearchQuery('');
                   }}
-                  className="px-2.5 py-1.5 rounded hover:bg-slate-100 cursor-pointer flex items-center justify-between text-xs transition-colors"
+                  className="px-2.5 py-1.5 rounded hover:bg-slate-100 dark:hover:bg-neutral-800 cursor-pointer flex items-center justify-between text-xs transition-colors"
                 >
                   <div className="min-w-0">
-                    <span className="font-semibold text-slate-900 block truncate">
+                    <span className="font-semibold text-slate-900 dark:text-white block truncate">
                       {match.first_name} {match.last_name}
                     </span>
-                    <span className="text-[11px] text-slate-500 block truncate">
+                    <span className="text-[11px] text-slate-500 dark:text-neutral-400 block truncate">
                       {match.title} · {match.department}
                     </span>
                   </div>
@@ -281,7 +281,7 @@ export const OrgChartView: React.FC<OrgChartViewProps> = ({ onOpenReview }) => {
                       setSearchQuery('');
                     }}
                     title="Focus branch"
-                    className="p-1 text-slate-400 hover:text-slate-800"
+                    className="p-1 text-slate-400 dark:text-neutral-500 hover:text-slate-800 dark:hover:text-white cursor-pointer"
                   >
                     <Target className="w-3.5 h-3.5" />
                   </button>
@@ -299,7 +299,7 @@ export const OrgChartView: React.FC<OrgChartViewProps> = ({ onOpenReview }) => {
             <select
               value={departmentFilter}
               onChange={(e) => setDepartmentFilter(e.target.value)}
-              className="bg-white border border-slate-300 text-slate-700 py-1 px-2 rounded text-xs focus:outline-none"
+              className="bg-white dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-700 dark:text-neutral-200 py-1 px-2 rounded text-xs focus:outline-none cursor-pointer"
             >
               <option value="ALL">All Departments</option>
               {departments.map((d) => (
@@ -315,7 +315,7 @@ export const OrgChartView: React.FC<OrgChartViewProps> = ({ onOpenReview }) => {
             <select
               value={workerTypeFilter}
               onChange={(e) => setWorkerTypeFilter(e.target.value)}
-              className="bg-white border border-slate-300 text-slate-700 py-1 px-2 rounded text-xs focus:outline-none"
+              className="bg-white dark:bg-neutral-950 border border-slate-300 dark:border-neutral-800 text-slate-700 dark:text-neutral-200 py-1 px-2 rounded text-xs focus:outline-none cursor-pointer"
             >
               <option value="ALL">All Worker Types</option>
               <option value="full_time">Full-Time Only</option>
@@ -324,46 +324,46 @@ export const OrgChartView: React.FC<OrgChartViewProps> = ({ onOpenReview }) => {
             </select>
           </div>
 
-          <div className="h-4 w-px bg-slate-200 mx-1" />
+          <div className="h-4 w-px bg-slate-200 dark:bg-neutral-800 mx-1" />
 
           {/* Expand / Collapse Controls */}
           <button
             onClick={handleExpandAll}
-            className="px-2 py-1 text-xs text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded font-medium transition-colors"
+            className="px-2 py-1 text-xs text-slate-600 dark:text-neutral-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-neutral-800 hover:bg-slate-200 dark:hover:bg-neutral-700 rounded font-medium transition-colors cursor-pointer"
           >
             Expand All
           </button>
           <button
             onClick={handleCollapseAll}
-            className="px-2 py-1 text-xs text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded font-medium transition-colors"
+            className="px-2 py-1 text-xs text-slate-600 dark:text-neutral-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-neutral-800 hover:bg-slate-200 dark:hover:bg-neutral-700 rounded font-medium transition-colors cursor-pointer"
           >
             Collapse All
           </button>
 
-          <div className="h-4 w-px bg-slate-200 mx-1" />
+          <div className="h-4 w-px bg-slate-200 dark:bg-neutral-800 mx-1" />
 
           {/* Zoom controls */}
-          <div className="flex items-center bg-slate-100 rounded p-0.5 border border-slate-200">
+          <div className="flex items-center bg-slate-100 dark:bg-neutral-950 rounded p-0.5 border border-slate-200 dark:border-neutral-800">
             <button
               onClick={() => setZoomScale((prev) => Math.max(0.5, prev - 0.1))}
-              className="p-1 text-slate-600 hover:text-slate-900 rounded"
+              className="p-1 text-slate-600 dark:text-neutral-300 hover:text-slate-900 dark:hover:text-white rounded cursor-pointer"
               title="Zoom Out"
             >
               <ZoomOut className="w-3.5 h-3.5" />
             </button>
-            <span className="text-[11px] font-mono px-1.5 text-slate-600">
+            <span className="text-[11px] font-mono tabular-nums px-1.5 text-slate-600 dark:text-neutral-300">
               {Math.round(zoomScale * 100)}%
             </span>
             <button
               onClick={() => setZoomScale((prev) => Math.min(1.5, prev + 0.1))}
-              className="p-1 text-slate-600 hover:text-slate-900 rounded"
+              className="p-1 text-slate-600 dark:text-neutral-300 hover:text-slate-900 dark:hover:text-white rounded cursor-pointer"
               title="Zoom In"
             >
               <ZoomIn className="w-3.5 h-3.5" />
             </button>
             <button
               onClick={() => setZoomScale(1)}
-              className="p-1 text-slate-400 hover:text-slate-700 ml-1"
+              className="p-1 text-slate-400 dark:text-neutral-500 hover:text-slate-700 dark:hover:text-white ml-1 cursor-pointer"
               title="Reset Zoom"
             >
               <RotateCcw className="w-3 h-3" />
@@ -374,17 +374,11 @@ export const OrgChartView: React.FC<OrgChartViewProps> = ({ onOpenReview }) => {
 
       </div>
 
-      {/* Main Interactive Canvas with distinct light grey background */}
-      <div className="flex-1 overflow-auto p-12 flex justify-center items-start relative cursor-grab active:cursor-grabbing bg-slate-200">
+      {/* Main Interactive Canvas */}
+      <div className="flex-1 overflow-auto p-12 flex justify-center items-start relative cursor-grab active:cursor-grabbing bg-slate-100 dark:bg-[#070708] transition-colors">
         
         {/* Crisp grid pattern background */}
-        <div 
-          className="absolute inset-0 pointer-events-none opacity-50"
-          style={{
-            backgroundImage: 'radial-gradient(circle, #94a3b8 1.5px, transparent 1.5px)',
-            backgroundSize: '24px 24px',
-          }}
-        />
+        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(#94a3b8_1.5px,transparent_1.5px)] dark:bg-[radial-gradient(#1e293b_1.5px,transparent_1.5px)] [background-size:24px_24px] opacity-45 dark:opacity-35" />
 
         {/* Tree Container with Zoom transform */}
         <div 
@@ -394,7 +388,7 @@ export const OrgChartView: React.FC<OrgChartViewProps> = ({ onOpenReview }) => {
           {activeRoot ? (
             renderTreeBranch(activeRoot)
           ) : (
-            <div className="text-center py-20 text-slate-500 font-semibold text-xs">
+            <div className="text-center py-20 text-slate-500 dark:text-neutral-500 font-semibold text-xs">
               No organization structure found.
             </div>
           )}

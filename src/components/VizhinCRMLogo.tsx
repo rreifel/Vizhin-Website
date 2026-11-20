@@ -1,13 +1,16 @@
 import React from 'react';
+import { useTheme } from '../context/ThemeContext';
 
 interface VizhinCRMLogoProps {
   className?: string;
   lightMode?: boolean;
 }
 
-export default function VizhinCRMLogo({ className = "h-8 w-auto", lightMode = false }: VizhinCRMLogoProps) {
-  // Use off-white #F3F4F6 on dark backgrounds and ink black #181C24 on light backgrounds
-  const textFill = lightMode ? "#181C24" : "#F3F4F6";
+export default function VizhinCRMLogo({ className = "h-8 w-auto", lightMode }: VizhinCRMLogoProps) {
+  const { theme } = useTheme();
+  const isLight = lightMode !== undefined ? lightMode : theme === 'light';
+  // Use ink black #181C24 on light backgrounds and off-white #F3F4F6 on dark backgrounds
+  const textFill = isLight ? "#181C24" : "#F3F4F6";
 
   return (
     <svg 

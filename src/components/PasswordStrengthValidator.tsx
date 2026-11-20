@@ -60,10 +60,10 @@ export function calculatePasswordStrength(password: string): PasswordStrengthRes
     return {
       score: 0,
       label: 'Enter password',
-      color: 'bg-neutral-800',
-      textColor: 'text-neutral-500',
-      bgColor: 'bg-neutral-900',
-      borderColor: 'border-neutral-800',
+      color: 'bg-slate-200 dark:bg-neutral-800',
+      textColor: 'text-slate-500 dark:text-neutral-500',
+      bgColor: 'bg-slate-100 dark:bg-neutral-900',
+      borderColor: 'border-slate-200 dark:border-neutral-800',
       percentage: 0,
       isCompliant: false,
       failedRules: ENTERPRISE_PASSWORD_RULES.map(r => r.id)
@@ -87,9 +87,9 @@ export function calculatePasswordStrength(password: string): PasswordStrengthRes
         score: 1,
         label: 'Weak — Insufficient complexity',
         color: 'bg-red-500',
-        textColor: 'text-red-400',
-        bgColor: 'bg-red-950/40',
-        borderColor: 'border-red-800/60',
+        textColor: 'text-red-700 dark:text-red-400',
+        bgColor: 'bg-red-50 dark:bg-red-950/40',
+        borderColor: 'border-red-200 dark:border-red-800/60',
         percentage: 25,
         isCompliant: false,
         failedRules
@@ -99,9 +99,9 @@ export function calculatePasswordStrength(password: string): PasswordStrengthRes
         score: 2,
         label: 'Fair — Meets basic criteria',
         color: 'bg-amber-500',
-        textColor: 'text-amber-400',
-        bgColor: 'bg-amber-950/40',
-        borderColor: 'border-amber-800/60',
+        textColor: 'text-amber-800 dark:text-amber-400',
+        bgColor: 'bg-amber-50 dark:bg-amber-950/40',
+        borderColor: 'border-amber-200 dark:border-amber-800/60',
         percentage: 50,
         isCompliant: false,
         failedRules
@@ -111,9 +111,9 @@ export function calculatePasswordStrength(password: string): PasswordStrengthRes
         score: 3,
         label: 'Good — Strong security',
         color: 'bg-teal-500',
-        textColor: 'text-teal-400',
-        bgColor: 'bg-teal-950/40',
-        borderColor: 'border-teal-800/60',
+        textColor: 'text-teal-700 dark:text-teal-400',
+        bgColor: 'bg-teal-50 dark:bg-teal-950/40',
+        borderColor: 'border-teal-200 dark:border-teal-800/60',
         percentage: 75,
         isCompliant: true,
         failedRules
@@ -123,9 +123,9 @@ export function calculatePasswordStrength(password: string): PasswordStrengthRes
         score: 4,
         label: 'Enterprise Grade 🔒 — Fully Compliant',
         color: 'bg-emerald-500',
-        textColor: 'text-emerald-400',
-        bgColor: 'bg-emerald-950/40',
-        borderColor: 'border-emerald-800/60',
+        textColor: 'text-[#0D5C46] dark:text-emerald-400',
+        bgColor: 'bg-emerald-50 dark:bg-emerald-950/40',
+        borderColor: 'border-emerald-200 dark:border-emerald-800/60',
         percentage: 100,
         isCompliant: true,
         failedRules
@@ -135,9 +135,9 @@ export function calculatePasswordStrength(password: string): PasswordStrengthRes
         score: 0,
         label: 'Very Weak — Critical risk',
         color: 'bg-red-700',
-        textColor: 'text-red-400',
-        bgColor: 'bg-red-950/50',
-        borderColor: 'border-red-900',
+        textColor: 'text-red-700 dark:text-red-400',
+        bgColor: 'bg-red-50 dark:bg-red-950/50',
+        borderColor: 'border-red-200 dark:border-red-900',
         percentage: 10,
         isCompliant: false,
         failedRules
@@ -175,17 +175,17 @@ export default function PasswordStrengthValidator({
   }
 
   return (
-    <div className={`space-y-3 p-3.5 rounded-xl bg-neutral-950/80 border border-neutral-850/90 text-left ${className}`}>
+    <div className={`space-y-3 p-3.5 rounded-xl bg-slate-50 dark:bg-neutral-950/80 border border-slate-200 dark:border-neutral-800 text-left ${className}`}>
       
       {/* Strength Header & Status */}
       <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-1.5 text-xs font-semibold text-neutral-300">
+        <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-700 dark:text-neutral-300">
           {result.score >= 3 ? (
-            <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+            <ShieldCheck className="w-4 h-4 text-[#0D5C46] dark:text-emerald-400 shrink-0" />
           ) : result.score > 0 ? (
-            <Shield className="w-4 h-4 text-amber-400 shrink-0" />
+            <Shield className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
           ) : (
-            <ShieldAlert className="w-4 h-4 text-neutral-500 shrink-0" />
+            <ShieldAlert className="w-4 h-4 text-slate-400 dark:text-neutral-500 shrink-0" />
           )}
           <span>{title}</span>
         </div>
@@ -195,7 +195,7 @@ export default function PasswordStrengthValidator({
             {result.label}
           </span>
         ) : (
-          <span className="text-[10px] font-mono text-neutral-500 uppercase">
+          <span className="text-[10px] font-mono text-slate-500 dark:text-neutral-500 uppercase">
             NIST SP 800-63B
           </span>
         )}
@@ -205,12 +205,12 @@ export default function PasswordStrengthValidator({
       <div className="grid grid-cols-4 gap-1.5 h-1.5">
         {[1, 2, 3, 4].map((step) => {
           const isActive = result.score >= step;
-          let segmentColor = 'bg-neutral-800';
+          let segmentColor = 'bg-slate-200 dark:bg-neutral-800';
           if (isActive) {
             if (result.score === 1) segmentColor = 'bg-red-500';
             else if (result.score === 2) segmentColor = 'bg-amber-500';
-            else if (result.score === 3) segmentColor = 'bg-teal-400';
-            else if (result.score === 4) segmentColor = 'bg-emerald-400';
+            else if (result.score === 3) segmentColor = 'bg-teal-500 dark:bg-teal-400';
+            else if (result.score === 4) segmentColor = 'bg-emerald-600 dark:bg-emerald-400';
           }
           return (
             <div
@@ -224,7 +224,7 @@ export default function PasswordStrengthValidator({
       {/* Requirements Checklist */}
       {showRequirements && (
         <div className="space-y-1.5 pt-1">
-          <p className="text-[10px] font-mono uppercase tracking-wider text-neutral-400">
+          <p className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-neutral-400">
             Security Requirements:
           </p>
           <ul className="space-y-1">
@@ -234,17 +234,17 @@ export default function PasswordStrengthValidator({
                 <li
                   key={rule.id}
                   className={`flex items-center gap-2 text-[11px] transition-colors ${
-                    isPassed ? 'text-emerald-300 font-medium' : 'text-neutral-500'
+                    isPassed ? 'text-[#0D5C46] dark:text-emerald-300 font-medium' : 'text-slate-500 dark:text-neutral-500'
                   }`}
                 >
                   <div
                     className={`w-3.5 h-3.5 rounded-full flex items-center justify-center shrink-0 border ${
                       isPassed
-                        ? 'bg-emerald-950 border-emerald-600 text-emerald-400'
-                        : 'border-neutral-700 bg-neutral-900 text-neutral-600'
+                        ? 'bg-emerald-100 dark:bg-emerald-950 border-emerald-400 dark:border-emerald-600 text-[#0D5C46] dark:text-emerald-400'
+                        : 'border-slate-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-slate-400 dark:text-neutral-600'
                     }`}
                   >
-                    {isPassed ? <Check className="w-2.5 h-2.5 stroke-[3]" /> : <span className="w-1 h-1 rounded-full bg-neutral-600" />}
+                    {isPassed ? <Check className="w-2.5 h-2.5 stroke-[3]" /> : <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-neutral-600" />}
                   </div>
                   <span>{rule.label}</span>
                 </li>
@@ -255,8 +255,8 @@ export default function PasswordStrengthValidator({
       )}
 
       {/* Enterprise Policy Footnote */}
-      <div className="flex items-start gap-1.5 pt-1 border-t border-neutral-900 text-[10px] text-neutral-500 leading-tight">
-        <Info className="w-3 h-3 text-neutral-400 shrink-0 mt-0.5" />
+      <div className="flex items-start gap-1.5 pt-1 border-t border-slate-200 dark:border-neutral-900 text-[10px] text-slate-500 dark:text-neutral-500 leading-tight">
+        <Info className="w-3 h-3 text-slate-400 dark:text-neutral-400 shrink-0 mt-0.5" />
         <span>Passphrases of 14+ characters provide maximum entropy against credential stuffing attacks.</span>
       </div>
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
-  ShieldCheck, Layers, Users, Activity, Sparkles, Mail, BarChart3, Calendar, ArrowUpRight, ArrowRight, FileText, Download, Target, UserPlus
+  ShieldCheck, Layers, Users, Activity, Sparkles, Mail, BarChart3, Calendar, ArrowRight, FileText, Download, Target, UserPlus
 } from 'lucide-react';
 import SiteHeader from './SiteHeader';
 import BrochureViewer from './BrochureViewer';
@@ -128,35 +128,35 @@ const DETAILED_SECTIONS: DetailedSectionItem[] = [
     summary: 'Performance Architecture: shifting your sales culture from activity-driven to outcome-focused. I establish clear, high-impact key performance indicators (KPIs) and accountability structures that ensure every sales rep owns their pipeline and consistently hits their targets.',
     lowerDescription: (
       <div className="space-y-4">
-        <div className="text-xs font-mono uppercase tracking-wider text-emerald-400 font-semibold">
+        <div className="text-xs font-mono uppercase tracking-wider text-[#0D5C46] dark:text-emerald-400 font-semibold">
           Sales Team Accountability &amp; KPIs
         </div>
         <p>
           Performance Architecture: shifting your sales culture from activity-driven to outcome-focused. I establish clear, high-impact key performance indicators (KPIs) and accountability structures that ensure every sales rep owns their pipeline and consistently hits their targets.
         </p>
-        <p className="text-neutral-300 font-normal">
+        <p className="text-slate-600 dark:text-neutral-300 font-normal">
           Accountability isn&apos;t more reporting. It&apos;s knowing sooner.
         </p>
         <div className="space-y-2 pt-1">
-          <p className="font-semibold text-white">
+          <p className="font-semibold text-slate-900 dark:text-white">
             When it&apos;s working, you don&apos;t wait until quarter-end to find out who&apos;s performing:
           </p>
-          <ul className="space-y-2 pl-1 text-xs md:text-sm text-neutral-300 font-normal">
+          <ul className="space-y-2 pl-1 text-xs md:text-sm text-slate-600 dark:text-neutral-300 font-normal">
             <li className="flex items-start gap-2">
-              <span className="text-emerald-400 select-none">•</span>
+              <span className="text-[#0D5C46] dark:text-emerald-400 select-none">•</span>
               <span>Every rep can say what their number is, where they stand against it, and what their next deal is</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-emerald-400 select-none">•</span>
+              <span className="text-[#0D5C46] dark:text-emerald-400 select-none">•</span>
               <span>A pipeline review ends with a decision, not just a status update</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-emerald-400 select-none">•</span>
+              <span className="text-[#0D5C46] dark:text-emerald-400 select-none">•</span>
               <span>A problem shows up mid-quarter, while there&apos;s still time to fix it</span>
             </li>
           </ul>
         </div>
-        <p className="text-neutral-300 font-normal pt-1">
+        <p className="text-slate-600 dark:text-neutral-300 font-normal pt-1">
           And it only sticks if the people were hired against a clear profile in the first place &mdash; which is why this pairs closely with Sales Hiring Strategy.
         </p>
       </div>
@@ -173,22 +173,22 @@ const DETAILED_SECTIONS: DetailedSectionItem[] = [
         <p>
           Predictable Talent Acquisition: Ending the cycle of bad sales hires and missed quotas. I design and execute a rigorous, metrics-driven recruiting and vetting blueprint to attract, hire, and onboard elite sales professionals who fit your culture and consistently produce results.
         </p>
-        <p className="text-neutral-300 font-normal">
+        <p className="text-slate-600 dark:text-neutral-300 font-normal">
           Hiring right is where the rest of your sales system starts. A rep hired against a clear profile is easier to coach, easier to measure, and easier to hold accountable &mdash; a rep hired on gut feel usually isn&apos;t.
         </p>
         <div className="space-y-2 pt-1">
-          <p className="font-semibold text-white">Start here if:</p>
-          <ul className="space-y-2 pl-1 text-xs md:text-sm text-neutral-300 font-normal">
+          <p className="font-semibold text-slate-900 dark:text-white">Start here if:</p>
+          <ul className="space-y-2 pl-1 text-xs md:text-sm text-slate-600 dark:text-neutral-300 font-normal">
             <li className="flex items-start gap-2">
-              <span className="text-emerald-400 select-none">•</span>
+              <span className="text-[#0D5C46] dark:text-emerald-400 select-none">•</span>
               <span>You&apos;re making your first sales hire and don&apos;t want to guess at the profile</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-emerald-400 select-none">•</span>
+              <span className="text-[#0D5C46] dark:text-emerald-400 select-none">•</span>
               <span>You&apos;ve already had a hire miss, and don&apos;t want to repeat it</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-emerald-400 select-none">•</span>
+              <span className="text-[#0D5C46] dark:text-emerald-400 select-none">•</span>
               <span>You&apos;re scaling and need the same hiring bar every time, not a one-off decision</span>
             </li>
           </ul>
@@ -204,19 +204,19 @@ const DETAILED_SECTIONS: DetailedSectionItem[] = [
     summary: 'Be ready before reviewers ask. Vizhin prepares sales teams for review by senior managers and boards, verifying partner accountability, access, and audit trails so due diligence does not become a last-minute scramble.',
     lowerDescription: (
       <div className="space-y-4">
-        <div className="text-xs font-mono uppercase tracking-wider text-emerald-400 font-semibold">
+        <div className="text-xs font-mono uppercase tracking-wider text-[#0D5C46] dark:text-emerald-400 font-semibold">
           Sales Governance, Partner Accountability &amp; Audit Readiness
         </div>
         <p>
           A review rarely fails on the headline numbers. It fails on the follow-up questions: who approved this partner deal, who had access to what, what changed, and can you show the trail?
         </p>
-        <p className="text-neutral-300 font-normal">
+        <p className="text-slate-600 dark:text-neutral-300 font-normal">
           Vizhin checks those answers before a reviewer does. We review how partner activity is recorded, whether access permissions match what the team actually does, and whether the audit trail tells a clear, consistent story from first contact to close.
         </p>
-        <p className="text-neutral-300 font-normal">
+        <p className="text-slate-600 dark:text-neutral-300 font-normal">
           The point is not to rewrite how your team sells. It is to find the gaps while there is still time to close them, prepare the team to answer clearly and consistently, and organize the evidence so a senior manager, board, or due diligence review feels calm and controlled instead of rushed and defensive.
         </p>
-        <p className="text-neutral-300 font-normal">
+        <p className="text-slate-600 dark:text-neutral-300 font-normal">
           If a review is coming, or you suspect one is, this is the work to do first.
         </p>
       </div>
@@ -240,16 +240,16 @@ const DETAILED_SECTIONS: DetailedSectionItem[] = [
     summary: "Stop judging marketing by traffic and leads alone. Vizhin turns marketing data into executive decisions, tracing what actually becomes closed-won revenue so you can put more behind what works and stop funding what doesn't.",
     lowerDescription: (
       <div className="space-y-4">
-        <div className="text-xs font-mono uppercase tracking-wider text-emerald-400 font-semibold">
+        <div className="text-xs font-mono uppercase tracking-wider text-[#0D5C46] dark:text-emerald-400 font-semibold">
           Marketing Analysis
         </div>
         <p>
           Every founder has sat in the budget conversation where marketing looks busy and revenue still feels uncertain. The reports show activity, but they don&apos;t answer the one question that matters: which spend produced which deals?
         </p>
-        <p className="text-neutral-300 font-normal">
+        <p className="text-slate-600 dark:text-neutral-300 font-normal">
           That gap is where waste hides. A channel can look successful on clicks and leads while contributing almost nothing to closed revenue, and a quieter channel can be doing the real work. Without a clear line from first click to signed contract, scaling is guesswork &mdash; you either under-invest in a winner or keep funding a loser because it looks active.
         </p>
-        <p className="text-neutral-300 font-normal">
+        <p className="text-slate-600 dark:text-neutral-300 font-normal">
           Marketing Analysis closes that gap by making the funnel visible end to end, so budget decisions, board conversations, and growth plans are based on revenue evidence, not on the loudest report.
         </p>
       </div>
@@ -263,16 +263,16 @@ const DETAILED_SECTIONS: DetailedSectionItem[] = [
     summary: 'Big technology changes should not pull a founder away from running the company. Vizhin provides platform-agnostic oversight for software selection, legacy migration, and system implementation, so your investment delivers operational value on time and in scope.',
     lowerDescription: (
       <div className="space-y-4">
-        <div className="text-xs font-mono uppercase tracking-wider text-emerald-400 font-semibold">
+        <div className="text-xs font-mono uppercase tracking-wider text-[#0D5C46] dark:text-emerald-400 font-semibold">
           Technology Project Management
         </div>
         <p>
           The hardest part of a technology change is rarely choosing a product. It is everything around the product: what the business actually needs, what the vendor is not saying about cost and effort, how the change will land with the team, and who keeps the project honest when timelines slip.
         </p>
-        <p className="text-neutral-300 font-normal">
+        <p className="text-slate-600 dark:text-neutral-300 font-normal">
           A vendor is paid to sell its platform. An internal team is already busy running the business. That leaves a gap &mdash; and that gap is where budgets grow, adoption stalls, and a promising system ends up underused.
         </p>
-        <p className="text-neutral-300 font-normal">
+        <p className="text-slate-600 dark:text-neutral-300 font-normal">
           This service fills that gap with an objective executive on your side of the table: someone who tests the requirements before the purchase, challenges the vendor plan before you commit, and keeps delivery tied to business outcomes, not just to a go-live date.
         </p>
       </div>
@@ -346,15 +346,15 @@ export default function LandingPage({
   };
 
   return (
-    <div id="landing_container" className="min-h-screen bg-[#070708] text-neutral-100 flex flex-col relative overflow-hidden font-sans">
+    <div id="landing_container" className="min-h-screen bg-[#F8FAFC] dark:bg-[#070708] text-slate-900 dark:text-neutral-100 flex flex-col relative overflow-hidden font-sans transition-colors">
       
       {/* Absolute Decorative Glows */}
-      <div className="absolute top-[-30%] left-[-20%] w-[80vw] h-[80vw] rounded-full bg-emerald-950/25 blur-[150px] pointer-events-none" />
-      <div className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-[#0D5C46]/20 blur-[150px] pointer-events-none" />
-      <div className="absolute top-[40%] right-[10%] w-[40vw] h-[40vw] rounded-full bg-teal-950/20 blur-[130px] pointer-events-none" />
+      <div className="absolute top-[-30%] left-[-20%] w-[80vw] h-[80vw] rounded-full bg-emerald-200/40 dark:bg-emerald-950/25 blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-teal-200/30 dark:bg-[#0D5C46]/20 blur-[150px] pointer-events-none" />
+      <div className="absolute top-[40%] right-[10%] w-[40vw] h-[40vw] rounded-full bg-emerald-100/40 dark:bg-teal-950/20 blur-[130px] pointer-events-none" />
 
       {/* Grid Pattern Backdrop */}
-      <div className="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.15] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] dark:bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.45] dark:opacity-[0.15] pointer-events-none" />
 
       {/* PERSISTENT GLOBAL SITE HEADER */}
       <SiteHeader 
@@ -386,9 +386,9 @@ export default function LandingPage({
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-950/80 text-emerald-300 border border-emerald-800/60 backdrop-blur"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 backdrop-blur shadow-xs"
           >
-            <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+            <Sparkles className="w-3.5 h-3.5 text-[#0D5C46] dark:text-emerald-400" />
             <span>Go-to-Market Consulting & Fractional VP of Sales | Vizhin</span>
           </motion.div>
 
@@ -396,10 +396,10 @@ export default function LandingPage({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-4xl md:text-6xl font-extrabold text-white tracking-tight leading-tight"
+            className="text-4xl md:text-6xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight"
           >
             Go-to-Market Consulting for{' '}
-            <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-200 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[#0D5C46] via-emerald-600 to-teal-600 dark:from-emerald-400 dark:via-teal-300 dark:to-emerald-200 bg-clip-text text-transparent">
               Growth-Stage Companies
             </span>
           </motion.h1>
@@ -408,7 +408,7 @@ export default function LandingPage({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-neutral-400 text-base md:text-lg max-w-2xl mx-auto leading-relaxed"
+            className="text-slate-600 dark:text-neutral-400 text-base md:text-lg max-w-2xl mx-auto leading-relaxed"
           >
             Enabling Go To Market teams with modern methodologies and technology. We provide the services you need to enable your organization to grow.
           </motion.p>
@@ -419,13 +419,12 @@ export default function LandingPage({
       {/* CORE CAPABILITIES BENTO GRID */}
       <section className="px-6 py-12 max-w-7xl mx-auto z-10 w-full" id="landing_features">
         <div className="text-center mb-12">
-          <p className="text-2xl font-bold text-white tracking-tight">Accelerating Hi-Performance Go-To-Market Teams</p>
+          <p className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Accelerating Hi-Performance Go-To-Market Teams</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {DETAILED_SECTIONS.slice(0, 8).map((sec) => {
             const Icon = sec.icon;
-            const isMarketingAnalysis = sec.id === 'marketing-analysis';
 
             return (
               <div 
@@ -434,22 +433,22 @@ export default function LandingPage({
                   const el = document.getElementById(sec.id);
                   if (el) el.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="bg-neutral-900/35 border border-neutral-850/60 p-6 rounded-2xl space-y-4 hover:border-emerald-600/60 hover:bg-neutral-900/60 transition-all cursor-pointer group flex flex-col justify-between"
+                className="bg-white dark:bg-neutral-900/35 border border-slate-200 dark:border-neutral-800/80 p-6 rounded-2xl space-y-4 hover:border-[#0D5C46]/60 dark:hover:border-emerald-600/60 hover:bg-slate-50/70 dark:hover:bg-neutral-900/60 shadow-sm dark:shadow-none hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
               >
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-950/80 flex items-center justify-center border border-emerald-800/60 text-emerald-400 group-hover:scale-105 transition-transform shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/80 flex items-center justify-center border border-emerald-200 dark:border-emerald-800/60 text-[#0D5C46] dark:text-emerald-400 group-hover:scale-105 transition-transform shrink-0">
                       <Icon className="w-5 h-5" />
                     </div>
-                    <span className="text-[10px] font-mono text-neutral-500 group-hover:text-emerald-400 transition-colors">
+                    <span className="text-[10px] font-mono text-slate-400 dark:text-neutral-500 group-hover:text-[#0D5C46] dark:group-hover:text-emerald-400 transition-colors">
                       Explore ↓
                     </span>
                   </div>
                   <div className="space-y-2">
-                    <h3 className="text-base font-bold text-neutral-150 group-hover:text-emerald-300 transition-colors">
+                    <h3 className="text-base font-bold text-slate-900 dark:text-neutral-100 group-hover:text-[#0D5C46] dark:group-hover:text-emerald-300 transition-colors">
                       {sec.title}
                     </h3>
-                    <p className="text-xs text-neutral-400 leading-relaxed">
+                    <p className="text-xs text-slate-600 dark:text-neutral-400 leading-relaxed">
                       {sec.summary}
                     </p>
                   </div>
@@ -462,7 +461,7 @@ export default function LandingPage({
 
       {/* DETAILED CONTENT SECTIONS */}
       <section className="px-6 py-10 max-w-7xl mx-auto z-10 w-full space-y-8" id="landing_detailed_sections">
-        {DETAILED_SECTIONS.map((sec, idx) => {
+        {DETAILED_SECTIONS.map((sec) => {
           const Icon = sec.icon;
 
           if (sec.id === 'call-to-action') {
@@ -470,45 +469,45 @@ export default function LandingPage({
               <div
                 key={sec.id}
                 id={sec.id}
-                className="bg-neutral-900/50 border border-emerald-850/80 hover:border-emerald-700/80 transition-all rounded-2xl p-6 md:p-8 backdrop-blur-xs flex flex-col justify-between shadow-lg shadow-emerald-950/20"
+                className="bg-white dark:bg-neutral-900/50 border border-emerald-200 dark:border-emerald-800/80 hover:border-[#0D5C46]/70 dark:hover:border-emerald-700/80 transition-all rounded-2xl p-6 md:p-8 backdrop-blur-xs flex flex-col justify-between shadow-md dark:shadow-lg dark:shadow-emerald-950/20"
               >
                 <div className="space-y-6">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800/60 flex items-center justify-center text-[#0D5C46] dark:text-emerald-400 shrink-0">
                       <Icon className="w-5 h-5" />
                     </div>
-                    <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">
+                    <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
                       Ready to build a predictable, self-sustaining sales engine?
                     </h2>
                   </div>
 
-                  <p className="text-sm md:text-base text-neutral-300 leading-relaxed font-medium">
+                  <p className="text-sm md:text-base text-slate-700 dark:text-neutral-300 leading-relaxed font-medium">
                     Let’s skip the high-pressure sales pitch. Schedule a 25-minute Revenue Strategy Session where we will look at your current pipeline bottlenecks and map out a realistic path to scale.
                   </p>
 
                   <div className="pt-2">
                     <a
                       href="/contact"
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white text-xs md:text-sm font-bold rounded-xl shadow-md shadow-emerald-950/40 border border-emerald-500/30 transition-all transform hover:-translate-y-0.5 cursor-pointer group"
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white text-xs md:text-sm font-bold rounded-xl shadow-md shadow-emerald-900/15 dark:shadow-emerald-950/40 border border-emerald-500/30 transition-all transform hover:-translate-y-0.5 cursor-pointer group"
                     >
-                      <Calendar className="w-4 h-4 text-emerald-300 group-hover:scale-110 transition-transform" />
+                      <Calendar className="w-4 h-4 text-emerald-100 dark:text-emerald-300 group-hover:scale-110 transition-transform" />
                       <span>Schedule Your Strategy Session</span>
-                      <span className="font-mono text-xs text-emerald-300">→</span>
+                      <span className="font-mono text-xs text-emerald-100 dark:text-emerald-300">→</span>
                     </a>
                   </div>
 
-                  <div className="pt-6 border-t border-neutral-850/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs md:text-sm text-neutral-400">
+                  <div className="pt-6 border-t border-slate-200 dark:border-neutral-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs md:text-sm text-slate-600 dark:text-neutral-400">
                     <p className="leading-relaxed">
                       Not ready to book a call? Drop me a direct note with your primary sales challenge, and I’ll send over my initial thoughts via email.
                     </p>
                     <a
                       href="mailto:rreifel@vizhin.co?subject=Primary%20Sales%20Challenge"
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-neutral-900 hover:bg-neutral-850 text-emerald-400 hover:text-emerald-300 rounded-lg border border-neutral-800 hover:border-emerald-600/70 font-semibold transition-all shrink-0 cursor-pointer group"
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-slate-50 dark:bg-neutral-900 hover:bg-emerald-50 dark:hover:bg-neutral-800 text-[#0D5C46] dark:text-emerald-400 hover:text-emerald-900 dark:hover:text-emerald-300 rounded-lg border border-slate-200 dark:border-neutral-800 hover:border-emerald-300 dark:hover:border-emerald-600/70 font-semibold transition-all shrink-0 cursor-pointer group"
                       title="Send email to rreifel@vizhin.co"
                     >
-                      <Mail className="w-3.5 h-3.5 text-emerald-400 group-hover:scale-105 transition-transform" />
+                      <Mail className="w-3.5 h-3.5 text-[#0D5C46] dark:text-emerald-400 group-hover:scale-105 transition-transform" />
                       <span>Message Me Safely</span>
-                      <span className="text-neutral-500 font-mono text-xs">(rreifel@vizhin.co)</span>
+                      <span className="text-slate-500 dark:text-neutral-500 font-mono text-xs">(rreifel@vizhin.co)</span>
                     </a>
                   </div>
                 </div>
@@ -520,24 +519,24 @@ export default function LandingPage({
             <div
               key={sec.id}
               id={sec.id}
-              className="bg-neutral-900/40 border border-neutral-850/80 hover:border-neutral-700/80 transition-all rounded-2xl p-6 md:p-8 backdrop-blur-xs flex flex-col justify-between"
+              className="bg-white dark:bg-neutral-900/40 border border-slate-200 dark:border-neutral-800/80 hover:border-slate-300 dark:hover:border-neutral-700/80 shadow-sm dark:shadow-none transition-all rounded-2xl p-6 md:p-8 backdrop-blur-xs flex flex-col justify-between"
             >
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800/60 flex items-center justify-center text-[#0D5C46] dark:text-emerald-400 shrink-0">
                     <Icon className="w-5 h-5" />
                   </div>
-                  <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">
+                  <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
                     {sec.title}
                   </h2>
                 </div>
 
-                <div className="p-4 rounded-xl bg-neutral-950/70 border border-neutral-850 text-sm md:text-base text-neutral-200 leading-relaxed font-medium">
+                <div className="p-4 rounded-xl bg-slate-50 dark:bg-neutral-950/70 border border-slate-200 dark:border-neutral-800 text-sm md:text-base text-slate-800 dark:text-neutral-200 leading-relaxed font-medium">
                   {sec.lowerDescription ? sec.lowerDescription : sec.summary}
                 </div>
 
                 {sec.paragraphs.length > 0 && (
-                  <div className="space-y-3 pt-1 text-xs md:text-sm text-neutral-400 leading-relaxed">
+                  <div className="space-y-3 pt-1 text-xs md:text-sm text-slate-600 dark:text-neutral-400 leading-relaxed">
                     {sec.paragraphs.map((para, pIdx) => (
                       <p key={pIdx}>
                         {para}
@@ -552,7 +551,7 @@ export default function LandingPage({
                     <button
                       type="button"
                       onClick={() => toggleSection(sec.id)}
-                      className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-neutral-900 hover:bg-neutral-850 border border-emerald-800/80 hover:border-emerald-500 text-emerald-400 hover:text-emerald-300 text-lg font-bold font-mono transition-all cursor-pointer shadow-sm select-none"
+                      className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-slate-50 dark:bg-neutral-900 hover:bg-emerald-50 dark:hover:bg-neutral-800 border border-emerald-300 dark:border-emerald-800/80 hover:border-[#0D5C46] dark:hover:border-emerald-500 text-[#0D5C46] dark:text-emerald-400 hover:text-emerald-900 dark:hover:text-emerald-300 text-lg font-bold font-mono transition-all cursor-pointer shadow-xs select-none"
                       aria-expanded={expandedSections[sec.id] || false}
                       aria-label={expandedSections[sec.id] ? 'Collapse' : 'Expand'}
                       title={expandedSections[sec.id] ? 'Collapse' : 'Expand'}
@@ -569,21 +568,21 @@ export default function LandingPage({
                           transition={{ duration: 0.25, ease: 'easeInOut' }}
                           className="overflow-hidden"
                         >
-                          <div className="mt-4 p-5 md:p-6 rounded-xl bg-neutral-950/90 border border-emerald-900/60 space-y-6 shadow-inner">
+                          <div className="mt-4 p-5 md:p-6 rounded-xl bg-slate-50 dark:bg-neutral-950/90 border border-emerald-200 dark:border-emerald-900/60 space-y-6 shadow-inner">
                             {sec.expandableContent.pillars.map((pillar, pIdx) => (
-                              <div key={pIdx} className="space-y-3 pb-5 border-b border-neutral-850/80 last:border-b-0 last:pb-0">
-                                <h4 className="text-sm md:text-base font-bold text-emerald-300 tracking-tight">
+                              <div key={pIdx} className="space-y-3 pb-5 border-b border-slate-200 dark:border-neutral-800/80 last:border-b-0 last:pb-0">
+                                <h4 className="text-sm md:text-base font-bold text-[#0D5C46] dark:text-emerald-300 tracking-tight">
                                   {pillar.title}
                                 </h4>
-                                <p className="text-xs md:text-sm text-neutral-300 leading-relaxed">
+                                <p className="text-xs md:text-sm text-slate-700 dark:text-neutral-300 leading-relaxed">
                                   {pillar.intro}
                                 </p>
                                 <ul className="space-y-2 pt-1 pl-1">
                                   {pillar.bullets.map((b, bIdx) => (
-                                    <li key={bIdx} className="text-xs md:text-sm text-neutral-400 leading-relaxed flex items-start gap-2">
-                                      <span className="text-emerald-400 text-base leading-none select-none">•</span>
+                                    <li key={bIdx} className="text-xs md:text-sm text-slate-600 dark:text-neutral-400 leading-relaxed flex items-start gap-2">
+                                      <span className="text-[#0D5C46] dark:text-emerald-400 text-base leading-none select-none">•</span>
                                       <span>
-                                        <strong className="text-neutral-200 font-semibold">{b.label}:</strong> {b.text}
+                                        <strong className="text-slate-900 dark:text-neutral-200 font-semibold">{b.label}:</strong> {b.text}
                                       </span>
                                     </li>
                                   ))}
@@ -592,12 +591,12 @@ export default function LandingPage({
                             ))}
 
                             {sec.expandableContent.synergy && (
-                              <div className="mt-4 p-4 md:p-5 rounded-lg bg-emerald-950/30 border border-emerald-800/50 space-y-2">
-                                <h4 className="text-xs md:text-sm font-bold text-emerald-300 uppercase tracking-wide flex items-center gap-2">
-                                  <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+                              <div className="mt-4 p-4 md:p-5 rounded-lg bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/50 space-y-2">
+                                <h4 className="text-xs md:text-sm font-bold text-[#0D5C46] dark:text-emerald-300 uppercase tracking-wide flex items-center gap-2">
+                                  <span className="w-2 h-2 rounded-full bg-[#0D5C46] dark:bg-emerald-400"></span>
                                   {sec.expandableContent.synergy.title}
                                 </h4>
-                                <p className="text-xs md:text-sm text-neutral-300 leading-relaxed">
+                                <p className="text-xs md:text-sm text-slate-700 dark:text-neutral-300 leading-relaxed">
                                   {sec.expandableContent.synergy.text}
                                 </p>
                               </div>
@@ -611,7 +610,7 @@ export default function LandingPage({
               </div>
 
               {/* Card Footer: Lower left link and lower right actions */}
-              <div className="pt-6 mt-4 border-t border-neutral-850/60 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="pt-6 mt-4 border-t border-slate-200 dark:border-neutral-800/60 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 {/* Lower Left */}
                 <div className="flex items-center">
                   {sec.id === 'strategic-gtm-analysis' && (
@@ -625,7 +624,7 @@ export default function LandingPage({
                           window.location.href = '/gtm';
                         }
                       }}
-                      className="inline-flex items-center gap-1.5 text-xs md:text-sm font-semibold text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer group"
+                      className="inline-flex items-center gap-1.5 text-xs md:text-sm font-semibold text-[#0D5C46] dark:text-emerald-400 hover:text-emerald-900 dark:hover:text-emerald-300 transition-colors cursor-pointer group"
                     >
                       <span>Explore Strategic Go-to-Market Analysis</span>
                       <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
@@ -642,7 +641,7 @@ export default function LandingPage({
                           window.location.href = '/gtm-tech';
                         }
                       }}
-                      className="inline-flex items-center gap-1.5 text-xs md:text-sm font-semibold text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer group"
+                      className="inline-flex items-center gap-1.5 text-xs md:text-sm font-semibold text-[#0D5C46] dark:text-emerald-400 hover:text-emerald-900 dark:hover:text-emerald-300 transition-colors cursor-pointer group"
                     >
                       <span>Explore GTM Tech: Sales Technology Stack Optimization</span>
                       <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
@@ -659,7 +658,7 @@ export default function LandingPage({
                           window.location.href = '/sales-team-accountability';
                         }
                       }}
-                      className="inline-flex items-center gap-1.5 text-xs md:text-sm font-semibold text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer group"
+                      className="inline-flex items-center gap-1.5 text-xs md:text-sm font-semibold text-[#0D5C46] dark:text-emerald-400 hover:text-emerald-900 dark:hover:text-emerald-300 transition-colors cursor-pointer group"
                     >
                       <span>Explore Sales Team Accountability & KPI Architecture</span>
                       <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
@@ -676,7 +675,7 @@ export default function LandingPage({
                           window.location.href = '/sales-hiring-strategy';
                         }
                       }}
-                      className="inline-flex items-center gap-1.5 text-xs md:text-sm font-semibold text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer group"
+                      className="inline-flex items-center gap-1.5 text-xs md:text-sm font-semibold text-[#0D5C46] dark:text-emerald-400 hover:text-emerald-900 dark:hover:text-emerald-300 transition-colors cursor-pointer group"
                     >
                       <span>Explore Predictable Sales Hiring Strategy</span>
                       <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
@@ -693,7 +692,7 @@ export default function LandingPage({
                           window.location.href = '/audit-compliance';
                         }
                       }}
-                      className="inline-flex items-center gap-1.5 text-xs md:text-sm font-semibold text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer group"
+                      className="inline-flex items-center gap-1.5 text-xs md:text-sm font-semibold text-[#0D5C46] dark:text-emerald-400 hover:text-emerald-900 dark:hover:text-emerald-300 transition-colors cursor-pointer group"
                     >
                       <span>View the full Sales Governance &amp; Audit Readiness service</span>
                       <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
@@ -710,7 +709,7 @@ export default function LandingPage({
                           window.location.href = '/marketing-services';
                         }
                       }}
-                      className="inline-flex items-center gap-1.5 text-xs md:text-sm font-semibold text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer group"
+                      className="inline-flex items-center gap-1.5 text-xs md:text-sm font-semibold text-[#0D5C46] dark:text-emerald-400 hover:text-emerald-900 dark:hover:text-emerald-300 transition-colors cursor-pointer group"
                     >
                       <span>Explore Integration Services</span>
                       <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
@@ -727,7 +726,7 @@ export default function LandingPage({
                           window.location.href = '/marketing-analysis';
                         }
                       }}
-                      className="inline-flex items-center gap-1.5 text-xs md:text-sm font-semibold text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer group"
+                      className="inline-flex items-center gap-1.5 text-xs md:text-sm font-semibold text-[#0D5C46] dark:text-emerald-400 hover:text-emerald-900 dark:hover:text-emerald-300 transition-colors cursor-pointer group"
                     >
                       <span>View the full Marketing Analysis service</span>
                       <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
@@ -744,7 +743,7 @@ export default function LandingPage({
                           window.location.href = '/technology-project-management';
                         }
                       }}
-                      className="inline-flex items-center gap-1.5 text-xs md:text-sm font-semibold text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer group"
+                      className="inline-flex items-center gap-1.5 text-xs md:text-sm font-semibold text-[#0D5C46] dark:text-emerald-400 hover:text-emerald-900 dark:hover:text-emerald-300 transition-colors cursor-pointer group"
                     >
                       <span>View the full Technology Project Management service</span>
                       <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
@@ -759,16 +758,16 @@ export default function LandingPage({
                       <button
                         type="button"
                         onClick={() => setExpandedBrochureSec(prev => prev === sec.id ? null : sec.id)}
-                        className="px-5 py-2.5 bg-neutral-900 hover:bg-neutral-850 text-emerald-400 hover:text-emerald-300 text-xs font-bold rounded-xl border border-emerald-800/80 hover:border-emerald-600 shadow-md transition-all flex items-center gap-2 cursor-pointer group"
+                        className="px-5 py-2.5 bg-white dark:bg-neutral-900 hover:bg-emerald-50 dark:hover:bg-neutral-800 text-[#0D5C46] dark:text-emerald-400 hover:text-emerald-900 dark:hover:text-emerald-300 text-xs font-bold rounded-xl border border-emerald-300 dark:border-emerald-800/80 hover:border-[#0D5C46] dark:hover:border-emerald-600 shadow-xs dark:shadow-md transition-all flex items-center gap-2 cursor-pointer group"
                       >
-                        <FileText className="w-4 h-4 text-emerald-400 group-hover:scale-105 transition-transform" />
+                        <FileText className="w-4 h-4 text-[#0D5C46] dark:text-emerald-400 group-hover:scale-105 transition-transform" />
                         <span>{expandedBrochureSec === sec.id ? 'Hide Brochure' : 'View Brochure'}</span>
-                        <span className="font-mono text-[10px] text-emerald-400">↓</span>
+                        <span className="font-mono text-[10px] text-[#0D5C46] dark:text-emerald-400">↓</span>
                       </button>
                       <a
                         href="/assets/aistudio/Vizhin_GTM_Assessment_290913e5.pdf"
                         download="Vizhin_GTM_Assessment.pdf"
-                        className="p-2.5 bg-neutral-900 hover:bg-neutral-850 text-neutral-400 hover:text-emerald-300 rounded-xl border border-neutral-800 hover:border-emerald-700/60 transition-all cursor-pointer"
+                        className="p-2.5 bg-white dark:bg-neutral-900 hover:bg-emerald-50 dark:hover:bg-neutral-800 text-slate-600 dark:text-neutral-400 hover:text-[#0D5C46] dark:hover:text-emerald-300 rounded-xl border border-slate-200 dark:border-neutral-800 hover:border-emerald-400 dark:hover:border-emerald-700/60 transition-all cursor-pointer shadow-xs"
                         title="Download PDF Brochure"
                       >
                         <Download className="w-4 h-4" />
@@ -778,11 +777,11 @@ export default function LandingPage({
 
                   <a
                     href="/contact"
-                    className="px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white text-xs font-bold rounded-xl shadow-md shadow-emerald-950/40 border border-emerald-500/30 transition-all transform hover:-translate-y-0.5 cursor-pointer flex items-center gap-2 group"
+                    className="px-5 py-2.5 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white text-xs font-bold rounded-xl shadow-md shadow-emerald-900/15 dark:shadow-emerald-950/40 border border-emerald-500/30 transition-all transform hover:-translate-y-0.5 cursor-pointer flex items-center gap-2 group"
                   >
-                    <Calendar className="w-4 h-4 text-emerald-300 group-hover:scale-110 transition-transform" />
+                    <Calendar className="w-4 h-4 text-emerald-100 dark:text-emerald-300 group-hover:scale-110 transition-transform" />
                     <span>Schedule a Call</span>
-                    <span className="font-mono text-[10px] text-emerald-300">→</span>
+                    <span className="font-mono text-[10px] text-emerald-100 dark:text-emerald-300">→</span>
                   </a>
                 </div>
               </div>
@@ -801,21 +800,21 @@ export default function LandingPage({
       </section>
 
       {/* CORPORATE FOOTER ADDRESS & DIRECT EMAIL SYSTEM */}
-      <section className="px-6 py-12 border-t border-neutral-900/60 bg-[#070708]/90 z-10 w-full" id="landing_corporate_footer">
+      <section className="px-6 py-12 border-t border-slate-200 dark:border-neutral-900/60 bg-slate-100/70 dark:bg-[#070708]/90 z-10 w-full" id="landing_corporate_footer">
         <div className="max-w-md mx-auto">
           
           {/* Address Details & Contact */}
-          <div className="space-y-1.5 font-mono text-xs text-neutral-300 leading-relaxed bg-neutral-950 border border-neutral-900 p-6 rounded-xl shadow-inner text-center">
-            <p className="font-sans font-bold text-sm text-white tracking-tight">Vizhin LLC</p>
+          <div className="space-y-1.5 font-mono text-xs text-slate-600 dark:text-neutral-300 leading-relaxed bg-white dark:bg-neutral-950 border border-slate-200 dark:border-neutral-900 p-6 rounded-xl shadow-sm dark:shadow-inner text-center">
+            <p className="font-sans font-bold text-sm text-slate-900 dark:text-white tracking-tight">Vizhin LLC</p>
             <p>951 20th St #652</p>
             <p>Denver, CO 80201</p>
             
-            <div className="pt-4 mt-4 border-t border-neutral-900/80 flex justify-center">
+            <div className="pt-4 mt-4 border-t border-slate-200 dark:border-neutral-900/80 flex justify-center">
               <a
                 href="/contact"
-                className="px-6 py-2.5 bg-[#0e0e11] hover:bg-neutral-850 border border-neutral-800 hover:border-emerald-500/50 text-white rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer flex items-center gap-2 group"
+                className="px-6 py-2.5 bg-slate-50 dark:bg-[#0e0e11] hover:bg-emerald-50 dark:hover:bg-neutral-800 border border-slate-200 dark:border-neutral-800 hover:border-[#0D5C46]/50 dark:hover:border-emerald-500/50 text-slate-900 dark:text-white rounded-xl text-xs font-bold transition-all shadow-xs dark:shadow-md cursor-pointer flex items-center gap-2 group"
               >
-                <Mail className="w-4 h-4 text-emerald-400 group-hover:text-emerald-300 transition-colors" />
+                <Mail className="w-4 h-4 text-[#0D5C46] dark:text-emerald-400 group-hover:text-emerald-700 dark:group-hover:text-emerald-300 transition-colors" />
                 <span>Contact Us</span>
               </a>
             </div>
@@ -825,10 +824,10 @@ export default function LandingPage({
       </section>
 
       {/* FOOTER CO-BRAND BANNER */}
-      <footer className="border-t border-neutral-900/80 bg-[#060607] py-8 px-6 text-center text-xs text-neutral-500 font-mono z-10" id="landing_footer">
+      <footer className="border-t border-slate-200 dark:border-neutral-900/80 bg-slate-100 dark:bg-[#060607] py-8 px-6 text-center text-xs text-slate-500 dark:text-neutral-500 font-mono z-10" id="landing_footer">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-center gap-4">
           <div className="flex items-center gap-2">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+            <ShieldCheck className="w-3.5 h-3.5 text-[#0D5C46] dark:text-emerald-400" />
             <span>VIZHIN LLC • SECURED GTM LEADERSHIP & WHITE-LABELED TECHNOLOGY SOLUTIONS</span>
           </div>
         </div>
@@ -837,6 +836,3 @@ export default function LandingPage({
     </div>
   );
 }
-
-// GitHub Actions configuration sync
-

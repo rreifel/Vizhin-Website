@@ -79,13 +79,13 @@ export default function SalesHiringStrategyPage({
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#070708] text-neutral-100 flex flex-col relative overflow-hidden font-sans">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#070708] text-slate-900 dark:text-neutral-100 flex flex-col relative overflow-hidden font-sans transition-colors">
       {/* Decorative Background Glows */}
-      <div className="absolute top-[-30%] left-[-20%] w-[80vw] h-[80vw] rounded-full bg-emerald-950/25 blur-[150px] pointer-events-none" />
-      <div className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-[#0D5C46]/20 blur-[150px] pointer-events-none" />
+      <div className="absolute top-[-30%] left-[-20%] w-[80vw] h-[80vw] rounded-full bg-emerald-200/40 dark:bg-emerald-950/25 blur-[150px] pointer-events-none" />
+      <div className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-teal-200/30 dark:bg-[#0D5C46]/20 blur-[150px] pointer-events-none" />
 
       {/* Grid Pattern Backdrop */}
-      <div className="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.15] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] dark:bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.45] dark:opacity-[0.15] pointer-events-none" />
 
       {/* Persistent Site Header */}
       <SiteHeader
@@ -115,24 +115,24 @@ export default function SalesHiringStrategyPage({
         <div className="flex items-center justify-between">
           <button
             onClick={onNavigateHome}
-            className="inline-flex items-center gap-2 text-xs font-mono text-neutral-400 hover:text-emerald-400 transition-colors cursor-pointer group"
+            className="inline-flex items-center gap-2 text-xs font-mono text-slate-600 dark:text-neutral-400 hover:text-[#0D5C46] dark:hover:text-emerald-400 transition-colors cursor-pointer group"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             <span>Back to Home</span>
           </button>
 
-          <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-emerald-950/80 text-emerald-400 border border-emerald-800/60 font-semibold uppercase tracking-wider">
+          <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/80 text-[#0D5C46] dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/60 font-semibold uppercase tracking-wider">
             Predictable Talent Acquisition
           </span>
         </div>
 
         {/* Hero Section with EXACTLY ONE H1 HEADING */}
         <div className="space-y-4">
-          <div className="w-12 h-12 rounded-2xl bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shadow-md">
+          <div className="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800/60 flex items-center justify-center text-[#0D5C46] dark:text-emerald-400 shadow-sm dark:shadow-md">
             <UserPlus className="w-6 h-6" />
           </div>
 
-          <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight">
+          <h1 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
             Predictable Sales Hiring Strategy
           </h1>
         </div>
@@ -142,9 +142,9 @@ export default function SalesHiringStrategyPage({
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="p-6 md:p-8 rounded-2xl bg-neutral-900/60 border border-emerald-850/80 hover:border-emerald-600/70 shadow-xl backdrop-blur-md transition-all space-y-4"
+          className="p-6 md:p-8 rounded-2xl bg-white dark:bg-neutral-900/60 border border-emerald-200 dark:border-emerald-800/80 hover:border-[#0D5C46]/60 dark:hover:border-emerald-600/70 shadow-md dark:shadow-xl backdrop-blur-md transition-all space-y-4"
         >
-          <div className="text-sm md:text-base text-neutral-200 leading-relaxed font-medium">
+          <div className="text-sm md:text-base text-slate-700 dark:text-neutral-200 leading-relaxed font-medium">
             Predictable Talent Acquisition: Ending the cycle of bad sales hires and missed quotas. I design and execute a rigorous, metrics-driven recruiting and vetting blueprint to attract, hire, and onboard elite sales professionals who fit your culture and consistently produce results.
           </div>
         </motion.div>
@@ -157,24 +157,24 @@ export default function SalesHiringStrategyPage({
           className="space-y-6"
         >
           {/* Section: The problem */}
-          <div className="bg-neutral-900/40 border border-neutral-850/80 hover:border-neutral-750 transition-all rounded-2xl p-6 md:p-8 backdrop-blur-xs space-y-3">
-            <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight flex items-center gap-2.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
+          <div className="bg-white dark:bg-neutral-900/40 border border-slate-200 dark:border-neutral-800/80 hover:border-slate-300 dark:hover:border-neutral-700 transition-all rounded-2xl p-6 md:p-8 shadow-sm dark:shadow-none backdrop-blur-xs space-y-3">
+            <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-600 dark:bg-emerald-400 shrink-0" />
               <span>The problem</span>
             </h2>
-            <p className="text-sm md:text-base text-neutral-300 leading-relaxed font-normal">
+            <p className="text-sm md:text-base text-slate-600 dark:text-neutral-300 leading-relaxed font-normal">
               For most founders, hiring sales reps is a costly roll of the dice. Charismatic candidates routinely interview exceptionally well, only to fail miserably once they are in the seat—costing you months of lost revenue, burned leads, and thousands in wasted salary. Without a dedicated sales leader who knows exactly how to screen for grit, process discipline, and true selling capability, growth-stage companies easily fall into the trap of hiring the wrong profile for their specific sales cycle. I eliminate this expensive guesswork by building a structured, repeatable talent acquisition engine designed to source and filter for elite performers.
             </p>
           </div>
 
           {/* Section: What we build together */}
-          <div className="bg-neutral-900/40 border border-neutral-850/80 hover:border-neutral-750 transition-all rounded-2xl p-6 md:p-8 backdrop-blur-xs space-y-5">
-            <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight flex items-center gap-2.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
+          <div className="bg-white dark:bg-neutral-900/40 border border-slate-200 dark:border-neutral-800/80 hover:border-slate-300 dark:hover:border-neutral-700 transition-all rounded-2xl p-6 md:p-8 shadow-sm dark:shadow-none backdrop-blur-xs space-y-5">
+            <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-600 dark:bg-emerald-400 shrink-0" />
               <span>What we build together</span>
             </h2>
 
-            <p className="text-sm md:text-base text-neutral-300 leading-relaxed font-normal">
+            <p className="text-sm md:text-base text-slate-600 dark:text-neutral-300 leading-relaxed font-normal">
               When you partner with me for your sales hiring strategy, we don&apos;t just find people; we build a scalable hiring infrastructure.
             </p>
 
@@ -183,30 +183,30 @@ export default function SalesHiringStrategyPage({
               {hiringPillars.map((item, idx) => (
                 <div 
                   key={idx} 
-                  className="p-3.5 rounded-xl bg-neutral-950/60 border border-neutral-850/80 flex items-start gap-3 group hover:border-emerald-600/50 transition-all"
+                  className="p-3.5 rounded-xl bg-slate-50 dark:bg-neutral-950/60 border border-slate-200 dark:border-neutral-800/80 flex items-start gap-3 group hover:border-[#0D5C46]/50 dark:hover:border-emerald-600/50 transition-all"
                 >
-                  <div className="w-5 h-5 rounded-md bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0 mt-0.5">
+                  <div className="w-5 h-5 rounded-md bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800/60 flex items-center justify-center text-[#0D5C46] dark:text-emerald-400 shrink-0 mt-0.5">
                     <CheckCircle2 className="w-3.5 h-3.5" />
                   </div>
-                  <span className="text-xs md:text-sm text-neutral-200 font-medium leading-snug">
+                  <span className="text-xs md:text-sm text-slate-700 dark:text-neutral-200 font-medium leading-snug">
                     {item}
                   </span>
                 </div>
               ))}
             </div>
 
-            <p className="text-sm md:text-base text-neutral-300 leading-relaxed font-normal pt-2 border-t border-neutral-850/70">
+            <p className="text-sm md:text-base text-slate-600 dark:text-neutral-300 leading-relaxed font-normal pt-2 border-t border-slate-200 dark:border-neutral-800/70">
               This ensures your new hires hit the ground running with the exact training, scripts, and playbooks they need to shorten their time-to-productivity and start closing deals quickly.
             </p>
           </div>
 
           {/* Action Strategy & Revenue Session CTA */}
-          <div className="bg-gradient-to-r from-neutral-900/90 via-emerald-950/40 to-neutral-900/90 border border-emerald-800/60 rounded-2xl p-6 md:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
+          <div className="bg-gradient-to-r from-emerald-50/90 via-white to-teal-50/90 dark:from-neutral-900/90 dark:via-emerald-950/40 dark:to-neutral-900/90 border border-emerald-200 dark:border-emerald-800/60 rounded-2xl p-6 md:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-md dark:shadow-xl">
             <div className="space-y-2 text-center sm:text-left">
-              <h3 className="text-lg md:text-xl font-bold text-white">
+              <h3 className="text-lg md:text-xl font-bold text-slate-900 dark:text-white">
                 Ready to stop costly sales hiring mistakes?
               </h3>
-              <p className="text-xs md:text-sm text-neutral-400 max-w-xl">
+              <p className="text-xs md:text-sm text-slate-600 dark:text-neutral-400 max-w-xl">
                 Book a 25-minute Talent Strategy Session to review candidate profiles, vetting scorecards, and ramp schedules for your upcoming sales hires.
               </p>
             </div>
@@ -216,23 +216,23 @@ export default function SalesHiringStrategyPage({
                 href="/contact"
                 className="px-5 py-3 bg-gradient-to-r from-emerald-600 to-[#0D5C46] hover:from-emerald-500 hover:to-[#0A4837] text-white text-xs font-bold rounded-xl shadow-md border border-emerald-500/30 transition-all flex items-center gap-2 cursor-pointer group"
               >
-                <Calendar className="w-4 h-4 text-emerald-300 group-hover:scale-110 transition-transform" />
+                <Calendar className="w-4 h-4 text-emerald-100 dark:text-emerald-300 group-hover:scale-110 transition-transform" />
                 <span>Schedule Talent Call</span>
-                <span className="font-mono text-[10px] text-emerald-300">→</span>
+                <span className="font-mono text-[10px] text-emerald-100 dark:text-emerald-300">→</span>
               </a>
             </div>
           </div>
         </motion.div>
 
         {/* Related Services & Bottom Navigation (Links to Sales Team Accountability and Strategic GTM Analysis) */}
-        <div className="pt-8 border-t border-neutral-850/80 space-y-4">
+        <div className="pt-8 border-t border-slate-200 dark:border-neutral-800/80 space-y-4">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-mono uppercase tracking-wider text-neutral-400">
+            <span className="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-neutral-400">
               Related Advisory Services
             </span>
             <button
               onClick={onNavigateHome}
-              className="text-xs font-mono text-emerald-400 hover:text-emerald-300 transition-colors inline-flex items-center gap-1 cursor-pointer"
+              className="text-xs font-mono text-[#0D5C46] dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors inline-flex items-center gap-1 cursor-pointer"
             >
               <span>View All Services</span>
               <span>→</span>
@@ -251,17 +251,17 @@ export default function SalesHiringStrategyPage({
                   window.location.href = '/sales-team-accountability';
                 }
               }}
-              className="p-4 rounded-xl bg-neutral-900/60 border border-neutral-800 hover:border-emerald-600/60 transition-all group flex items-start gap-3 cursor-pointer"
+              className="p-4 rounded-xl bg-white dark:bg-neutral-900/60 border border-slate-200 dark:border-neutral-800 hover:border-[#0D5C46]/50 dark:hover:border-emerald-600/60 shadow-sm dark:shadow-none transition-all group flex items-start gap-3 cursor-pointer"
             >
-              <div className="w-9 h-9 rounded-lg bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0 group-hover:scale-105 transition-transform">
+              <div className="w-9 h-9 rounded-lg bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800/60 flex items-center justify-center text-[#0D5C46] dark:text-emerald-400 shrink-0 group-hover:scale-105 transition-transform">
                 <Target className="w-4 h-4" />
               </div>
               <div className="space-y-1">
-                <div className="flex items-center gap-1.5 text-xs font-bold text-white group-hover:text-emerald-300 transition-colors">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900 dark:text-white group-hover:text-[#0D5C46] dark:group-hover:text-emerald-300 transition-colors">
                   <span>Sales Team Accountability & KPIs</span>
                   <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                 </div>
-                <p className="text-[11px] text-neutral-400 leading-relaxed line-clamp-2">
+                <p className="text-[11px] text-slate-600 dark:text-neutral-400 leading-relaxed line-clamp-2">
                   Shift from activity-driven to outcome-focused sales with objective KPI architecture and pipeline reviews.
                 </p>
               </div>
@@ -278,17 +278,17 @@ export default function SalesHiringStrategyPage({
                   window.location.href = '/strategic-gtm-analysis';
                 }
               }}
-              className="p-4 rounded-xl bg-neutral-900/60 border border-neutral-800 hover:border-emerald-600/60 transition-all group flex items-start gap-3 cursor-pointer"
+              className="p-4 rounded-xl bg-white dark:bg-neutral-900/60 border border-slate-200 dark:border-neutral-800 hover:border-[#0D5C46]/50 dark:hover:border-emerald-600/60 shadow-sm dark:shadow-none transition-all group flex items-start gap-3 cursor-pointer"
             >
-              <div className="w-9 h-9 rounded-lg bg-emerald-950/80 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0 group-hover:scale-105 transition-transform">
+              <div className="w-9 h-9 rounded-lg bg-emerald-50 dark:bg-emerald-950/80 border border-emerald-200 dark:border-emerald-800/60 flex items-center justify-center text-[#0D5C46] dark:text-emerald-400 shrink-0 group-hover:scale-105 transition-transform">
                 <Compass className="w-4 h-4" />
               </div>
               <div className="space-y-1">
-                <div className="flex items-center gap-1.5 text-xs font-bold text-white group-hover:text-emerald-300 transition-colors">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-slate-900 dark:text-white group-hover:text-[#0D5C46] dark:group-hover:text-emerald-300 transition-colors">
                   <span>Strategic Go-to-Market Analysis</span>
                   <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                 </div>
-                <p className="text-[11px] text-neutral-400 leading-relaxed line-clamp-2">
+                <p className="text-[11px] text-slate-600 dark:text-neutral-400 leading-relaxed line-clamp-2">
                   Diagnose hidden friction in your revenue engine, buyer personas, and market opportunity.
                 </p>
               </div>
@@ -302,7 +302,7 @@ export default function SalesHiringStrategyPage({
                 e.preventDefault();
                 onNavigateHome();
               }}
-              className="inline-flex items-center gap-2 text-xs font-mono text-neutral-400 hover:text-emerald-400 transition-colors"
+              className="inline-flex items-center gap-2 text-xs font-mono text-slate-600 dark:text-neutral-400 hover:text-[#0D5C46] dark:hover:text-emerald-400 transition-colors"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Return to Vizhin Consulting Home</span>
@@ -312,10 +312,10 @@ export default function SalesHiringStrategyPage({
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-neutral-900/80 bg-[#060607] py-8 px-6 text-center text-xs text-neutral-500 font-mono z-10">
+      <footer className="border-t border-slate-200 dark:border-neutral-900/80 bg-white dark:bg-[#060607] py-8 px-6 text-center text-xs text-slate-500 dark:text-neutral-500 font-mono z-10">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-center gap-4">
           <div className="flex items-center gap-2">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+            <ShieldCheck className="w-3.5 h-3.5 text-[#0D5C46] dark:text-emerald-400" />
             <span>VIZHIN LLC • PREDICTABLE SALES TALENT ACQUISITION & RECRUITING BLUEPRINTS</span>
           </div>
         </div>

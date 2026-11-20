@@ -1,15 +1,19 @@
 import React from 'react';
+import { useTheme } from '../context/ThemeContext';
 
 interface VizhinLogoProps {
   className?: string;
   lightMode?: boolean;
 }
 
-export default function VizhinLogo({ className = "h-8 w-auto", lightMode = false }: VizhinLogoProps) {
-  // On dark backgrounds, #181C24 is invisible. We should use a beautiful off-white/silver or white color (#F3F4F6) instead.
-  // The left chevron (leaf) is #0D5C46 (Deep Forest Green) which has the green they designed.
-  const textFill = lightMode ? "#181C24" : "#F3F4F6";
-  const taglineFill = lightMode ? "#717D8A" : "#94A3B8";
+export default function VizhinLogo({ className = "h-8 w-auto", lightMode }: VizhinLogoProps) {
+  const { theme } = useTheme();
+  const isLight = lightMode !== undefined ? lightMode : theme === 'light';
+  // On light backgrounds (default), use Ink Black (#181C24) & Slate Gray (#717D8A).
+  // On dark backgrounds, use crisp off-white (#F3F4F6) & muted slate (#94A3B8).
+  // Left chevron leaf always remains Deep Forest Green (#0D5C46).
+  const textFill = isLight ? "#181C24" : "#F3F4F6";
+  const taglineFill = isLight ? "#717D8A" : "#94A3B8";
 
   return (
     <svg 

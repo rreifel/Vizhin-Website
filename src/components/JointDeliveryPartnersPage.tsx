@@ -151,7 +151,7 @@ export default function JointDeliveryPartnersPage({
                 </h2>
 
                 <p className="text-xs md:text-sm text-slate-600 dark:text-neutral-300 leading-relaxed max-w-xl">
-                  Sublime Designs Media and Vizhin collaborate directly on comprehensive GTM revenue assessments, brand collateral, and high-impact digital storytelling that align sales and marketing engines for sustainable, repeatable expansion.
+                  Sublime is a b2b marketing agency focused on tech and tech services. They plug in like a fractional marketing team, helping to expand your marketing capabilities. Sublime and Vizhin collaborate directly on comprehensive GTM revenue assessments, sales enablement and demand gen that align sales and marketing engines for sustainable, repeatable expansion.
                 </p>
 
                 <div className="pt-2 flex flex-wrap items-center justify-center md:justify-start gap-3">
